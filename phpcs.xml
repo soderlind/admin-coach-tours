@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<ruleset name="Admin Coach Tours">
+	<description>WordPress Coding Standards for Admin Coach Tours plugin.</description>
+
+	<!-- What to scan -->
+	<file>./admin-coach-tours.php</file>
+	<file>./php</file>
+	<file>./tests/php</file>
+
+	<!-- Exclude patterns -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>build/*</exclude-pattern>
+	<exclude-pattern>assets/*</exclude-pattern>
+	<exclude-pattern>languages/*</exclude-pattern>
+
+	<!-- Show progress and sniff codes -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+
+	<!-- WordPress Coding Standards -->
+	<rule ref="WordPress"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress-Extra"/>
+
+	<!-- PHP Compatibility -->
+	<rule ref="PHPCompatibility"/>
+	<config name="testVersion" value="8.3-"/>
+
+	<!-- WordPress specific configuration -->
+	<config name="minimum_wp_version" value="6.8"/>
+
+	<!-- Text domain -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="admin-coach-tours"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Prefixes -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="AdminCoachTours"/>
+				<element value="act_"/>
+				<element value="admin_coach_tours"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Allow short array syntax -->
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Exclude test files from certain rules -->
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow namespace declarations -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid">
+		<exclude-pattern>php/*</exclude-pattern>
+	</rule>
+</ruleset>

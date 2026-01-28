@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+	bootstrap="tests/php/bootstrap.php"
+	colors="true"
+	cacheDirectory=".phpunit.cache"
+	beStrictAboutOutputDuringTests="true"
+	beStrictAboutTodoAnnotatedTests="true"
+	failOnRisky="true"
+	failOnWarning="true"
+>
+	<testsuites>
+		<testsuite name="Admin Coach Tours Test Suite">
+			<directory suffix="Test.php">tests/php</directory>
+		</testsuite>
+	</testsuites>
+
+	<source>
+		<include>
+			<directory suffix=".php">php</directory>
+		</include>
+		<exclude>
+			<directory>vendor</directory>
+		</exclude>
+	</source>
+
+	<coverage>
+		<report>
+			<html outputDirectory="coverage"/>
+			<text outputFile="php://stdout"/>
+		</report>
+	</coverage>
+
+	<php>
+		<const name="ADMIN_COACH_TOURS_TESTING" value="true"/>
+	</php>
+</phpunit>

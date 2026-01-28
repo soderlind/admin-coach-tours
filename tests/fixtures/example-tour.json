@@ -1,0 +1,262 @@
+{
+	"id": 1,
+	"title": "Getting Started with the Block Editor",
+	"description": "Learn the basics of creating content with the WordPress block editor.",
+	"status": "publish",
+	"postTypes": ["post", "page"],
+	"editors": ["block"],
+	"version": 1,
+	"steps": [
+		{
+			"id": "step-welcome",
+			"title": "Welcome to the Block Editor",
+			"content": "<p>Welcome! This tour will guide you through the basics of creating content with blocks.</p><p>Let's get started!</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".editor-visual-editor",
+						"priority": 2
+					},
+					{
+						"type": "role",
+						"value": "textbox",
+						"accessibleName": "Add title",
+						"priority": 1
+					}
+				]
+			},
+			"completion": {
+				"type": "manual"
+			},
+			"preconditions": [
+				{
+					"type": "ensureEditor",
+					"editor": "block"
+				}
+			]
+		},
+		{
+			"id": "step-add-title",
+			"title": "Add a Title",
+			"content": "<p>Every post or page needs a title. Click on the <strong>Add title</strong> field and type your title.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "role",
+						"value": "textbox",
+						"accessibleName": "Add title",
+						"priority": 1
+					},
+					{
+						"type": "css",
+						"value": ".editor-post-title__input",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "domValueChanged",
+				"selector": ".editor-post-title__input"
+			},
+			"preconditions": []
+		},
+		{
+			"id": "step-open-inserter",
+			"title": "Open the Block Inserter",
+			"content": "<p>To add content, you need to insert blocks. Click the <strong>+</strong> button to open the block inserter.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "ariaLabel",
+						"value": "Toggle block inserter",
+						"priority": 1
+					},
+					{
+						"type": "css",
+						"value": ".editor-document-tools__inserter-toggle",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "elementAppear",
+				"selector": ".block-editor-inserter__menu"
+			},
+			"preconditions": [
+				{
+					"type": "closeInserter"
+				}
+			]
+		},
+		{
+			"id": "step-search-block",
+			"title": "Search for a Block",
+			"content": "<p>You can search for any block type. Try typing <strong>paragraph</strong> in the search field.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".block-editor-inserter__search input",
+						"priority": 1
+					},
+					{
+						"type": "role",
+						"value": "searchbox",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "domValueChanged",
+				"selector": ".block-editor-inserter__search input"
+			},
+			"preconditions": [
+				{
+					"type": "openInserter"
+				}
+			]
+		},
+		{
+			"id": "step-insert-paragraph",
+			"title": "Insert a Paragraph Block",
+			"content": "<p>Click on the <strong>Paragraph</strong> block to insert it into your content.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".block-editor-block-types-list__item[aria-label*='Paragraph']",
+						"priority": 1
+					}
+				]
+			},
+			"completion": {
+				"type": "elementAppear",
+				"selector": ".wp-block-paragraph"
+			},
+			"preconditions": []
+		},
+		{
+			"id": "step-type-content",
+			"title": "Type Your Content",
+			"content": "<p>Now you can type your content directly in the paragraph block. Try typing something!</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".wp-block-paragraph:last-of-type",
+						"priority": 1
+					}
+				]
+			},
+			"completion": {
+				"type": "domValueChanged",
+				"selector": ".wp-block-paragraph"
+			},
+			"preconditions": [
+				{
+					"type": "closeInserter"
+				}
+			]
+		},
+		{
+			"id": "step-open-sidebar",
+			"title": "Open the Settings Sidebar",
+			"content": "<p>The sidebar lets you configure block and document settings. Click the <strong>Settings</strong> button to open it.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "ariaLabel",
+						"value": "Settings",
+						"priority": 1
+					},
+					{
+						"type": "css",
+						"value": ".edit-post-header__settings button[aria-label='Settings']",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "elementAppear",
+				"selector": ".interface-interface-skeleton__sidebar"
+			},
+			"preconditions": [
+				{
+					"type": "ensureSidebarClosed"
+				}
+			]
+		},
+		{
+			"id": "step-document-tab",
+			"title": "Document Settings",
+			"content": "<p>The <strong>Post</strong> tab shows document-level settings like categories, tags, and featured image.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".edit-post-sidebar__panel-tab[data-label='Post']",
+						"priority": 1
+					},
+					{
+						"type": "ariaLabel",
+						"value": "Post",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "clickTarget"
+			},
+			"preconditions": [
+				{
+					"type": "ensureSidebarOpen"
+				}
+			]
+		},
+		{
+			"id": "step-save-draft",
+			"title": "Save Your Work",
+			"content": "<p>Don't forget to save your work! Click <strong>Save draft</strong> to save without publishing.</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".editor-post-save-draft",
+						"priority": 1
+					},
+					{
+						"type": "ariaLabel",
+						"value": "Save draft",
+						"priority": 2
+					}
+				]
+			},
+			"completion": {
+				"type": "wpData",
+				"store": "core/editor",
+				"selector": "isSavingPost",
+				"expectedValue": true
+			},
+			"preconditions": []
+		},
+		{
+			"id": "step-complete",
+			"title": "Tour Complete!",
+			"content": "<p>🎉 Congratulations! You've learned the basics of the block editor.</p><p>Keep exploring to discover more blocks and features!</p>",
+			"target": {
+				"locators": [
+					{
+						"type": "css",
+						"value": ".editor-visual-editor",
+						"priority": 1
+					}
+				]
+			},
+			"completion": {
+				"type": "manual"
+			},
+			"preconditions": []
+		}
+	]
+}

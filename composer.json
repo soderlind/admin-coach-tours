@@ -1,0 +1,47 @@
+{
+	"name": "persoderlind/admin-coach-tours",
+	"description": "Interactive guided tours for WordPress admin",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Per Soderlind",
+			"email": "per@developer.developer"
+		}
+	],
+	"require": {
+		"php": ">=8.3"
+	},
+	"require-dev": {
+		"brain/monkey": "^2.6",
+		"phpunit/phpunit": "^10.5",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"mockery/mockery": "^1.6"
+	},
+	"autoload": {
+		"psr-4": {
+			"AdminCoachTours\\": "php/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"AdminCoachTours\\Tests\\": "tests/php/"
+		}
+	},
+	"scripts": {
+		"lint": "phpcs",
+		"lint:fix": "phpcbf",
+		"test": "phpunit",
+		"test:coverage": "phpunit --coverage-html coverage"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true
+}

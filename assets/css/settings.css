@@ -1,0 +1,45 @@
+/**
+ * Settings page styles.
+ *
+ * @package AdminCoachTours
+ */
+
+/* Provider field visibility */
+.act-provider-field {
+	display: none;
+}
+
+.act-provider-field.act-provider-active {
+	display: block;
+}
+
+/* Sensitive field indicator */
+.act-field-status {
+	color: #00a32a;
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+/* Form styling */
+#act-settings-form .form-table th {
+	width: 220px;
+}
+
+#act-settings-form .form-table td {
+	vertical-align: top;
+}
+
+/* Notice styling */
+#act-settings-form .notice.inline {
+	margin: 5px 0 15px;
+}
+
+/* Sensitive field styling */
+.act-sensitive-field {
+	font-family: monospace;
+}
+
+.act-sensitive-field::placeholder {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-style: italic;
+}
