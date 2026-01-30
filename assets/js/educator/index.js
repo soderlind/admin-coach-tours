@@ -9,6 +9,9 @@
 
 import { registerPlugin } from '@wordpress/plugins';
 
+// Import store to ensure it's registered before components use it.
+import '../store';
+
 import EducatorSidebar from './EducatorSidebar.jsx';
 
 // Register the educator plugin sidebar.

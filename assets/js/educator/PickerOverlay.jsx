@@ -89,21 +89,39 @@ export default function PickerOverlay( { onCancel } ) {
 
 	// Track if element is from iframe.
 	const iframeElementRef = useRef( false );
+	// Track last processed element to avoid redundant updates.
+	const lastElementRef = useRef( null );
+	// Throttle timer ref.
+	const throttleRef = useRef( null );
 
 	/**
 	 * Handle mouse move - track hovered element.
+	 * Throttled to reduce flickering.
 	 *
 	 * @param {MouseEvent} event      Mouse event.
 	 * @param {boolean}    fromIframe Whether event is from iframe.
 	 */
 	const handleMouseMove = useCallback(
 		( event, fromIframe = false ) => {
+			// Throttle updates to 60fps (16ms).
+			if ( throttleRef.current ) {
+				return;
+			}
+			throttleRef.current = setTimeout( () => {
+				throttleRef.current = null;
+			}, 16 );
+
 			let targetElement = null;
 
 			if ( fromIframe ) {
 				// Event is from iframe - use event.target directly.
 				targetElement = event.target;
 				if ( targetElement && ! isExcluded( targetElement ) ) {
+					// Skip if same element (avoid redundant updates).
+					if ( targetElement === lastElementRef.current ) {
+						return;
+					}
+					lastElementRef.current = targetElement;
 					iframeElementRef.current = true;
 
 					// Get iframe to calculate position offset.
@@ -145,7 +163,8 @@ export default function PickerOverlay( { onCancel } ) {
 					return true;
 				} );
 
-				if ( targetElement && targetElement !== hoveredElement ) {
+				if ( targetElement && targetElement !== lastElementRef.current ) {
+					lastElementRef.current = targetElement;
 					iframeElementRef.current = false;
 					setHoveredElement( targetElement );
 
@@ -160,7 +179,7 @@ export default function PickerOverlay( { onCancel } ) {
 				}
 			}
 		},
-		[ hoveredElement ]
+		[] // No dependencies - uses refs
 	);
 
 	/**
@@ -172,14 +191,16 @@ export default function PickerOverlay( { onCancel } ) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			if ( ! hoveredElement ) {
+			// Use ref for the element (more reliable than state).
+			const element = lastElementRef.current;
+			if ( ! element ) {
 				return;
 			}
 
 			// Capture locator bundle from element.
 			const inIframe = iframeElementRef.current;
-			const target = captureLocatorBundle( hoveredElement, { inEditorIframe: inIframe } );
-			const elementContext = captureElementContext( hoveredElement );
+			const target = captureLocatorBundle( element, { inEditorIframe: inIframe } );
+			const elementContext = captureElementContext( element );
 
 			// Create step data.
 			const stepData = {
@@ -192,8 +213,8 @@ export default function PickerOverlay( { onCancel } ) {
 			};
 
 			if ( pickingStepId ) {
-				// Updating existing step.
-				updateStep( currentTourId, pickingStepId, { target } );
+				// Updating existing step - include elementContext for AI drafting.
+				updateStep( currentTourId, pickingStepId, { target, elementContext } );
 			} else {
 				// Adding new step.
 				addStep( currentTourId, stepData );
@@ -202,7 +223,7 @@ export default function PickerOverlay( { onCancel } ) {
 			// Stop picking mode.
 			stopPicking();
 		},
-		[ hoveredElement, pickingStepId, currentTourId, addStep, updateStep, stopPicking ]
+		[ pickingStepId, currentTourId, addStep, updateStep, stopPicking ]
 	);
 
 	/**
@@ -298,6 +319,11 @@ export default function PickerOverlay( { onCancel } ) {
 			document.removeEventListener( 'keydown', onKeyDown, true );
 			document.body.style.overflow = '';
 
+			// Clear throttle timer.
+			if ( throttleRef.current ) {
+				clearTimeout( throttleRef.current );
+			}
+
 			if ( pollInterval ) {
 				clearInterval( pollInterval );
 			}
@@ -325,11 +351,14 @@ export default function PickerOverlay( { onCancel } ) {
 					left: highlightRect.left,
 					width: highlightRect.width,
 					height: highlightRect.height,
-					border: '2px solid #007cba',
-					backgroundColor: 'rgba(0, 124, 186, 0.1)',
+					border: '3px solid #007cba',
+					backgroundColor: 'rgba(0, 124, 186, 0.15)',
 					pointerEvents: 'none',
 					zIndex: 9999999,
 					boxSizing: 'border-box',
+					borderRadius: '3px',
+					transition: 'top 0.08s ease-out, left 0.08s ease-out, width 0.08s ease-out, height 0.08s ease-out',
+					boxShadow: '0 0 0 2px rgba(0, 124, 186, 0.3)',
 				} }
 			/>
 		);

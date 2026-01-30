@@ -1,6 +1,6 @@
 {
 	"name": "admin-coach-tours",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Interactive guided tours for WordPress admin",
 	"author": "Per Soderlind",
 	"license": "GPL-2.0-or-later",

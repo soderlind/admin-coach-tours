@@ -11,7 +11,7 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.2.0
+ * Version:     0.2.1
  * Requires at least: 6.8
  * Requires PHP: 8.3
  * Author:      Per Soderlind
@@ -168,6 +168,25 @@ function init(): void {
  * @return void
  */
 function enqueue_editor_assets(): void {
+	global $post_type;
+
+	// Educator assets only load on act_tour post type.
+	if ( 'act_tour' === $post_type ) {
+		enqueue_educator_assets();
+	}
+
+	// Pupil assets load on all post types except act_tour (for running tours).
+	if ( 'act_tour' !== $post_type ) {
+		enqueue_pupil_assets();
+	}
+}
+
+/**
+ * Enqueue educator mode assets (for act_tour CPT only).
+ *
+ * @return void
+ */
+function enqueue_educator_assets(): void {
 	$asset_file = PLUGIN_PATH . 'build/educator/index.asset.php';
 
 	if ( ! file_exists( $asset_file ) ) {
@@ -191,8 +210,8 @@ function enqueue_editor_assets(): void {
 		[
 			'restUrl'   => rest_url( 'admin-coach-tours/v1/' ),
 			'nonce'     => wp_create_nonce( 'wp_rest' ),
-			'canEdit'   => current_user_can( 'edit_act_tours' ),
-			'canRun'    => current_user_can( 'run_act_tours' ),
+			'canEdit'   => current_user_can( 'edit_posts' ),
+			'canRun'    => current_user_can( 'edit_posts' ),
 			'postTypes' => get_post_types( [ 'show_in_rest' => true ], 'names' ),
 		]
 	);
@@ -210,28 +229,48 @@ function enqueue_editor_assets(): void {
 		[],
 		VERSION
 	);
+}
 
-	// Also enqueue pupil script for tour running.
+/**
+ * Enqueue pupil mode assets (for running tours on any post type).
+ *
+ * @return void
+ */
+function enqueue_pupil_assets(): void {
 	$pupil_asset_file = PLUGIN_PATH . 'build/pupil/index.asset.php';
 
-	if ( file_exists( $pupil_asset_file ) ) {
-		$pupil_asset = require $pupil_asset_file;
-
-		wp_enqueue_script(
-			'admin-coach-tours-pupil',
-			PLUGIN_URL . 'build/pupil/index.js',
-			$pupil_asset['dependencies'],
-			$pupil_asset['version'],
-			true
-		);
-
-		wp_enqueue_style(
-			'admin-coach-tours-pupil',
-			PLUGIN_URL . 'assets/css/pupil.css',
-			[],
-			VERSION
-		);
+	if ( ! file_exists( $pupil_asset_file ) ) {
+		return;
 	}
+
+	$pupil_asset = require $pupil_asset_file;
+
+	wp_enqueue_script(
+		'admin-coach-tours-pupil',
+		PLUGIN_URL . 'build/pupil/index.js',
+		$pupil_asset['dependencies'],
+		$pupil_asset['version'],
+		true
+	);
+
+	// Localize script with REST info for fetching tours.
+	wp_localize_script(
+		'admin-coach-tours-pupil',
+		'adminCoachToursData',
+		[
+			'restUrl'   => rest_url( 'admin-coach-tours/v1/' ),
+			'nonce'     => wp_create_nonce( 'wp_rest' ),
+			'canRun'    => current_user_can( 'edit_posts' ),
+			'postTypes' => get_post_types( [ 'show_in_rest' => true ], 'names' ),
+		]
+	);
+
+	wp_enqueue_style(
+		'admin-coach-tours-pupil',
+		PLUGIN_URL . 'assets/css/pupil.css',
+		[],
+		VERSION
+	);
 }
 
 /**

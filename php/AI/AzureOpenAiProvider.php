@@ -77,8 +77,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return string|null API key or null.
 	 */
 	private function get_api_key(): ?string {
-		$settings      = get_option( 'act_ai_settings', [] );
-		$encrypted_key = $settings['providers'][ self::ID ]['api_key'] ?? '';
+		$encrypted_key = get_option( 'act_ai_' . self::ID . '_api_key', '' );
 
 		if ( empty( $encrypted_key ) ) {
 			return null;
@@ -95,8 +94,8 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return string|null Endpoint URL or null.
 	 */
 	private function get_endpoint(): ?string {
-		$settings = get_option( 'act_ai_settings', [] );
-		return $settings['providers'][ self::ID ]['endpoint'] ?? null;
+		$endpoint = get_option( 'act_ai_' . self::ID . '_endpoint', '' );
+		return ! empty( $endpoint ) ? $endpoint : null;
 	}
 
 	/**
@@ -105,8 +104,8 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return string Deployment name.
 	 */
 	private function get_deployment(): string {
-		$settings = get_option( 'act_ai_settings', [] );
-		return $settings['providers'][ self::ID ]['deployment'] ?? 'gpt-4o-mini';
+		$deployment = get_option( 'act_ai_' . self::ID . '_deployment', '' );
+		return ! empty( $deployment ) ? $deployment : 'gpt-4o-mini';
 	}
 
 	/**
@@ -115,8 +114,8 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return string API version.
 	 */
 	private function get_api_version(): string {
-		$settings = get_option( 'act_ai_settings', [] );
-		return $settings['providers'][ self::ID ]['api_version'] ?? '2024-08-01-preview';
+		$api_version = get_option( 'act_ai_' . self::ID . '_api_version', '' );
+		return ! empty( $api_version ) ? $api_version : '2024-08-01-preview';
 	}
 
 	/**

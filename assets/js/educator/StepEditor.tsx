@@ -150,16 +150,22 @@ export default function StepEditor( {
 	 */
 	const handleRequestAiDraft = useCallback( () => {
 		if ( step.target ) {
-			// Build element context from step data.
-			const elementContext = {
+			// Use the captured element context if available, otherwise build from step data.
+			const elementContext = step.elementContext || {
 				selector: step.target,
 				stepId: step.id,
+			};
+
+			// Add existing content for context.
+			const contextWithExisting = {
+				...elementContext,
 				existingTitle: title,
 				existingContent: content,
 			};
-			requestAiDraft( elementContext, postType );
+
+			requestAiDraft( contextWithExisting, postType );
 		}
-	}, [ step.id, step.target, title, content, postType, requestAiDraft ] );
+	}, [ step.id, step.target, step.elementContext, title, content, postType, requestAiDraft ] );
 
 	/**
 	 * Apply AI draft to form.

@@ -13,6 +13,7 @@ declare( strict_types=1 );
 namespace AdminCoachTours\Settings;
 
 use AdminCoachTours\AI\AiManager;
+use AdminCoachTours\Security\Encryption;
 
 /**
  * Settings Page class.
@@ -41,6 +42,20 @@ class SettingsPage {
 	private static ?self $instance = null;
 
 	/**
+	 * Tracks which option names are sensitive (need encryption).
+	 *
+	 * @var array<string, bool>
+	 */
+	private array $sensitive_options = [];
+
+	/**
+	 * Encryption helper.
+	 *
+	 * @var Encryption|null
+	 */
+	private ?Encryption $encryption = null;
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return self
@@ -50,6 +65,13 @@ class SettingsPage {
 			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * Constructor.
+	 */
+	private function __construct() {
+		$this->encryption = new Encryption();
 	}
 
 	/**
@@ -167,6 +189,11 @@ class SettingsPage {
 
 			foreach ( $schema as $field_id => $field_config ) {
 				$option_name = "act_ai_{$provider_id}_{$field_id}";
+
+				// Track sensitive fields for encryption.
+				if ( ! empty( $field_config['sensitive'] ) ) {
+					$this->sensitive_options[ $option_name ] = true;
+				}
 
 				register_setting(
 					self::OPTION_GROUP,
@@ -394,19 +421,30 @@ class SettingsPage {
 	 * @return mixed Sanitized value.
 	 */
 	public function sanitize_provider_field( $value ) {
-		// Keep existing value if empty (for sensitive fields).
-		if ( '' === $value ) {
-			$option_name = current_filter();
+		// Get the option name from the filter.
+		$filter_name = current_filter();
+		$option_name = '';
 
-			// Extract option name from filter name (option_sanitize_option_{name}).
-			if ( preg_match( '/^sanitize_option_(.+)$/', $option_name, $matches ) ) {
-				$existing = get_option( $matches[1] );
-				if ( ! empty( $existing ) ) {
-					return $existing;
-				}
+		if ( preg_match( '/^sanitize_option_(.+)$/', $filter_name, $matches ) ) {
+			$option_name = $matches[1];
+		}
+
+		// Keep existing value if empty (for sensitive fields).
+		if ( '' === $value && ! empty( $option_name ) ) {
+			$existing = get_option( $option_name );
+			if ( ! empty( $existing ) ) {
+				return $existing;
 			}
 		}
 
-		return sanitize_text_field( $value );
+		// Sanitize.
+		$value = sanitize_text_field( $value );
+
+		// Encrypt sensitive fields.
+		if ( ! empty( $option_name ) && ! empty( $this->sensitive_options[ $option_name ] ) && ! empty( $value ) ) {
+			$value = $this->encryption->encrypt( $value );
+		}
+
+		return $value;
 	}
 }

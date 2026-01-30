@@ -30,6 +30,18 @@ class TourRepositoryTest extends TestCase {
 		// Mock WordPress functions.
 		Functions\stubTranslationFunctions();
 		Functions\stubEscapeFunctions();
+
+		// Mock $wpdb global for save_steps.
+		global $wpdb;
+		$wpdb = new class() {
+			public string $postmeta = 'wp_postmeta';
+			public function delete( $table, $where, $format ): bool {
+				return true;
+			}
+			public function insert( $table, $data, $format ): bool {
+				return true;
+			}
+		};
 	}
 
 	/**
@@ -62,12 +74,23 @@ class TourRepositoryTest extends TestCase {
 			'post_content' => 'Test description',
 			'post_status'  => 'publish',
 			'post_type'    => 'act_tour',
+			'post_author'  => 1,
+			'post_date_gmt'     => '2026-01-30 12:00:00',
+			'post_modified_gmt' => '2026-01-30 12:00:00',
 		];
 
 		Functions\when( 'get_post' )->justReturn( $mock_post );
-		Functions\when( 'get_post_meta' )
-			->justReturn( [] );
-		Functions\when( 'update_post_meta' )->justReturn( true );
+		Functions\when( 'get_post_meta' )->alias(
+			function ( $post_id, $key, $single ) {
+				return match ( $key ) {
+					'_act_schema_version' => 1, // Current schema version - no migration needed.
+					'_act_editor'         => 'block',
+					'_act_post_types'     => [ 'post', 'page' ],
+					'_act_steps'          => '[]',
+					default               => '',
+				};
+			}
+		);
 
 		$result = TourRepository::get( 1 );
 
@@ -107,6 +130,7 @@ class TourRepositoryTest extends TestCase {
 		Functions\when( 'sanitize_textarea_field' )->returnArg();
 		Functions\when( 'wp_kses_post' )->returnArg();
 		Functions\when( 'wp_json_encode' )->alias( 'json_encode' );
+		Functions\when( 'wp_cache_delete' )->justReturn( true );
 
 		$result = TourRepository::create( [
 			'title' => 'New Tour',

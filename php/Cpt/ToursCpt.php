@@ -95,7 +95,7 @@ class ToursCpt {
 			'label'               => __( 'Coach Tour', 'admin-coach-tours' ),
 			'description'         => __( 'Interactive guided tours for WordPress admin', 'admin-coach-tours' ),
 			'labels'              => $labels,
-			'supports'            => [ 'title', 'author', 'custom-fields' ],
+			'supports'            => [ 'title', 'editor', 'author', 'custom-fields' ],
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,

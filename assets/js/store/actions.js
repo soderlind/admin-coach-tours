@@ -81,12 +81,47 @@ export function receiveTour( tour ) {
 
 /**
  * Set current tour for editing (educator mode).
+ * Fetches the tour if not already in the store.
  *
  * @param {number|null} tourId Tour ID or null to deselect.
- * @return {Object} Action object.
+ * @return {Generator} Action generator.
  */
-export function setCurrentTour( tourId ) {
-	return {
+export function* setCurrentTour( tourId ) {
+	if ( ! tourId ) {
+		yield {
+			type: ACTION_TYPES.SET_CURRENT_TOUR,
+			tourId: null,
+		};
+		return;
+	}
+
+	// First, try to fetch the tour to ensure it's in the store.
+	try {
+		const tour = yield {
+			type: 'API_FETCH',
+			request: {
+				path: `/admin-coach-tours/v1/tours/${ tourId }`,
+				method: 'GET',
+			},
+		};
+
+		// If tour exists, receive it.
+		if ( tour && tour.id ) {
+			yield receiveTour( tour );
+		}
+	} catch ( error ) {
+		// Tour might not exist yet (new post). Create a placeholder.
+		console.log( '[ACT] Tour not found, creating placeholder for:', tourId );
+		yield receiveTour( {
+			id: tourId,
+			title: '',
+			steps: [],
+			status: 'draft',
+		} );
+	}
+
+	// Now set it as current.
+	yield {
 		type: ACTION_TYPES.SET_CURRENT_TOUR,
 		tourId,
 	};

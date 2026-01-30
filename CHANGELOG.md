@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-01-30
+
+### Added
+
+- **CPT-based educator mode**: Tour authoring now uses the `act_tour` block editor
+  - Educator sidebar auto-opens when editing Coach Tours
+  - Asset loading split: educator on `act_tour`, pupil on other post types
+
+### Changed
+
+- Picker overlay uses 60fps throttling and CSS transitions for smooth highlighting
+- AI draft generation now receives full element context (tag name, ARIA labels, text content)
+
+### Fixed
+
+- Fixed store not registered error by importing store in educator entry point
+- Fixed picker click not capturing elements (use ref instead of stale state)
+- Fixed `setCurrentTour` not creating tour in store before setting as current
+- Fixed AI providers reading from wrong option keys (`act_ai_*` individual options)
+- Fixed API key encryption not applied when saving settings
+- Fixed element context not saved when updating existing step target
+
 ## [0.2.0] - 2026-01-30
 
 ### Added

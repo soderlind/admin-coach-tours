@@ -2,6 +2,7 @@
  * Educator Sidebar Panel.
  *
  * Main sidebar panel for tour authoring in the block editor.
+ * Only loads when editing an act_tour post type.
  *
  * @package AdminCoachTours
  * @since   0.1.0
@@ -9,21 +10,17 @@
 
 import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/editor';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useCallback, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	PanelBody,
 	Button,
-	TextControl,
-	TextareaControl,
-	SelectControl,
 	Notice,
 	Spinner,
 	Flex,
 	FlexItem,
-	FlexBlock,
 } from '@wordpress/components';
-import { plus, help, check } from '@wordpress/icons';
+import { help, check, seen } from '@wordpress/icons';
 
 import StepList from './StepList.tsx';
 import StepEditor from './StepEditor.tsx';
@@ -34,55 +31,90 @@ const STORE_NAME = 'admin-coach-tours';
 /**
  * Educator Sidebar component.
  *
- * @return {JSX.Element} Sidebar component.
+ * @return {JSX.Element|null} Sidebar component or null if not on act_tour.
  */
 export default function EducatorSidebar() {
-	const [ showNewTourForm, setShowNewTourForm ] = useState( false );
-	const [ newTourTitle, setNewTourTitle ] = useState( '' );
-	const [ newTourDescription, setNewTourDescription ] = useState( '' );
 	const [ savingError, setSavingError ] = useState( null );
 	const [ isSavingSteps, setIsSavingSteps ] = useState( false );
 	const [ saveSuccess, setSaveSuccess ] = useState( false );
 
-	// Get data from store.
-	const {
-		tours,
-		isLoading,
-		currentTour,
-		selectedStep,
-		isPickerActive,
-		currentPostType,
-		editorType,
-	} = useSelect( ( select ) => {
-		const store = select( STORE_NAME );
-		const editorStore = select( 'core/editor' );
+	// Get data from editor store.
+	const { postType, postId, postTitle, postStatus, isSaving } = useSelect(
+		( select ) => {
+			const editorStore = select( 'core/editor' );
 
-		return {
-			tours: store.getTours(),
-			isLoading: store.isToursLoading(),
-			currentTour: store.getCurrentTour(),
-			selectedStep: store.getSelectedStep(),
-			isPickerActive: store.isPickerActive(),
-			currentPostType: editorStore?.getCurrentPostType?.() || 'post',
-			editorType: 'block', // Currently only block editor supported.
-		};
-	}, [] );
+			return {
+				postType: editorStore?.getCurrentPostType?.() || '',
+				postId: editorStore?.getCurrentPostId?.() || 0,
+				postTitle:
+					editorStore?.getEditedPostAttribute?.( 'title' ) || '',
+				postStatus:
+					editorStore?.getEditedPostAttribute?.( 'status' ) ||
+					'draft',
+				isSaving: editorStore?.isSavingPost?.() || false,
+			};
+		},
+		[]
+	);
+
+	// Get data from our store.
+	const { currentTour, selectedStep, isPickerActive, isLoading } = useSelect(
+		( select ) => {
+			const store = select( STORE_NAME );
+
+			return {
+				currentTour: store.getCurrentTour(),
+				selectedStep: store.getSelectedStep(),
+				isPickerActive: store.isPickerActive(),
+				isLoading: store.isToursLoading(),
+			};
+		},
+		[]
+	);
 
 	// Get dispatch actions.
 	const {
 		setCurrentTour,
-		createTour,
-		updateTour,
 		saveTour,
 		startPicking,
 		stopPicking,
 		selectStep,
+		startTour,
 	} = useDispatch( STORE_NAME );
+
+	// Get interface dispatch for opening sidebar (works in newer WP).
+	const { enableComplementaryArea } = useDispatch( 'core/interface' );
+
+	// Auto-set current tour when editing an act_tour post.
+	useEffect( () => {
+		if ( postType === 'act_tour' && postId && postId !== currentTour?.id ) {
+			setCurrentTour( postId );
+		}
+	}, [ postType, postId, currentTour?.id, setCurrentTour ] );
+
+	// Auto-open sidebar when editing an act_tour.
+	useEffect( () => {
+		if ( postType === 'act_tour' ) {
+			// Small delay to ensure sidebar is registered.
+			const timer = setTimeout( () => {
+				enableComplementaryArea(
+					'core',
+					'admin-coach-tours-educator/admin-coach-tours-sidebar'
+				);
+			}, 100 );
+			return () => clearTimeout( timer );
+		}
+	}, [ postType, enableComplementaryArea ] );
+
+	// Don't render if not editing an act_tour.
+	if ( postType !== 'act_tour' ) {
+		return null;
+	}
 
 	/**
 	 * Handle saving tour steps.
 	 */
-	const handleSaveSteps = useCallback( async () => {
+	const handleSaveSteps = async () => {
 		if ( ! currentTour?.id ) {
 			return;
 		}
@@ -92,7 +124,6 @@ export default function EducatorSidebar() {
 		setSaveSuccess( false );
 
 		try {
-			// Build tour data with current steps.
 			const tourData = {
 				steps: currentTour.steps || [],
 			};
@@ -104,57 +135,13 @@ export default function EducatorSidebar() {
 			setTimeout( () => setSaveSuccess( false ), 3000 );
 		} catch ( error ) {
 			setSavingError(
-				error.message || __( 'Failed to save steps.', 'admin-coach-tours' )
+				error.message ||
+					__( 'Failed to save steps.', 'admin-coach-tours' )
 			);
 		} finally {
 			setIsSavingSteps( false );
 		}
-	}, [ currentTour?.id, currentTour?.steps, saveTour ] );
-
-	/**
-	 * Handle creating a new tour.
-	 */
-	const handleCreateTour = useCallback( async () => {
-		if ( ! newTourTitle.trim() ) {
-			return;
-		}
-
-		setSavingError( null );
-
-		try {
-			const tourData = {
-				title: newTourTitle.trim(),
-				description: newTourDescription.trim(),
-				postTypes: [ currentPostType ],
-				editors: [ editorType ],
-				status: 'draft',
-			};
-
-			const result = await createTour( tourData );
-
-			if ( result?.id ) {
-				setCurrentTour( result.id );
-				setShowNewTourForm( false );
-				setNewTourTitle( '' );
-				setNewTourDescription( '' );
-			}
-		} catch ( error ) {
-			setSavingError( error.message || __( 'Failed to create tour.', 'admin-coach-tours' ) );
-		}
-	}, [ newTourTitle, newTourDescription, currentPostType, editorType, createTour, setCurrentTour ] );
-
-	/**
-	 * Handle selecting a tour.
-	 *
-	 * @param {number} tourId Tour ID.
-	 */
-	const handleSelectTour = useCallback(
-		( tourId ) => {
-			setCurrentTour( tourId );
-			setShowNewTourForm( false );
-		},
-		[ setCurrentTour ]
-	);
+	};
 
 	/**
 	 * Handle starting to pick an element for a step.
@@ -171,213 +158,39 @@ export default function EducatorSidebar() {
 	}, [ stopPicking ] );
 
 	/**
-	 * Render tour selector when no tour is selected.
-	 *
-	 * @return {JSX.Element} Tour selector.
+	 * Handle testing the tour (preview mode).
 	 */
-	const renderTourSelector = () => {
-		const tourOptions = [
-			{ value: '', label: __( '— Select a tour —', 'admin-coach-tours' ) },
-			...tours.map( ( tour ) => ( {
-				value: tour.id.toString(),
-				label: tour.title || __( 'Untitled Tour', 'admin-coach-tours' ),
-			} ) ),
-		];
-
-		return (
-			<PanelBody
-				title={ __( 'Select Tour', 'admin-coach-tours' ) }
-				initialOpen={ true }
-			>
-				{ isLoading ? (
-					<Flex justify="center">
-						<Spinner />
-					</Flex>
-				) : (
-					<>
-						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							label={ __( 'Edit Existing Tour', 'admin-coach-tours' ) }
-							value=""
-							options={ tourOptions }
-							onChange={ ( value ) => {
-								if ( value ) {
-									handleSelectTour( parseInt( value, 10 ) );
-								}
-							} }
-						/>
-
-						<div style={ { marginTop: '16px' } }>
-							{ ! showNewTourForm ? (
-								<Button
-									variant="primary"
-									icon={ plus }
-									onClick={ () => setShowNewTourForm( true ) }
-								>
-									{ __( 'Create New Tour', 'admin-coach-tours' ) }
-								</Button>
-							) : (
-								<div className="act-new-tour-form">
-									<TextControl
-										__next40pxDefaultSize
-										__nextHasNoMarginBottom
-										label={ __( 'Tour Title', 'admin-coach-tours' ) }
-										value={ newTourTitle }
-										onChange={ setNewTourTitle }
-										placeholder={ __( 'Enter tour title…', 'admin-coach-tours' ) }
-									/>
-									<TextareaControl
-										__nextHasNoMarginBottom
-										label={ __( 'Description', 'admin-coach-tours' ) }
-										value={ newTourDescription }
-										onChange={ setNewTourDescription }
-										placeholder={ __( 'Optional description…', 'admin-coach-tours' ) }
-									/>
-									{ savingError && (
-										<Notice
-											status="error"
-											isDismissible={ false }
-										>
-											{ savingError }
-										</Notice>
-									) }
-									<div className="act-button-group">
-										<Button
-											variant="primary"
-											onClick={ handleCreateTour }
-											disabled={ ! newTourTitle.trim() }
-										>
-											{ __( 'Create', 'admin-coach-tours' ) }
-										</Button>
-										<Button
-											variant="tertiary"
-											onClick={ () => {
-												setShowNewTourForm( false );
-												setNewTourTitle( '' );
-												setNewTourDescription( '' );
-												setSavingError( null );
-											} }
-										>
-											{ __( 'Cancel', 'admin-coach-tours' ) }
-										</Button>
-									</div>
-								</div>
-							) }
-						</div>
-					</>
-				) }
-			</PanelBody>
-		);
-	};
-
-	/**
-	 * Render tour editor when a tour is selected.
-	 *
-	 * @return {JSX.Element} Tour editor.
-	 */
-	const renderTourEditor = () => {
-		if ( ! currentTour ) {
-			return null;
+	const handleTestTour = useCallback( () => {
+		if ( currentTour?.id ) {
+			startTour( currentTour.id );
 		}
+	}, [ currentTour?.id, startTour ] );
 
+	// Show loading state.
+	if ( isLoading && ! currentTour ) {
 		return (
 			<>
-				<PanelBody
-					title={ currentTour.title || __( 'Untitled Tour', 'admin-coach-tours' ) }
-					initialOpen={ true }
+				<PluginSidebar
+					name="admin-coach-tours-sidebar"
+					title={ __( 'Tour Steps', 'admin-coach-tours' ) }
+					icon={ help }
 				>
-					<Flex justify="space-between" align="center">
-						<FlexItem>
-							<span className={ `act-tour-status${ currentTour.status === 'publish' ? ' act-tour-status--published' : '' }` }>
-								{ currentTour.status === 'publish'
-									? __( 'Published', 'admin-coach-tours' )
-									: __( 'Draft', 'admin-coach-tours' )
-								}
-							</span>
-						</FlexItem>
-						<FlexItem>
-							<Button
-								variant="link"
-								onClick={ () => setCurrentTour( null ) }
-								size="small"
+					<div className="act-educator-sidebar">
+						<PanelBody>
+							<Flex
+								justify="center"
+								style={ { padding: '24px' } }
 							>
-								{ __( 'Switch Tour', 'admin-coach-tours' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
-
-					{ currentTour.description && (
-						<p className="act-tour-description">
-							{ currentTour.description }
-						</p>
-					) }
-				</PanelBody>
-
-				<PanelBody
-					title={ __( 'Steps', 'admin-coach-tours' ) }
-					initialOpen={ true }
-				>
-					{ savingError && (
-						<Notice
-							status="error"
-							isDismissible={ true }
-							onRemove={ () => setSavingError( null ) }
-						>
-							{ savingError }
-						</Notice>
-					) }
-
-					{ saveSuccess && (
-						<Notice
-							status="success"
-							isDismissible={ false }
-						>
-							{ __( 'Steps saved successfully!', 'admin-coach-tours' ) }
-						</Notice>
-					) }
-
-					<StepList
-						tourId={ currentTour.id }
-						steps={ currentTour.steps || [] }
-						onEditStep={ ( step ) => selectStep( step?.id ?? null ) }
-						onAddStep={ handleStartPicking }
-					/>
-
-					{ ( currentTour.steps?.length > 0 ) && (
-						<div className="act-actions-footer">
-							<Button
-								variant="primary"
-								icon={ check }
-								onClick={ handleSaveSteps }
-								isBusy={ isSavingSteps }
-								disabled={ isSavingSteps }
-							>
-								{ isSavingSteps
-									? __( 'Saving…', 'admin-coach-tours' )
-									: __( 'Save Steps', 'admin-coach-tours' )
-								}
-							</Button>
-						</div>
-					) }
-				</PanelBody>
-
-				{ selectedStep && (
-					<PanelBody
-						title={ __( 'Edit Step', 'admin-coach-tours' ) }
-						initialOpen={ true }
-					>
-						<StepEditor
-							step={ selectedStep }
-							tourId={ currentTour.id }
-							postType={ currentPostType }
-							onClose={ () => selectStep( null ) }
-						/>
-					</PanelBody>
-				) }
+								<Spinner />
+							</Flex>
+						</PanelBody>
+					</div>
+				</PluginSidebar>
 			</>
 		);
-	};
+	}
+
+	const steps = currentTour?.steps || [];
 
 	return (
 		<>
@@ -385,16 +198,136 @@ export default function EducatorSidebar() {
 				target="admin-coach-tours-sidebar"
 				icon={ help }
 			>
-				{ __( 'Admin Coach Tours', 'admin-coach-tours' ) }
+				{ __( 'Tour Steps', 'admin-coach-tours' ) }
 			</PluginSidebarMoreMenuItem>
 
 			<PluginSidebar
 				name="admin-coach-tours-sidebar"
-				title={ __( 'Admin Coach Tours', 'admin-coach-tours' ) }
+				title={ __( 'Tour Steps', 'admin-coach-tours' ) }
 				icon={ help }
 			>
 				<div className="act-educator-sidebar">
-					{ ! currentTour ? renderTourSelector() : renderTourEditor() }
+					<PanelBody
+						title={ __( 'Tour Info', 'admin-coach-tours' ) }
+						initialOpen={ false }
+					>
+						<Flex justify="space-between" align="center">
+							<FlexItem>
+								<strong>
+									{ postTitle ||
+										__(
+											'Untitled Tour',
+											'admin-coach-tours'
+										) }
+								</strong>
+							</FlexItem>
+							<FlexItem>
+								<span
+									className={ `act-tour-status${
+										postStatus === 'publish'
+											? ' act-tour-status--published'
+											: ''
+									}` }
+								>
+									{ postStatus === 'publish'
+										? __(
+												'Published',
+												'admin-coach-tours'
+										  )
+										: __( 'Draft', 'admin-coach-tours' ) }
+								</span>
+							</FlexItem>
+						</Flex>
+						<p
+							className="act-help-text"
+							style={ { marginTop: '8px' } }
+						>
+							{ __(
+								'Use the block editor canvas as a sandbox to create your tour steps. Pick elements from the editor to target them in your tour.',
+								'admin-coach-tours'
+							) }
+						</p>
+					</PanelBody>
+
+					<PanelBody
+						title={
+							__( 'Steps', 'admin-coach-tours' ) +
+							` (${ steps.length })`
+						}
+						initialOpen={ true }
+					>
+						{ savingError && (
+							<Notice
+								status="error"
+								isDismissible={ true }
+								onRemove={ () => setSavingError( null ) }
+							>
+								{ savingError }
+							</Notice>
+						) }
+
+						{ saveSuccess && (
+							<Notice status="success" isDismissible={ false }>
+								{ __(
+									'Steps saved successfully!',
+									'admin-coach-tours'
+								) }
+							</Notice>
+						) }
+
+						<StepList
+							tourId={ postId }
+							steps={ steps }
+							onEditStep={ ( step ) =>
+								selectStep( step?.id ?? null )
+							}
+							onAddStep={ handleStartPicking }
+						/>
+
+						{ steps.length > 0 && (
+							<div className="act-actions-footer">
+								<Button
+									variant="primary"
+									icon={ check }
+									onClick={ handleSaveSteps }
+									isBusy={ isSavingSteps }
+									disabled={ isSavingSteps || isSaving }
+								>
+									{ isSavingSteps
+										? __(
+												'Saving…',
+												'admin-coach-tours'
+										  )
+										: __(
+												'Save Steps',
+												'admin-coach-tours'
+										  ) }
+								</Button>
+								<Button
+									variant="secondary"
+									icon={ seen }
+									onClick={ handleTestTour }
+									disabled={ steps.length === 0 }
+								>
+									{ __( 'Test Tour', 'admin-coach-tours' ) }
+								</Button>
+							</div>
+						) }
+					</PanelBody>
+
+					{ selectedStep && (
+						<PanelBody
+							title={ __( 'Edit Step', 'admin-coach-tours' ) }
+							initialOpen={ true }
+						>
+							<StepEditor
+								step={ selectedStep }
+								tourId={ postId }
+								postType="act_tour"
+								onClose={ () => selectStep( null ) }
+							/>
+						</PanelBody>
+					) }
 				</div>
 			</PluginSidebar>
 

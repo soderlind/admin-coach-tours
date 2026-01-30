@@ -83,8 +83,7 @@ class OpenAiProvider implements AiProviderInterface {
 	 * @return string|null API key or null.
 	 */
 	private function get_api_key(): ?string {
-		$settings = get_option( 'act_ai_settings', [] );
-		$encrypted_key = $settings['providers'][ self::ID ]['api_key'] ?? '';
+		$encrypted_key = get_option( 'act_ai_' . self::ID . '_api_key', '' );
 
 		if ( empty( $encrypted_key ) ) {
 			return null;
@@ -101,8 +100,8 @@ class OpenAiProvider implements AiProviderInterface {
 	 * @return string Model name.
 	 */
 	private function get_model(): string {
-		$settings = get_option( 'act_ai_settings', [] );
-		return $settings['providers'][ self::ID ]['model'] ?? 'gpt-4o-mini';
+		$model = get_option( 'act_ai_' . self::ID . '_model', '' );
+		return ! empty( $model ) ? $model : 'gpt-4o-mini';
 	}
 
 	/**

@@ -144,15 +144,10 @@ class AiManager {
 	 * @return array Settings.
 	 */
 	public function get_settings(): array {
-		$defaults = [
-			'active_provider' => '',
-			'enabled'         => false,
-			'providers'       => [],
+		return [
+			'active_provider' => get_option( 'act_ai_provider', '' ),
+			'enabled'         => (bool) get_option( 'act_ai_enabled', false ),
 		];
-
-		$settings = get_option( self::OPTION_NAME, [] );
-
-		return wp_parse_args( $settings, $defaults );
 	}
 
 	/**
