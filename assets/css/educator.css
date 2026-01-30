@@ -1,0 +1,337 @@
+/**
+ * Educator Sidebar Styles.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+/**
+ * Sidebar container.
+ */
+.act-educator-sidebar {
+	padding: 0;
+}
+
+.act-educator-sidebar .components-panel__body {
+	border-top: none;
+}
+
+.act-educator-sidebar .components-panel__body:first-child {
+	border-top: 1px solid #e0e0e0;
+}
+
+/**
+ * Tour status badge.
+ */
+.act-tour-status {
+	display: inline-block;
+	padding: 2px 8px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	border-radius: 3px;
+	background: #f0f0f0;
+	color: #757575;
+}
+
+.act-tour-status--published {
+	background: #d4edda;
+	color: #155724;
+}
+
+/**
+ * Tour description.
+ */
+.act-tour-description {
+	margin: 0;
+	padding: 8px 0;
+	font-size: 13px;
+	color: #757575;
+	line-height: 1.5;
+}
+
+/**
+ * New tour form.
+ */
+.act-new-tour-form {
+	padding: 12px;
+	background: #f9f9f9;
+	border-radius: 4px;
+	border: 1px solid #e0e0e0;
+}
+
+.act-new-tour-form > * + * {
+	margin-top: 12px;
+}
+
+/**
+ * Step List.
+ */
+.act-step-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.act-step-list-empty {
+	text-align: center;
+	padding: 24px 16px;
+	background: #f9f9f9;
+	border-radius: 4px;
+	border: 1px dashed #ccc;
+}
+
+.act-step-list-empty p {
+	margin: 0 0 12px;
+	color: #757575;
+	font-size: 13px;
+}
+
+.act-step-list-footer {
+	margin-top: 12px;
+}
+
+/**
+ * Step Item.
+ */
+.act-step-item {
+	padding: 10px 12px;
+	margin-bottom: 1px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.act-step-item:hover {
+	border-color: #007cba;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.act-step-item.is-dragging {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	border-color: #007cba;
+}
+
+.act-step-item + .act-step-item {
+	margin-top: 8px;
+}
+
+/**
+ * Step drag handle.
+ */
+.act-step-drag-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: transparent;
+	border-radius: 4px;
+	cursor: grab;
+	color: #757575;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.act-step-drag-handle:hover {
+	background: #f0f0f0;
+	color: #1e1e1e;
+}
+
+.act-step-drag-handle:active {
+	cursor: grabbing;
+	background: #e0e0e0;
+}
+
+/**
+ * Step number badge.
+ */
+.act-step-order {
+	flex-shrink: 0;
+}
+
+.act-step-number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 24px;
+	height: 24px;
+	padding: 0 6px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #fff;
+	background: #007cba;
+	border-radius: 12px;
+}
+
+/**
+ * Step content.
+ */
+.act-step-content {
+	min-width: 0; /* Allow text truncation */
+	flex: 1;
+}
+
+.act-step-title {
+	font-size: 13px;
+	font-weight: 500;
+	color: #1e1e1e;
+	line-height: 1.4;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.act-step-target-info {
+	margin-top: 2px;
+}
+
+.act-step-target-info code {
+	display: block;
+	font-size: 10px;
+	color: #757575;
+	background: #f0f0f0;
+	padding: 2px 6px;
+	border-radius: 3px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
+/**
+ * Step actions.
+ */
+.act-step-actions {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.act-step-actions .components-button {
+	min-width: 28px;
+	height: 28px;
+	padding: 0;
+}
+
+.act-step-actions .components-button.is-destructive:hover {
+	background: #cc1818;
+	color: #fff;
+}
+
+/**
+ * Button groups - side by side buttons.
+ */
+.act-button-group {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.act-button-group .components-button {
+	flex: 1;
+	justify-content: center;
+}
+
+.act-button-group--end {
+	justify-content: flex-end;
+}
+
+.act-button-group--end .components-button {
+	flex: none;
+}
+
+/**
+ * Actions footer.
+ */
+.act-actions-footer {
+	display: flex;
+	gap: 8px;
+	padding-top: 12px;
+	margin-top: 12px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.act-actions-footer .components-button {
+	flex: 1;
+	justify-content: center;
+}
+
+/**
+ * Notice improvements.
+ */
+.act-educator-sidebar .components-notice {
+	margin: 0 0 12px;
+	padding: 8px 12px;
+}
+
+/**
+ * Tour header in edit mode.
+ */
+.act-tour-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.act-tour-header-title {
+	flex: 1;
+	font-size: 14px;
+	font-weight: 600;
+	margin: 0;
+	color: #1e1e1e;
+}
+
+/**
+ * Compact mode for small sidebar.
+ */
+@media (max-width: 280px) {
+	.act-step-item {
+		padding: 8px;
+	}
+
+	.act-step-title {
+		font-size: 12px;
+	}
+
+	.act-step-target-info code {
+		font-size: 9px;
+	}
+
+	.act-button-group {
+		flex-direction: column;
+	}
+}
+
+/**
+ * Selected step highlight.
+ */
+.act-step-item.is-selected {
+	border-color: #007cba;
+	background: #f0f7fc;
+	box-shadow: inset 3px 0 0 #007cba;
+}
+
+/**
+ * Loading state.
+ */
+.act-loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 24px;
+}
+
+/**
+ * Help text.
+ */
+.act-help-text {
+	font-size: 12px;
+	color: #757575;
+	margin: 4px 0 0;
+}

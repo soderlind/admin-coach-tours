@@ -153,9 +153,27 @@ export default class Highlighter {
 		// Add padding around the element.
 		const padding = 4;
 
+		// Check if element is inside an iframe and get iframe offset.
+		let iframeOffset = { top: 0, left: 0 };
+		const ownerDoc = this.targetElement.ownerDocument;
+		if ( ownerDoc !== document ) {
+			// Element is in an iframe - find the iframe element.
+			const iframes = document.querySelectorAll( 'iframe' );
+			for ( const iframe of iframes ) {
+				if ( iframe.contentDocument === ownerDoc ) {
+					const iframeRect = iframe.getBoundingClientRect();
+					iframeOffset = {
+						top: iframeRect.top,
+						left: iframeRect.left,
+					};
+					break;
+				}
+			}
+		}
+
 		Object.assign( this.spotlightElement.style, {
-			top: `${ rect.top - padding }px`,
-			left: `${ rect.left - padding }px`,
+			top: `${ rect.top + iframeOffset.top - padding }px`,
+			left: `${ rect.left + iframeOffset.left - padding }px`,
 			width: `${ rect.width + padding * 2 }px`,
 			height: `${ rect.height + padding * 2 }px`,
 		} );

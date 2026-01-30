@@ -28,13 +28,6 @@ class Routes {
 	public const NAMESPACE = 'admin-coach-tours/v1';
 
 	/**
-	 * Repository instance.
-	 *
-	 * @var TourRepository
-	 */
-	private TourRepository $repository;
-
-	/**
 	 * Singleton instance.
 	 *
 	 * @var self|null
@@ -57,14 +50,15 @@ class Routes {
 	 * Constructor.
 	 */
 	private function __construct() {
-		$this->repository = TourRepository::get_instance();
+		// No initialization needed - uses TourRepository static methods.
 	}
 
 	/**
 	 * Initialize routes.
 	 */
-	public function init(): void {
-		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+	public static function init(): void {
+		$instance = self::get_instance();
+		add_action( 'rest_api_init', [ $instance, 'register_routes' ] );
 	}
 
 	/**
@@ -240,7 +234,7 @@ class Routes {
 			);
 		}
 
-		if ( ! Capabilities::verify_request( 'run' ) ) {
+		if ( ! current_user_can( Capabilities::RUN_TOURS ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
 				__( 'You do not have permission to run tours.', 'admin-coach-tours' ),
@@ -265,7 +259,7 @@ class Routes {
 			);
 		}
 
-		if ( ! Capabilities::verify_request( 'edit' ) ) {
+		if ( ! current_user_can( Capabilities::EDIT_TOURS ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
 				__( 'You do not have permission to edit tours.', 'admin-coach-tours' ),
@@ -290,7 +284,7 @@ class Routes {
 			);
 		}
 
-		if ( ! Capabilities::verify_request( 'ai' ) ) {
+		if ( ! current_user_can( Capabilities::USE_AI ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
 				__( 'You do not have permission to use AI features.', 'admin-coach-tours' ),
@@ -319,7 +313,7 @@ class Routes {
 		// Filter out null values.
 		$args = array_filter( $args, fn( $v ) => null !== $v );
 
-		$tours = $this->repository->get_all( $args );
+		$tours = TourRepository::get_all( $args );
 
 		return rest_ensure_response( $tours );
 	}
@@ -333,7 +327,7 @@ class Routes {
 	public function get_tour( \WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$tour = $this->repository->get( $id );
+		$tour = TourRepository::get( $id );
 
 		if ( ! $tour ) {
 			return new \WP_Error(
@@ -361,13 +355,13 @@ class Routes {
 			'status'      => $request->get_param( 'status' ) ?? 'draft',
 		];
 
-		$result = $this->repository->create( $data );
+		$result = TourRepository::create( $data );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
-		$tour = $this->repository->get( $result );
+		$tour = TourRepository::get( $result );
 
 		return rest_ensure_response( $tour );
 	}
@@ -381,7 +375,7 @@ class Routes {
 	public function update_tour( \WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$existing = $this->repository->get( $id );
+		$existing = TourRepository::get( $id );
 
 		if ( ! $existing ) {
 			return new \WP_Error(
@@ -413,13 +407,17 @@ class Routes {
 			$data['status'] = $request->get_param( 'status' );
 		}
 
-		$result = $this->repository->update( $id, $data );
+		if ( $request->has_param( 'steps' ) ) {
+			$data['steps'] = $request->get_param( 'steps' );
+		}
+
+		$result = TourRepository::update( $id, $data );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
-		$tour = $this->repository->get( $id );
+		$tour = TourRepository::get( $id );
 
 		return rest_ensure_response( $tour );
 	}
@@ -433,7 +431,7 @@ class Routes {
 	public function delete_tour( \WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$result = $this->repository->delete( $id );
+		$result = TourRepository::delete( $id );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -459,7 +457,7 @@ class Routes {
 			'preconditions' => $request->get_param( 'preconditions' ),
 		];
 
-		$result = $this->repository->add_step( $tour_id, $step_data );
+		$result = TourRepository::add_step( $tour_id, $step_data );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -486,7 +484,7 @@ class Routes {
 			}
 		}
 
-		$result = $this->repository->update_step( $tour_id, $step_id, $step_data );
+		$result = TourRepository::update_step( $tour_id, $step_id, $step_data );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -505,7 +503,7 @@ class Routes {
 		$tour_id = $request->get_param( 'tour_id' );
 		$step_id = $request->get_param( 'step_id' );
 
-		$result = $this->repository->delete_step( $tour_id, $step_id );
+		$result = TourRepository::delete_step( $tour_id, $step_id );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -524,7 +522,7 @@ class Routes {
 		$tour_id = $request->get_param( 'tour_id' );
 		$order   = $request->get_param( 'order' );
 
-		$result = $this->repository->reorder_steps( $tour_id, $order );
+		$result = TourRepository::reorder_steps( $tour_id, $order );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -629,6 +627,12 @@ class Routes {
 			'type'              => 'integer',
 			'required'          => true,
 			'sanitize_callback' => 'absint',
+		];
+
+		// Allow steps to be updated.
+		$args['steps'] = [
+			'type'  => 'array',
+			'items' => [ 'type' => 'object' ],
 		];
 
 		return $args;

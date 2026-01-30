@@ -11,7 +11,7 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.1.0
+ * Version:     0.2.0
  * Requires at least: 6.8
  * Requires PHP: 8.3
  * Author:      Per Soderlind
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 
 /**
  * Plugin slug.
@@ -146,7 +146,7 @@ function init(): void {
 		Cpt\ToursCpt::class,
 		Security\Capabilities::class,
 		Rest\Routes::class,
-		Admin\SettingsPage::class,
+		Settings\SettingsPage::class,
 	];
 
 	foreach ( $initializers as $class ) {
@@ -168,7 +168,7 @@ function init(): void {
  * @return void
  */
 function enqueue_editor_assets(): void {
-	$asset_file = PLUGIN_PATH . 'build/editor/index.asset.php';
+	$asset_file = PLUGIN_PATH . 'build/educator/index.asset.php';
 
 	if ( ! file_exists( $asset_file ) ) {
 		return;
@@ -177,23 +177,16 @@ function enqueue_editor_assets(): void {
 	$asset = require $asset_file;
 
 	wp_enqueue_script(
-		'admin-coach-tours-editor',
-		PLUGIN_URL . 'build/editor/index.js',
+		'admin-coach-tours-educator',
+		PLUGIN_URL . 'build/educator/index.js',
 		$asset['dependencies'],
 		$asset['version'],
 		true
 	);
 
-	wp_enqueue_style(
-		'admin-coach-tours-editor',
-		PLUGIN_URL . 'build/editor/index.css',
-		[ 'wp-components' ],
-		$asset['version']
-	);
-
 	// Localize script with REST info and nonce.
 	wp_localize_script(
-		'admin-coach-tours-editor',
+		'admin-coach-tours-educator',
 		'adminCoachToursData',
 		[
 			'restUrl'   => rest_url( 'admin-coach-tours/v1/' ),
@@ -205,10 +198,40 @@ function enqueue_editor_assets(): void {
 	);
 
 	wp_set_script_translations(
-		'admin-coach-tours-editor',
+		'admin-coach-tours-educator',
 		'admin-coach-tours',
 		PLUGIN_PATH . 'languages'
 	);
+
+	// Enqueue educator sidebar styles.
+	wp_enqueue_style(
+		'admin-coach-tours-educator',
+		PLUGIN_URL . 'assets/css/educator.css',
+		[],
+		VERSION
+	);
+
+	// Also enqueue pupil script for tour running.
+	$pupil_asset_file = PLUGIN_PATH . 'build/pupil/index.asset.php';
+
+	if ( file_exists( $pupil_asset_file ) ) {
+		$pupil_asset = require $pupil_asset_file;
+
+		wp_enqueue_script(
+			'admin-coach-tours-pupil',
+			PLUGIN_URL . 'build/pupil/index.js',
+			$pupil_asset['dependencies'],
+			$pupil_asset['version'],
+			true
+		);
+
+		wp_enqueue_style(
+			'admin-coach-tours-pupil',
+			PLUGIN_URL . 'assets/css/pupil.css',
+			[],
+			VERSION
+		);
+	}
 }
 
 /**

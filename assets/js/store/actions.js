@@ -80,6 +80,19 @@ export function receiveTour( tour ) {
 }
 
 /**
+ * Set current tour for editing (educator mode).
+ *
+ * @param {number|null} tourId Tour ID or null to deselect.
+ * @return {Object} Action object.
+ */
+export function setCurrentTour( tourId ) {
+	return {
+		type: ACTION_TYPES.SET_CURRENT_TOUR,
+		tourId,
+	};
+}
+
+/**
  * Fetch tours from REST API.
  *
  * @param {Object} args Query arguments.
@@ -108,14 +121,74 @@ export function fetchTour( tourId ) {
 /**
  * Save tour to server.
  *
- * @param {number} tourId Tour ID.
- * @return {Object} Action object for control.
+ * @param {number} tourId   Tour ID.
+ * @param {Object} tourData Tour data to save.
+ * @return {Generator} Action generator.
  */
-export function saveTour( tourId ) {
-	return {
-		type: 'SAVE_TOUR',
-		tourId,
-	};
+export function* saveTour( tourId, tourData ) {
+	try {
+		const result = yield {
+			type: 'SAVE_TOUR',
+			tourId,
+			tourData,
+		};
+
+		if ( result?.id ) {
+			yield receiveTour( result );
+		}
+
+		return result;
+	} catch ( error ) {
+		throw error;
+	}
+}
+
+/**
+ * Create a new tour.
+ *
+ * @param {Object} data Tour data (title, description, postTypes, editors, status).
+ * @return {Function} Thunk that creates tour and returns result.
+ */
+export function* createTour( data ) {
+	try {
+		const result = yield {
+			type: 'CREATE_TOUR',
+			data,
+		};
+
+		if ( result?.id ) {
+			yield receiveTour( result );
+		}
+
+		return result;
+	} catch ( error ) {
+		throw error;
+	}
+}
+
+/**
+ * Update an existing tour.
+ *
+ * @param {number} tourId Tour ID.
+ * @param {Object} data   Tour data to update.
+ * @return {Function} Thunk that updates tour and returns result.
+ */
+export function* updateTour( tourId, data ) {
+	try {
+		const result = yield {
+			type: 'UPDATE_TOUR',
+			tourId,
+			data,
+		};
+
+		if ( result?.id ) {
+			yield receiveTour( result );
+		}
+
+		return result;
+	} catch ( error ) {
+		throw error;
+	}
 }
 
 // ============================================================================
@@ -146,6 +219,15 @@ export function endTour() {
 	return {
 		type: ACTION_TYPES.END_TOUR,
 	};
+}
+
+/**
+ * Alias for endTour - stop the current tour.
+ *
+ * @return {Object} Action object.
+ */
+export function stopTour() {
+	return endTour();
 }
 
 /**
@@ -250,6 +332,19 @@ export function resetCompletion() {
 	};
 }
 
+/**
+ * Mark step as complete and auto-advance.
+ *
+ * Sets completion satisfied and moves to next step.
+ *
+ * @return {Object} Action object (next step).
+ */
+export function markStepComplete() {
+	// This is just an alias for nextStep - the completion watcher
+	// handles the logic, this just triggers the advance.
+	return nextStep();
+}
+
 // ============================================================================
 // Target Resolution Actions
 // ============================================================================
@@ -322,12 +417,24 @@ export function setLastError( error ) {
 /**
  * Activate element picker.
  *
+ * @param {string|null} stepId Optional step ID if repicking for existing step.
  * @return {Object} Action object.
  */
-export function activatePicker() {
+export function activatePicker( stepId = null ) {
 	return {
 		type: ACTION_TYPES.ACTIVATE_PICKER,
+		stepId,
 	};
+}
+
+/**
+ * Start picking an element (alias for activatePicker).
+ *
+ * @param {string|null} stepId Optional step ID if repicking for existing step.
+ * @return {Object} Action object.
+ */
+export function startPicking( stepId = null ) {
+	return activatePicker( stepId );
 }
 
 /**
@@ -339,6 +446,15 @@ export function deactivatePicker() {
 	return {
 		type: ACTION_TYPES.DEACTIVATE_PICKER,
 	};
+}
+
+/**
+ * Stop picking (alias for deactivatePicker).
+ *
+ * @return {Object} Action object.
+ */
+export function stopPicking() {
+	return deactivatePicker();
 }
 
 /**
@@ -373,10 +489,10 @@ export function setPendingChanges( pending ) {
  * @param {number} tourId  Tour ID.
  * @param {string} stepId  Step ID.
  * @param {Object} updates Updates to apply.
- * @return {Object} Action object.
+ * @return {Generator} Action generator.
  */
-export function updateStep( tourId, stepId, updates ) {
-	return {
+export function* updateStep( tourId, stepId, updates ) {
+	yield {
 		type: ACTION_TYPES.UPDATE_STEP,
 		tourId,
 		stepId,
@@ -390,9 +506,9 @@ export function updateStep( tourId, stepId, updates ) {
  * @param {number}      tourId Tour ID.
  * @param {Object}      step   Step data (without id/order).
  * @param {number|null} index  Insert position.
- * @return {Object} Action object.
+ * @return {Generator} Action generator.
  */
-export function addStep( tourId, step = {}, index = null ) {
+export function* addStep( tourId, step = {}, index = null ) {
 	const newStep = {
 		id: generateId(),
 		order: 0,
@@ -411,7 +527,7 @@ export function addStep( tourId, step = {}, index = null ) {
 		...step,
 	};
 
-	return {
+	yield {
 		type: ACTION_TYPES.ADD_STEP,
 		tourId,
 		step: newStep,
@@ -424,10 +540,10 @@ export function addStep( tourId, step = {}, index = null ) {
  *
  * @param {number} tourId Tour ID.
  * @param {string} stepId Step ID.
- * @return {Object} Action object.
+ * @return {Generator} Action generator.
  */
-export function deleteStep( tourId, stepId ) {
-	return {
+export function* deleteStep( tourId, stepId ) {
+	yield {
 		type: ACTION_TYPES.DELETE_STEP,
 		tourId,
 		stepId,
@@ -439,10 +555,10 @@ export function deleteStep( tourId, stepId ) {
  *
  * @param {number}   tourId  Tour ID.
  * @param {string[]} stepIds Ordered step IDs.
- * @return {Object} Action object.
+ * @return {Generator} Action generator.
  */
-export function reorderSteps( tourId, stepIds ) {
-	return {
+export function* reorderSteps( tourId, stepIds ) {
+	yield {
 		type: ACTION_TYPES.REORDER_STEPS,
 		tourId,
 		stepIds,
@@ -508,14 +624,28 @@ export function clearAiDraft() {
  *
  * @param {Object} elementContext Element context for AI.
  * @param {string} postType       Current post type.
- * @return {Object} Action object for control.
+ * @return {Generator} Generator that handles AI draft request.
  */
-export function requestAiDraft( elementContext, postType ) {
-	return {
-		type: 'REQUEST_AI_DRAFT',
-		elementContext,
-		postType,
-	};
+export function* requestAiDraft( elementContext, postType ) {
+	// Set loading state.
+	yield setAiDraftLoading( true );
+	yield setAiDraftError( null );
+
+	try {
+		const result = yield {
+			type: 'REQUEST_AI_DRAFT',
+			elementContext,
+			postType,
+		};
+
+		yield setAiDraftResult( result );
+		return result;
+	} catch ( error ) {
+		yield setAiDraftError( error.message || 'Failed to generate AI draft' );
+		throw error;
+	} finally {
+		yield setAiDraftLoading( false );
+	}
 }
 
 // ============================================================================

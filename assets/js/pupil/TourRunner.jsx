@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import CoachPanel from './CoachPanel.jsx';
 import Highlighter from './Highlighter.js';
 import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarget.js';
-import { applyPreconditions } from '../runtime/applyPreconditions.js';
+import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
 
 const STORE_NAME = 'admin-coach-tours';
@@ -26,41 +26,44 @@ const STORE_NAME = 'admin-coach-tours';
  * @return {JSX.Element|null} Tour runner UI.
  */
 export default function TourRunner() {
+	console.log( '[ACT TourRunner] Component function called' );
+	
 	const [ targetElement, setTargetElement ] = useState( null );
 	const [ resolutionError, setResolutionError ] = useState( null );
+	const [ resolution, setResolution ] = useState( null );
 	const [ isApplyingPreconditions, setIsApplyingPreconditions ] = useState( false );
 	const [ completionWatcher, setCompletionWatcher ] = useState( null );
+	const [ repeatCounter, setRepeatCounter ] = useState( 0 );
 	const highlighterRef = useRef( null );
+	const previousStepIndexRef = useRef( null );
 
 	// Get playback state from store.
 	const {
 		isPlaying,
-		isPaused,
 		currentTour,
 		currentStep,
 		stepIndex,
 		totalSteps,
 	} = useSelect( ( select ) => {
 		const store = select( STORE_NAME );
-		return {
-			isPlaying: store.isPlaying(),
-			isPaused: store.isPaused?.() || false,
+		const data = {
+			// Only run in pupil mode, not educator mode.
+			isPlaying: store.isPupilMode(),
 			currentTour: store.getCurrentTour(),
 			currentStep: store.getCurrentStep(),
-			stepIndex: store.getCurrentStepIndex?.() || 0,
-			totalSteps: store.getTotalSteps?.() || 0,
+			stepIndex: store.getCurrentStepIndex() || 0,
+			totalSteps: store.getTotalSteps() || 0,
 		};
+		console.log( '[ACT TourRunner] useSelect:', data );
+		return data;
 	}, [] );
 
 	// Get dispatch actions.
 	const {
-		pauseTour,
-		resumeTour,
 		stopTour,
 		nextStep,
 		previousStep,
 		repeatStep,
-		setResolution,
 		markStepComplete,
 	} = useDispatch( STORE_NAME );
 
@@ -90,10 +93,14 @@ export default function TourRunner() {
 				highlighterRef.current.clear();
 			}
 			setTargetElement( null );
+			// Clear block tracking when tour ends.
+			clearInsertedBlocks();
 			return;
 		}
 
 		let isMounted = true;
+		let resolvedElement = null; // Track the resolved element locally.
+		const previousStepIndex = previousStepIndexRef.current;
 
 		const setupStep = async () => {
 			setResolutionError( null );
@@ -104,11 +111,21 @@ export default function TourRunner() {
 				completionWatcher.cancel();
 			}
 
+			// Handle step transition: leave previous step, enter new step.
+			if ( previousStepIndex !== null && previousStepIndex !== stepIndex ) {
+				await onLeaveStep( previousStepIndex );
+			}
+			await onEnterStep( stepIndex );
+			previousStepIndexRef.current = stepIndex;
+
 			// 1. Apply preconditions.
+			console.log( '[ACT TourRunner] Preconditions for step:', stepIndex, currentStep.preconditions );
 			if ( currentStep.preconditions?.length > 0 ) {
+				console.log( '[ACT TourRunner] Applying', currentStep.preconditions.length, 'preconditions' );
 				const preconditionResult = await applyPreconditions(
 					currentStep.preconditions
 				);
+				console.log( '[ACT TourRunner] Precondition result:', preconditionResult );
 
 				if ( ! isMounted ) {
 					return;
@@ -120,6 +137,8 @@ export default function TourRunner() {
 						preconditionResult.failedPreconditions
 					);
 				}
+			} else {
+				console.log( '[ACT TourRunner] No preconditions for this step' );
 			}
 
 			setIsApplyingPreconditions( false );
@@ -144,6 +163,7 @@ export default function TourRunner() {
 				}
 
 				if ( result.success ) {
+					resolvedElement = result.element; // Store locally for completion watcher.
 					setTargetElement( result.element );
 					setResolution( {
 						success: true,
@@ -163,6 +183,7 @@ export default function TourRunner() {
 						inline: 'center',
 					} );
 				} else {
+					resolvedElement = null;
 					setTargetElement( null );
 					setResolutionError( result.error );
 					setResolution( {
@@ -176,11 +197,18 @@ export default function TourRunner() {
 				}
 			}
 
-			// 3. Set up completion watcher.
-			if ( currentStep.completion ) {
+			// 3. Set up completion watcher (use resolvedElement, not state).
+			if ( currentStep.completion && resolvedElement ) {
+				// Small delay to ensure DOM is stable and UI is ready.
+				await new Promise( ( r ) => setTimeout( r, 100 ) );
+
+				if ( ! isMounted ) {
+					return;
+				}
+
 				const watcher = watchCompletion(
 					currentStep.completion,
-					targetElement
+					resolvedElement // Use local variable, not stale state!
 				);
 				setCompletionWatcher( watcher );
 
@@ -215,19 +243,19 @@ export default function TourRunner() {
 				completionWatcher.cancel();
 			}
 		};
-	}, [ isPlaying, currentStep, stepIndex ] );
+	}, [ isPlaying, currentStep, stepIndex, repeatCounter ] );
 
 	/**
-	 * Handle manual continue (for manual completion type).
+	 * Handle manual continue (for manual completion type or finish).
 	 */
 	const handleContinue = useCallback( () => {
 		if ( completionWatcher?.confirm ) {
 			completionWatcher.confirm();
 		} else {
-			markStepComplete( currentStep?.id );
+			// Just advance to next step (or end tour if last step).
 			nextStep();
 		}
-	}, [ completionWatcher, currentStep, markStepComplete, nextStep ] );
+	}, [ completionWatcher, nextStep ] );
 
 	/**
 	 * Handle repeat step.
@@ -237,6 +265,8 @@ export default function TourRunner() {
 		if ( completionWatcher?.cancel ) {
 			completionWatcher.cancel();
 		}
+		// Increment counter to trigger useEffect re-run.
+		setRepeatCounter( ( c ) => c + 1 );
 		repeatStep();
 	}, [ completionWatcher, repeatStep ] );
 
@@ -247,6 +277,9 @@ export default function TourRunner() {
 		if ( completionWatcher?.cancel ) {
 			completionWatcher.cancel();
 		}
+		// Clear inserted blocks tracking when tour stops.
+		clearInsertedBlocks();
+		previousStepIndexRef.current = null;
 		stopTour();
 	}, [ completionWatcher, stopTour ] );
 
@@ -264,13 +297,13 @@ export default function TourRunner() {
 			targetElement={ targetElement }
 			resolutionError={ resolutionError }
 			isApplyingPreconditions={ isApplyingPreconditions }
-			isPaused={ isPaused }
+			isPaused={ false }
 			onContinue={ handleContinue }
 			onRepeat={ handleRepeat }
 			onPrevious={ previousStep }
 			onNext={ nextStep }
-			onPause={ pauseTour }
-			onResume={ resumeTour }
+			onPause={ () => {} }
+			onResume={ () => {} }
 			onStop={ handleStop }
 		/>
 	);

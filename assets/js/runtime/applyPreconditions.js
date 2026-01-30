@@ -413,6 +413,348 @@ async function openModal( triggerSelector, modalSelector ) {
 }
 
 /**
+ * Global storage for blocks inserted by preconditions.
+ * Used by wpBlock locator with 'inserted' value.
+ * Exposed on window for cross-module access.
+ *
+ * Maps markerId -> clientId for direct lookups.
+ */
+export const insertedBlocks = new Map();
+window.__actInsertedBlocks = insertedBlocks;
+
+/**
+ * Track blocks inserted per step for navigation.
+ * Maps stepIndex -> { markerId: clientId }
+ * This allows us to reuse blocks when navigating back/forward.
+ */
+const insertedBlocksByStep = new Map();
+let currentStepIndex = 0;
+
+/**
+ * Set the current step index for tracking.
+ * Called by TourRunner when step changes.
+ *
+ * @param {number} stepIndex Current step index.
+ */
+export function setCurrentStepIndex( stepIndex ) {
+	currentStepIndex = stepIndex;
+	console.log( '[ACT setCurrentStepIndex]', stepIndex );
+}
+
+/**
+ * Clear blocks when leaving a step.
+ * Deselects the current block but preserves inserted blocks for reuse.
+ *
+ * @param {number} leavingStepIndex Step index being left.
+ * @return {Promise<void>}
+ */
+export async function onLeaveStep( leavingStepIndex ) {
+	console.log( '[ACT onLeaveStep] Leaving step:', leavingStepIndex );
+
+	const blockEditorDispatch = dispatch( 'core/block-editor' );
+	const blockEditorSelect = select( 'core/block-editor' );
+
+	if ( ! blockEditorDispatch || ! blockEditorSelect ) {
+		return;
+	}
+
+	// Deselect current block when leaving.
+	const selectedClientId = blockEditorSelect.getSelectedBlockClientId?.();
+	if ( selectedClientId ) {
+		try {
+			await blockEditorDispatch.clearSelectedBlock?.();
+			console.log( '[ACT onLeaveStep] Deselected block:', selectedClientId );
+		} catch ( e ) {
+			console.warn( '[ACT onLeaveStep] Could not deselect block:', e );
+		}
+	}
+}
+
+/**
+ * Called when entering a step.
+ * Reselects previously inserted blocks if returning to a step.
+ *
+ * @param {number} enteringStepIndex Step index being entered.
+ * @return {Promise<void>}
+ */
+export async function onEnterStep( enteringStepIndex ) {
+	console.log( '[ACT onEnterStep] Entering step:', enteringStepIndex );
+	setCurrentStepIndex( enteringStepIndex );
+}
+
+/**
+ * Clear all tracking when tour ends.
+ */
+export function clearInsertedBlocks() {
+	insertedBlocks.clear();
+	insertedBlocksByStep.clear();
+	currentStepIndex = 0;
+	console.log( '[ACT clearInsertedBlocks] Cleared all tracking' );
+}
+
+/**
+ * Get previously inserted block for a step/marker combo.
+ *
+ * @param {number} stepIndex Step index.
+ * @param {string} markerId  Marker ID.
+ * @return {string|null} Block clientId or null.
+ */
+function getStepInsertedBlock( stepIndex, markerId ) {
+	const stepBlocks = insertedBlocksByStep.get( stepIndex );
+	if ( stepBlocks && stepBlocks[ markerId ] ) {
+		return stepBlocks[ markerId ];
+	}
+	return null;
+}
+
+/**
+ * Store inserted block for a step.
+ *
+ * @param {number} stepIndex Step index.
+ * @param {string} markerId  Marker ID.
+ * @param {string} clientId  Block client ID.
+ */
+function setStepInsertedBlock( stepIndex, markerId, clientId ) {
+	if ( ! insertedBlocksByStep.has( stepIndex ) ) {
+		insertedBlocksByStep.set( stepIndex, {} );
+	}
+	insertedBlocksByStep.get( stepIndex )[ markerId ] = clientId;
+}
+
+/**
+ * Insert a block as a precondition.
+ * Creates a block with a marker so we can target it later.
+ * The block will be selected and focused after insertion.
+ * If returning to a step that already inserted this block, reuses it.
+ *
+ * @param {string} blockName Block type name (e.g., 'core/paragraph').
+ * @param {Object} attributes Optional block attributes.
+ * @param {string} markerId Optional marker ID for retrieval.
+ * @return {Promise<boolean>} True if successful.
+ */
+async function insertBlock( blockName = 'core/paragraph', attributes = {}, markerId = 'act-inserted-block' ) {
+	console.log( '[ACT insertBlock] Called with:', { blockName, markerId, currentStepIndex } );
+	console.log( '[ACT insertBlock] insertedBlocks map:', Array.from( insertedBlocks.entries() ) );
+	console.log( '[ACT insertBlock] insertedBlocksByStep:', Array.from( insertedBlocksByStep.entries() ) );
+	
+	try {
+		const { createBlock } = await import( '@wordpress/blocks' );
+		const blockEditorDispatch = dispatch( 'core/block-editor' );
+		const blockEditorSelect = select( 'core/block-editor' );
+
+		if ( ! blockEditorDispatch || ! createBlock ) {
+			console.warn( '[ACT insertBlock] Block editor not available' );
+			return false;
+		}
+
+		// Check if this step already inserted a block with this marker.
+		const stepClientId = getStepInsertedBlock( currentStepIndex, markerId );
+		console.log( '[ACT insertBlock] stepClientId from getStepInsertedBlock:', stepClientId );
+		
+		if ( stepClientId ) {
+			const existingBlock = blockEditorSelect.getBlock( stepClientId );
+			console.log( '[ACT insertBlock] existingBlock from store:', existingBlock?.name );
+			if ( existingBlock ) {
+				// Block still exists, select and focus it.
+				await blockEditorDispatch.selectBlock( stepClientId );
+				await focusBlockElement( stepClientId );
+				console.log( '[ACT insertBlock] Reusing step block:', stepClientId, 'for step:', currentStepIndex );
+				return true;
+			}
+			
+			// Block not in store - it may have been transformed/replaced.
+			// Check if DOM element still exists and get its current clientId.
+			const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+			const targetDoc = iframe?.contentDocument || document;
+			const blockElement = targetDoc.querySelector( `[data-block="${ stepClientId }"]` );
+			
+			if ( blockElement ) {
+				// DOM element exists, select it.
+				await blockEditorDispatch.selectBlock( stepClientId );
+				await focusBlockElement( stepClientId );
+				console.log( '[ACT insertBlock] Block still in DOM, reusing:', stepClientId );
+				return true;
+			}
+			
+			console.log( '[ACT insertBlock] Block not in store or DOM, checking for any existing blocks of this type' );
+		}
+
+		// Fallback: check global marker map (for backwards compatibility).
+		console.log( '[ACT insertBlock] Checking global map for:', markerId, 'has:', insertedBlocks.has( markerId ) );
+		if ( insertedBlocks.has( markerId ) ) {
+			const existingClientId = insertedBlocks.get( markerId );
+			const existingBlock = blockEditorSelect.getBlock( existingClientId );
+			console.log( '[ACT insertBlock] existingBlock from global map:', existingBlock?.name );
+			if ( existingBlock ) {
+				// Block still exists, select and focus it.
+				await blockEditorDispatch.selectBlock( existingClientId );
+				await focusBlockElement( existingClientId );
+				// Track for this step too.
+				setStepInsertedBlock( currentStepIndex, markerId, existingClientId );
+				console.log( '[ACT insertBlock] Reusing existing block:', existingClientId );
+				return true;
+			}
+			
+			// Check DOM for this clientId too.
+			const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+			const targetDoc = iframe?.contentDocument || document;
+			const blockElement = targetDoc.querySelector( `[data-block="${ existingClientId }"]` );
+			
+			if ( blockElement ) {
+				await blockEditorDispatch.selectBlock( existingClientId );
+				await focusBlockElement( existingClientId );
+				setStepInsertedBlock( currentStepIndex, markerId, existingClientId );
+				console.log( '[ACT insertBlock] Block from global map still in DOM:', existingClientId );
+				return true;
+			}
+		}
+
+		// Final fallback: check if there's already a block of the target type we can use.
+		// This handles the case where the block was transformed by WordPress.
+		const allBlocks = blockEditorSelect.getBlocks() || [];
+		console.log( '[ACT insertBlock] Checking for existing blocks of type:', blockName, 'found:', allBlocks.length, 'total blocks' );
+		console.log( '[ACT insertBlock] Block names in editor:', allBlocks.map( ( b ) => b.name ) );
+		
+		const matchingBlock = allBlocks.find( ( b ) => b.name === blockName );
+		if ( matchingBlock ) {
+			console.log( '[ACT insertBlock] Found existing block of same type:', matchingBlock.clientId );
+			await blockEditorDispatch.selectBlock( matchingBlock.clientId );
+			await focusBlockElement( matchingBlock.clientId );
+			// Update tracking with new clientId.
+			insertedBlocks.set( markerId, matchingBlock.clientId );
+			setStepInsertedBlock( currentStepIndex, markerId, matchingBlock.clientId );
+			console.log( '[ACT insertBlock] Reusing existing block of type:', blockName );
+			return true;
+		}
+		
+		// If no exact match, try to find ANY block we can use (not empty).
+		// The user may have typed in the placeholder, changing its type.
+		if ( allBlocks.length > 0 ) {
+			// Find the last non-empty block, or just the last block.
+			const lastBlock = allBlocks[ allBlocks.length - 1 ];
+			console.log( '[ACT insertBlock] Considering last block:', lastBlock.name, lastBlock.clientId );
+			
+			// If the last block is similar (a text block), reuse it.
+			const textBlockTypes = [ 'core/paragraph', 'core/heading', 'core/list', 'core/quote' ];
+			if ( textBlockTypes.includes( lastBlock.name ) || textBlockTypes.includes( blockName ) ) {
+				console.log( '[ACT insertBlock] Reusing last text block instead of creating new:', lastBlock.clientId );
+				await blockEditorDispatch.selectBlock( lastBlock.clientId );
+				await focusBlockElement( lastBlock.clientId );
+				insertedBlocks.set( markerId, lastBlock.clientId );
+				setStepInsertedBlock( currentStepIndex, markerId, lastBlock.clientId );
+				return true;
+			}
+		}
+
+		console.log( '[ACT insertBlock] No existing block found, creating new one' );
+
+		// Create the block with marker in metadata.
+		const blockAttributes = {
+			...attributes,
+			metadata: {
+				...( attributes.metadata || {} ),
+				actMarkerId: markerId,
+			},
+		};
+
+		const block = createBlock( blockName, blockAttributes );
+
+		// Insert at the end of the root and select it.
+		const rootClientId = '';
+		await blockEditorDispatch.insertBlock( block, undefined, rootClientId, true );
+
+		// Store the clientId for later retrieval (both global and per-step).
+		insertedBlocks.set( markerId, block.clientId );
+		setStepInsertedBlock( currentStepIndex, markerId, block.clientId );
+
+		// Wait for the block to appear in DOM.
+		const success = await waitForCondition( () => {
+			// Check in main document and iframe.
+			const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+			const iframeDoc = iframe?.contentDocument;
+			const targetDoc = iframeDoc || document;
+			return !! targetDoc.querySelector( `[data-block="${ block.clientId }"]` );
+		}, 3000 );
+
+		if ( success ) {
+			// Ensure the block is selected (sometimes insertBlock doesn't auto-select).
+			await blockEditorDispatch.selectBlock( block.clientId );
+
+			// Focus the block element in the DOM.
+			await focusBlockElement( block.clientId );
+		}
+
+		console.log( '[ACT insertBlock] Inserted block:', block.clientId, 'markerId:', markerId, 'step:', currentStepIndex, 'success:', success );
+
+		return success;
+	} catch ( error ) {
+		console.error( '[ACT insertBlock] Error:', error );
+		return false;
+	}
+}
+
+/**
+ * Focus a block element in the DOM.
+ * Handles both iframed and non-iframed editors.
+ *
+ * @param {string} clientId Block client ID.
+ * @return {Promise<boolean>} True if focused.
+ */
+async function focusBlockElement( clientId ) {
+	// Small delay to let React update the DOM.
+	await new Promise( ( resolve ) => setTimeout( resolve, 100 ) );
+
+	// Find the block element.
+	const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+	const targetDoc = iframe?.contentDocument || document;
+	const blockElement = targetDoc.querySelector( `[data-block="${ clientId }"]` );
+
+	if ( ! blockElement ) {
+		console.warn( '[ACT focusBlockElement] Block element not found:', clientId );
+		return false;
+	}
+
+	// Find the editable element within the block.
+	const editableSelectors = [
+		'[contenteditable="true"]',
+		'.block-editor-rich-text__editable',
+		'textarea',
+		'input[type="text"]',
+		'input:not([type])',
+	];
+
+	let focusTarget = null;
+	for ( const selector of editableSelectors ) {
+		focusTarget = blockElement.querySelector( selector );
+		if ( focusTarget ) {
+			break;
+		}
+	}
+
+	// If no editable found, focus the block itself.
+	if ( ! focusTarget ) {
+		focusTarget = blockElement;
+	}
+
+	// Scroll into view and focus.
+	focusTarget.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+	focusTarget.focus();
+
+	// For contenteditable, also set selection to the end.
+	if ( focusTarget.getAttribute( 'contenteditable' ) === 'true' ) {
+		const selection = targetDoc.getSelection();
+		const range = targetDoc.createRange();
+		range.selectNodeContents( focusTarget );
+		range.collapse( false ); // Collapse to end.
+		selection?.removeAllRanges();
+		selection?.addRange( range );
+	}
+
+	console.log( '[ACT focusBlockElement] Focused:', focusTarget.tagName, focusTarget.className );
+	return true;
+}
+
+/**
  * Close any open modals/popovers.
  *
  * @param {string} modalSelector Modal selector.
@@ -468,6 +810,7 @@ const preconditionHandlers = {
 	scrollIntoView,
 	openModal,
 	closeModal,
+	insertBlock,
 };
 
 /**
@@ -530,6 +873,14 @@ export async function applyPrecondition( precondition ) {
 
 			case 'closeModal':
 				result = await handler( params.modal );
+				break;
+
+			case 'insertBlock':
+				result = await handler(
+					params.blockName || 'core/paragraph',
+					params.attributes || {},
+					params.markerId || 'act-inserted-block'
+				);
 				break;
 
 			default:
@@ -709,6 +1060,31 @@ export function getAvailablePreconditions() {
 					type: 'string',
 					required: true,
 					description: 'Modal element selector',
+				},
+			],
+		},
+		{
+			type: 'insertBlock',
+			label: 'Insert Block',
+			description: 'Insert a block into the editor (creates targetable element)',
+			params: [
+				{
+					name: 'blockName',
+					type: 'string',
+					optional: true,
+					description: 'Block type (default: core/paragraph)',
+				},
+				{
+					name: 'attributes',
+					type: 'object',
+					optional: true,
+					description: 'Block attributes',
+				},
+				{
+					name: 'markerId',
+					type: 'string',
+					optional: true,
+					description: 'Marker ID for targeting with wpBlock:inserted locator',
 				},
 			],
 		},

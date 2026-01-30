@@ -4,7 +4,16 @@
  * @package AdminCoachTours
  */
 
-/* Provider field visibility */
+/* Provider field visibility - hide entire table row */
+.act-provider-row {
+	display: none;
+}
+
+.act-provider-row.act-provider-active {
+	display: table-row;
+}
+
+/* Fallback for non-row contexts */
 .act-provider-field {
 	display: none;
 }

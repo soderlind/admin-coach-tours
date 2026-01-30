@@ -75,6 +75,7 @@ function createWatcher( checkFn, timeout = 0 ) {
 
 /**
  * Watch for click on target element.
+ * Includes a grace period to avoid catching clicks during setup.
  *
  * @param {HTMLElement} targetElement Target element.
  * @param {Object}      options       Options.
@@ -83,11 +84,20 @@ function createWatcher( checkFn, timeout = 0 ) {
 function watchClickTarget( targetElement, options = {} ) {
 	return new Promise( ( resolve ) => {
 		let isResolved = false;
-		const { timeout = 0 } = options;
+		let isArmed = false; // Grace period flag.
+		const { timeout = 0, gracePeriod = 300 } = options;
 		let timeoutId = null;
 
 		const cleanup = () => {
-			targetElement.removeEventListener( 'click', handleClick );
+			targetElement.removeEventListener( 'click', handleClick, true );
+			// Also try to remove from iframe document if applicable.
+			if ( targetElement.ownerDocument !== document ) {
+				targetElement.ownerDocument.removeEventListener(
+					'click',
+					handleClick,
+					true
+				);
+			}
 			if ( timeoutId ) {
 				clearTimeout( timeoutId );
 			}
@@ -98,20 +108,50 @@ function watchClickTarget( targetElement, options = {} ) {
 				return;
 			}
 
+			// Ignore clicks during grace period.
+			if ( ! isArmed ) {
+				console.log(
+					'[ACT watchClickTarget] Ignoring click during grace period'
+				);
+				return;
+			}
+
 			// Verify click is on target or within target.
 			if (
 				targetElement === event.target ||
 				targetElement.contains( event.target )
 			) {
+				console.log(
+					'[ACT watchClickTarget] Click detected on target:',
+					targetElement.tagName
+				);
 				isResolved = true;
 				cleanup();
 				resolve( { success: true, event: 'click' } );
 			}
 		};
 
+		// Add listener to the target element.
 		targetElement.addEventListener( 'click', handleClick, {
 			capture: true,
 		} );
+
+		// Also listen on the document (for iframe elements).
+		if ( targetElement.ownerDocument !== document ) {
+			targetElement.ownerDocument.addEventListener( 'click', handleClick, {
+				capture: true,
+			} );
+		}
+
+		// Arm the watcher after grace period.
+		setTimeout( () => {
+			isArmed = true;
+			console.log(
+				'[ACT watchClickTarget] Armed after grace period, watching:',
+				targetElement.tagName,
+				targetElement.className
+			);
+		}, gracePeriod );
 
 		if ( timeout > 0 ) {
 			timeoutId = setTimeout( () => {

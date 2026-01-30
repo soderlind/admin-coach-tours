@@ -8,15 +8,13 @@
  */
 
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useState, useCallback, useEffect } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	TextControl,
 	TextareaControl,
 	SelectControl,
-	PanelRow,
-	ToggleControl,
 	Notice,
 	Spinner,
 	Flex,
@@ -27,42 +25,62 @@ import {
 import { pin, starFilled, check, close } from '@wordpress/icons';
 
 import { getAvailableCompletions } from '../runtime/watchCompletion.js';
-import { getAvailablePreconditions } from '../runtime/applyPreconditions.js';
 import { testTargetResolution } from '../runtime/resolveTarget.js';
+import type {
+	Step,
+	StepEditorProps,
+	CompletionType,
+	AiStepDraft,
+	ResolutionResult,
+} from '../types/index';
 
 const STORE_NAME = 'admin-coach-tours';
 
 /**
- * @typedef {import('../types/step.js').Step} Step
+ * Completion type info from runtime.
  */
+interface CompletionTypeInfo {
+	type: string;
+	label: string;
+	description?: string;
+	params?: Array< {
+		name: string;
+		description?: string;
+		required?: boolean;
+	} >;
+}
 
 /**
  * Step Editor component.
- *
- * @param {Object}   props          Component props.
- * @param {Step}     props.step     Step to edit.
- * @param {number}   props.tourId   Tour ID.
- * @param {string}   props.postType Current post type.
- * @param {Function} props.onClose  Close handler.
- * @return {JSX.Element} Step editor form.
  */
-export default function StepEditor( { step, tourId, postType, onClose } ) {
+export default function StepEditor( {
+	step,
+	tourId,
+	postType,
+	onClose,
+}: StepEditorProps ): JSX.Element {
 	// Local state for form fields.
-	const [ title, setTitle ] = useState( step.title || '' );
-	const [ content, setContent ] = useState( step.content || '' );
-	const [ completionType, setCompletionType ] = useState(
+	const [ title, setTitle ] = useState< string >( step.title || '' );
+	const [ content, setContent ] = useState< string >( step.content || '' );
+	const [ completionType, setCompletionType ] = useState< string >(
 		step.completion?.type || 'manual'
 	);
-	const [ completionParams, setCompletionParams ] = useState(
-		step.completion?.params || {}
-	);
-	const [ isSaving, setIsSaving ] = useState( false );
-	const [ saveError, setSaveError ] = useState( null );
-	const [ targetTestResult, setTargetTestResult ] = useState( null );
+	const [ completionParams, setCompletionParams ] = useState<
+		Record< string, unknown >
+	>( ( step.completion?.params as Record< string, unknown > ) || {} );
+	const [ isSaving, setIsSaving ] = useState< boolean >( false );
+	const [ saveError, setSaveError ] = useState< string | null >( null );
+	const [ targetTestResult, setTargetTestResult ] = useState<
+		ResolutionResult | null
+	>( null );
 
 	// Get AI draft state.
 	const { aiDraft, isAiDrafting, aiDraftError } = useSelect( ( select ) => {
-		const store = select( STORE_NAME );
+		const store = select( STORE_NAME ) as {
+			getAiDraft: () => AiStepDraft | null;
+			isAiDrafting: () => boolean;
+			getAiDraftError: () => string | null;
+		};
 		return {
 			aiDraft: store.getAiDraft(),
 			isAiDrafting: store.isAiDrafting(),
@@ -75,7 +93,7 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 		useDispatch( STORE_NAME );
 
 	// Get completion types.
-	const completionTypes = getAvailableCompletions();
+	const completionTypes: CompletionTypeInfo[] = getAvailableCompletions();
 
 	/**
 	 * Test target resolution.
@@ -102,7 +120,7 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 				title: title.trim(),
 				content: content.trim(),
 				completion: {
-					type: completionType,
+					type: completionType as CompletionType,
 					params: completionParams,
 				},
 			} );
@@ -110,7 +128,8 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 			onClose();
 		} catch ( error ) {
 			setSaveError(
-				error.message || __( 'Failed to save step.', 'admin-coach-tours' )
+				( error as Error ).message ||
+					__( 'Failed to save step.', 'admin-coach-tours' )
 			);
 		} finally {
 			setIsSaving( false );
@@ -155,7 +174,12 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 			}
 			if ( aiDraft.suggestedCompletion ) {
 				setCompletionType( aiDraft.suggestedCompletion.type );
-				setCompletionParams( aiDraft.suggestedCompletion.params || {} );
+				setCompletionParams(
+					( aiDraft.suggestedCompletion as unknown as Record<
+						string,
+						unknown
+					> ) || {}
+				);
 			}
 			clearAiDraft();
 		}
@@ -170,16 +194,16 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 
 	/**
 	 * Update completion params.
-	 *
-	 * @param {string} key   Param key.
-	 * @param {*}      value Param value.
 	 */
-	const updateCompletionParam = useCallback( ( key, value ) => {
-		setCompletionParams( ( prev ) => ( {
-			...prev,
-			[ key ]: value,
-		} ) );
-	}, [] );
+	const updateCompletionParam = useCallback(
+		( key: string, value: unknown ) => {
+			setCompletionParams( ( prev ) => ( {
+				...prev,
+				[ key ]: value,
+			} ) );
+		},
+		[]
+	);
 
 	// Get current completion type info.
 	const currentCompletionInfo = completionTypes.find(
@@ -229,7 +253,11 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 							</Flex>
 							{ targetTestResult && (
 								<Notice
-									status={ targetTestResult.success ? 'success' : 'error' }
+									status={
+										targetTestResult.success
+											? 'success'
+											: 'error'
+									}
 									isDismissible={ false }
 									className="act-target-test-result"
 								>
@@ -264,7 +292,10 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 				label={ __( 'Step Title', 'admin-coach-tours' ) }
 				value={ title }
 				onChange={ setTitle }
-				placeholder={ __( 'e.g., Click the Add Block button', 'admin-coach-tours' ) }
+				placeholder={ __(
+					'e.g., Click the Add Block button',
+					'admin-coach-tours'
+				) }
 			/>
 
 			{ /* Content */ }
@@ -290,13 +321,20 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 					{ isAiDrafting ? (
 						<Flex align="center" gap={ 2 }>
 							<Spinner />
-							<span>{ __( 'Generating draft…', 'admin-coach-tours' ) }</span>
+							<span>
+								{ __(
+									'Generating draft…',
+									'admin-coach-tours'
+								) }
+							</span>
 						</Flex>
 					) : aiDraft ? (
 						<div className="act-ai-draft">
 							<div className="act-ai-draft-preview">
 								<strong>{ aiDraft.title }</strong>
-								<p>{ aiDraft.content?.substring( 0, 100 ) }…</p>
+								<p>
+									{ aiDraft.content?.substring( 0, 100 ) }…
+								</p>
 							</div>
 							<Flex gap={ 2 }>
 								<FlexItem>
@@ -314,7 +352,7 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 										variant="tertiary"
 										size="small"
 										icon={ close }
-										onClick={ clearAiDraft }
+										onClick={ () => clearAiDraft() }
 									>
 										{ __( 'Dismiss', 'admin-coach-tours' ) }
 									</Button>
@@ -348,7 +386,7 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 					value: ct.type,
 					label: ct.label,
 				} ) ) }
-				onChange={ ( value ) => {
+				onChange={ ( value: string ) => {
 					setCompletionType( value );
 					setCompletionParams( {} );
 				} }
@@ -356,24 +394,28 @@ export default function StepEditor( { step, tourId, postType, onClose } ) {
 			/>
 
 			{ /* Completion Params */ }
-			{ currentCompletionInfo?.params?.length > 0 && (
-				<div className="act-completion-params">
-					{ currentCompletionInfo.params.map( ( param ) => (
-						<TextControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							key={ param.name }
-							label={ param.name }
-							value={ completionParams[ param.name ] || '' }
-							onChange={ ( value ) =>
-								updateCompletionParam( param.name, value )
-							}
-							help={ param.description }
-							required={ param.required }
-						/>
-					) ) }
-				</div>
-			) }
+			{ currentCompletionInfo?.params &&
+				currentCompletionInfo.params.length > 0 && (
+					<div className="act-completion-params">
+						{ currentCompletionInfo.params.map( ( param ) => (
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								key={ param.name }
+								label={ param.name }
+								value={
+									( completionParams[ param.name ] as string ) ||
+									''
+								}
+								onChange={ ( value: string ) =>
+									updateCompletionParam( param.name, value )
+								}
+								help={ param.description }
+								required={ param.required }
+							/>
+						) ) }
+					</div>
+				) }
 
 			{ /* Actions */ }
 			<div className="act-step-editor-actions">

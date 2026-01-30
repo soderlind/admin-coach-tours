@@ -5,7 +5,47 @@
  * @since   0.1.0
  */
 
-import { DEFAULT_STATE } from './index';
+/**
+ * Default state for the store.
+ */
+export const DEFAULT_STATE = {
+	// Tour data.
+	tours: {},
+	toursLoading: false,
+	toursError: null,
+
+	// Current tour state.
+	currentTourId: null,
+	currentStepIndex: 0,
+
+	// Mode: 'educator' | 'pupil' | null.
+	mode: null,
+
+	// Completion tracking.
+	completionSatisfied: false,
+	skippedSteps: [],
+
+	// Educator mode state.
+	isPickerActive: false,
+	pickingStepId: null,
+	selectedStepId: null,
+	pendingChanges: false,
+
+	// Pupil mode state.
+	tourProgress: {},
+	isRecovering: false,
+	lastError: null,
+
+	// Target resolution.
+	resolvedTarget: null,
+	resolutionAttempts: 0,
+
+	// UI state.
+	sidebarOpen: false,
+	aiDraftLoading: false,
+	aiDraftError: null,
+	aiDraftResult: null,
+};
 
 /**
  * Action types.
@@ -16,6 +56,9 @@ export const ACTION_TYPES = {
 	SET_TOURS_ERROR: 'SET_TOURS_ERROR',
 	RECEIVE_TOURS: 'RECEIVE_TOURS',
 	RECEIVE_TOUR: 'RECEIVE_TOUR',
+
+	// Tour selection/editing.
+	SET_CURRENT_TOUR: 'SET_CURRENT_TOUR',
 
 	// Tour playback.
 	START_TOUR: 'START_TOUR',
@@ -102,6 +145,16 @@ export default function reducer( state = DEFAULT_STATE, action ) {
 					[ action.tour.id ]: action.tour,
 				},
 				toursLoading: false,
+			};
+
+		// Tour selection for editing.
+		case ACTION_TYPES.SET_CURRENT_TOUR:
+			return {
+				...state,
+				currentTourId: action.tourId,
+				currentStepIndex: 0,
+				mode: action.tourId ? 'educator' : null,
+				selectedStepId: null,
 			};
 
 		// Tour playback.
@@ -272,12 +325,14 @@ export default function reducer( state = DEFAULT_STATE, action ) {
 			return {
 				...state,
 				isPickerActive: true,
+				pickingStepId: action.stepId || null,
 			};
 
 		case ACTION_TYPES.DEACTIVATE_PICKER:
 			return {
 				...state,
 				isPickerActive: false,
+				pickingStepId: null,
 			};
 
 		case ACTION_TYPES.SELECT_STEP:

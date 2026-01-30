@@ -25,9 +25,9 @@ class StepSchema {
 	public const LOCATOR_TYPES = [
 		'css',
 		'role',
-		'testId',
-		'dataAttribute',
-		'ariaLabel',
+		'testid',
+		'dataattribute',
+		'arialabel',
 		'contextual',
 	];
 
@@ -43,6 +43,7 @@ class StepSchema {
 		'selectSidebarTab',
 		'openInserter',
 		'closeInserter',
+		'insertBlock',
 	];
 
 	/**
@@ -105,7 +106,6 @@ class StepSchema {
 				],
 				'title'         => [
 					'type'        => 'string',
-					'minLength'   => 1,
 					'maxLength'   => 200,
 					'description' => 'Short title for the step',
 				],
@@ -125,7 +125,6 @@ class StepSchema {
 					'properties' => [
 						'locators'    => [
 							'type'     => 'array',
-							'minItems' => 1,
 							'items'    => [
 								'type'       => 'object',
 								'required'   => [ 'type', 'value' ],
@@ -283,8 +282,8 @@ class StepSchema {
 		}
 
 		// Validate title.
-		if ( ! is_string( $step['title'] ) || empty( $step['title'] ) ) {
-			$errors[] = __( 'Step title must be a non-empty string', 'admin-coach-tours' );
+		if ( ! is_string( $step['title'] ) ) {
+			$errors[] = __( 'Step title must be a string', 'admin-coach-tours' );
 		}
 
 		// Validate target.
@@ -333,8 +332,13 @@ class StepSchema {
 			return new WP_Error( 'invalid_target', __( 'Target must be an object', 'admin-coach-tours' ) );
 		}
 
-		if ( ! isset( $target['locators'] ) || ! is_array( $target['locators'] ) || empty( $target['locators'] ) ) {
-			return new WP_Error( 'invalid_target', __( 'Target must have at least one locator', 'admin-coach-tours' ) );
+		if ( ! isset( $target['locators'] ) || ! is_array( $target['locators'] ) ) {
+			return new WP_Error( 'invalid_target', __( 'Target must have a locators array', 'admin-coach-tours' ) );
+		}
+
+		// Empty locators is allowed for draft steps.
+		if ( empty( $target['locators'] ) ) {
+			return true;
 		}
 
 		foreach ( $target['locators'] as $i => $locator ) {
@@ -349,7 +353,9 @@ class StepSchema {
 				);
 			}
 
-			if ( ! isset( $locator['type'] ) || ! in_array( $locator['type'], self::LOCATOR_TYPES, true ) ) {
+			// Normalize type to lowercase for comparison (sanitize_key will lowercase it).
+			$locator_type = isset( $locator['type'] ) ? strtolower( $locator['type'] ) : '';
+			if ( empty( $locator_type ) || ! in_array( $locator_type, self::LOCATOR_TYPES, true ) ) {
 				return new WP_Error(
 					'invalid_locator_type',
 					sprintf(

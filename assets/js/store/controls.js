@@ -62,27 +62,45 @@ const controls = {
 	/**
 	 * Handle tour save requests.
 	 *
-	 * @param {Object} action Action with tourId.
-	 * @return {Function} Thunk that saves tour.
+	 * @param {Object} action Action with tourId and tourData.
+	 * @return {Promise} API response.
 	 */
 	SAVE_TOUR( action ) {
-		return async ( { select } ) => {
-			const tour = select.getTour( action.tourId );
-			if ( ! tour ) {
-				throw new Error( 'Tour not found' );
-			}
+		console.log( '[ACT Controls] SAVE_TOUR:', action.tourId, action.tourData );
+		console.log( '[ACT Controls] Steps count:', action.tourData?.steps?.length );
+		return apiFetch( {
+			path: `/admin-coach-tours/v1/tours/${ action.tourId }`,
+			method: 'PUT',
+			data: action.tourData,
+		} );
+	},
 
-			return apiFetch( {
-				path: `/admin-coach-tours/v1/tours/${ action.tourId }`,
-				method: 'PUT',
-				data: {
-					title: tour.title,
-					editor: tour.editor,
-					postTypes: tour.postTypes,
-					steps: tour.steps,
-				},
-			} );
-		};
+	/**
+	 * Handle tour creation.
+	 *
+	 * @param {Object} action Action with tour data.
+	 * @return {Promise} API response with created tour.
+	 */
+	CREATE_TOUR( action ) {
+		return apiFetch( {
+			path: '/admin-coach-tours/v1/tours',
+			method: 'POST',
+			data: action.data,
+		} );
+	},
+
+	/**
+	 * Handle tour update.
+	 *
+	 * @param {Object} action Action with tourId and data.
+	 * @return {Promise} API response with updated tour.
+	 */
+	UPDATE_TOUR( action ) {
+		return apiFetch( {
+			path: `/admin-coach-tours/v1/tours/${ action.tourId }`,
+			method: 'PUT',
+			data: action.data,
+		} );
 	},
 
 	/**
@@ -93,7 +111,7 @@ const controls = {
 	 */
 	REQUEST_AI_DRAFT( action ) {
 		return apiFetch( {
-			path: '/admin-coach-tours/v1/ai/draft-step',
+			path: '/admin-coach-tours/v1/ai/generate-draft',
 			method: 'POST',
 			data: {
 				elementContext: action.elementContext,

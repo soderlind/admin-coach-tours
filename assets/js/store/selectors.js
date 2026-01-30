@@ -5,19 +5,11 @@
  * @since   0.1.0
  */
 
+import { createSelector } from '@wordpress/data';
+
 // ============================================================================
 // Tour Selectors
 // ============================================================================
-
-/**
- * Get all tours as an array.
- *
- * @param {Object} state Store state.
- * @return {Array} Array of tours.
- */
-export function getTours( state ) {
-	return Object.values( state.tours );
-}
 
 /**
  * Get tours as an object keyed by ID.
@@ -28,6 +20,17 @@ export function getTours( state ) {
 export function getToursById( state ) {
 	return state.tours;
 }
+
+/**
+ * Get all tours as an array (memoized).
+ *
+ * @param {Object} state Store state.
+ * @return {Array} Array of tours.
+ */
+export const getTours = createSelector(
+	( state ) => Object.values( state.tours ),
+	( state ) => [ state.tours ]
+);
 
 /**
  * Get a single tour by ID.
@@ -61,33 +64,37 @@ export function getToursError( state ) {
 }
 
 /**
- * Get tours filtered by post type.
+ * Get tours filtered by post type (memoized).
  *
  * @param {Object} state    Store state.
  * @param {string} postType Post type to filter by.
  * @return {Array} Filtered tours.
  */
-export function getToursByPostType( state, postType ) {
-	return getTours( state ).filter(
-		( tour ) =>
-			tour.postTypes &&
-			tour.postTypes.includes( postType ) &&
-			tour.status === 'publish'
-	);
-}
+export const getToursByPostType = createSelector(
+	( state, postType ) =>
+		getTours( state ).filter(
+			( tour ) =>
+				tour.postTypes &&
+				tour.postTypes.includes( postType ) &&
+				tour.status === 'publish'
+		),
+	( state, postType ) => [ state.tours, postType ]
+);
 
 /**
- * Get tours filtered by editor type.
+ * Get tours filtered by editor type (memoized).
  *
  * @param {Object} state  Store state.
  * @param {string} editor Editor type ('block', 'classic', 'site').
  * @return {Array} Filtered tours.
  */
-export function getToursByEditor( state, editor ) {
-	return getTours( state ).filter(
-		( tour ) => tour.editor === editor && tour.status === 'publish'
-	);
-}
+export const getToursByEditor = createSelector(
+	( state, editor ) =>
+		getTours( state ).filter(
+			( tour ) => tour.editor === editor && tour.status === 'publish'
+		),
+	( state, editor ) => [ state.tours, editor ]
+);
 
 // ============================================================================
 // Current Tour Selectors
@@ -124,18 +131,25 @@ export function getCurrentStepIndex( state ) {
 }
 
 /**
- * Get current step object.
+ * Get current step object (memoized).
  *
  * @param {Object} state Store state.
  * @return {Object|null} Current step.
  */
-export function getCurrentStep( state ) {
-	const tour = getCurrentTour( state );
-	if ( ! tour || ! tour.steps ) {
-		return null;
-	}
-	return tour.steps[ state.currentStepIndex ] || null;
-}
+export const getCurrentStep = createSelector(
+	( state ) => {
+		const tour = getCurrentTour( state );
+		if ( ! tour || ! tour.steps ) {
+			return null;
+		}
+		return tour.steps[ state.currentStepIndex ] || null;
+	},
+	( state ) => [
+		state.tours,
+		state.currentTourId,
+		state.currentStepIndex,
+	]
+);
 
 /**
  * Get total steps count for current tour.
@@ -320,6 +334,16 @@ export function isPickerActive( state ) {
 }
 
 /**
+ * Get the step ID being picked for (if repicking target).
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Step ID or null if adding new step.
+ */
+export function getPickingStepId( state ) {
+	return state.pickingStepId || null;
+}
+
+/**
  * Get selected step ID.
  *
  * @param {Object} state Store state.
@@ -330,18 +354,21 @@ export function getSelectedStepId( state ) {
 }
 
 /**
- * Get selected step object.
+ * Get selected step object (memoized).
  *
  * @param {Object} state Store state.
  * @return {Object|null} Selected step.
  */
-export function getSelectedStep( state ) {
-	const tour = getCurrentTour( state );
-	if ( ! tour || ! state.selectedStepId ) {
-		return null;
-	}
-	return tour.steps.find( ( step ) => step.id === state.selectedStepId );
-}
+export const getSelectedStep = createSelector(
+	( state ) => {
+		const tour = getCurrentTour( state );
+		if ( ! tour || ! state.selectedStepId ) {
+			return null;
+		}
+		return tour.steps.find( ( step ) => step.id === state.selectedStepId );
+	},
+	( state ) => [ state.tours, state.currentTourId, state.selectedStepId ]
+);
 
 /**
  * Check if there are pending changes.
@@ -368,6 +395,16 @@ export function isAiDraftLoading( state ) {
 }
 
 /**
+ * Check if AI drafting is in progress (alias for isAiDraftLoading).
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} AI drafting in progress.
+ */
+export function isAiDrafting( state ) {
+	return isAiDraftLoading( state );
+}
+
+/**
  * Get AI draft error.
  *
  * @param {Object} state Store state.
@@ -385,6 +422,16 @@ export function getAiDraftError( state ) {
  */
 export function getAiDraftResult( state ) {
 	return state.aiDraftResult;
+}
+
+/**
+ * Get AI draft (alias for getAiDraftResult).
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} AI draft output.
+ */
+export function getAiDraft( state ) {
+	return getAiDraftResult( state );
 }
 
 // ============================================================================

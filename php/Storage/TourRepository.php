@@ -329,7 +329,36 @@ class TourRepository {
 
 		$json = wp_json_encode( $steps );
 
-		return (bool) update_post_meta( $tour_id, ToursCpt::META_STEPS, $json );
+		// Write directly to database to bypass sanitize_callback issues.
+		// The sanitize_callback on register_post_meta was corrupting the JSON data.
+		global $wpdb;
+		$meta_key = ToursCpt::META_STEPS;
+
+		// Delete existing.
+		$wpdb->delete(
+			$wpdb->postmeta,
+			[
+				'post_id'  => $tour_id,
+				'meta_key' => $meta_key,
+			],
+			[ '%d', '%s' ]
+		);
+
+		// Insert new.
+		$result = $wpdb->insert(
+			$wpdb->postmeta,
+			[
+				'post_id'    => $tour_id,
+				'meta_key'   => $meta_key,
+				'meta_value' => $json,
+			],
+			[ '%d', '%s', '%s' ]
+		);
+
+		// Clear meta cache so subsequent reads get fresh data.
+		wp_cache_delete( $tour_id, 'post_meta' );
+
+		return false !== $result;
 	}
 
 	/**

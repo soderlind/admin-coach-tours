@@ -72,6 +72,7 @@ class AiManager {
 	 */
 	private function register_default_providers(): void {
 		$this->register_provider( new OpenAiProvider( $this->encryption ) );
+		$this->register_provider( new AzureOpenAiProvider( $this->encryption ) );
 		$this->register_provider( new AnthropicProvider( $this->encryption ) );
 
 		/**

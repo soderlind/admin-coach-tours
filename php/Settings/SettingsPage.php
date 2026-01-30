@@ -55,10 +55,11 @@ class SettingsPage {
 	/**
 	 * Initialize settings.
 	 */
-	public function init(): void {
-		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
-		add_action( 'admin_init', [ $this, 'register_settings' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+	public static function init(): void {
+		$instance = self::get_instance();
+		add_action( 'admin_menu', [ $instance, 'add_menu_page' ] );
+		add_action( 'admin_init', [ $instance, 'register_settings' ] );
+		add_action( 'admin_enqueue_scripts', [ $instance, 'enqueue_scripts' ] );
 	}
 
 	/**
@@ -206,16 +207,16 @@ class SettingsPage {
 
 		wp_enqueue_style(
 			'admin-coach-tours-settings',
-			plugins_url( 'assets/css/settings.css', dirname( __DIR__ ) . '/admin-coach-tours.php' ),
+			\AdminCoachTours\PLUGIN_URL . 'assets/css/settings.css',
 			[],
-			ACT_VERSION
+			\AdminCoachTours\VERSION
 		);
 
 		wp_enqueue_script(
 			'admin-coach-tours-settings',
-			plugins_url( 'assets/js/settings.js', dirname( __DIR__ ) . '/admin-coach-tours.php' ),
+			\AdminCoachTours\PLUGIN_URL . 'build/settings.js',
 			[ 'jquery' ],
-			ACT_VERSION,
+			\AdminCoachTours\VERSION,
 			true
 		);
 	}

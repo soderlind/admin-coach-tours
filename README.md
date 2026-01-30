@@ -55,8 +55,8 @@ Admin Coach Tours enables **Educators** to create interactive guided tours withi
 
 1. Go to **Tours → Settings**
 2. Enable AI Features
-3. Configure your AI provider (OpenAI or Anthropic)
-4. Add your API key
+3. Configure your AI provider (OpenAI, Azure OpenAI, or Anthropic)
+4. Add your API key (and endpoint URL for Azure OpenAI)
 5. Use the **AI Draft** button when editing steps
 
 ## Step Completion Types

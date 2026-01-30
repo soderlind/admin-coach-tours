@@ -99,7 +99,7 @@ class ToursCpt {
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,
-			'show_in_menu'        => false, // We'll add to Tools menu instead.
+			'show_in_menu'        => true,
 			'menu_position'       => 100,
 			'menu_icon'           => 'dashicons-welcome-learn-more',
 			'show_in_admin_bar'   => false,
@@ -109,8 +109,7 @@ class ToursCpt {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'rewrite'             => false,
-			'capability_type'     => 'act_tour',
-			'map_meta_cap'        => true,
+			'capability_type'     => 'post',
 			'show_in_rest'        => true,
 			'rest_base'           => 'act-tours',
 			'rest_namespace'      => 'admin-coach-tours/v1',
@@ -194,6 +193,21 @@ class ToursCpt {
 				],
 			]
 		);
+
+		// Steps modified timestamp (for triggering dirty state).
+		register_post_meta(
+			self::POST_TYPE,
+			'_act_steps_modified',
+			[
+				'type'              => 'integer',
+				'description'       => __( 'Timestamp when steps were last modified', 'admin-coach-tours' ),
+				'single'            => true,
+				'default'           => 0,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => [ self::class, 'auth_callback' ],
+				'show_in_rest'      => true,
+			]
+		);
 	}
 
 	/**
@@ -245,17 +259,19 @@ class ToursCpt {
 	 */
 	public static function sanitize_step( array $step ): array {
 		return [
-			'id'            => isset( $step['id'] ) ? sanitize_key( $step['id'] ) : wp_generate_uuid4(),
-			'order'         => isset( $step['order'] ) ? absint( $step['order'] ) : 0,
-			'title'         => isset( $step['title'] ) ? sanitize_text_field( $step['title'] ) : '',
-			'instruction'   => isset( $step['instruction'] ) ? wp_kses_post( $step['instruction'] ) : '',
-			'hint'          => isset( $step['hint'] ) ? sanitize_text_field( $step['hint'] ) : '',
-			'target'        => self::sanitize_target( $step['target'] ?? [] ),
-			'preconditions' => self::sanitize_preconditions( $step['preconditions'] ?? [] ),
-			'completion'    => self::sanitize_completion( $step['completion'] ?? [] ),
-			'recovery'      => self::sanitize_recovery( $step['recovery'] ?? [] ),
-			'tags'          => self::sanitize_tags( $step['tags'] ?? [] ),
-			'version'       => isset( $step['version'] ) ? absint( $step['version'] ) : 1,
+			'id'             => isset( $step['id'] ) ? sanitize_key( $step['id'] ) : wp_generate_uuid4(),
+			'order'          => isset( $step['order'] ) ? absint( $step['order'] ) : 0,
+			'title'          => isset( $step['title'] ) ? sanitize_text_field( $step['title'] ) : '',
+			'instruction'    => isset( $step['instruction'] ) ? wp_kses_post( $step['instruction'] ) : '',
+			'hint'           => isset( $step['hint'] ) ? sanitize_text_field( $step['hint'] ) : '',
+			'target'         => self::sanitize_target( $step['target'] ?? [] ),
+			'preconditions'  => self::sanitize_preconditions( $step['preconditions'] ?? [] ),
+			'completion'     => self::sanitize_completion( $step['completion'] ?? [] ),
+			'recovery'       => self::sanitize_recovery( $step['recovery'] ?? [] ),
+			'tags'           => self::sanitize_tags( $step['tags'] ?? [] ),
+			'version'        => isset( $step['version'] ) ? absint( $step['version'] ) : 1,
+			'content'        => isset( $step['content'] ) ? sanitize_text_field( $step['content'] ) : '',
+			'elementContext' => self::sanitize_element_context( $step['elementContext'] ?? [] ),
 		];
 	}
 
@@ -288,6 +304,7 @@ class ToursCpt {
 		if ( isset( $target['constraints'] ) && is_array( $target['constraints'] ) ) {
 			$sanitized['constraints'] = [
 				'visible'         => ! empty( $target['constraints']['visible'] ),
+				'inEditorIframe'  => ! empty( $target['constraints']['inEditorIframe'] ),
 				'withinContainer' => isset( $target['constraints']['withinContainer'] )
 					? sanitize_text_field( $target['constraints']['withinContainer'] )
 					: '',
@@ -307,13 +324,26 @@ class ToursCpt {
 	 * @return array Sanitized preconditions.
 	 */
 	private static function sanitize_preconditions( array $preconditions ): array {
+		// Note: sanitize_key() lowercases, so these must be lowercase.
 		$allowed_types = [
-			'ensureEditor',
-			'ensureSidebarOpen',
-			'ensureSidebarClosed',
-			'selectSidebarTab',
-			'openInserter',
-			'closeInserter',
+			'ensureeditor',
+			'ensuresidebaropen',
+			'ensuresidebarclosed',
+			'selectsidebartab',
+			'openinserter',
+			'closeinserter',
+			'insertblock',
+		];
+
+		// Map from lowercase to proper camelCase for output.
+		$type_map = [
+			'ensureeditor'        => 'ensureEditor',
+			'ensuresidebaropen'   => 'ensureSidebarOpen',
+			'ensuresidebarclosed' => 'ensureSidebarClosed',
+			'selectsidebartab'    => 'selectSidebarTab',
+			'openinserter'        => 'openInserter',
+			'closeinserter'       => 'closeInserter',
+			'insertblock'         => 'insertBlock',
 		];
 
 		$sanitized = [];
@@ -323,15 +353,78 @@ class ToursCpt {
 				continue;
 			}
 
-			$type = sanitize_key( $condition['type'] );
-			if ( ! in_array( $type, $allowed_types, true ) ) {
+			$type_lower = sanitize_key( $condition['type'] );
+			if ( ! in_array( $type_lower, $allowed_types, true ) ) {
 				continue;
 			}
 
-			$sanitized[] = [
-				'type'  => $type,
-				'value' => isset( $condition['value'] ) ? sanitize_text_field( $condition['value'] ) : '',
+			// Use proper camelCase for the type.
+			$type = $type_map[ $type_lower ];
+
+			$sanitized_condition = [
+				'type' => $type,
 			];
+
+			// Handle value (for backwards compatibility).
+			if ( isset( $condition['value'] ) ) {
+				$sanitized_condition['value'] = sanitize_text_field( $condition['value'] );
+			}
+
+			// Handle params object.
+			if ( isset( $condition['params'] ) && is_array( $condition['params'] ) ) {
+				$sanitized_condition['params'] = self::sanitize_precondition_params( $type, $condition['params'] );
+			}
+
+			$sanitized[] = $sanitized_condition;
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize precondition params based on type.
+	 *
+	 * @param string $type   Precondition type.
+	 * @param array  $params Raw params.
+	 * @return array Sanitized params.
+	 */
+	private static function sanitize_precondition_params( string $type, array $params ): array {
+		$sanitized = [];
+
+		switch ( $type ) {
+			case 'insertBlock':
+				if ( isset( $params['blockName'] ) ) {
+					$sanitized['blockName'] = sanitize_text_field( $params['blockName'] );
+				}
+				if ( isset( $params['markerId'] ) ) {
+					$sanitized['markerId'] = sanitize_key( $params['markerId'] );
+				}
+				if ( isset( $params['attributes'] ) && is_array( $params['attributes'] ) ) {
+					// Allow attributes through - they're block-specific.
+					$sanitized['attributes'] = $params['attributes'];
+				}
+				break;
+
+			case 'ensureSidebarOpen':
+				if ( isset( $params['sidebar'] ) ) {
+					$sanitized['sidebar'] = sanitize_text_field( $params['sidebar'] );
+				}
+				break;
+
+			case 'selectSidebarTab':
+				if ( isset( $params['tab'] ) ) {
+					$sanitized['tab'] = sanitize_text_field( $params['tab'] );
+				}
+				break;
+
+			default:
+				// Pass through unknown params with basic sanitization.
+				foreach ( $params as $key => $value ) {
+					if ( is_string( $value ) ) {
+						$sanitized[ sanitize_key( $key ) ] = sanitize_text_field( $value );
+					}
+				}
+				break;
 		}
 
 		return $sanitized;
@@ -411,6 +504,67 @@ class ToursCpt {
 				array_map( 'sanitize_key', $tags )
 			)
 		);
+	}
+
+	/**
+	 * Sanitize element context for debugging/display purposes.
+	 *
+	 * @param array $context Raw element context.
+	 * @return array Sanitized element context.
+	 */
+	private static function sanitize_element_context( array $context ): array {
+		if ( empty( $context ) ) {
+			return [];
+		}
+
+		$sanitized = [];
+
+		if ( isset( $context['tagName'] ) ) {
+			$sanitized['tagName'] = sanitize_key( $context['tagName'] );
+		}
+
+		if ( isset( $context['role'] ) ) {
+			$sanitized['role'] = sanitize_text_field( $context['role'] );
+		}
+
+		if ( isset( $context['classNames'] ) && is_array( $context['classNames'] ) ) {
+			$sanitized['classNames'] = array_values(
+				array_map( 'sanitize_html_class', $context['classNames'] )
+			);
+		}
+
+		if ( isset( $context['label'] ) ) {
+			$sanitized['label'] = sanitize_text_field( $context['label'] );
+		}
+
+		if ( isset( $context['textContent'] ) ) {
+			$sanitized['textContent'] = sanitize_text_field( $context['textContent'] );
+		}
+
+		if ( isset( $context['dataAttrs'] ) && is_array( $context['dataAttrs'] ) ) {
+			$sanitized['dataAttrs'] = array_map( 'sanitize_text_field', $context['dataAttrs'] );
+		}
+
+		if ( isset( $context['ancestors'] ) && is_array( $context['ancestors'] ) ) {
+			$sanitized['ancestors'] = [];
+			foreach ( $context['ancestors'] as $ancestor ) {
+				if ( ! is_array( $ancestor ) ) {
+					continue;
+				}
+				$sanitized_ancestor = [];
+				if ( isset( $ancestor['tagName'] ) ) {
+					$sanitized_ancestor['tagName'] = sanitize_key( $ancestor['tagName'] );
+				}
+				if ( isset( $ancestor['classNames'] ) && is_array( $ancestor['classNames'] ) ) {
+					$sanitized_ancestor['classNames'] = array_values(
+						array_map( 'sanitize_html_class', $ancestor['classNames'] )
+					);
+				}
+				$sanitized['ancestors'][] = $sanitized_ancestor;
+			}
+		}
+
+		return $sanitized;
 	}
 
 	/**

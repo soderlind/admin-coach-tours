@@ -17,12 +17,28 @@
 			return;
 		}
 
+		// Add provider class to parent table rows for proper hiding.
+		$( '.act-provider-field' ).each( function() {
+			const $field = $( this );
+			const provider = $field.data( 'provider' );
+			const $row = $field.closest( 'tr' );
+
+			if ( $row.length && provider ) {
+				$row.addClass( 'act-provider-row act-provider-' + provider );
+			}
+		} );
+
 		// Toggle provider fields visibility.
 		function toggleProviderFields() {
 			const selectedProvider = $providerSelect.val();
 
+			// Toggle row visibility.
+			$( '.act-provider-row' ).removeClass( 'act-provider-active' );
+			$( '.act-provider-row.act-provider-' + selectedProvider ).addClass( 'act-provider-active' );
+
+			// Also toggle field divs (fallback).
 			$( '.act-provider-field' ).removeClass( 'act-provider-active' );
-			$( '.act-provider-' + selectedProvider ).addClass( 'act-provider-active' );
+			$( '.act-provider-' + selectedProvider + '.act-provider-field' ).addClass( 'act-provider-active' );
 		}
 
 		// Initial toggle.

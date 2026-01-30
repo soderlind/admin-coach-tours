@@ -30,7 +30,18 @@ const EXCLUDED_SELECTORS = [
 	'#wpadminbar',
 	'.components-popover',
 	'.components-modal__screen-overlay',
+	'iframe[name="editor-canvas"]', // Exclude iframe itself; pick elements inside
 ];
+
+/**
+ * Get the editor iframe element if present.
+ *
+ * @return {HTMLIFrameElement|null} The editor iframe or null.
+ */
+function getEditorIframe() {
+	// WordPress 6.8+ uses an iframe for the block editor content.
+	return document.querySelector( 'iframe[name="editor-canvas"]' );
+}
 
 /**
  * Check if element should be excluded from picking.
@@ -65,51 +76,88 @@ export default function PickerOverlay( { onCancel } ) {
 	const overlayRef = useRef( null );
 
 	// Get picking state.
-	const { pickingStepId } = useSelect( ( select ) => {
+	const { pickingStepId, currentTourId } = useSelect( ( select ) => {
 		const store = select( STORE_NAME );
 		return {
 			pickingStepId: store.getPickingStepId?.() || null,
+			currentTourId: store.getCurrentTourId?.() || null,
 		};
 	}, [] );
 
 	// Get dispatch actions.
 	const { stopPicking, addStep, updateStep } = useDispatch( STORE_NAME );
 
+	// Track if element is from iframe.
+	const iframeElementRef = useRef( false );
+
 	/**
 	 * Handle mouse move - track hovered element.
+	 *
+	 * @param {MouseEvent} event      Mouse event.
+	 * @param {boolean}    fromIframe Whether event is from iframe.
 	 */
 	const handleMouseMove = useCallback(
-		( event ) => {
-			// Get element under cursor, excluding our overlay.
-			const elementsAtPoint = document.elementsFromPoint(
-				event.clientX,
-				event.clientY
-			);
+		( event, fromIframe = false ) => {
+			let targetElement = null;
 
-			// Find first non-excluded element.
-			const targetElement = elementsAtPoint.find( ( el ) => {
-				// Skip our overlay elements.
-				if ( el.closest( '.act-picker-overlay' ) ) {
-					return false;
+			if ( fromIframe ) {
+				// Event is from iframe - use event.target directly.
+				targetElement = event.target;
+				if ( targetElement && ! isExcluded( targetElement ) ) {
+					iframeElementRef.current = true;
+
+					// Get iframe to calculate position offset.
+					const iframe = getEditorIframe();
+					if ( iframe ) {
+						const iframeRect = iframe.getBoundingClientRect();
+						const elRect = targetElement.getBoundingClientRect();
+
+						setHoveredElement( targetElement );
+						setHighlightRect( {
+							top: iframeRect.top + elRect.top,
+							left: iframeRect.left + elRect.left,
+							width: elRect.width,
+							height: elRect.height,
+						} );
+					}
 				}
-				// Skip excluded elements.
-				if ( isExcluded( el ) ) {
-					return false;
-				}
-				return true;
-			} );
+			} else {
+				// Event is from main document.
+				const elementsAtPoint = document.elementsFromPoint(
+					event.clientX,
+					event.clientY
+				);
 
-			if ( targetElement && targetElement !== hoveredElement ) {
-				setHoveredElement( targetElement );
-
-				// Get element rect for highlight.
-				const rect = targetElement.getBoundingClientRect();
-				setHighlightRect( {
-					top: rect.top,
-					left: rect.left,
-					width: rect.width,
-					height: rect.height,
+				// Find first non-excluded element.
+				targetElement = elementsAtPoint.find( ( el ) => {
+					// Skip our overlay elements.
+					if ( el.closest( '.act-picker-overlay' ) ) {
+						return false;
+					}
+					// Skip excluded elements.
+					if ( isExcluded( el ) ) {
+						return false;
+					}
+					// Skip the iframe itself - we handle its contents separately.
+					if ( el.tagName === 'IFRAME' && el.name === 'editor-canvas' ) {
+						return false;
+					}
+					return true;
 				} );
+
+				if ( targetElement && targetElement !== hoveredElement ) {
+					iframeElementRef.current = false;
+					setHoveredElement( targetElement );
+
+					// Get element rect for highlight.
+					const rect = targetElement.getBoundingClientRect();
+					setHighlightRect( {
+						top: rect.top,
+						left: rect.left,
+						width: rect.width,
+						height: rect.height,
+					} );
+				}
 			}
 		},
 		[ hoveredElement ]
@@ -129,7 +177,8 @@ export default function PickerOverlay( { onCancel } ) {
 			}
 
 			// Capture locator bundle from element.
-			const target = captureLocatorBundle( hoveredElement );
+			const inIframe = iframeElementRef.current;
+			const target = captureLocatorBundle( hoveredElement, { inEditorIframe: inIframe } );
 			const elementContext = captureElementContext( hoveredElement );
 
 			// Create step data.
@@ -144,16 +193,16 @@ export default function PickerOverlay( { onCancel } ) {
 
 			if ( pickingStepId ) {
 				// Updating existing step.
-				updateStep( pickingStepId, { target } );
+				updateStep( currentTourId, pickingStepId, { target } );
 			} else {
 				// Adding new step.
-				addStep( stepData );
+				addStep( currentTourId, stepData );
 			}
 
 			// Stop picking mode.
 			stopPicking();
 		},
-		[ hoveredElement, pickingStepId, addStep, updateStep, stopPicking ]
+		[ hoveredElement, pickingStepId, currentTourId, addStep, updateStep, stopPicking ]
 	);
 
 	/**
@@ -169,22 +218,97 @@ export default function PickerOverlay( { onCancel } ) {
 		[ stopPicking, onCancel ]
 	);
 
-	// Set up event listeners.
+	// Use refs to store latest handlers so we don't need to re-attach listeners.
+	const handlersRef = useRef( {
+		handleMouseMove,
+		handleClick,
+		handleKeyDown,
+	} );
+
+	// Update refs when handlers change.
 	useEffect( () => {
-		document.addEventListener( 'mousemove', handleMouseMove, true );
-		document.addEventListener( 'click', handleClick, true );
-		document.addEventListener( 'keydown', handleKeyDown, true );
+		handlersRef.current = {
+			handleMouseMove,
+			handleClick,
+			handleKeyDown,
+		};
+	}, [ handleMouseMove, handleClick, handleKeyDown ] );
+
+	// Set up event listeners for main document and iframe.
+	useEffect( () => {
+		// Stable wrappers that use refs.
+		const onMouseMove = ( event ) =>
+			handlersRef.current.handleMouseMove( event, false );
+		const onClick = ( event ) => handlersRef.current.handleClick( event );
+		const onKeyDown = ( event ) => handlersRef.current.handleKeyDown( event );
+
+		const onIframeMouseMove = ( event ) =>
+			handlersRef.current.handleMouseMove( event, true );
+		const onIframeClick = ( event ) => {
+			event.preventDefault();
+			event.stopPropagation();
+			handlersRef.current.handleClick( event );
+		};
+
+		// Main document listeners.
+		document.addEventListener( 'mousemove', onMouseMove, true );
+		document.addEventListener( 'click', onClick, true );
+		document.addEventListener( 'keydown', onKeyDown, true );
 
 		// Prevent scroll while picking.
 		document.body.style.overflow = 'hidden';
 
-		return () => {
-			document.removeEventListener( 'mousemove', handleMouseMove, true );
-			document.removeEventListener( 'click', handleClick, true );
-			document.removeEventListener( 'keydown', handleKeyDown, true );
-			document.body.style.overflow = '';
+		// Track iframe doc for cleanup.
+		let iframeDoc = null;
+		let pollInterval = null;
+
+		/**
+		 * Attempt to attach listeners to iframe.
+		 */
+		const attachIframeListeners = () => {
+			const iframe = getEditorIframe();
+			if ( iframe?.contentDocument && iframe.contentDocument !== iframeDoc ) {
+				// Remove old listeners if doc changed.
+				if ( iframeDoc ) {
+					iframeDoc.removeEventListener(
+						'mousemove',
+						onIframeMouseMove,
+						true
+					);
+					iframeDoc.removeEventListener( 'click', onIframeClick, true );
+					iframeDoc.removeEventListener( 'keydown', onKeyDown, true );
+				}
+
+				iframeDoc = iframe.contentDocument;
+				iframeDoc.addEventListener( 'mousemove', onIframeMouseMove, true );
+				iframeDoc.addEventListener( 'click', onIframeClick, true );
+				iframeDoc.addEventListener( 'keydown', onKeyDown, true );
+			}
 		};
-	}, [ handleMouseMove, handleClick, handleKeyDown ] );
+
+		// Initial attempt.
+		attachIframeListeners();
+
+		// Poll for iframe (it may load after mount).
+		pollInterval = setInterval( attachIframeListeners, 500 );
+
+		return () => {
+			document.removeEventListener( 'mousemove', onMouseMove, true );
+			document.removeEventListener( 'click', onClick, true );
+			document.removeEventListener( 'keydown', onKeyDown, true );
+			document.body.style.overflow = '';
+
+			if ( pollInterval ) {
+				clearInterval( pollInterval );
+			}
+
+			if ( iframeDoc ) {
+				iframeDoc.removeEventListener( 'mousemove', onIframeMouseMove, true );
+				iframeDoc.removeEventListener( 'click', onIframeClick, true );
+				iframeDoc.removeEventListener( 'keydown', onKeyDown, true );
+			}
+		};
+	}, [] ); // Empty deps - uses refs for stable handlers
 
 	// Render highlight box.
 	const renderHighlight = () => {
@@ -273,6 +397,7 @@ export default function PickerOverlay( { onCancel } ) {
 					borderRadius: '8px',
 					boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
 					zIndex: 9999999,
+					pointerEvents: 'auto', // Make toolbar clickable
 				} }
 			>
 				<span style={ { alignSelf: 'center', fontWeight: 500 } }>
@@ -305,6 +430,7 @@ export default function PickerOverlay( { onCancel } ) {
 				bottom: 0,
 				zIndex: 9999998,
 				cursor: 'crosshair',
+				pointerEvents: 'none', // Let events pass through to iframe
 			} }
 		>
 			{ renderHighlight() }

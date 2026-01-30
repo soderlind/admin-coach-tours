@@ -359,20 +359,60 @@ function findNearestContainer( element, maxDepth = 5 ) {
 }
 
 /**
+ * Check if an ID appears to be a unique/generated ID (like block UUIDs).
+ *
+ * @param {string} id The ID to check.
+ * @return {boolean} True if the ID appears unique/generated.
+ */
+function isUniqueId( id ) {
+	if ( ! id ) {
+		return true;
+	}
+
+	// Block IDs like "block-b435bbd5-7189-4126-bfdc-54e2f014ce08"
+	if ( /^block-[a-f0-9-]{36}$/i.test( id ) ) {
+		return true;
+	}
+
+	// Generic UUIDs
+	if ( /^[a-f0-9-]{36}$/i.test( id ) ) {
+		return true;
+	}
+
+	// Random hash-like IDs (more than 8 hex chars)
+	if ( /^[a-f0-9]{8,}$/i.test( id ) ) {
+		return true;
+	}
+
+	// IDs with common unique patterns
+	if ( /[-_][a-f0-9]{8,}/i.test( id ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Capture a complete locator bundle from an element.
  *
  * @param {HTMLElement} element Target element.
  * @return {Target} Target configuration with locators and constraints.
  */
-export function captureLocatorBundle( element ) {
+export function captureLocatorBundle( element, options = {} ) {
+	const { inEditorIframe = false } = options;
 	const locators = [];
 	const constraints = {
 		visible: true,
 	};
 
+	// If element is in editor iframe, mark it.
+	if ( inEditorIframe ) {
+		constraints.inEditorIframe = true;
+	}
+
 	// 1. data-testid (highest priority).
 	const testId = element.getAttribute( 'data-testid' );
-	if ( testId ) {
+	if ( testId && ! isUniqueId( testId ) ) {
 		locators.push( {
 			type: 'testId',
 			value: testId,
@@ -381,8 +421,8 @@ export function captureLocatorBundle( element ) {
 		} );
 	}
 
-	// 2. ID-based CSS selector.
-	if ( element.id ) {
+	// 2. ID-based CSS selector (skip unique IDs).
+	if ( element.id && ! isUniqueId( element.id ) ) {
 		locators.push( {
 			type: 'css',
 			value: `#${ CSS.escape( element.id ) }`,
@@ -406,7 +446,7 @@ export function captureLocatorBundle( element ) {
 		} );
 	}
 
-	// 4. Data attributes.
+	// 4. Data attributes (skip unique values like block IDs).
 	const dataAttrs = getDataAttributes( element );
 	for ( const [ key, value ] of Object.entries( dataAttrs ) ) {
 		// Skip testid (already handled) and common non-useful ones.
@@ -414,8 +454,13 @@ export function captureLocatorBundle( element ) {
 			continue;
 		}
 
-		// Prioritize block-related and wp-specific data attrs.
-		const weight = key.startsWith( 'wp-' ) || key === 'block' ? 85 : 70;
+		// Skip unique block IDs - use the type instead.
+		if ( key === 'block' && value && /^[a-f0-9-]{36}$/i.test( value ) ) {
+			continue;
+		}
+
+		// Prioritize block type (stable across pages).
+		const weight = key === 'type' ? 85 : key.startsWith( 'wp-' ) ? 75 : 70;
 
 		locators.push( {
 			type: 'dataAttribute',
@@ -474,6 +519,17 @@ export function captureLocatorBundle( element ) {
 			weight: 50,
 			fallback: true,
 		} );
+
+		// For Gutenberg blocks, add a :first-of-type fallback.
+		const blockType = element.getAttribute( 'data-type' );
+		if ( blockType ) {
+			locators.push( {
+				type: 'css',
+				value: `[data-type="${ blockType }"]:first-of-type`,
+				weight: 45,
+				fallback: true,
+			} );
+		}
 	}
 
 	// Ensure we have at least one locator.

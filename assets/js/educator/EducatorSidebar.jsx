@@ -7,7 +7,7 @@
  * @since   0.1.0
  */
 
-import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-post';
+import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/editor';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -23,10 +23,10 @@ import {
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
-import { plus, help } from '@wordpress/icons';
+import { plus, help, check } from '@wordpress/icons';
 
-import StepList from './StepList.jsx';
-import StepEditor from './StepEditor.jsx';
+import StepList from './StepList.tsx';
+import StepEditor from './StepEditor.tsx';
 import PickerOverlay from './PickerOverlay.jsx';
 
 const STORE_NAME = 'admin-coach-tours';
@@ -41,14 +41,15 @@ export default function EducatorSidebar() {
 	const [ newTourTitle, setNewTourTitle ] = useState( '' );
 	const [ newTourDescription, setNewTourDescription ] = useState( '' );
 	const [ savingError, setSavingError ] = useState( null );
+	const [ isSavingSteps, setIsSavingSteps ] = useState( false );
+	const [ saveSuccess, setSaveSuccess ] = useState( false );
 
 	// Get data from store.
 	const {
 		tours,
 		isLoading,
 		currentTour,
-		editingStep,
-		isPicking,
+		selectedStep,
 		isPickerActive,
 		currentPostType,
 		editorType,
@@ -58,10 +59,9 @@ export default function EducatorSidebar() {
 
 		return {
 			tours: store.getTours(),
-			isLoading: store.isLoading(),
+			isLoading: store.isToursLoading(),
 			currentTour: store.getCurrentTour(),
-			editingStep: store.getEditingStep(),
-			isPicking: store.isPicking(),
+			selectedStep: store.getSelectedStep(),
 			isPickerActive: store.isPickerActive(),
 			currentPostType: editorStore?.getCurrentPostType?.() || 'post',
 			editorType: 'block', // Currently only block editor supported.
@@ -73,10 +73,43 @@ export default function EducatorSidebar() {
 		setCurrentTour,
 		createTour,
 		updateTour,
+		saveTour,
 		startPicking,
 		stopPicking,
-		setEditingStep,
+		selectStep,
 	} = useDispatch( STORE_NAME );
+
+	/**
+	 * Handle saving tour steps.
+	 */
+	const handleSaveSteps = useCallback( async () => {
+		if ( ! currentTour?.id ) {
+			return;
+		}
+
+		setIsSavingSteps( true );
+		setSavingError( null );
+		setSaveSuccess( false );
+
+		try {
+			// Build tour data with current steps.
+			const tourData = {
+				steps: currentTour.steps || [],
+			};
+
+			await saveTour( currentTour.id, tourData );
+			setSaveSuccess( true );
+
+			// Clear success message after 3 seconds.
+			setTimeout( () => setSaveSuccess( false ), 3000 );
+		} catch ( error ) {
+			setSavingError(
+				error.message || __( 'Failed to save steps.', 'admin-coach-tours' )
+			);
+		} finally {
+			setIsSavingSteps( false );
+		}
+	}, [ currentTour?.id, currentTour?.steps, saveTour ] );
 
 	/**
 	 * Handle creating a new tour.
@@ -163,6 +196,8 @@ export default function EducatorSidebar() {
 				) : (
 					<>
 						<SelectControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 							label={ __( 'Edit Existing Tour', 'admin-coach-tours' ) }
 							value=""
 							options={ tourOptions }
@@ -185,12 +220,15 @@ export default function EducatorSidebar() {
 							) : (
 								<div className="act-new-tour-form">
 									<TextControl
+										__next40pxDefaultSize
+										__nextHasNoMarginBottom
 										label={ __( 'Tour Title', 'admin-coach-tours' ) }
 										value={ newTourTitle }
 										onChange={ setNewTourTitle }
 										placeholder={ __( 'Enter tour title…', 'admin-coach-tours' ) }
 									/>
 									<TextareaControl
+										__nextHasNoMarginBottom
 										label={ __( 'Description', 'admin-coach-tours' ) }
 										value={ newTourDescription }
 										onChange={ setNewTourDescription }
@@ -204,30 +242,26 @@ export default function EducatorSidebar() {
 											{ savingError }
 										</Notice>
 									) }
-									<Flex>
-										<FlexItem>
-											<Button
-												variant="primary"
-												onClick={ handleCreateTour }
-												disabled={ ! newTourTitle.trim() }
-											>
-												{ __( 'Create', 'admin-coach-tours' ) }
-											</Button>
-										</FlexItem>
-										<FlexItem>
-											<Button
-												variant="tertiary"
-												onClick={ () => {
-													setShowNewTourForm( false );
-													setNewTourTitle( '' );
-													setNewTourDescription( '' );
-													setSavingError( null );
-												} }
-											>
-												{ __( 'Cancel', 'admin-coach-tours' ) }
-											</Button>
-										</FlexItem>
-									</Flex>
+									<div className="act-button-group">
+										<Button
+											variant="primary"
+											onClick={ handleCreateTour }
+											disabled={ ! newTourTitle.trim() }
+										>
+											{ __( 'Create', 'admin-coach-tours' ) }
+										</Button>
+										<Button
+											variant="tertiary"
+											onClick={ () => {
+												setShowNewTourForm( false );
+												setNewTourTitle( '' );
+												setNewTourDescription( '' );
+												setSavingError( null );
+											} }
+										>
+											{ __( 'Cancel', 'admin-coach-tours' ) }
+										</Button>
+									</div>
 								</div>
 							) }
 						</div>
@@ -253,19 +287,20 @@ export default function EducatorSidebar() {
 					title={ currentTour.title || __( 'Untitled Tour', 'admin-coach-tours' ) }
 					initialOpen={ true }
 				>
-					<Flex justify="space-between" style={ { marginBottom: '12px' } }>
-						<FlexBlock>
-							<span className="act-tour-status">
+					<Flex justify="space-between" align="center">
+						<FlexItem>
+							<span className={ `act-tour-status${ currentTour.status === 'publish' ? ' act-tour-status--published' : '' }` }>
 								{ currentTour.status === 'publish'
 									? __( 'Published', 'admin-coach-tours' )
 									: __( 'Draft', 'admin-coach-tours' )
 								}
 							</span>
-						</FlexBlock>
+						</FlexItem>
 						<FlexItem>
 							<Button
 								variant="link"
 								onClick={ () => setCurrentTour( null ) }
+								size="small"
 							>
 								{ __( 'Switch Tour', 'admin-coach-tours' ) }
 							</Button>
@@ -283,22 +318,60 @@ export default function EducatorSidebar() {
 					title={ __( 'Steps', 'admin-coach-tours' ) }
 					initialOpen={ true }
 				>
+					{ savingError && (
+						<Notice
+							status="error"
+							isDismissible={ true }
+							onRemove={ () => setSavingError( null ) }
+						>
+							{ savingError }
+						</Notice>
+					) }
+
+					{ saveSuccess && (
+						<Notice
+							status="success"
+							isDismissible={ false }
+						>
+							{ __( 'Steps saved successfully!', 'admin-coach-tours' ) }
+						</Notice>
+					) }
+
 					<StepList
+						tourId={ currentTour.id }
 						steps={ currentTour.steps || [] }
-						onEditStep={ setEditingStep }
+						onEditStep={ ( step ) => selectStep( step?.id ?? null ) }
 						onAddStep={ handleStartPicking }
 					/>
+
+					{ ( currentTour.steps?.length > 0 ) && (
+						<div className="act-actions-footer">
+							<Button
+								variant="primary"
+								icon={ check }
+								onClick={ handleSaveSteps }
+								isBusy={ isSavingSteps }
+								disabled={ isSavingSteps }
+							>
+								{ isSavingSteps
+									? __( 'Saving…', 'admin-coach-tours' )
+									: __( 'Save Steps', 'admin-coach-tours' )
+								}
+							</Button>
+						</div>
+					) }
 				</PanelBody>
 
-				{ editingStep && (
+				{ selectedStep && (
 					<PanelBody
 						title={ __( 'Edit Step', 'admin-coach-tours' ) }
 						initialOpen={ true }
 					>
 						<StepEditor
-							step={ editingStep }
+							step={ selectedStep }
 							tourId={ currentTour.id }
-							onClose={ () => setEditingStep( null ) }
+							postType={ currentPostType }
+							onClose={ () => selectStep( null ) }
 						/>
 					</PanelBody>
 				) }
@@ -325,7 +398,7 @@ export default function EducatorSidebar() {
 				</div>
 			</PluginSidebar>
 
-			{ ( isPicking || isPickerActive ) && (
+			{ isPickerActive && (
 				<PickerOverlay onCancel={ handleCancelPicking } />
 			) }
 		</>

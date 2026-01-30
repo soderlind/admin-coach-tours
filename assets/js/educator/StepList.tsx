@@ -16,12 +16,7 @@ import {
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
-import {
-	edit,
-	dragHandle,
-	trash,
-	plus,
-} from '@wordpress/icons';
+import { edit, trash, plus } from '@wordpress/icons';
 import {
 	DndContext,
 	closestCenter,
@@ -29,6 +24,7 @@ import {
 	PointerSensor,
 	useSensor,
 	useSensors,
+	type DragEndEvent,
 } from '@dnd-kit/core';
 import {
 	arrayMove,
@@ -39,22 +35,18 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import type { Step, StepListProps, SortableStepItemProps } from '../types/index';
+
 const STORE_NAME = 'admin-coach-tours';
 
 /**
- * @typedef {import('../types/step.js').Step} Step
- */
-
-/**
  * Sortable step item component.
- *
- * @param {Object}   props         Component props.
- * @param {Step}     props.step    Step data.
- * @param {Function} props.onEdit  Edit handler.
- * @param {Function} props.onDelete Delete handler.
- * @return {JSX.Element} Step item.
  */
-function SortableStepItem( { step, onEdit, onDelete } ) {
+function SortableStepItem( {
+	step,
+	onEdit,
+	onDelete,
+}: SortableStepItemProps ): JSX.Element {
 	const {
 		attributes,
 		listeners,
@@ -64,9 +56,9 @@ function SortableStepItem( { step, onEdit, onDelete } ) {
 		isDragging,
 	} = useSortable( { id: step.id } );
 
-	const style = {
+	const style: React.CSSProperties = {
 		transform: CSS.Transform.toString( transform ),
-		transition,
+		transition: transition ?? undefined,
 		opacity: isDragging ? 0.5 : 1,
 	};
 
@@ -85,7 +77,10 @@ function SortableStepItem( { step, onEdit, onDelete } ) {
 						{ ...listeners }
 						aria-label={ __( 'Drag to reorder', 'admin-coach-tours' ) }
 					>
-						<span className="dashicons dashicons-move" style={ { width: 20, height: 20 } } />
+						<span
+							className="dashicons dashicons-move"
+							style={ { width: 20, height: 20 } }
+						/>
 					</button>
 				</FlexItem>
 
@@ -129,15 +124,13 @@ function SortableStepItem( { step, onEdit, onDelete } ) {
 
 /**
  * Step List component.
- *
- * @param {Object}   props           Component props.
- * @param {number}   props.tourId    Tour ID.
- * @param {Step[]}   props.steps     Array of steps.
- * @param {Function} props.onEditStep Handler for editing a step.
- * @param {Function} props.onAddStep  Handler for adding a step.
- * @return {JSX.Element} Step list.
  */
-export default function StepList( { tourId, steps = [], onEditStep, onAddStep } ) {
+export default function StepList( {
+	tourId,
+	steps = [],
+	onEditStep,
+	onAddStep,
+}: StepListProps ): JSX.Element {
 	const { reorderSteps, deleteStep } = useDispatch( STORE_NAME );
 
 	// Configure drag sensors.
@@ -154,20 +147,22 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 
 	/**
 	 * Handle drag end.
-	 *
-	 * @param {Object} event Drag event.
 	 */
 	const handleDragEnd = useCallback(
-		( event ) => {
+		( event: DragEndEvent ) => {
 			const { active, over } = event;
 
 			if ( active.id !== over?.id ) {
-				const oldIndex = steps.findIndex( ( s ) => s.id === active.id );
-				const newIndex = steps.findIndex( ( s ) => s.id === over.id );
+				const oldIndex = steps.findIndex(
+					( s: Step ) => s.id === active.id
+				);
+				const newIndex = steps.findIndex(
+					( s: Step ) => s.id === over?.id
+				);
 
 				if ( oldIndex !== -1 && newIndex !== -1 ) {
 					const newOrder = arrayMove(
-						steps.map( ( s ) => s.id ),
+						steps.map( ( s: Step ) => s.id ),
 						oldIndex,
 						newIndex
 					);
@@ -180,14 +175,15 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 
 	/**
 	 * Handle delete step.
-	 *
-	 * @param {string} stepId Step ID to delete.
 	 */
 	const handleDeleteStep = useCallback(
-		( stepId ) => {
+		( stepId: string ) => {
 			if (
 				window.confirm(
-					__( 'Are you sure you want to delete this step?', 'admin-coach-tours' )
+					__(
+						'Are you sure you want to delete this step?',
+						'admin-coach-tours'
+					)
 				)
 			) {
 				deleteStep( tourId, stepId );
@@ -199,12 +195,13 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 	if ( steps.length === 0 ) {
 		return (
 			<div className="act-step-list-empty">
-				<p>{ __( 'No steps yet. Click the button below to add your first step.', 'admin-coach-tours' ) }</p>
-				<Button
-					variant="primary"
-					icon={ plus }
-					onClick={ onAddStep }
-				>
+				<p>
+					{ __(
+						'No steps yet. Click the button below to add your first step.',
+						'admin-coach-tours'
+					) }
+				</p>
+				<Button variant="primary" icon={ plus } onClick={ onAddStep }>
 					{ __( 'Add First Step', 'admin-coach-tours' ) }
 				</Button>
 			</div>
@@ -212,7 +209,9 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 	}
 
 	// Sort steps by order.
-	const sortedSteps = [ ...steps ].sort( ( a, b ) => a.order - b.order );
+	const sortedSteps = [ ...steps ].sort(
+		( a: Step, b: Step ) => a.order - b.order
+	);
 
 	return (
 		<div className="act-step-list">
@@ -222,10 +221,10 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 				onDragEnd={ handleDragEnd }
 			>
 				<SortableContext
-					items={ sortedSteps.map( ( s ) => s.id ) }
+					items={ sortedSteps.map( ( s: Step ) => s.id ) }
 					strategy={ verticalListSortingStrategy }
 				>
-					{ sortedSteps.map( ( step ) => (
+					{ sortedSteps.map( ( step: Step ) => (
 						<SortableStepItem
 							key={ step.id }
 							step={ step }
@@ -236,12 +235,8 @@ export default function StepList( { tourId, steps = [], onEditStep, onAddStep } 
 				</SortableContext>
 			</DndContext>
 
-			<div className="act-step-list-footer">
-				<Button
-					variant="secondary"
-					icon={ plus }
-					onClick={ onAddStep }
-				>
+			<div className="act-step-list-footer act-button-group">
+				<Button variant="secondary" icon={ plus } onClick={ onAddStep }>
 					{ __( 'Add Step', 'admin-coach-tours' ) }
 				</Button>
 			</div>
