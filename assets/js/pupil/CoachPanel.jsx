@@ -16,14 +16,7 @@ import {
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
-import {
-	arrowLeft,
-	arrowRight,
-	close,
-	redo,
-	cancelCircleFilled,
-	chevronRight,
-} from '@wordpress/icons';
+import { arrowRight, close } from '@wordpress/icons';
 
 /**
  * @typedef {import('../types/step.js').Step} Step
@@ -40,13 +33,10 @@ import {
  * @param {HTMLElement|null} props.targetElement            Resolved target element.
  * @param {string|null}      props.resolutionError          Target resolution error.
  * @param {boolean}          props.isApplyingPreconditions  Whether preconditions are being applied.
- * @param {boolean}          props.isPaused                 Whether tour is paused.
  * @param {Function}         props.onContinue               Continue/complete handler.
  * @param {Function}         props.onRepeat                 Repeat step handler.
  * @param {Function}         props.onPrevious               Previous step handler.
  * @param {Function}         props.onNext                   Next step handler.
- * @param {Function}         props.onPause                  Pause handler.
- * @param {Function}         props.onResume                 Resume handler.
  * @param {Function}         props.onStop                   Stop tour handler.
  * @return {JSX.Element} Coach panel.
  */
@@ -58,13 +48,10 @@ export default function CoachPanel( {
 	targetElement,
 	resolutionError,
 	isApplyingPreconditions,
-	isPaused,
 	onContinue,
 	onRepeat,
 	onPrevious,
 	onNext,
-	onPause,
-	onResume,
 	onStop,
 } ) {
 	const [ position, setPosition ] = useState( { x: 20, y: 20 } );
@@ -232,36 +219,7 @@ export default function CoachPanel( {
 	const renderControls = () => {
 		return (
 			<div className="act-panel-controls">
-				<Flex justify="space-between" align="center">
-					{ /* Previous button removed - going backwards doesn't work well
-					   with AI tours because completing steps changes editor state
-					   (e.g., inserting an image replaces the paragraph placeholder) */ }
-
-					<FlexBlock style={ { textAlign: 'center' } }>
-						<Button
-							icon={ redo }
-							label={ __( 'Repeat', 'admin-coach-tours' ) }
-							onClick={ onRepeat }
-							disabled={ isApplyingPreconditions }
-							size="small"
-						/>
-						{ isPaused ? (
-							<Button
-								icon={ chevronRight }
-								label={ __( 'Resume', 'admin-coach-tours' ) }
-								onClick={ onResume }
-								size="small"
-							/>
-						) : (
-							<Button
-								icon={ cancelCircleFilled }
-								label={ __( 'Pause', 'admin-coach-tours' ) }
-								onClick={ onPause }
-								size="small"
-							/>
-						) }
-					</FlexBlock>
-
+				<Flex justify="flex-end" align="center">
 					<FlexItem>
 						{ isManualCompletion || isLastStep ? (
 							<Button

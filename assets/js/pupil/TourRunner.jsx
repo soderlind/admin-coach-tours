@@ -319,13 +319,10 @@ export default function TourRunner() {
 			targetElement={ targetElement }
 			resolutionError={ resolutionError }
 			isApplyingPreconditions={ isApplyingPreconditions }
-			isPaused={ false }
 			onContinue={ handleContinue }
 			onRepeat={ handleRepeat }
 			onPrevious={ previousStep }
 			onNext={ nextStep }
-			onPause={ () => {} }
-			onResume={ () => {} }
 			onStop={ handleStop }
 		/>
 	);

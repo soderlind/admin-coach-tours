@@ -11,7 +11,7 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.3.3
+ * Version:     0.3.4
  * Requires at least: 6.8
  * Requires PHP: 8.3
  * Author:      Per Soderlind
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.3.0';
+const VERSION = '0.3.4';
 
 /**
  * Plugin slug.

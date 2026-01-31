@@ -23,15 +23,63 @@ export function hasEmptyParagraph() {
 		}
 
 		const blocks = blockEditorStore.getBlocks();
-		return blocks.some(
+		const emptyParagraph = blocks.find(
 			( block ) =>
 				block.name === 'core/paragraph' &&
-				( ! block.attributes?.content || block.attributes.content === '' )
+				isEmptyContent( block.attributes?.content )
 		);
+
+		return !! emptyParagraph;
 	} catch ( e ) {
 		console.warn( '[ACT] Error checking for empty paragraph:', e );
 		return false;
 	}
+}
+
+/**
+ * Check if content is considered empty.
+ * Handles various empty states: undefined, null, empty string, whitespace-only,
+ * and WordPress RichTextData objects.
+ *
+ * @param {*} content Block content attribute.
+ * @return {boolean} True if content is empty.
+ */
+function isEmptyContent( content ) {
+	if ( content === undefined || content === null || content === '' ) {
+		return true;
+	}
+	// Handle RichText value (might be a string with only whitespace/newlines)
+	if ( typeof content === 'string' ) {
+		return content.trim() === '';
+	}
+	// Handle RichTextData object (WordPress 6.x+)
+	// RichTextData has toString(), toJSON(), and length properties
+	if ( typeof content === 'object' && content !== null ) {
+		// Check if it has a length property (RichTextData)
+		if ( typeof content.length === 'number' ) {
+			return content.length === 0;
+		}
+		// Try toString() method
+		if ( typeof content.toString === 'function' ) {
+			const str = content.toString();
+			// Avoid "[object Object]" from default toString
+			if ( str !== '[object Object]' ) {
+				return str.trim() === '';
+			}
+		}
+		// Try toJSON() for serializable values
+		if ( typeof content.toJSON === 'function' ) {
+			const json = content.toJSON();
+			if ( typeof json === 'string' ) {
+				return json.trim() === '';
+			}
+		}
+	}
+	// Handle empty array (shouldn't happen but just in case)
+	if ( Array.isArray( content ) && content.length === 0 ) {
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -162,14 +210,13 @@ export async function ensureEmptyPlaceholder() {
 	const exists = hasEmptyParagraph();
 
 	if ( exists ) {
-		console.log( '[ACT] Empty paragraph already exists' );
 		// Find and select the existing empty paragraph.
 		const blockEditorStore = select( 'core/block-editor' );
 		const blocks = blockEditorStore?.getBlocks() || [];
 		const emptyParagraph = blocks.find(
 			( block ) =>
 				block.name === 'core/paragraph' &&
-				( ! block.attributes?.content || block.attributes.content === '' )
+				isEmptyContent( block.attributes?.content )
 		);
 		if ( emptyParagraph ) {
 			await dispatch( 'core/block-editor' ).selectBlock( emptyParagraph.clientId );
