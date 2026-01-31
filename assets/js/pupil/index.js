@@ -21,7 +21,7 @@ const STORE_NAME = 'admin-coach-tours';
  * Initialize the pupil tour runner.
  */
 function init() {
-	console.log( '[ACT Pupil] Initializing... v2' );
+	console.log( '[ACT Pupil] Initializing... v3' );
 	console.log( '[ACT Pupil] TourRunner:', typeof TourRunner, TourRunner );
 
 	// Create container for tour runner.
@@ -37,10 +37,12 @@ function init() {
 		console.error( '[ACT Pupil] Error rendering TourRunner:', error );
 	}
 
-	// Check for auto-start tour from URL.
-	const urlParams = new URLSearchParams( window.location.search );
+	// Check for auto-start tour from URL (use top window to handle iframe case).
+	const topWindow = window.top || window;
+	const urlParams = new URLSearchParams( topWindow.location.search );
 	const autoStartTourId = urlParams.get( 'act_tour' );
 
+	console.log( '[ACT Pupil] URL search:', topWindow.location.search );
 	console.log( '[ACT Pupil] act_tour param:', autoStartTourId );
 
 	if ( autoStartTourId ) {

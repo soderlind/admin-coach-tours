@@ -79,7 +79,6 @@ export default function EducatorSidebar() {
 		startPicking,
 		stopPicking,
 		selectStep,
-		startTour,
 	} = useDispatch( STORE_NAME );
 
 	// Get interface dispatch for opening sidebar (works in newer WP).
@@ -159,12 +158,28 @@ export default function EducatorSidebar() {
 
 	/**
 	 * Handle testing the tour (preview mode).
+	 * Opens a new post in the tour's target post type with the tour parameter.
 	 */
 	const handleTestTour = useCallback( () => {
 		if ( currentTour?.id ) {
-			startTour( currentTour.id );
+			// Get the first configured post type for this tour.
+			const targetPostTypes = currentTour.postTypes || [ 'post' ];
+			const targetPostType = targetPostTypes[ 0 ] || 'post';
+
+			// Build the URL to create a new post of that type with the tour parameter.
+			// Use URLSearchParams to properly encode parameters.
+			const adminUrl = new URL( window.location.origin + '/wp-admin/post-new.php' );
+			if ( targetPostType !== 'post' ) {
+				adminUrl.searchParams.set( 'post_type', targetPostType );
+			}
+			adminUrl.searchParams.set( 'act_tour', currentTour.id.toString() );
+
+			console.log( '[ACT Educator] Opening test URL:', adminUrl.toString() );
+
+			// Open in new tab for testing.
+			window.open( adminUrl.toString(), '_blank' );
 		}
-	}, [ currentTour?.id, startTour ] );
+	}, [ currentTour?.id, currentTour?.postTypes ] );
 
 	// Show loading state.
 	if ( isLoading && ! currentTour ) {

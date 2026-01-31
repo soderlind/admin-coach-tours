@@ -170,15 +170,15 @@ function init(): void {
 function enqueue_editor_assets(): void {
 	global $post_type;
 
+	error_log( '[ACT] enqueue_editor_assets called, post_type: ' . $post_type );
+
 	// Educator assets only load on act_tour post type.
 	if ( 'act_tour' === $post_type ) {
 		enqueue_educator_assets();
 	}
 
-	// Pupil assets load on all post types except act_tour (for running tours).
-	if ( 'act_tour' !== $post_type ) {
-		enqueue_pupil_assets();
-	}
+	// Pupil assets load on all post types (including act_tour for testing tours).
+	enqueue_pupil_assets();
 }
 
 /**
@@ -239,11 +239,16 @@ function enqueue_educator_assets(): void {
 function enqueue_pupil_assets(): void {
 	$pupil_asset_file = PLUGIN_PATH . 'build/pupil/index.asset.php';
 
+	error_log( '[ACT] enqueue_pupil_assets called, file: ' . $pupil_asset_file );
+	error_log( '[ACT] file_exists: ' . ( file_exists( $pupil_asset_file ) ? 'yes' : 'no' ) );
+
 	if ( ! file_exists( $pupil_asset_file ) ) {
+		error_log( '[ACT] Pupil asset file not found, aborting' );
 		return;
 	}
 
 	$pupil_asset = require $pupil_asset_file;
+	error_log( '[ACT] Enqueueing pupil script' );
 
 	wp_enqueue_script(
 		'admin-coach-tours-pupil',

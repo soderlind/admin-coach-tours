@@ -7,7 +7,7 @@
  * @since   0.1.0
  */
 
-import { createReduxStore, register } from '@wordpress/data';
+import { createReduxStore, register, select } from '@wordpress/data';
 import reducer, { DEFAULT_STATE } from './reducer';
 import * as actions from './actions';
 import * as selectors from './selectors';
@@ -32,9 +32,11 @@ const store = createReduxStore( STORE_NAME, {
 } );
 
 /**
- * Register the store with WordPress.
+ * Register the store with WordPress (only if not already registered).
  */
-register( store );
+if ( ! select( STORE_NAME ) ) {
+	register( store );
+}
 
 export default store;
 export { DEFAULT_STATE };
