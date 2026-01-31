@@ -497,9 +497,9 @@ class TourRepository {
 					[ 'status' => 404 ]
 				);
 			}
-			$step           = $steps_map[ $id ];
-			$step['order']  = $i;
-			$reordered[]    = $step;
+			$step          = $steps_map[ $id ];
+			$step['order'] = $i;
+			$reordered[]   = $step;
 		}
 
 		self::save_steps( $tour_id, $reordered );
@@ -526,7 +526,10 @@ class TourRepository {
 						'title'         => '',
 						'instruction'   => '',
 						'hint'          => '',
-						'target'        => [ 'locators' => [], 'constraints' => [] ],
+						'target'        => [
+							'locators'    => [],
+							'constraints' => [],
+						],
 						'preconditions' => [],
 						'completion'    => [ 'type' => 'manual' ],
 						'recovery'      => [],
@@ -539,7 +542,6 @@ class TourRepository {
 		}
 
 		// Future migrations would go here.
-		// if ( $version < 2 ) { ... }
 
 		return $steps;
 	}

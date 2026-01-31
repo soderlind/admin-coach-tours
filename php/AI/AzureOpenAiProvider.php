@@ -167,7 +167,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 				],
 				'body'    => wp_json_encode(
 					[
-						'messages' => [
+						'messages'        => [
 							[
 								'role'    => 'system',
 								'content' => $system_prompt,
@@ -345,7 +345,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return string System prompt.
 	 */
 	private function build_system_prompt(): string {
-		return <<<PROMPT
+		return <<<'PROMPT'
 You are an expert WordPress admin UI instructor. Your task is to generate clear, helpful step content for a guided tour of the WordPress admin interface.
 
 Given information about a UI element, generate:
@@ -445,12 +445,13 @@ PROMPT;
 		$response = wp_remote_post(
 			$this->build_api_url(),
 			[
-				'timeout' => 60, // Longer timeout for tour generation.
-				'headers' => [
-					'api-key'      => $api_key,
-					'Content-Type' => 'application/json',
-				],
-				'body'    => wp_json_encode(
+				'timeout'                                 => 60,
+				// Longer timeout for tour generation.
+												'headers' => [
+													'api-key' => $api_key,
+													'Content-Type' => 'application/json',
+												],
+				'body'                                    => wp_json_encode(
 					[
 						'messages'        => [
 							[
@@ -616,7 +617,7 @@ PROMPT;
 
 			// Process constraints.
 			if ( isset( $step['target']['constraints'] ) && is_array( $step['target']['constraints'] ) ) {
-				$constraints = $step['target']['constraints'];
+				$constraints                             = $step['target']['constraints'];
 				$sanitized_step['target']['constraints'] = [
 					'visible'        => (bool) ( $constraints['visible'] ?? true ),
 					'inEditorIframe' => (bool) ( $constraints['inEditorIframe'] ?? false ),

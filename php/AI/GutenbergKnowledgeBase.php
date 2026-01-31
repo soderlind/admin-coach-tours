@@ -221,7 +221,7 @@ class GutenbergKnowledgeBase {
 		$query_words = explode( ' ', $query );
 		foreach ( $query_words as $word ) {
 			if ( strlen( $word ) > 3 && str_contains( $description, $word ) ) {
-				$score += 1;
+				++$score;
 			}
 		}
 

@@ -182,7 +182,7 @@ class AnthropicProvider implements AiProviderInterface {
 		}
 
 		// Extract JSON from response.
-		$text = $data['content'][0]['text'];
+		$text       = $data['content'][0]['text'];
 		$json_match = [];
 
 		if ( preg_match( '/\{[^{}]*\}/s', $text, $json_match ) ) {
@@ -291,7 +291,7 @@ class AnthropicProvider implements AiProviderInterface {
 	 * @return string System prompt.
 	 */
 	private function build_system_prompt(): string {
-		return <<<PROMPT
+		return <<<'PROMPT'
 You are an expert WordPress admin UI instructor. Your task is to generate clear, helpful step content for a guided tour of the WordPress admin interface.
 
 Given information about a UI element, generate:
@@ -351,8 +351,8 @@ PROMPT;
 		];
 
 		if ( isset( $content['suggestedCompletion'] ) && is_array( $content['suggestedCompletion'] ) ) {
-			$completion      = $content['suggestedCompletion'];
-			$allowed_types   = [ 'clickTarget', 'domValueChanged', 'manual', 'wpData' ];
+			$completion    = $content['suggestedCompletion'];
+			$allowed_types = [ 'clickTarget', 'domValueChanged', 'manual', 'wpData' ];
 
 			if ( in_array( $completion['type'] ?? '', $allowed_types, true ) ) {
 				$draft['suggestedCompletion'] = [
@@ -390,13 +390,14 @@ PROMPT;
 		$response = wp_remote_post(
 			self::API_ENDPOINT,
 			[
-				'timeout' => 60, // Longer timeout for tour generation.
-				'headers' => [
-					'x-api-key'         => $api_key,
-					'anthropic-version' => self::API_VERSION,
-					'Content-Type'      => 'application/json',
-				],
-				'body'    => wp_json_encode(
+				'timeout'                                 => 60,
+				// Longer timeout for tour generation.
+												'headers' => [
+													'x-api-key'    => $api_key,
+													'anthropic-version' => self::API_VERSION,
+													'Content-Type' => 'application/json',
+												],
+				'body'                                    => wp_json_encode(
 					[
 						'model'      => $this->get_model(),
 						'system'     => $system_prompt,
@@ -570,7 +571,7 @@ PROMPT;
 
 			// Process constraints.
 			if ( isset( $step['target']['constraints'] ) && is_array( $step['target']['constraints'] ) ) {
-				$constraints = $step['target']['constraints'];
+				$constraints                             = $step['target']['constraints'];
 				$sanitized_step['target']['constraints'] = [
 					'visible'        => (bool) ( $constraints['visible'] ?? true ),
 					'inEditorIframe' => (bool) ( $constraints['inEditorIframe'] ?? false ),

@@ -167,10 +167,10 @@ class AiController {
 		// Ancestors (limited depth).
 		if ( isset( $context['ancestors'] ) && is_array( $context['ancestors'] ) ) {
 			$sanitized['ancestors'] = [];
-			$max_ancestors = min( 3, count( $context['ancestors'] ) );
+			$max_ancestors          = min( 3, count( $context['ancestors'] ) );
 
 			for ( $i = 0; $i < $max_ancestors; $i++ ) {
-				$ancestor = $context['ancestors'][ $i ];
+				$ancestor           = $context['ancestors'][ $i ];
 				$sanitized_ancestor = [];
 
 				if ( isset( $ancestor['tagName'] ) ) {
@@ -250,7 +250,7 @@ class AiController {
 
 		// UI samples.
 		if ( isset( $context['uiSamples'] ) && is_array( $context['uiSamples'] ) ) {
-			$samples                 = $context['uiSamples'];
+			$samples                = $context['uiSamples'];
 			$sanitized['uiSamples'] = [];
 
 			foreach ( [ 'inserterButton', 'publishButton', 'settingsButton', 'searchInput' ] as $key ) {

@@ -56,6 +56,19 @@
 	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
 		<severity>0</severity>
 	</rule>
+	<rule ref="Universal.Arrays.DisallowShortArraySyntax.Found">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Allow short ternary (?:) -->
+	<rule ref="Universal.Operators.DisallowShortTernary.Found">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Disable overly pedantic rules -->
+	<rule ref="Squiz.Commenting.LongConditionClosingComment">
+		<severity>0</severity>
+	</rule>
 
 	<!-- Exclude test files from certain rules -->
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
@@ -65,8 +78,43 @@
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
+	<!-- Exclude doc comments for test bootstrap (mock classes) -->
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>tests/php/bootstrap.php</exclude-pattern>
+		<exclude-pattern>tests/php/*Test.php</exclude-pattern>
+	</rule>
+
+	<!-- Exclude mixed OO/function declarations in test bootstrap -->
+	<rule ref="Universal.Files.SeparateFunctionsFromOO.Mixed">
+		<exclude-pattern>tests/php/bootstrap.php</exclude-pattern>
+	</rule>
+
+	<!-- Allow variable naming flexibility in tests -->
+	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow overriding globals in test mocks -->
+	<rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow strip_tags in tests -->
+	<rule ref="WordPress.WP.AlternativeFunctions.strip_tags_strip_tags">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
 	<!-- Allow namespace declarations -->
 	<rule ref="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid">
+		<exclude-pattern>php/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow PSR-4 class filenames (PascalCase) instead of WordPress hyphenated lowercase -->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>php/*</exclude-pattern>
+		<exclude-pattern>tests/php/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<exclude-pattern>php/*</exclude-pattern>
 	</rule>
 </ruleset>

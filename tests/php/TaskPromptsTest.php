@@ -30,9 +30,11 @@ class TaskPromptsTest extends TestCase {
 		Functions\stubEscapeFunctions();
 
 		// Mock apply_filters to return the second argument (the value being filtered).
-		Functions\when( 'apply_filters' )->alias( function( $hook, $value ) {
-			return $value;
-		} );
+		Functions\when( 'apply_filters' )->alias(
+			function ( $hook, $value ) {
+				return $value;
+			}
+		);
 	}
 
 	/**
@@ -178,9 +180,9 @@ class TaskPromptsTest extends TestCase {
 	 * Test predefined tasks include expected ones.
 	 */
 	public function test_predefined_tasks_include_expected(): void {
-		$tasks     = TaskPrompts::get_tasks();
-		$task_ids  = array_column( $tasks, 'id' );
-		$expected  = [
+		$tasks    = TaskPrompts::get_tasks();
+		$task_ids = array_column( $tasks, 'id' );
+		$expected = [
 			'add-image',
 			'add-video',
 			'embed-youtube',

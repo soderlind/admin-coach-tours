@@ -323,8 +323,8 @@ function activate(): void {
 
 	// Set default options.
 	$defaults = [
-		'act_ai_provider'       => 'openai',
-		'act_ai_api_key'        => '',
+		'act_ai_provider'        => 'openai',
+		'act_ai_api_key'         => '',
 		'act_allow_post_content' => false,
 	];
 

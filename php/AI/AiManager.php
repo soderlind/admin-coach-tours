@@ -118,8 +118,8 @@ class AiManager {
 	 * @return AiProviderInterface|null Active provider or null.
 	 */
 	public function get_active_provider(): ?AiProviderInterface {
-		$settings   = $this->get_settings();
-		$active_id  = $settings['active_provider'] ?? '';
+		$settings  = $this->get_settings();
+		$active_id = $settings['active_provider'] ?? '';
 
 		if ( $active_id && isset( $this->providers[ $active_id ] ) ) {
 			$provider = $this->providers[ $active_id ];
@@ -169,7 +169,7 @@ class AiManager {
 			foreach ( $settings['providers'] as $provider_id => $provider_settings ) {
 				$provider = $this->get_provider( $provider_id );
 				if ( $provider ) {
-					$schema = $provider->get_settings_schema();
+					$schema                                 = $provider->get_settings_schema();
 					$sanitized['providers'][ $provider_id ] = $this->sanitize_provider_settings(
 						$provider_settings,
 						$schema
@@ -320,10 +320,10 @@ class AiManager {
 
 		foreach ( $this->providers as $id => $provider ) {
 			$info[ $id ] = [
-				'id'          => $id,
-				'name'        => $provider->get_name(),
-				'configured'  => $provider->is_configured(),
-				'schema'      => $provider->get_settings_schema(),
+				'id'         => $id,
+				'name'       => $provider->get_name(),
+				'configured' => $provider->is_configured(),
+				'schema'     => $provider->get_settings_schema(),
 			];
 		}
 

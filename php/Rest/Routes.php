@@ -346,11 +346,11 @@ class Routes {
 	 */
 	public function get_tours( \WP_REST_Request $request ) {
 		$args = [
-			'post_type'  => $request->get_param( 'post_type' ),
-			'editor'     => $request->get_param( 'editor' ),
-			'status'     => $request->get_param( 'status' ),
-			'per_page'   => $request->get_param( 'per_page' ),
-			'page'       => $request->get_param( 'page' ),
+			'post_type' => $request->get_param( 'post_type' ),
+			'editor'    => $request->get_param( 'editor' ),
+			'status'    => $request->get_param( 'status' ),
+			'per_page'  => $request->get_param( 'per_page' ),
+			'page'      => $request->get_param( 'page' ),
 		];
 
 		// Filter out null values.
@@ -493,10 +493,10 @@ class Routes {
 		$tour_id = $request->get_param( 'tour_id' );
 
 		$step_data = [
-			'title'        => $request->get_param( 'title' ) ?? '',
-			'content'      => $request->get_param( 'content' ) ?? '',
-			'target'       => $request->get_param( 'target' ),
-			'completion'   => $request->get_param( 'completion' ),
+			'title'         => $request->get_param( 'title' ) ?? '',
+			'content'       => $request->get_param( 'content' ) ?? '',
+			'target'        => $request->get_param( 'target' ),
+			'completion'    => $request->get_param( 'completion' ),
 			'preconditions' => $request->get_param( 'preconditions' ),
 		];
 
@@ -688,24 +688,24 @@ class Routes {
 	 */
 	private function get_step_create_args(): array {
 		return [
-			'tour_id'      => [
+			'tour_id'       => [
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			],
-			'title'        => [
+			'title'         => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			'content'      => [
+			'content'       => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			'target'       => [
+			'target'        => [
 				'type'     => 'object',
 				'required' => true,
 			],
-			'completion'   => [
+			'completion'    => [
 				'type' => 'object',
 			],
 			'preconditions' => [
@@ -722,32 +722,32 @@ class Routes {
 	 */
 	private function get_step_update_args(): array {
 		return [
-			'tour_id'      => [
+			'tour_id'       => [
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			],
-			'step_id'      => [
+			'step_id'       => [
 				'type'     => 'string',
 				'required' => true,
 			],
-			'title'        => [
+			'title'         => [
 				'type' => 'string',
 			],
-			'content'      => [
+			'content'       => [
 				'type' => 'string',
 			],
-			'target'       => [
+			'target'        => [
 				'type' => 'object',
 			],
-			'completion'   => [
+			'completion'    => [
 				'type' => 'object',
 			],
 			'preconditions' => [
 				'type'  => 'array',
 				'items' => [ 'type' => 'object' ],
 			],
-			'recovery'     => [
+			'recovery'      => [
 				'type'  => 'array',
 				'items' => [ 'type' => 'object' ],
 			],

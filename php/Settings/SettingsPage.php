@@ -212,10 +212,10 @@ class SettingsPage {
 					self::MENU_SLUG,
 					'act_ai',
 					[
-						'provider'   => $provider_id,
-						'field_id'   => $field_id,
-						'field'      => $field_config,
-						'name'       => $option_name,
+						'provider' => $provider_id,
+						'field_id' => $field_id,
+						'field'    => $field_config,
+						'name'     => $option_name,
 					]
 				);
 			}

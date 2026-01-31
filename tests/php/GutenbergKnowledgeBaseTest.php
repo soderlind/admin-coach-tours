@@ -30,9 +30,11 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 		Functions\stubEscapeFunctions();
 
 		// Mock apply_filters to return the second argument (the value being filtered).
-		Functions\when( 'apply_filters' )->alias( function( $hook, $value ) {
-			return $value;
-		} );
+		Functions\when( 'apply_filters' )->alias(
+			function ( $hook, $value ) {
+				return $value;
+			}
+		);
 
 		// Reset the static cache before each test.
 		$this->resetKnowledgeCache();
@@ -112,12 +114,14 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 	 * Test format_context_for_prompt with empty context.
 	 */
 	public function test_format_context_for_prompt_with_empty_context(): void {
-		$formatted = GutenbergKnowledgeBase::format_context_for_prompt( [
-			'blocks'     => [],
-			'uiElements' => [],
-			'actions'    => [],
-			'formatting' => [],
-		] );
+		$formatted = GutenbergKnowledgeBase::format_context_for_prompt(
+			[
+				'blocks'     => [],
+				'uiElements' => [],
+				'actions'    => [],
+				'formatting' => [],
+			]
+		);
 
 		$this->assertIsString( $formatted );
 	}

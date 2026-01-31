@@ -69,12 +69,12 @@ class TourRepositoryTest extends TestCase {
 	 */
 	public function test_get_returns_tour_data_for_valid_id(): void {
 		$mock_post = (object) [
-			'ID'           => 1,
-			'post_title'   => 'Test Tour',
-			'post_content' => 'Test description',
-			'post_status'  => 'publish',
-			'post_type'    => 'act_tour',
-			'post_author'  => 1,
+			'ID'                => 1,
+			'post_title'        => 'Test Tour',
+			'post_content'      => 'Test description',
+			'post_status'       => 'publish',
+			'post_type'         => 'act_tour',
+			'post_author'       => 1,
 			'post_date_gmt'     => '2026-01-30 12:00:00',
 			'post_modified_gmt' => '2026-01-30 12:00:00',
 		];
@@ -83,7 +83,8 @@ class TourRepositoryTest extends TestCase {
 		Functions\when( 'get_post_meta' )->alias(
 			function ( $post_id, $key, $single ) {
 				return match ( $key ) {
-					'_act_schema_version' => 1, // Current schema version - no migration needed.
+					'_act_schema_version' => 1,
+					// Current schema version - no migration needed.
 					'_act_editor'         => 'block',
 					'_act_post_types'     => [ 'post', 'page' ],
 					'_act_steps'          => '[]',
@@ -132,9 +133,11 @@ class TourRepositoryTest extends TestCase {
 		Functions\when( 'wp_json_encode' )->alias( 'json_encode' );
 		Functions\when( 'wp_cache_delete' )->justReturn( true );
 
-		$result = TourRepository::create( [
-			'title' => 'New Tour',
-		] );
+		$result = TourRepository::create(
+			[
+				'title' => 'New Tour',
+			]
+		);
 
 		$this->assertEquals( 123, $result );
 	}
@@ -151,9 +154,11 @@ class TourRepositoryTest extends TestCase {
 		Functions\when( 'sanitize_textarea_field' )->returnArg();
 		Functions\when( 'sanitize_key' )->returnArg();
 
-		$result = TourRepository::create( [
-			'title' => 'New Tour',
-		] );
+		$result = TourRepository::create(
+			[
+				'title' => 'New Tour',
+			]
+		);
 
 		$this->assertInstanceOf( \WP_Error::class, $result );
 	}

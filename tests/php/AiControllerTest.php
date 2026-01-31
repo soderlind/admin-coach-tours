@@ -48,15 +48,17 @@ class AiControllerTest extends TestCase {
 		// Create mock request.
 		$request = $this->createMock( \WP_REST_Request::class );
 		$request->method( 'get_param' )
-			->willReturnCallback( function( $param ) {
-				if ( 'elementContext' === $param ) {
-					return [
-						'tagName' => 'button',
-						'role'    => 'button',
-					];
+			->willReturnCallback(
+				function ( $param ) {
+					if ( 'elementContext' === $param ) {
+							return [
+								'tagName' => 'button',
+								'role'    => 'button',
+							];
+					}
+					return null;
 				}
-				return null;
-			} );
+			);
 
 		// Mock AiManager to return not available.
 		$ai_manager = $this->getMockBuilder( \stdClass::class )
@@ -84,15 +86,21 @@ class AiControllerTest extends TestCase {
 	 * Test sanitization of element context.
 	 */
 	public function test_element_context_sanitization(): void {
-		Functions\when( 'sanitize_key' )->alias( function( $str ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( $str ) );
-		} );
-		Functions\when( 'sanitize_html_class' )->alias( function( $str ) {
-			return preg_replace( '/[^a-zA-Z0-9_\-]/', '', $str );
-		} );
-		Functions\when( 'sanitize_text_field' )->alias( function( $str ) {
-			return strip_tags( $str );
-		} );
+		Functions\when( 'sanitize_key' )->alias(
+			function ( $str ) {
+				return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( $str ) );
+			}
+		);
+		Functions\when( 'sanitize_html_class' )->alias(
+			function ( $str ) {
+				return preg_replace( '/[^a-zA-Z0-9_\-]/', '', $str );
+			}
+		);
+		Functions\when( 'sanitize_text_field' )->alias(
+			function ( $str ) {
+				return strip_tags( $str );
+			}
+		);
 
 		// Use reflection to test private sanitize method.
 		$reflection = new \ReflectionClass( AiController::class );
@@ -137,14 +145,16 @@ class AiControllerTest extends TestCase {
 		// Create mock request with no task or query.
 		$request = $this->createMock( \WP_REST_Request::class );
 		$request->method( 'get_param' )
-			->willReturnCallback( function( $param ) {
-				return match ( $param ) {
-					'taskId'   => '',
-					'query'    => '',
-					'postType' => 'post',
-					default    => null,
-				};
-			} );
+			->willReturnCallback(
+				function ( $param ) {
+					return match ( $param ) {
+							'taskId'   => '',
+							'query'    => '',
+							'postType' => 'post',
+							default    => null,
+					};
+				}
+			);
 
 		// Mock AiManager.
 		$ai_manager = $this->getMockBuilder( \stdClass::class )
@@ -187,9 +197,11 @@ class AiControllerTest extends TestCase {
 	 * Test sanitize_editor_context handles editor blocks.
 	 */
 	public function test_sanitize_editor_context_handles_blocks(): void {
-		Functions\when( 'sanitize_key' )->alias( function( $str ) {
-			return preg_replace( '/[^a-z0-9_\-\/]/', '', strtolower( $str ) );
-		} );
+		Functions\when( 'sanitize_key' )->alias(
+			function ( $str ) {
+				return preg_replace( '/[^a-z0-9_\-\/]/', '', strtolower( $str ) );
+			}
+		);
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
 		$reflection = new \ReflectionClass( AiController::class );
@@ -262,7 +274,7 @@ class AiControllerTest extends TestCase {
 					'selector' => '.editor-document-tools__inserter-toggle',
 					'visible'  => true,
 				],
-				'publishButton' => [
+				'publishButton'  => [
 					'selector' => '.editor-post-publish-button',
 					'visible'  => true,
 				],
@@ -285,7 +297,7 @@ class AiControllerTest extends TestCase {
 		$method->setAccessible( true );
 
 		$context = [
-			'editorBlocks' => [
+			'editorBlocks'    => [
 				[
 					'name'    => 'core/paragraph',
 					'isEmpty' => true,
@@ -297,7 +309,7 @@ class AiControllerTest extends TestCase {
 				'hasSelectedBlock'  => false,
 				'selectedBlockType' => null,
 			],
-			'uiSamples' => [
+			'uiSamples'       => [
 				'inserterButton' => [
 					'selector' => '.editor-document-tools__inserter-toggle',
 					'visible'  => true,
@@ -340,8 +352,11 @@ class AiControllerTest extends TestCase {
 		$method->setAccessible( true );
 
 		$context = [
-			'editorBlocks' => [
-				[ 'name' => 'core/paragraph', 'isEmpty' => true ],
+			'editorBlocks'    => [
+				[
+					'name'    => 'core/paragraph',
+					'isEmpty' => true,
+				],
 			],
 			'visibleElements' => [
 				'inserterOpen' => false,
@@ -368,7 +383,10 @@ class AiControllerTest extends TestCase {
 
 		$context = [
 			'editorBlocks' => [
-				[ 'name' => 'core/paragraph', 'isEmpty' => true ],
+				[
+					'name'    => 'core/paragraph',
+					'isEmpty' => true,
+				],
 			],
 		];
 

@@ -141,9 +141,9 @@ class TaskPrompts {
 	 * @return array Tasks grouped by category.
 	 */
 	public static function get_tasks_by_category(): array {
-		$tasks    = self::get_tasks();
-		$grouped  = [];
-		$labels   = [
+		$tasks   = self::get_tasks();
+		$grouped = [];
+		$labels  = [
 			'media'  => __( 'Media', 'admin-coach-tours' ),
 			'text'   => __( 'Text & Content', 'admin-coach-tours' ),
 			'embed'  => __( 'Embeds', 'admin-coach-tours' ),
@@ -351,7 +351,8 @@ RECOMMENDED APPROACH - Teach the natural workflow:
   - Completion: manual
 
 KEY: Look at "CURRENT EDITOR STATE" for the actual targeting options available!
-INST,
+INST
+			,
 
 			'add-video'     => <<<'INST'
 Create a tour that guides the user to add a video using the "/" quick inserter.
@@ -375,7 +376,8 @@ RECOMMENDED APPROACH - Teach the natural workflow:
   - Completion: manual
 
 KEY: Use the targeting options from "CURRENT EDITOR STATE" - they show real selectors!
-INST,
+INST
+			,
 
 			'embed-youtube' => <<<'INST'
 Create a tour that guides the user to embed a YouTube video.
@@ -389,7 +391,8 @@ Steps should include:
 IMPORTANT CSS SELECTORS:
 - Search input: .components-search-control__input
 - YouTube block: .block-editor-block-types-list button.editor-block-list-item-embed-youtube
-INST,
+INST
+			,
 
 			'add-heading'   => <<<'INST'
 Create a tour that guides the user to add a heading.
@@ -398,7 +401,8 @@ Steps should include:
 2. Select the Heading block
 3. Explain heading levels (H2, H3, etc.)
 4. Show how to change heading level if needed
-INST,
+INST
+			,
 
 			'create-list'   => <<<'INST'
 Create a tour that guides the user to create a list.
@@ -407,7 +411,8 @@ Steps should include:
 2. Select the List block
 3. Explain how to add list items (Enter key)
 4. Show how to switch between bulleted and numbered
-INST,
+INST
+			,
 
 			'add-button'    => <<<'INST'
 Create a tour that guides the user to add a button.
@@ -416,7 +421,8 @@ Steps should include:
 2. Search for and select the Buttons block
 3. Show where to type button text
 4. Explain how to add a link to the button
-INST,
+INST
+			,
 
 			'add-columns'   => <<<'INST'
 Create a tour that guides the user to create a columns layout.
@@ -425,7 +431,8 @@ Steps should include:
 2. Select the Columns block
 3. Choose a column variation (2 columns, 3 columns, etc.)
 4. Explain how to add content to each column
-INST,
+INST
+			,
 
 			'add-gallery'   => <<<'INST'
 Create a tour that guides the user to create an image gallery.
@@ -434,7 +441,8 @@ Steps should include:
 2. Select the Gallery block
 3. Show how to select multiple images
 4. Explain gallery arrangement options
-INST,
+INST
+			,
 
 			'format-text'   => <<<'INST'
 Create a tour that guides the user through text formatting.
@@ -443,7 +451,8 @@ Steps should include:
 2. Explain the formatting toolbar (Bold, Italic)
 3. Show how to add a link (Cmd/Ctrl+K or link button)
 4. Mention keyboard shortcuts
-INST,
+INST
+			,
 
 			'add-quote'     => <<<'INST'
 Create a tour that guides the user to add a quote block.
@@ -452,7 +461,8 @@ Steps should include:
 2. Select the Quote block
 3. Show where to type the quote text
 4. Explain the citation field
-INST,
+INST
+			,
 
 			'add-table'     => <<<'INST'
 Create a tour that guides the user to create a table.
@@ -461,7 +471,8 @@ Steps should include:
 2. Select the Table block
 3. Set the number of rows and columns
 4. Show how to enter data in cells
-INST,
+INST
+			,
 
 			'add-cover'     => <<<'INST'
 Create a tour that guides the user to add a cover image.
@@ -470,7 +481,8 @@ Steps should include:
 2. Select the Cover block
 3. Upload or select a background image
 4. Show where to add overlay text
-INST,
+INST
+			,
 		];
 
 		return $instructions[ $task_id ] ?? 'Create a helpful tour that accomplishes the selected task.';
@@ -517,7 +529,7 @@ INST,
 									'constraints' => [
 										'type'       => 'object',
 										'properties' => [
-											'visible'        => [ 'type' => 'boolean' ],
+											'visible' => [ 'type' => 'boolean' ],
 											'inEditorIframe' => [ 'type' => 'boolean' ],
 										],
 									],

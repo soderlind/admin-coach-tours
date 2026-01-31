@@ -47,20 +47,20 @@ class Capabilities {
 	 * @var array<string, string>
 	 */
 	private const POST_TYPE_CAPS = [
-		'edit_post'          => 'edit_act_tour',
-		'read_post'          => 'read_act_tour',
-		'delete_post'        => 'delete_act_tour',
-		'edit_posts'         => 'edit_act_tours',
-		'edit_others_posts'  => 'edit_others_act_tours',
-		'publish_posts'      => 'publish_act_tours',
-		'read_private_posts' => 'read_private_act_tours',
-		'delete_posts'       => 'delete_act_tours',
-		'delete_others_posts' => 'delete_others_act_tours',
+		'edit_post'              => 'edit_act_tour',
+		'read_post'              => 'read_act_tour',
+		'delete_post'            => 'delete_act_tour',
+		'edit_posts'             => 'edit_act_tours',
+		'edit_others_posts'      => 'edit_others_act_tours',
+		'publish_posts'          => 'publish_act_tours',
+		'read_private_posts'     => 'read_private_act_tours',
+		'delete_posts'           => 'delete_act_tours',
+		'delete_others_posts'    => 'delete_others_act_tours',
 		'delete_published_posts' => 'delete_published_act_tours',
-		'delete_private_posts' => 'delete_private_act_tours',
-		'edit_private_posts' => 'edit_private_act_tours',
-		'edit_published_posts' => 'edit_published_act_tours',
-		'create_posts'       => 'create_act_tours',
+		'delete_private_posts'   => 'delete_private_act_tours',
+		'edit_private_posts'     => 'edit_private_act_tours',
+		'edit_published_posts'   => 'edit_published_act_tours',
+		'create_posts'           => 'create_act_tours',
 	];
 
 	/**
@@ -99,24 +99,24 @@ class Capabilities {
 			$caps = [];
 
 			// Check ownership.
-			if ( (int) $post->post_author === $user_id ) {
-				// Owner can edit/delete their own.
-				if ( 'edit_act_tour' === $cap ) {
-					$caps[] = $post_type->cap->edit_posts;
-				} elseif ( 'delete_act_tour' === $cap ) {
-					$caps[] = $post_type->cap->delete_posts;
-				} elseif ( 'read_act_tour' === $cap ) {
-					$caps[] = 'read';
-				}
-			} else {
+			$is_owner = (int) $post->post_author === $user_id;
+
+			if ( $is_owner && 'edit_act_tour' === $cap ) {
+				// Owner can edit their own.
+				$caps[] = $post_type->cap->edit_posts;
+			} elseif ( $is_owner && 'delete_act_tour' === $cap ) {
+				// Owner can delete their own.
+				$caps[] = $post_type->cap->delete_posts;
+			} elseif ( $is_owner && 'read_act_tour' === $cap ) {
+				// Owner can read their own.
+				$caps[] = 'read';
+			} elseif ( ! $is_owner && 'edit_act_tour' === $cap ) {
 				// Non-owners need "others" capability.
-				if ( 'edit_act_tour' === $cap ) {
-					$caps[] = $post_type->cap->edit_others_posts;
-				} elseif ( 'delete_act_tour' === $cap ) {
-					$caps[] = $post_type->cap->delete_others_posts;
-				} elseif ( 'read_act_tour' === $cap ) {
-					$caps[] = $post_type->cap->read_private_posts;
-				}
+				$caps[] = $post_type->cap->edit_others_posts;
+			} elseif ( ! $is_owner && 'delete_act_tour' === $cap ) {
+				$caps[] = $post_type->cap->delete_others_posts;
+			} elseif ( ! $is_owner && 'read_act_tour' === $cap ) {
+				$caps[] = $post_type->cap->read_private_posts;
 			}
 		}
 

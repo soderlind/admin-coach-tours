@@ -124,8 +124,8 @@ class StepSchema {
 					'required'   => [ 'locators' ],
 					'properties' => [
 						'locators'    => [
-							'type'     => 'array',
-							'items'    => [
+							'type'  => 'array',
+							'items' => [
 								'type'       => 'object',
 								'required'   => [ 'type', 'value' ],
 								'properties' => [
