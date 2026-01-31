@@ -89,9 +89,9 @@ class SettingsPage {
 	 */
 	public function add_menu_page(): void {
 		add_submenu_page(
-			'edit.php?post_type=act_tour',
-			__( 'Settings', 'admin-coach-tours' ),
-			__( 'Settings', 'admin-coach-tours' ),
+			'tools.php',
+			__( 'Admin Coach Tours', 'admin-coach-tours' ),
+			__( 'Coach Tours', 'admin-coach-tours' ),
 			'manage_options',
 			self::MENU_SLUG,
 			[ $this, 'render_page' ]
@@ -228,7 +228,8 @@ class SettingsPage {
 	 * @param string $hook Current admin page.
 	 */
 	public function enqueue_scripts( string $hook ): void {
-		if ( 'act_tour_page_' . self::MENU_SLUG !== $hook ) {
+		// Settings page is now under Tools menu.
+		if ( 'tools_page_' . self::MENU_SLUG !== $hook ) {
 			return;
 		}
 

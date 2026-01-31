@@ -1,7 +1,7 @@
 /**
  * Pupil Entry Point.
  *
- * Initializes the tour runner for pupils.
+ * Initializes the tour runner and AI launcher for pupils.
  *
  * @package AdminCoachTours
  * @since   0.1.0
@@ -11,6 +11,7 @@ import { render } from '@wordpress/element';
 import { dispatch, select, subscribe } from '@wordpress/data';
 
 import TourRunner from './TourRunner.jsx';
+import PupilLauncher from './PupilLauncher.jsx';
 
 // Import store to ensure it's registered.
 import '../store/index.js';
@@ -21,8 +22,9 @@ const STORE_NAME = 'admin-coach-tours';
  * Initialize the pupil tour runner.
  */
 function init() {
-	console.log( '[ACT Pupil] Initializing... v3' );
+	console.log( '[ACT Pupil] Initializing... v4' );
 	console.log( '[ACT Pupil] TourRunner:', typeof TourRunner, TourRunner );
+	console.log( '[ACT Pupil] AI Available:', window.adminCoachTours?.aiAvailable );
 
 	// Create container for tour runner.
 	const container = document.createElement( 'div' );
@@ -35,6 +37,18 @@ function init() {
 		console.log( '[ACT Pupil] TourRunner rendered successfully' );
 	} catch ( error ) {
 		console.error( '[ACT Pupil] Error rendering TourRunner:', error );
+	}
+
+	// Create container for AI launcher.
+	const launcherContainer = document.createElement( 'div' );
+	launcherContainer.id = 'admin-coach-tours-launcher';
+	document.body.appendChild( launcherContainer );
+
+	try {
+		render( <PupilLauncher />, launcherContainer );
+		console.log( '[ACT Pupil] PupilLauncher rendered successfully' );
+	} catch ( error ) {
+		console.error( '[ACT Pupil] Error rendering PupilLauncher:', error );
 	}
 
 	// Check for auto-start tour from URL (use top window to handle iframe case).

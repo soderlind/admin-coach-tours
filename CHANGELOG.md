@@ -5,6 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-01-31
+
+### Added
+
+- **Editor context for AI tours**: Gather current editor state to help AI generate accurate selectors
+  - Collects visible blocks, UI state (inserter/sidebar), and verified CSS selectors
+  - Detects empty block placeholder as priority starting point for block insertion
+  - Sends context to AI for more reliable tour generation
+- **Tour caching**: Cache AI-generated tours using WordPress transients
+  - Cache key based on task, query, post type, and editor context
+  - 24-hour cache expiration (filterable via `admin_coach_tours_cache_expiration`)
+  - Instant response for repeated requests with same context
+- **Dashicon support**: Task icons now render as proper WordPress Dashicons
+
+### Changed
+
+- **Preferred "/" workflow**: AI now teaches users the natural "/" quick inserter instead of auto-inserting blocks
+  - Guides users to click empty placeholder and type "/image", "/video", etc.
+  - Teaches transferable skills users can apply without tours
+- Updated task instructions for add-image, add-video to use placeholder-first approach
+
+### Fixed
+
+- Task icons displayed as text instead of Dashicons
+- AI prompt now emphasizes teaching over automation
+
+## [0.3.0] - 2026-01-31
+
+### Added
+
+- **AI-generated tours**: Major feature pivot to AI-first pupil experience
+  - Pupils can select from 12 predefined tasks (add image, add video, embed YouTube, etc.)
+  - Freeform chat option for custom questions about the Gutenberg editor
+  - AI generates complete step-by-step tours on demand
+- **Gutenberg Knowledge Base**: RAG-style context injection for AI prompts
+  - Static JSON with block definitions, selectors, workflows, and UI elements
+  - `GutenbergKnowledgeBase.php` for relevance-based context retrieval
+- **TaskPrompts system**: Predefined task definitions with system prompts
+  - 12 tasks across 4 categories: media, content, layout, formatting
+  - Comprehensive tour JSON schema for structured AI output
+- **PupilLauncher component**: Floating action button with dropdown panel
+  - Tab interface for "Common Tasks" and "Ask a Question"
+  - Real-time loading states and error handling
+- **Ephemeral tours**: AI-generated tours are in-memory only
+  - New store actions: `requestAiTour`, `receiveEphemeralTour`, `clearEphemeralTour`
+  - Tours automatically start after generation
+
+### Changed
+
+- **Educator mode hidden**: CPT menu removed from admin (functional but not visible)
+- Tours focus shifted from educator-created to AI-generated
+- Pupil script now receives `aiAvailable` flag for conditional rendering
+- Updated version references throughout codebase
+
+### REST API
+
+- `GET /admin-coach-tours/v1/ai/tasks` - List available predefined tasks
+- `POST /admin-coach-tours/v1/ai/generate-tour` - Generate tour from task ID or freeform query
+
 ## [0.2.1] - 2026-01-30
 
 ### Added

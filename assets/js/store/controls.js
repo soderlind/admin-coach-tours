@@ -6,6 +6,7 @@
  */
 
 import apiFetch from '@wordpress/api-fetch';
+import { gatherEditorContext } from '../runtime/gatherEditorContext';
 
 /**
  * Control handlers.
@@ -19,6 +20,15 @@ const controls = {
 	 */
 	API_FETCH( action ) {
 		return apiFetch( action.request );
+	},
+
+	/**
+	 * Gather editor context for AI tour generation.
+	 *
+	 * @return {Object} Editor context including blocks and UI state.
+	 */
+	GATHER_EDITOR_CONTEXT() {
+		return gatherEditorContext();
 	},
 
 	/**
@@ -117,6 +127,37 @@ const controls = {
 				elementContext: action.elementContext,
 				postType: action.postType,
 			},
+		} );
+	},
+
+	/**
+	 * Handle AI tour generation requests.
+	 *
+	 * @param {Object} action Action with taskId, query, postType, and editorContext.
+	 * @return {Promise} API response with generated tour.
+	 */
+	REQUEST_AI_TOUR( action ) {
+		return apiFetch( {
+			path: '/admin-coach-tours/v1/ai/generate-tour',
+			method: 'POST',
+			data: {
+				taskId: action.taskId,
+				query: action.query,
+				postType: action.postType,
+				editorContext: action.editorContext || null,
+			},
+		} );
+	},
+
+	/**
+	 * Fetch available AI tasks.
+	 *
+	 * @return {Promise} API response with available tasks.
+	 */
+	FETCH_AI_TASKS() {
+		return apiFetch( {
+			path: '/admin-coach-tours/v1/ai/tasks',
+			method: 'GET',
 		} );
 	},
 };

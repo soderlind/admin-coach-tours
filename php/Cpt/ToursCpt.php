@@ -99,7 +99,7 @@ class ToursCpt {
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,
-			'show_in_menu'        => true,
+			'show_in_menu'        => false, // Hidden in v0.3.0 - AI generates tours for pupils.
 			'menu_position'       => 100,
 			'menu_icon'           => 'dashicons-welcome-learn-more',
 			'show_in_admin_bar'   => false,

@@ -634,9 +634,14 @@ async function insertBlock( blockName = 'core/paragraph', attributes = {}, marke
 			const lastBlock = allBlocks[ allBlocks.length - 1 ];
 			console.log( '[ACT insertBlock] Considering last block:', lastBlock.name, lastBlock.clientId );
 			
-			// If the last block is similar (a text block), reuse it.
+			// Only reuse text blocks for OTHER text block insertions.
+			// Never reuse a paragraph when we need an image/video/etc.
 			const textBlockTypes = [ 'core/paragraph', 'core/heading', 'core/list', 'core/quote' ];
-			if ( textBlockTypes.includes( lastBlock.name ) || textBlockTypes.includes( blockName ) ) {
+			const isRequestingTextBlock = textBlockTypes.includes( blockName );
+			const isLastBlockText = textBlockTypes.includes( lastBlock.name );
+			
+			// Only reuse if BOTH are text blocks.
+			if ( isRequestingTextBlock && isLastBlockText ) {
 				console.log( '[ACT insertBlock] Reusing last text block instead of creating new:', lastBlock.clientId );
 				await blockEditorDispatch.selectBlock( lastBlock.clientId );
 				await focusBlockElement( lastBlock.clientId );

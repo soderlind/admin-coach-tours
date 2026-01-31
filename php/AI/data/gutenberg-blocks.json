@@ -1,0 +1,345 @@
+{
+	"version": "1.0.0",
+	"lastUpdated": "2026-01-31",
+	"blocks": {
+		"core/paragraph": {
+			"name": "Paragraph",
+			"description": "Start with the basic building block of all narrative.",
+			"category": "text",
+			"keywords": ["text", "paragraph", "write", "content"],
+			"selectors": {
+				"block": "[data-type=\"core/paragraph\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"paragraph\"]",
+				"toolbar": ".block-editor-block-toolbar"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Search or select Paragraph", "Click to insert", "Start typing"]
+			}
+		},
+		"core/heading": {
+			"name": "Heading",
+			"description": "Introduce new sections and organize content.",
+			"category": "text",
+			"keywords": ["title", "heading", "h1", "h2", "h3", "h4", "h5", "h6", "section"],
+			"selectors": {
+				"block": "[data-type=\"core/heading\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"heading\"]",
+				"levelDropdown": ".block-editor-block-toolbar button[aria-label*=\"heading level\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Search 'heading'", "Click Heading block", "Type heading text"],
+				"changeLevel": ["Select heading block", "Click level dropdown in toolbar", "Choose H1-H6"]
+			}
+		},
+		"core/image": {
+			"name": "Image",
+			"description": "Insert an image to make a visual statement.",
+			"category": "media",
+			"keywords": ["image", "photo", "picture", "media", "upload"],
+			"selectors": {
+				"block": "[data-type=\"core/image\"]",
+				"inserterItem": ".block-editor-block-types-list button.editor-block-list-item-image",
+				"uploadButton": ".components-form-file-upload button.components-button",
+				"mediaLibraryButton": ".block-editor-media-placeholder__button",
+				"placeholder": ".block-editor-media-placeholder"
+			},
+			"workflows": {
+				"upload": ["Open inserter", "Select Image block", "Click Upload button", "Choose file from computer"],
+				"mediaLibrary": ["Open inserter", "Select Image block", "Click Media Library button", "Select existing image"],
+				"fromUrl": ["Open inserter", "Select Image block", "Click Insert from URL", "Paste image URL"]
+			}
+		},
+		"core/video": {
+			"name": "Video",
+			"description": "Embed a video from your media library or upload a new one.",
+			"category": "media",
+			"keywords": ["video", "movie", "media", "upload", "mp4"],
+			"selectors": {
+				"block": "[data-type=\"core/video\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"video\"]",
+				"uploadButton": ".block-editor-media-placeholder button:contains('Upload')"
+			},
+			"workflows": {
+				"upload": ["Open inserter", "Select Video block", "Click Upload", "Choose video file"],
+				"mediaLibrary": ["Open inserter", "Select Video block", "Click Media Library", "Select existing video"]
+			}
+		},
+		"core/embed": {
+			"name": "Embed",
+			"description": "Embed videos, images, tweets, audio, and other content from external services.",
+			"category": "embed",
+			"keywords": ["embed", "youtube", "vimeo", "twitter", "instagram", "url"],
+			"selectors": {
+				"block": "[data-type=\"core/embed\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"embed\"]",
+				"urlInput": ".block-editor-media-placeholder input[type=\"url\"], .wp-block-embed__wrapper input"
+			},
+			"workflows": {
+				"youtube": ["Open inserter", "Search 'YouTube'", "Select YouTube embed", "Paste YouTube URL", "Click Embed"],
+				"vimeo": ["Open inserter", "Search 'Vimeo'", "Select Vimeo embed", "Paste Vimeo URL"],
+				"twitter": ["Open inserter", "Search 'Twitter'", "Select Twitter embed", "Paste tweet URL"]
+			}
+		},
+		"core/list": {
+			"name": "List",
+			"description": "Create a bulleted or numbered list.",
+			"category": "text",
+			"keywords": ["list", "bullet", "numbered", "ordered", "unordered", "ul", "ol"],
+			"selectors": {
+				"block": "[data-type=\"core/list\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"list\"]",
+				"orderedButton": ".block-editor-block-toolbar button[aria-label*=\"ordered\"]",
+				"unorderedButton": ".block-editor-block-toolbar button[aria-label*=\"unordered\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select List block", "Type first item", "Press Enter for new items"],
+				"convertToOrdered": ["Select list block", "Click ordered list button in toolbar"]
+			}
+		},
+		"core/quote": {
+			"name": "Quote",
+			"description": "Give quoted text visual emphasis.",
+			"category": "text",
+			"keywords": ["quote", "blockquote", "citation", "cite"],
+			"selectors": {
+				"block": "[data-type=\"core/quote\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"quote\"]",
+				"citationField": ".wp-block-quote cite"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Quote block", "Type quote text", "Add citation below"]
+			}
+		},
+		"core/button": {
+			"name": "Button",
+			"description": "Prompt visitors to take action with a button-style link.",
+			"category": "design",
+			"keywords": ["button", "link", "cta", "call to action"],
+			"selectors": {
+				"block": "[data-type=\"core/button\"]",
+				"buttonsBlock": "[data-type=\"core/buttons\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"button\"]",
+				"linkInput": ".block-editor-url-input input"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Buttons block", "Type button text", "Click to add link URL"]
+			}
+		},
+		"core/columns": {
+			"name": "Columns",
+			"description": "Display content in multiple columns.",
+			"category": "design",
+			"keywords": ["columns", "layout", "grid", "multi-column"],
+			"selectors": {
+				"block": "[data-type=\"core/columns\"]",
+				"column": "[data-type=\"core/column\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"columns\"]",
+				"variationPicker": ".block-editor-block-variation-picker"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Columns block", "Choose column layout", "Add content to each column"]
+			}
+		},
+		"core/gallery": {
+			"name": "Gallery",
+			"description": "Display multiple images in a rich gallery.",
+			"category": "media",
+			"keywords": ["gallery", "images", "photos", "pictures"],
+			"selectors": {
+				"block": "[data-type=\"core/gallery\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"gallery\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Gallery block", "Upload or select multiple images", "Arrange order"]
+			}
+		},
+		"core/cover": {
+			"name": "Cover",
+			"description": "Add an image or video with a text overlay.",
+			"category": "media",
+			"keywords": ["cover", "banner", "header", "hero", "overlay"],
+			"selectors": {
+				"block": "[data-type=\"core/cover\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"cover\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Cover block", "Upload or select background image", "Add overlay text"]
+			}
+		},
+		"core/table": {
+			"name": "Table",
+			"description": "Insert a table for sharing data.",
+			"category": "text",
+			"keywords": ["table", "data", "rows", "columns", "grid"],
+			"selectors": {
+				"block": "[data-type=\"core/table\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"table\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Table block", "Set row and column count", "Enter data in cells"]
+			}
+		},
+		"core/separator": {
+			"name": "Separator",
+			"description": "Create a break between ideas or sections with a horizontal separator.",
+			"category": "design",
+			"keywords": ["separator", "divider", "hr", "line", "break"],
+			"selectors": {
+				"block": "[data-type=\"core/separator\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"separator\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Separator block", "Choose style in sidebar"]
+			}
+		},
+		"core/spacer": {
+			"name": "Spacer",
+			"description": "Add white space between blocks and customize its height.",
+			"category": "design",
+			"keywords": ["spacer", "space", "whitespace", "gap", "padding"],
+			"selectors": {
+				"block": "[data-type=\"core/spacer\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"spacer\"]",
+				"heightInput": ".components-spacer-height-control input"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Spacer block", "Drag handle or set height in sidebar"]
+			}
+		},
+		"core/code": {
+			"name": "Code",
+			"description": "Display code snippets that respect your spacing and tabs.",
+			"category": "text",
+			"keywords": ["code", "snippet", "preformatted", "programming"],
+			"selectors": {
+				"block": "[data-type=\"core/code\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"code\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Code block", "Paste or type code"]
+			}
+		},
+		"core/group": {
+			"name": "Group",
+			"description": "Combine blocks into a group for styling and layout.",
+			"category": "design",
+			"keywords": ["group", "container", "wrapper", "section"],
+			"selectors": {
+				"block": "[data-type=\"core/group\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"group\"]"
+			},
+			"workflows": {
+				"insert": ["Open inserter", "Select Group block", "Add blocks inside group"],
+				"groupExisting": ["Select multiple blocks", "Click Group in toolbar", "Blocks are now grouped"]
+			}
+		}
+	},
+	"uiElements": {
+		"inserter": {
+			"description": "The block inserter panel for adding new blocks",
+			"selectors": {
+				"toggleButton": ".editor-document-tools__inserter-toggle, button.block-editor-inserter-toggle, [aria-label='Toggle block inserter']",
+				"panel": ".block-editor-inserter__content, .block-editor-inserter__main-area",
+				"searchInput": ".block-editor-inserter__search input, .components-search-control__input",
+				"blockItems": ".block-editor-block-types-list button",
+				"mediaTab": "button[id*='inserter-media']",
+				"blocksTab": "button[id*='inserter-blocks']"
+			}
+		},
+		"toolbar": {
+			"description": "The block toolbar that appears above selected blocks",
+			"selectors": {
+				"main": ".block-editor-block-toolbar",
+				"mover": ".block-editor-block-mover",
+				"moreOptions": ".block-editor-block-toolbar button[aria-label*=\"Options\"]"
+			}
+		},
+		"sidebar": {
+			"description": "The settings sidebar on the right",
+			"selectors": {
+				"panel": ".interface-interface-skeleton__sidebar, .editor-sidebar",
+				"postTab": "button[data-tab-id='edit-post/document']",
+				"blockTab": "button[data-tab-id='edit-post/block']",
+				"settingsPanel": ".block-editor-block-inspector",
+				"toggleButton": "button[aria-label='Settings']"
+			}
+		},
+		"topBar": {
+			"description": "The top toolbar with save and settings",
+			"selectors": {
+				"saveButton": ".editor-post-publish-button, .editor-post-save-draft, .editor-post-publish-panel__toggle",
+				"publishButton": ".editor-post-publish-button",
+				"previewButton": ".editor-preview-dropdown button, button[aria-label='Preview']",
+				"settingsToggle": "button[aria-label='Settings']",
+				"moreOptionsMenu": ".editor-header__settings button[aria-label='Options']"
+			}
+		},
+		"editorCanvas": {
+			"description": "The main editing area (may be in iframe)",
+			"selectors": {
+				"iframe": "iframe[name=\"editor-canvas\"]",
+				"wrapper": ".editor-styles-wrapper",
+				"contentArea": ".block-editor-block-list__layout"
+			}
+		}
+	},
+	"commonActions": {
+		"openInserter": {
+			"description": "Open the block inserter to add new blocks",
+			"steps": ["Click the + button in the top toolbar or between blocks"]
+		},
+		"searchBlocks": {
+			"description": "Search for a specific block type",
+			"steps": ["Open inserter", "Type block name in search field"]
+		},
+		"selectBlock": {
+			"description": "Select a block to edit it",
+			"steps": ["Click on the block in the editor canvas"]
+		},
+		"deleteBlock": {
+			"description": "Remove a block from the post",
+			"steps": ["Select the block", "Click More options (three dots)", "Select Remove block"]
+		},
+		"moveBlock": {
+			"description": "Reorder blocks in the post",
+			"steps": ["Select the block", "Use up/down arrows in toolbar", "Or drag using the handle"]
+		},
+		"duplicateBlock": {
+			"description": "Create a copy of a block",
+			"steps": ["Select the block", "Click More options", "Select Duplicate"]
+		},
+		"transformBlock": {
+			"description": "Convert a block to a different type",
+			"steps": ["Select the block", "Click the block icon in toolbar", "Choose new block type"]
+		}
+	},
+	"formatting": {
+		"bold": {
+			"description": "Make text bold",
+			"shortcut": "Ctrl/Cmd + B",
+			"toolbarButton": "button[aria-label*=\"Bold\"]"
+		},
+		"italic": {
+			"description": "Make text italic",
+			"shortcut": "Ctrl/Cmd + I",
+			"toolbarButton": "button[aria-label*=\"Italic\"]"
+		},
+		"link": {
+			"description": "Add a hyperlink",
+			"shortcut": "Ctrl/Cmd + K",
+			"toolbarButton": "button[aria-label*=\"Link\"]"
+		},
+		"strikethrough": {
+			"description": "Add strikethrough to text",
+			"toolbarButton": "button[aria-label*=\"Strikethrough\"]"
+		},
+		"subscript": {
+			"description": "Make text subscript",
+			"toolbarButton": "button[aria-label*=\"Subscript\"]"
+		},
+		"superscript": {
+			"description": "Make text superscript",
+			"toolbarButton": "button[aria-label*=\"Superscript\"]"
+		}
+	}
+}

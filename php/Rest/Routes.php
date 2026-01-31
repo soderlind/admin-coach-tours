@@ -218,6 +218,49 @@ class Routes {
 				],
 			]
 		);
+
+		// AI tasks for pupil.
+		register_rest_route(
+			self::NAMESPACE,
+			'/ai/tasks',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ AiController::class, 'get_tasks' ],
+					'permission_callback' => [ $this, 'can_run_tours' ],
+				],
+			]
+		);
+
+		// Generate AI tour.
+		register_rest_route(
+			self::NAMESPACE,
+			'/ai/generate-tour',
+			[
+				[
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => [ AiController::class, 'generate_tour' ],
+					'permission_callback' => [ $this, 'can_run_tours' ],
+					'args'                => [
+						'taskId'   => [
+							'type'        => 'string',
+							'default'     => '',
+							'description' => __( 'ID of a predefined task.', 'admin-coach-tours' ),
+						],
+						'query'    => [
+							'type'        => 'string',
+							'default'     => '',
+							'description' => __( 'Freeform user query.', 'admin-coach-tours' ),
+						],
+						'postType' => [
+							'type'        => 'string',
+							'default'     => 'post',
+							'description' => __( 'The post type being edited.', 'admin-coach-tours' ),
+						],
+					],
+				],
+			]
+		);
 	}
 
 	/**

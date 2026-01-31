@@ -447,3 +447,47 @@ export function getAiDraft( state ) {
 export function isSidebarOpen( state ) {
 	return state.sidebarOpen;
 }
+
+// ============================================================================
+// AI Tour Selectors (Pupil Mode)
+// ============================================================================
+
+/**
+ * Check if AI tour is loading.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} AI tour loading.
+ */
+export function isAiTourLoading( state ) {
+	return state.aiTourLoading;
+}
+
+/**
+ * Get AI tour error.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Error message.
+ */
+export function getAiTourError( state ) {
+	return state.aiTourError;
+}
+
+/**
+ * Get ephemeral tour.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Ephemeral tour.
+ */
+export function getEphemeralTour( state ) {
+	return state.ephemeralTour;
+}
+
+/**
+ * Check if currently running an ephemeral tour.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Is ephemeral tour active.
+ */
+export function isEphemeralTourActive( state ) {
+	return state.currentTourId === 'ephemeral' && state.mode === 'pupil';
+}
