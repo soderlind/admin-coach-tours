@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2026-01-31
+
+### Added
+
+- **Full-screen loading overlay**: Shows animated overlay during AI tour generation
+  - Displays while AI is analyzing the editor and generating steps
+  - Uses local state to work around React 18 automatic batching
+  - Portal-rendered to document.body for proper z-index layering
+
+### Changed
+
+- **Updated dependencies**: Major version updates for WordPress packages
+  - `@wordpress/block-editor` 14 → 15
+  - `@wordpress/components` 29 → 32
+  - `@wordpress/icons` 10 → 11 (icon renames: `edit` → `pencil`)
+  - `@wordpress/i18n` 5 → 6
+  - And other minor updates
+
+### Fixed
+
+- Loading overlay now persists during tour initialization (React 18 batching workaround)
+- StepList icon updated from removed `edit` to `pencil` icon
+
+## [0.3.2] - 2026-01-31
+
+### Added
+
+- **Dynamic block targeting**: AI now receives real DOM selectors discovered from the live editor
+  - `gatherEditorContext` collects block-level DOM info (clientId, data-type, editable selectors)
+  - AI prompt includes targeting options for each block (wpBlock, CSS selectors)
+  - More reliable tours that adapt to different WordPress versions
+- **Block focus on selection**: When selecting a block for tour, focus is set on the editable element
+  - Scroll into view and set cursor position for immediate typing
+
+### Changed
+
+- **Removed "Previous" button**: Going backwards in AI tours doesn't work well because steps change editor state
+  - Example: Inserting an image replaces the paragraph placeholder, can't go back
+  - Tours now only allow forward progression
+
+### Fixed
+
+- Block selection now properly focuses the editable element
+- AI uses discovered selectors instead of hardcoded ones
+
 ## [0.3.1] - 2026-01-31
 
 ### Added

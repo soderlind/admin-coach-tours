@@ -8,7 +8,7 @@
  * @since   0.3.0
  */
 
-import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
+import { useState, useEffect, useCallback, useRef, createPortal } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
@@ -39,24 +39,36 @@ export default function PupilLauncher() {
 	const [ tasksError, setTasksError ] = useState( null );
 	const [ chatQuery, setChatQuery ] = useState( '' );
 	const [ activeTab, setActiveTab ] = useState( 'tasks' );
+	const [ localLoading, setLocalLoading ] = useState( false );
 	const inputRef = useRef( null );
 
 	// Get state from store.
 	const {
-		isAiTourLoading,
+		storeLoading,
 		aiTourError,
 		isPlaying,
 		aiAvailable,
 	} = useSelect( ( select ) => {
 		const store = select( STORE_NAME );
 		return {
-			isAiTourLoading: store.isAiTourLoading?.() ?? false,
+			storeLoading: store.isAiTourLoading?.() ?? false,
 			aiTourError: store.getAiTourError?.() ?? null,
 			isPlaying: store.getCurrentTour() !== null,
 			// Check if AI is available from localized data.
 			aiAvailable: window.adminCoachTours?.aiAvailable ?? false,
 		};
 	}, [] );
+
+	// Combine local and store loading state.
+	// Local state ensures immediate render before React batches updates.
+	const isAiTourLoading = localLoading || storeLoading;
+
+	// Clear local loading only when tour starts playing (not before).
+	useEffect( () => {
+		if ( isPlaying && localLoading ) {
+			setLocalLoading( false );
+		}
+	}, [ isPlaying, localLoading ] );
 
 	// Get dispatch actions.
 	const { requestAiTour, clearEphemeralTour } = useDispatch( STORE_NAME );
@@ -100,9 +112,11 @@ export default function PupilLauncher() {
 	 */
 	const handleTaskClick = useCallback(
 		( taskId ) => {
+			// Set local loading immediately to show overlay before React batches updates.
+			setLocalLoading( true );
+			setIsOpen( false );
 			const postType = window.adminCoachTours?.postType || 'post';
 			requestAiTour( taskId, '', postType );
-			setIsOpen( false );
 		},
 		[ requestAiTour ]
 	);
@@ -117,10 +131,12 @@ export default function PupilLauncher() {
 				return;
 			}
 
+			// Set local loading immediately to show overlay before React batches updates.
+			setLocalLoading( true );
+			setIsOpen( false );
 			const postType = window.adminCoachTours?.postType || 'post';
 			requestAiTour( '', chatQuery.trim(), postType );
 			setChatQuery( '' );
-			setIsOpen( false );
 		},
 		[ chatQuery, requestAiTour ]
 	);
@@ -182,11 +198,6 @@ export default function PupilLauncher() {
 		);
 	}
 
-	// Don't render if a tour is playing.
-	if ( isPlaying ) {
-		return null;
-	}
-
 	// Group tasks by category.
 	const tasksByCategory = tasks.reduce( ( acc, task ) => {
 		const category = task.category || 'other';
@@ -197,26 +208,68 @@ export default function PupilLauncher() {
 		return acc;
 	}, {} );
 
-	return (
-		<div className="act-pupil-launcher">
-			{ /* Floating Action Button */ }
-			<button
-				className="act-pupil-launcher__fab"
-				onClick={ toggleLauncher }
-				aria-expanded={ isOpen }
-				aria-label={ __( 'Open AI Coach', 'admin-coach-tours' ) }
-				disabled={ isAiTourLoading }
-			>
-				{ isAiTourLoading ? (
-					<span className="act-pupil-launcher__spinner" />
-				) : (
-					<span className="act-pupil-launcher__icon">💡</span>
-				) }
-			</button>
+	// Render loading overlay via portal (always available, even when tour is playing).
+	// This must be outside the isPlaying guard to persist during the transition.
+	const loadingOverlay = isAiTourLoading && createPortal(
+		<div className="act-ai-loading-overlay">
+			<div className="act-ai-loading-overlay__content">
+				<div className="act-ai-loading-overlay__spinner" />
+				<h2 className="act-ai-loading-overlay__title">
+					{ __( 'Creating your guided tour...', 'admin-coach-tours' ) }
+				</h2>
+				<p className="act-ai-loading-overlay__text">
+					{ __( 'AI is analyzing the editor and generating step-by-step instructions.', 'admin-coach-tours' ) }
+				</p>
+				<p className="act-ai-loading-overlay__hint">
+					{ __( 'This usually takes a few seconds.', 'admin-coach-tours' ) }
+				</p>
+			</div>
+		</div>,
+		document.body
+	);
 
-			{ /* Dropdown Panel */ }
-			{ isOpen && (
-				<div className="act-pupil-launcher__panel">
+	// Don't render launcher UI if a tour is playing, but keep the overlay.
+	if ( isPlaying ) {
+		return loadingOverlay || null;
+	}
+
+	return (
+		<>
+			{ /* Full-screen AI Loading Overlay */ }
+			{ loadingOverlay }
+
+			<div className="act-pupil-launcher">
+				{ /* Floating Action Button */ }
+				<button
+					className="act-pupil-launcher__fab"
+					onClick={ toggleLauncher }
+					aria-expanded={ isOpen }
+					aria-label={ __( 'Open AI Coach', 'admin-coach-tours' ) }
+					disabled={ isAiTourLoading }
+				>
+					{ isAiTourLoading ? (
+						<span className="act-pupil-launcher__spinner" />
+					) : (
+						<span className="act-pupil-launcher__icon">💡</span>
+					) }
+				</button>
+
+				{ /* Dropdown Panel */ }
+				{ isOpen && (
+					<div className="act-pupil-launcher__panel">
+					{ /* AI Loading Overlay */ }
+					{ isAiTourLoading && (
+						<div className="act-pupil-launcher__ai-loading">
+							<div className="act-pupil-launcher__ai-loading-spinner" />
+							<span className="act-pupil-launcher__ai-loading-text">
+								{ __( 'Creating your tour...', 'admin-coach-tours' ) }
+							</span>
+							<span className="act-pupil-launcher__ai-loading-hint">
+								{ __( 'AI is generating step-by-step instructions', 'admin-coach-tours' ) }
+							</span>
+						</div>
+					) }
+
 					<div className="act-pupil-launcher__header">
 						<h3>{ __( 'What would you like to learn?', 'admin-coach-tours' ) }</h3>
 						<button
@@ -328,6 +381,7 @@ export default function PupilLauncher() {
 					</div>
 				</div>
 			) }
-		</div>
+			</div>
+		</>
 	);
 }

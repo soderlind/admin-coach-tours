@@ -7,6 +7,7 @@
 
 import apiFetch from '@wordpress/api-fetch';
 import { gatherEditorContext } from '../runtime/gatherEditorContext';
+import { ensureEmptyPlaceholder } from '../runtime/ensureEmptyPlaceholder';
 
 /**
  * Control handlers.
@@ -29,6 +30,15 @@ const controls = {
 	 */
 	GATHER_EDITOR_CONTEXT() {
 		return gatherEditorContext();
+	},
+
+	/**
+	 * Ensure an empty block placeholder exists for "/" quick inserter tours.
+	 *
+	 * @return {Promise<Object>} Result with wasInserted and clientId.
+	 */
+	ENSURE_EMPTY_PLACEHOLDER() {
+		return ensureEmptyPlaceholder();
 	},
 
 	/**

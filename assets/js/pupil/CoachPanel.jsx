@@ -233,15 +233,9 @@ export default function CoachPanel( {
 		return (
 			<div className="act-panel-controls">
 				<Flex justify="space-between" align="center">
-					<FlexItem>
-						<Button
-							icon={ arrowLeft }
-							label={ __( 'Previous', 'admin-coach-tours' ) }
-							onClick={ onPrevious }
-							disabled={ isFirstStep || isApplyingPreconditions }
-							size="small"
-						/>
-					</FlexItem>
+					{ /* Previous button removed - going backwards doesn't work well
+					   with AI tours because completing steps changes editor state
+					   (e.g., inserting an image replaces the paragraph placeholder) */ }
 
 					<FlexBlock style={ { textAlign: 'center' } }>
 						<Button

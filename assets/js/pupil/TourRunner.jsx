@@ -17,6 +17,7 @@ import Highlighter from './Highlighter.js';
 import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarget.js';
 import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
+import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 
 const STORE_NAME = 'admin-coach-tours';
 
@@ -223,12 +224,23 @@ export default function TourRunner() {
 
 						// Auto-advance if not the last step.
 						if ( stepIndex < totalSteps - 1 ) {
-							// Small delay before advancing.
-							setTimeout( () => {
-								if ( isMounted ) {
-									nextStep();
+							// Look ahead: wait for the next step's expected block before advancing.
+							const tourSteps = currentTour?.steps || [];
+
+							( async () => {
+								const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
+
+								if ( lookAheadResult.waited ) {
+									console.log( '[ACT TourRunner] Waited for block:', lookAheadResult.blockType, 'success:', lookAheadResult.success );
 								}
-							}, 500 );
+
+								// Advance after a small delay.
+								setTimeout( () => {
+									if ( isMounted ) {
+										nextStep();
+									}
+								}, 300 );
+							} )();
 						}
 					}
 				} );
@@ -248,14 +260,24 @@ export default function TourRunner() {
 	/**
 	 * Handle manual continue (for manual completion type or finish).
 	 */
-	const handleContinue = useCallback( () => {
+	const handleContinue = useCallback( async () => {
 		if ( completionWatcher?.confirm ) {
 			completionWatcher.confirm();
 		} else {
-			// Just advance to next step (or end tour if last step).
+			// Look ahead: wait for next step's expected block before advancing.
+			if ( stepIndex < totalSteps - 1 ) {
+				const tourSteps = currentTour?.steps || [];
+				const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
+
+				if ( lookAheadResult.waited ) {
+					console.log( '[ACT TourRunner] Manual continue waited for block:', lookAheadResult.blockType );
+				}
+			}
+
+			// Advance to next step (or end tour if last step).
 			nextStep();
 		}
-	}, [ completionWatcher, nextStep ] );
+	}, [ completionWatcher, nextStep, stepIndex, totalSteps, currentTour ] );
 
 	/**
 	 * Handle repeat step.

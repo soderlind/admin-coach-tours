@@ -209,14 +209,30 @@ class AiController {
 	private static function sanitize_editor_context( array $context ): array {
 		$sanitized = [];
 
-		// Editor blocks.
+		// Editor blocks with DOM info.
 		if ( isset( $context['editorBlocks'] ) && is_array( $context['editorBlocks'] ) ) {
 			$sanitized['editorBlocks'] = [];
 			foreach ( array_slice( $context['editorBlocks'], 0, 20 ) as $block ) {
-				$sanitized['editorBlocks'][] = [
-					'name'    => isset( $block['name'] ) ? sanitize_key( $block['name'] ) : '',
-					'isEmpty' => isset( $block['isEmpty'] ) ? (bool) $block['isEmpty'] : false,
+				$block_data = [
+					'name'       => isset( $block['name'] ) ? sanitize_key( $block['name'] ) : '',
+					'isEmpty'    => isset( $block['isEmpty'] ) ? (bool) $block['isEmpty'] : false,
+					'isSelected' => isset( $block['isSelected'] ) ? (bool) $block['isSelected'] : false,
+					'order'      => isset( $block['order'] ) ? absint( $block['order'] ) : 0,
+					'clientId'   => isset( $block['clientId'] ) ? sanitize_text_field( $block['clientId'] ) : '',
 				];
+
+				// Include DOM info if available.
+				if ( isset( $block['domInfo'] ) && is_array( $block['domInfo'] ) ) {
+					$block_data['domInfo'] = [
+						'tagName'          => isset( $block['domInfo']['tagName'] ) ? sanitize_key( $block['domInfo']['tagName'] ) : '',
+						'dataType'         => isset( $block['domInfo']['dataType'] ) ? sanitize_text_field( $block['domInfo']['dataType'] ) : '',
+						'dataBlock'        => isset( $block['domInfo']['dataBlock'] ) ? sanitize_text_field( $block['domInfo']['dataBlock'] ) : '',
+						'hasRichText'      => isset( $block['domInfo']['hasRichText'] ) ? (bool) $block['domInfo']['hasRichText'] : false,
+						'editableSelector' => isset( $block['domInfo']['editableSelector'] ) ? sanitize_text_field( $block['domInfo']['editableSelector'] ) : null,
+					];
+				}
+
+				$sanitized['editorBlocks'][] = $block_data;
 			}
 		}
 
@@ -277,15 +293,44 @@ class AiController {
 			$lines[] = '   Users can click it and type "/" to add blocks - teach this workflow!';
 		}
 
-		// Blocks in editor.
+		// Blocks in editor with targeting options.
 		if ( ! empty( $context['editorBlocks'] ) ) {
-			$block_names = array_map(
-				function ( $b ) {
-					return $b['name'] . ( $b['isEmpty'] ? ' (empty)' : '' );
-				},
-				$context['editorBlocks']
-			);
-			$lines[]     = 'Blocks in editor: ' . implode( ', ', $block_names );
+			$lines[] = '';
+			$lines[] = 'BLOCKS IN EDITOR (with targeting options):';
+
+			foreach ( $context['editorBlocks'] as $block ) {
+				$status = [];
+				if ( $block['isEmpty'] ) {
+					$status[] = 'empty';
+				}
+				if ( $block['isSelected'] ) {
+					$status[] = 'SELECTED';
+				}
+				$status_str = empty( $status ) ? '' : ' (' . implode( ', ', $status ) . ')';
+				$lines[]    = "- #{$block['order']}: {$block['name']}{$status_str}";
+
+				// Show targeting options.
+				$targets = [];
+				if ( $block['isSelected'] ) {
+					$targets[] = 'wpBlock: "selected" (recommended - currently selected)';
+				}
+				if ( ! empty( $block['clientId'] ) ) {
+					$targets[] = "wpBlock: \"clientId:{$block['clientId']}\"";
+				}
+				if ( ! empty( $block['domInfo']['editableSelector'] ) ) {
+					$targets[] = "css: \"{$block['domInfo']['editableSelector']}\" (in iframe)";
+				}
+				if ( ! empty( $block['domInfo']['dataType'] ) ) {
+					$targets[] = "css: \"[data-type=\\\"{$block['domInfo']['dataType']}\\\"]\" (in iframe)";
+				}
+
+				if ( ! empty( $targets ) ) {
+					$lines[] = '  Targeting options:';
+					foreach ( $targets as $target ) {
+						$lines[] = "    • {$target}";
+					}
+				}
+			}
 		} else {
 			$lines[] = 'Blocks in editor: (empty editor or new post)';
 		}
@@ -300,6 +345,7 @@ class AiController {
 			if ( $ve['hasSelectedBlock'] && $ve['selectedBlockType'] ) {
 				$state[] = 'Selected block: ' . $ve['selectedBlockType'];
 			}
+			$lines[] = '';
 			$lines[] = 'UI State: ' . implode( '. ', $state );
 		}
 

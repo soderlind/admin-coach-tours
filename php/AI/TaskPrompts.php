@@ -254,18 +254,32 @@ You must return a valid JSON object with this structure:
 5. Use HTML in content field for formatting (<p>, <strong>, <em>, <ul>, <li>).
 6. Generate unique IDs for each step (use descriptive slugs like "open-inserter", "select-block").
 7. CRITICAL: Only use valid CSS selectors. Never use :contains(), :has(), or jQuery pseudo-selectors.
-8. Use the exact selectors from the Gutenberg Reference section - they are tested and working.
+8. USE THE TARGETING OPTIONS FROM "CURRENT EDITOR STATE" - they show real, working selectors for blocks on this page.
 9. For the block inserter button, use: .editor-document-tools__inserter-toggle
 10. For block items in inserter: .block-editor-block-types-list button.editor-block-list-item-[blockname]
 
+## DYNAMIC TARGETING - Use What's Available
+The "CURRENT EDITOR STATE" section shows you the REAL blocks on the page with their targeting options.
+- Look at which blocks are available and their targeting options
+- For SELECTED blocks, prefer wpBlock: "selected" (most reliable)
+- For specific blocks, use the clientId-based selector: wpBlock: "clientId:xxx"
+- CSS selectors with [data-block="..."] are specific to that exact block
+- After a step completes, the block may be deselected - use CSS or clientId targeting for subsequent steps
+
 ## PREFERRED: Teaching Users the "/" Quick Inserter
 When adding blocks, PREFER teaching users the natural "/" workflow over using insertBlock preconditions:
-1. If there's an empty block placeholder visible, guide users to click it first
-2. Teach them to type "/" followed by the block name (e.g., "/image", "/video")
+1. An empty paragraph block will be automatically inserted and SELECTED before the tour starts
+2. Guide users to click in the empty paragraph block, then type "/" followed by the block name
 3. This teaches a transferable skill they can use without the tour
 
-The empty block placeholder appears as "Type / to choose a block" in the editor. Use selector:
-- .block-editor-default-block-appender__content (in iframe, constraints.inEditorIframe=true)
+STEP TARGETING STRATEGY:
+- Step 1: Use wpBlock: "selected" if the block shows as SELECTED in editor state
+- Step 2+: Use the CSS selector from targeting options (e.g., [data-block="clientId"] .block-editor-rich-text__editable)
+  because the tour system deselects blocks between steps
+
+The quick inserter dropdown appears in the MAIN document (NOT in iframe):
+- .components-autocomplete__results (constraints.inEditorIframe=false)
+- .components-autocomplete__results button (to click an option)
 
 Only use insertBlock precondition when the "/" workflow isn't practical (e.g., complex nested blocks).
 
@@ -315,51 +329,52 @@ PROMPT;
 Create a tour that guides the user to add an image using the "/" quick inserter.
 
 RECOMMENDED APPROACH - Teach the natural workflow:
-- Step 1: Click on the empty block placeholder ("Type / to choose a block") in the editor
-  - Target: .block-editor-default-block-appender__content (constraints.inEditorIframe=true)
-  - Content: "Click here where it says 'Type / to choose a block'"
+- Step 1: Click on the empty paragraph block to start typing
+  - Look at "CURRENT EDITOR STATE" - find the paragraph block marked as SELECTED
+  - Use its recommended targeting option (wpBlock: "selected" if available)
+  - Constraints: { "visible": true, "inEditorIframe": true }
+  - Content: "Click in this empty block where you can type"
   - Completion: clickTarget
 - Step 2: Instruct user to type "/image" to search for the image block
-  - Target the same placeholder or the active paragraph
+  - Use the CSS selector from the block's targeting options (editableSelector)
+  - The block may be deselected after step 1, so use CSS not wpBlock:"selected"
+  - Constraints: { "visible": true, "inEditorIframe": true }
   - Content: "Type <strong>/image</strong> to quickly find the Image block"
-  - Completion: manual (user clicks Continue after typing)
+  - Completion: elementAppear with params.selector = ".components-autocomplete__results" (NOT in iframe - params.inEditorIframe=false)
 - Step 3: Select the Image block from the dropdown
-  - Target: button[role="option"] or .components-autocomplete__result (in main document, NOT iframe)
+  - Target: .components-autocomplete__results button (NOT in iframe, constraints.inEditorIframe=false)
   - Content: "Click on the Image block to insert it"
-  - Completion: elementAppear with selector [data-type="core/image"]
+  - Completion: elementAppear with params.selector = "[data-type=\"core/image\"]" and params.inEditorIframe=true
 - Step 4: Show how to upload an image
   - Target: .block-editor-media-placeholder (constraints.inEditorIframe=true)
   - Content: "Now you can upload an image, choose from media library, or paste a URL"
   - Completion: manual
 
-IMPORTANT CSS SELECTORS:
-- Empty block placeholder (in iframe): .block-editor-default-block-appender__content
-- Quick inserter dropdown: .components-autocomplete__results (NOT in iframe)
-- Image block in quick inserter: button[role="option"]
-- Image placeholder (in iframe): .block-editor-media-placeholder
-- Upload button (in iframe): .components-form-file-upload button
-- Block itself (in iframe): [data-type="core/image"]
-
-Keep it educational - teach skills they can reuse!
+KEY: Look at "CURRENT EDITOR STATE" for the actual targeting options available!
 INST,
 
 			'add-video'     => <<<'INST'
 Create a tour that guides the user to add a video using the "/" quick inserter.
 
 RECOMMENDED APPROACH - Teach the natural workflow:
-- Step 1: Click on the empty block placeholder in the editor
-  - Target: .block-editor-default-block-appender__content (constraints.inEditorIframe=true)
+- Step 1: Click on the empty paragraph block
+  - Look at "CURRENT EDITOR STATE" - use wpBlock: "selected" if block is SELECTED
+  - Constraints: { "visible": true, "inEditorIframe": true }
+  - Content: "Click in this empty block where you can type"
+  - Completion: clickTarget
 - Step 2: Instruct user to type "/video"
+  - Use the CSS selector from the block's targeting options (block is now deselected)
+  - Constraints: { "visible": true, "inEditorIframe": true }
   - Content: "Type <strong>/video</strong> to find the Video block"
-  - Completion: manual
+  - Completion: elementAppear with params.selector = ".components-autocomplete__results" (NOT in iframe)
 - Step 3: Select the Video block from the dropdown
-  - Target: button[role="option"] (NOT in iframe)
+  - Target: .components-autocomplete__results button (constraints.inEditorIframe=false)
+  - Completion: elementAppear with params.selector = "[data-type=\"core/video\"]" and params.inEditorIframe=true
 - Step 4: Show the video upload options
   - Target: .block-editor-media-placeholder (constraints.inEditorIframe=true)
+  - Completion: manual
 
-IMPORTANT CSS SELECTORS:
-- Empty block placeholder (in iframe): .block-editor-default-block-appender__content
-- Video placeholder (in iframe): .block-editor-media-placeholder
+KEY: Use the targeting options from "CURRENT EDITOR STATE" - they show real selectors!
 INST,
 
 			'embed-youtube' => <<<'INST'

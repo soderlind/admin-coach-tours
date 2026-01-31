@@ -58,9 +58,9 @@ function getVisibleElements() {
 }
 
 /**
- * Get current blocks in the editor.
+ * Get current blocks in the editor with DOM information.
  *
- * @return {Array} List of block types currently in the editor.
+ * @return {Array} List of block types currently in the editor with targeting info.
  */
 function getEditorBlocks() {
 	try {
@@ -70,11 +70,40 @@ function getEditorBlocks() {
 		}
 
 		const blocks = blockEditorStore.getBlocks();
-		return blocks.map( ( block ) => ( {
-			name: block.name,
-			clientId: block.clientId,
-			isEmpty: isBlockEmpty( block ),
-		} ) );
+		const selectedClientId = blockEditorStore.getSelectedBlockClientId?.() || null;
+
+		// Get the editor iframe for DOM lookups.
+		const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+		const iframeDoc = iframe?.contentDocument || null;
+
+		return blocks.map( ( block, index ) => {
+			const blockInfo = {
+				name: block.name,
+				clientId: block.clientId,
+				isEmpty: isBlockEmpty( block ),
+				isSelected: block.clientId === selectedClientId,
+				order: index,
+			};
+
+			// Look up the DOM element for this block to get real selectors.
+			if ( iframeDoc ) {
+				const blockEl = iframeDoc.querySelector( `[data-block="${ block.clientId }"]` );
+				if ( blockEl ) {
+					blockInfo.domInfo = {
+						tagName: blockEl.tagName.toLowerCase(),
+						dataType: blockEl.getAttribute( 'data-type' ),
+						dataBlock: block.clientId,
+						hasRichText: !! blockEl.querySelector( '.block-editor-rich-text__editable' ),
+						// For empty paragraphs, get the editable element's info.
+						editableSelector: blockEl.querySelector( '.block-editor-rich-text__editable' )
+							? `[data-block="${ block.clientId }"] .block-editor-rich-text__editable`
+							: null,
+					};
+				}
+			}
+
+			return blockInfo;
+		} );
 	} catch ( e ) {
 		console.warn( '[ACT] Error getting editor blocks:', e );
 		return [];

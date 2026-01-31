@@ -789,6 +789,11 @@ export function* requestAiTour( taskId, query, postType ) {
 
 		yield receiveEphemeralTour( tour );
 
+		// Ensure an empty block placeholder exists for "/" quick inserter tours.
+		yield {
+			type: 'ENSURE_EMPTY_PLACEHOLDER',
+		};
+
 		// Automatically start the tour.
 		yield startTour( 'ephemeral', 'pupil' );
 
@@ -815,5 +820,11 @@ export function* startEphemeralTour( tour ) {
 	};
 
 	yield receiveEphemeralTour( tourWithId );
+
+	// Ensure an empty block placeholder exists for "/" quick inserter tours.
+	yield {
+		type: 'ENSURE_EMPTY_PLACEHOLDER',
+	};
+
 	yield startTour( 'ephemeral', 'pupil' );
 }

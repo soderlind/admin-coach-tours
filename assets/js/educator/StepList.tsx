@@ -16,7 +16,7 @@ import {
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
-import { edit, trash, plus } from '@wordpress/icons';
+import { pencil, trash, plus } from '@wordpress/icons';
 import {
 	DndContext,
 	closestCenter,
@@ -104,7 +104,7 @@ function SortableStepItem( {
 
 				<FlexItem className="act-step-actions">
 					<Button
-						icon={ edit }
+						icon={ pencil }
 						label={ __( 'Edit step', 'admin-coach-tours' ) }
 						onClick={ () => onEdit( step ) }
 						size="small"
