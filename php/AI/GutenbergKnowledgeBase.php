@@ -8,7 +8,7 @@
  * @since   0.3.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\AI;
 
@@ -102,8 +102,8 @@ class GutenbergKnowledgeBase {
 
 		// Score and collect relevant blocks.
 		$scored_blocks = [];
-		if ( isset( $knowledge['blocks'] ) ) {
-			foreach ( $knowledge['blocks'] as $block_name => $block_data ) {
+		if ( isset( $knowledge[ 'blocks' ] ) ) {
+			foreach ( $knowledge[ 'blocks' ] as $block_name => $block_data ) {
 				$score = self::calculate_relevance_score( $query, $block_name, $block_data );
 				if ( $score > 0 ) {
 					$scored_blocks[] = [
@@ -116,15 +116,15 @@ class GutenbergKnowledgeBase {
 		}
 
 		// Sort by score and take top results.
-		usort( $scored_blocks, fn( $a, $b ) => $b['score'] <=> $a['score'] );
+		usort( $scored_blocks, fn( $a, $b ) => $b[ 'score' ] <=> $a[ 'score' ] );
 		$scored_blocks = array_slice( $scored_blocks, 0, $max_blocks );
 
 		foreach ( $scored_blocks as $block ) {
-			$context['blocks'][ $block['name'] ] = $block['data'];
+			$context[ 'blocks' ][ $block[ 'name' ] ] = $block[ 'data' ];
 		}
 
 		// Include relevant UI elements based on query.
-		if ( isset( $knowledge['uiElements'] ) ) {
+		if ( isset( $knowledge[ 'uiElements' ] ) ) {
 			$ui_keywords = [
 				'inserter'     => [ 'insert', 'add', 'block', 'new', '+' ],
 				'toolbar'      => [ 'toolbar', 'format', 'bold', 'italic', 'link', 'options' ],
@@ -135,8 +135,8 @@ class GutenbergKnowledgeBase {
 
 			foreach ( $ui_keywords as $element => $keywords ) {
 				foreach ( $keywords as $keyword ) {
-					if ( str_contains( $query, $keyword ) && isset( $knowledge['uiElements'][ $element ] ) ) {
-						$context['uiElements'][ $element ] = $knowledge['uiElements'][ $element ];
+					if ( str_contains( $query, $keyword ) && isset( $knowledge[ 'uiElements' ][ $element ] ) ) {
+						$context[ 'uiElements' ][ $element ] = $knowledge[ 'uiElements' ][ $element ];
 						break;
 					}
 				}
@@ -144,7 +144,7 @@ class GutenbergKnowledgeBase {
 		}
 
 		// Include relevant common actions.
-		if ( isset( $knowledge['commonActions'] ) ) {
+		if ( isset( $knowledge[ 'commonActions' ] ) ) {
 			$action_keywords = [
 				'openInserter'   => [ 'insert', 'add', 'new block', 'open inserter' ],
 				'searchBlocks'   => [ 'search', 'find block', 'look for' ],
@@ -157,8 +157,8 @@ class GutenbergKnowledgeBase {
 
 			foreach ( $action_keywords as $action => $keywords ) {
 				foreach ( $keywords as $keyword ) {
-					if ( str_contains( $query, $keyword ) && isset( $knowledge['commonActions'][ $action ] ) ) {
-						$context['actions'][ $action ] = $knowledge['commonActions'][ $action ];
+					if ( str_contains( $query, $keyword ) && isset( $knowledge[ 'commonActions' ][ $action ] ) ) {
+						$context[ 'actions' ][ $action ] = $knowledge[ 'commonActions' ][ $action ];
 						break;
 					}
 				}
@@ -166,11 +166,11 @@ class GutenbergKnowledgeBase {
 		}
 
 		// Include formatting info if relevant.
-		if ( isset( $knowledge['formatting'] ) ) {
+		if ( isset( $knowledge[ 'formatting' ] ) ) {
 			$formatting_keywords = [ 'bold', 'italic', 'link', 'format', 'strikethrough', 'subscript', 'superscript' ];
 			foreach ( $formatting_keywords as $keyword ) {
 				if ( str_contains( $query, $keyword ) ) {
-					$context['formatting'] = $knowledge['formatting'];
+					$context[ 'formatting' ] = $knowledge[ 'formatting' ];
 					break;
 				}
 			}
@@ -197,13 +197,13 @@ class GutenbergKnowledgeBase {
 		}
 
 		// Check display name.
-		$display_name = strtolower( $block_data['name'] ?? '' );
+		$display_name = strtolower( $block_data[ 'name' ] ?? '' );
 		if ( str_contains( $query, $display_name ) ) {
 			$score += 10;
 		}
 
 		// Check keywords.
-		$keywords = $block_data['keywords'] ?? [];
+		$keywords = $block_data[ 'keywords' ] ?? [];
 		foreach ( $keywords as $keyword ) {
 			if ( str_contains( $query, strtolower( $keyword ) ) ) {
 				$score += 5;
@@ -211,13 +211,13 @@ class GutenbergKnowledgeBase {
 		}
 
 		// Check category.
-		$category = strtolower( $block_data['category'] ?? '' );
+		$category = strtolower( $block_data[ 'category' ] ?? '' );
 		if ( str_contains( $query, $category ) ) {
 			$score += 3;
 		}
 
 		// Check description.
-		$description = strtolower( $block_data['description'] ?? '' );
+		$description = strtolower( $block_data[ 'description' ] ?? '' );
 		$query_words = explode( ' ', $query );
 		foreach ( $query_words as $word ) {
 			if ( strlen( $word ) > 3 && str_contains( $description, $word ) ) {
@@ -237,12 +237,12 @@ class GutenbergKnowledgeBase {
 		$knowledge = self::load();
 		$blocks    = [];
 
-		if ( isset( $knowledge['blocks'] ) ) {
-			foreach ( $knowledge['blocks'] as $block_name => $block_data ) {
+		if ( isset( $knowledge[ 'blocks' ] ) ) {
+			foreach ( $knowledge[ 'blocks' ] as $block_name => $block_data ) {
 				$blocks[ $block_name ] = [
-					'name'        => $block_data['name'] ?? $block_name,
-					'description' => $block_data['description'] ?? '',
-					'category'    => $block_data['category'] ?? 'common',
+					'name'        => $block_data[ 'name' ] ?? $block_name,
+					'description' => $block_data[ 'description' ] ?? '',
+					'category'    => $block_data[ 'category' ] ?? 'common',
 				];
 			}
 		}
@@ -258,7 +258,7 @@ class GutenbergKnowledgeBase {
 	 */
 	public static function get_block( string $block_name ): ?array {
 		$knowledge = self::load();
-		return $knowledge['blocks'][ $block_name ] ?? null;
+		return $knowledge[ 'blocks' ][ $block_name ] ?? null;
 	}
 
 	/**
@@ -270,69 +270,69 @@ class GutenbergKnowledgeBase {
 	public static function format_context_for_prompt( array $context ): string {
 		$output = [];
 
-		if ( ! empty( $context['blocks'] ) ) {
+		if ( ! empty( $context[ 'blocks' ] ) ) {
 			$output[] = '## Relevant Gutenberg Blocks';
-			foreach ( $context['blocks'] as $block_name => $block_data ) {
+			foreach ( $context[ 'blocks' ] as $block_name => $block_data ) {
 				$output[] = sprintf(
 					"\n### %s (`%s`)\n%s\n",
-					$block_data['name'] ?? $block_name,
+					$block_data[ 'name' ] ?? $block_name,
 					$block_name,
-					$block_data['description'] ?? ''
+					$block_data[ 'description' ] ?? ''
 				);
 
-				if ( ! empty( $block_data['selectors'] ) ) {
+				if ( ! empty( $block_data[ 'selectors' ] ) ) {
 					$output[] = 'Selectors:';
-					foreach ( $block_data['selectors'] as $key => $selector ) {
+					foreach ( $block_data[ 'selectors' ] as $key => $selector ) {
 						$output[] = sprintf( '- %s: `%s`', $key, $selector );
 					}
 				}
 
-				if ( ! empty( $block_data['workflows'] ) ) {
+				if ( ! empty( $block_data[ 'workflows' ] ) ) {
 					$output[] = "\nWorkflows:";
-					foreach ( $block_data['workflows'] as $workflow_name => $steps ) {
+					foreach ( $block_data[ 'workflows' ] as $workflow_name => $steps ) {
 						$output[] = sprintf( '- %s: %s', $workflow_name, implode( ' → ', $steps ) );
 					}
 				}
 			}
 		}
 
-		if ( ! empty( $context['uiElements'] ) ) {
+		if ( ! empty( $context[ 'uiElements' ] ) ) {
 			$output[] = "\n## UI Elements";
-			foreach ( $context['uiElements'] as $element_name => $element_data ) {
+			foreach ( $context[ 'uiElements' ] as $element_name => $element_data ) {
 				$output[] = sprintf(
 					"\n### %s\n%s",
 					ucfirst( $element_name ),
-					$element_data['description'] ?? ''
+					$element_data[ 'description' ] ?? ''
 				);
-				if ( ! empty( $element_data['selectors'] ) ) {
+				if ( ! empty( $element_data[ 'selectors' ] ) ) {
 					$output[] = 'Selectors:';
-					foreach ( $element_data['selectors'] as $key => $selector ) {
+					foreach ( $element_data[ 'selectors' ] as $key => $selector ) {
 						$output[] = sprintf( '- %s: `%s`', $key, $selector );
 					}
 				}
 			}
 		}
 
-		if ( ! empty( $context['actions'] ) ) {
+		if ( ! empty( $context[ 'actions' ] ) ) {
 			$output[] = "\n## Common Actions";
-			foreach ( $context['actions'] as $action_name => $action_data ) {
+			foreach ( $context[ 'actions' ] as $action_name => $action_data ) {
 				$output[] = sprintf(
 					"\n### %s\n%s\nSteps: %s",
 					ucfirst( str_replace( '_', ' ', $action_name ) ),
-					$action_data['description'] ?? '',
-					implode( ' → ', $action_data['steps'] ?? [] )
+					$action_data[ 'description' ] ?? '',
+					implode( ' → ', $action_data[ 'steps' ] ?? [] )
 				);
 			}
 		}
 
-		if ( ! empty( $context['formatting'] ) ) {
+		if ( ! empty( $context[ 'formatting' ] ) ) {
 			$output[] = "\n## Text Formatting";
-			foreach ( $context['formatting'] as $format_name => $format_data ) {
+			foreach ( $context[ 'formatting' ] as $format_name => $format_data ) {
 				$output[] = sprintf(
 					'- **%s**: %s%s',
 					ucfirst( $format_name ),
-					$format_data['description'] ?? '',
-					isset( $format_data['shortcut'] ) ? sprintf( ' (Shortcut: %s)', $format_data['shortcut'] ) : ''
+					$format_data[ 'description' ] ?? '',
+					isset( $format_data[ 'shortcut' ] ) ? sprintf( ' (Shortcut: %s)', $format_data[ 'shortcut' ] ) : ''
 				);
 			}
 		}

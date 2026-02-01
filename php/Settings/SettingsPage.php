@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Settings;
 
@@ -191,7 +191,7 @@ class SettingsPage {
 				$option_name = "act_ai_{$provider_id}_{$field_id}";
 
 				// Track sensitive fields for encryption.
-				if ( ! empty( $field_config['sensitive'] ) ) {
+				if ( ! empty( $field_config[ 'sensitive' ] ) ) {
 					$this->sensitive_options[ $option_name ] = true;
 				}
 
@@ -199,15 +199,15 @@ class SettingsPage {
 					self::OPTION_GROUP,
 					$option_name,
 					[
-						'type'              => $field_config['type'] ?? 'string',
+						'type'              => $field_config[ 'type' ] ?? 'string',
 						'sanitize_callback' => [ $this, 'sanitize_provider_field' ],
-						'default'           => $field_config['default'] ?? '',
+						'default'           => $field_config[ 'default' ] ?? '',
 					]
 				);
 
 				add_settings_field(
 					$option_name,
-					$field_config['label'] ?? $field_id,
+					$field_config[ 'label' ] ?? $field_id,
 					[ $this, 'render_provider_setting_field' ],
 					self::MENU_SLUG,
 					'act_ai',
@@ -298,18 +298,13 @@ class SettingsPage {
 	 * @param array $args Field arguments.
 	 */
 	public function render_checkbox_field( array $args ): void {
-		$name  = $args['name'];
+		$name  = $args[ 'name' ];
 		$value = get_option( $name, false );
-		$desc  = $args['description'] ?? '';
+		$desc  = $args[ 'description' ] ?? '';
 
 		?>
 		<label>
-			<input
-				type="checkbox"
-				name="<?php echo esc_attr( $name ); ?>"
-				value="1"
-				<?php checked( $value ); ?>
-			/>
+			<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( $value ); ?> />
 			<?php echo esc_html( $desc ); ?>
 		</label>
 		<?php
@@ -326,10 +321,7 @@ class SettingsPage {
 		?>
 		<select name="act_ai_provider" id="act_ai_provider">
 			<?php foreach ( $providers as $provider ) : ?>
-				<option
-					value="<?php echo esc_attr( $provider->get_id() ); ?>"
-					<?php selected( $current, $provider->get_id() ); ?>
-				>
+				<option value="<?php echo esc_attr( $provider->get_id() ); ?>" <?php selected( $current, $provider->get_id() ); ?>>
 					<?php echo esc_html( $provider->get_name() ); ?>
 					<?php if ( $provider->is_configured() ) : ?>
 						(<?php esc_html_e( 'configured', 'admin-coach-tours' ); ?>)
@@ -349,16 +341,16 @@ class SettingsPage {
 	 * @param array $args Field arguments.
 	 */
 	public function render_provider_setting_field( array $args ): void {
-		$provider_id = $args['provider'];
-		$field       = $args['field'];
-		$name        = $args['name'];
-		$type        = $field['type'] ?? 'text';
-		$options     = $field['options'] ?? [];
-		$desc        = $field['description'] ?? '';
-		$value       = get_option( $name, $field['default'] ?? '' );
+		$provider_id = $args[ 'provider' ];
+		$field       = $args[ 'field' ];
+		$name        = $args[ 'name' ];
+		$type        = $field[ 'type' ] ?? 'text';
+		$options     = $field[ 'options' ] ?? [];
+		$desc        = $field[ 'description' ] ?? '';
+		$value       = get_option( $name, $field[ 'default' ] ?? '' );
 
 		// Mask sensitive values.
-		$is_sensitive = $field['sensitive'] ?? false;
+		$is_sensitive = $field[ 'sensitive' ] ?? false;
 
 		if ( $is_sensitive && ! empty( $value ) ) {
 			$display_value = str_repeat( '•', 20 );
@@ -427,7 +419,7 @@ class SettingsPage {
 		$option_name = '';
 
 		if ( preg_match( '/^sanitize_option_(.+)$/', $filter_name, $matches ) ) {
-			$option_name = $matches[1];
+			$option_name = $matches[ 1 ];
 		}
 
 		// Keep existing value if empty (for sensitive fields).

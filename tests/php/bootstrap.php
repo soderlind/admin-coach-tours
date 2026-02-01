@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 // Load Composer autoloader.
 require_once dirname( __DIR__, 2 ) . '/vendor/autoload.php';

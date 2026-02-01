@@ -92,28 +92,28 @@ class ToursCpt {
 		];
 
 		$args = [
-			'label'                         => __( 'Coach Tour', 'admin-coach-tours' ),
-			'description'                   => __( 'Interactive guided tours for WordPress admin', 'admin-coach-tours' ),
-			'labels'                        => $labels,
-			'supports'                      => [ 'title', 'editor', 'author', 'custom-fields' ],
-			'hierarchical'                  => false,
-			'public'                        => false,
-			'show_ui'                       => true,
-			'show_in_menu'                  => false,
+			'label'               => __( 'Coach Tour', 'admin-coach-tours' ),
+			'description'         => __( 'Interactive guided tours for WordPress admin', 'admin-coach-tours' ),
+			'labels'              => $labels,
+			'supports'            => [ 'title', 'editor', 'author', 'custom-fields' ],
+			'hierarchical'        => false,
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => false,
 			// Hidden in v0.3.0 - AI generates tours for pupils.
-							'menu_position' => 100,
-			'menu_icon'                     => 'dashicons-welcome-learn-more',
-			'show_in_admin_bar'             => false,
-			'show_in_nav_menus'             => false,
-			'can_export'                    => true,
-			'has_archive'                   => false,
-			'exclude_from_search'           => true,
-			'publicly_queryable'            => false,
-			'rewrite'                       => false,
-			'capability_type'               => 'post',
-			'show_in_rest'                  => true,
-			'rest_base'                     => 'act-tours',
-			'rest_namespace'                => 'admin-coach-tours/v1',
+			'menu_position'       => 100,
+			'menu_icon'           => 'dashicons-welcome-learn-more',
+			'show_in_admin_bar'   => false,
+			'show_in_nav_menus'   => false,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => true,
+			'publicly_queryable'  => false,
+			'rewrite'             => false,
+			'capability_type'     => 'post',
+			'show_in_rest'        => true,
+			'rest_base'           => 'act-tours',
+			'rest_namespace'      => 'admin-coach-tours/v1',
 		];
 
 		register_post_type( self::POST_TYPE, $args );
@@ -260,19 +260,19 @@ class ToursCpt {
 	 */
 	public static function sanitize_step( array $step ): array {
 		return [
-			'id'             => isset( $step['id'] ) ? sanitize_key( $step['id'] ) : wp_generate_uuid4(),
-			'order'          => isset( $step['order'] ) ? absint( $step['order'] ) : 0,
-			'title'          => isset( $step['title'] ) ? sanitize_text_field( $step['title'] ) : '',
-			'instruction'    => isset( $step['instruction'] ) ? wp_kses_post( $step['instruction'] ) : '',
-			'hint'           => isset( $step['hint'] ) ? sanitize_text_field( $step['hint'] ) : '',
-			'target'         => self::sanitize_target( $step['target'] ?? [] ),
-			'preconditions'  => self::sanitize_preconditions( $step['preconditions'] ?? [] ),
-			'completion'     => self::sanitize_completion( $step['completion'] ?? [] ),
-			'recovery'       => self::sanitize_recovery( $step['recovery'] ?? [] ),
-			'tags'           => self::sanitize_tags( $step['tags'] ?? [] ),
-			'version'        => isset( $step['version'] ) ? absint( $step['version'] ) : 1,
-			'content'        => isset( $step['content'] ) ? sanitize_text_field( $step['content'] ) : '',
-			'elementContext' => self::sanitize_element_context( $step['elementContext'] ?? [] ),
+			'id'             => isset( $step[ 'id' ] ) ? sanitize_key( $step[ 'id' ] ) : wp_generate_uuid4(),
+			'order'          => isset( $step[ 'order' ] ) ? absint( $step[ 'order' ] ) : 0,
+			'title'          => isset( $step[ 'title' ] ) ? sanitize_text_field( $step[ 'title' ] ) : '',
+			'instruction'    => isset( $step[ 'instruction' ] ) ? wp_kses_post( $step[ 'instruction' ] ) : '',
+			'hint'           => isset( $step[ 'hint' ] ) ? sanitize_text_field( $step[ 'hint' ] ) : '',
+			'target'         => self::sanitize_target( $step[ 'target' ] ?? [] ),
+			'preconditions'  => self::sanitize_preconditions( $step[ 'preconditions' ] ?? [] ),
+			'completion'     => self::sanitize_completion( $step[ 'completion' ] ?? [] ),
+			'recovery'       => self::sanitize_recovery( $step[ 'recovery' ] ?? [] ),
+			'tags'           => self::sanitize_tags( $step[ 'tags' ] ?? [] ),
+			'version'        => isset( $step[ 'version' ] ) ? absint( $step[ 'version' ] ) : 1,
+			'content'        => isset( $step[ 'content' ] ) ? sanitize_text_field( $step[ 'content' ] ) : '',
+			'elementContext' => self::sanitize_element_context( $step[ 'elementContext' ] ?? [] ),
 		];
 	}
 
@@ -288,29 +288,29 @@ class ToursCpt {
 			'constraints' => [],
 		];
 
-		if ( isset( $target['locators'] ) && is_array( $target['locators'] ) ) {
-			foreach ( $target['locators'] as $locator ) {
+		if ( isset( $target[ 'locators' ] ) && is_array( $target[ 'locators' ] ) ) {
+			foreach ( $target[ 'locators' ] as $locator ) {
 				if ( ! is_array( $locator ) ) {
 					continue;
 				}
-				$sanitized['locators'][] = [
-					'type'     => isset( $locator['type'] ) ? sanitize_key( $locator['type'] ) : 'css',
-					'value'    => isset( $locator['value'] ) ? sanitize_text_field( $locator['value'] ) : '',
-					'weight'   => isset( $locator['weight'] ) ? absint( $locator['weight'] ) : 50,
-					'fallback' => ! empty( $locator['fallback'] ),
+				$sanitized[ 'locators' ][] = [
+					'type'     => isset( $locator[ 'type' ] ) ? sanitize_key( $locator[ 'type' ] ) : 'css',
+					'value'    => isset( $locator[ 'value' ] ) ? sanitize_text_field( $locator[ 'value' ] ) : '',
+					'weight'   => isset( $locator[ 'weight' ] ) ? absint( $locator[ 'weight' ] ) : 50,
+					'fallback' => ! empty( $locator[ 'fallback' ] ),
 				];
 			}
 		}
 
-		if ( isset( $target['constraints'] ) && is_array( $target['constraints'] ) ) {
-			$sanitized['constraints'] = [
-				'visible'         => ! empty( $target['constraints']['visible'] ),
-				'inEditorIframe'  => ! empty( $target['constraints']['inEditorIframe'] ),
-				'withinContainer' => isset( $target['constraints']['withinContainer'] )
-					? sanitize_text_field( $target['constraints']['withinContainer'] )
+		if ( isset( $target[ 'constraints' ] ) && is_array( $target[ 'constraints' ] ) ) {
+			$sanitized[ 'constraints' ] = [
+				'visible'         => ! empty( $target[ 'constraints' ][ 'visible' ] ),
+				'inEditorIframe'  => ! empty( $target[ 'constraints' ][ 'inEditorIframe' ] ),
+				'withinContainer' => isset( $target[ 'constraints' ][ 'withinContainer' ] )
+					? sanitize_text_field( $target[ 'constraints' ][ 'withinContainer' ] )
 					: '',
-				'index'           => isset( $target['constraints']['index'] )
-					? absint( $target['constraints']['index'] )
+				'index'           => isset( $target[ 'constraints' ][ 'index' ] )
+					? absint( $target[ 'constraints' ][ 'index' ] )
 					: null,
 			];
 		}
@@ -350,11 +350,11 @@ class ToursCpt {
 		$sanitized = [];
 
 		foreach ( $preconditions as $condition ) {
-			if ( ! is_array( $condition ) || ! isset( $condition['type'] ) ) {
+			if ( ! is_array( $condition ) || ! isset( $condition[ 'type' ] ) ) {
 				continue;
 			}
 
-			$type_lower = sanitize_key( $condition['type'] );
+			$type_lower = sanitize_key( $condition[ 'type' ] );
 			if ( ! in_array( $type_lower, $allowed_types, true ) ) {
 				continue;
 			}
@@ -367,13 +367,13 @@ class ToursCpt {
 			];
 
 			// Handle value (for backwards compatibility).
-			if ( isset( $condition['value'] ) ) {
-				$sanitized_condition['value'] = sanitize_text_field( $condition['value'] );
+			if ( isset( $condition[ 'value' ] ) ) {
+				$sanitized_condition[ 'value' ] = sanitize_text_field( $condition[ 'value' ] );
 			}
 
 			// Handle params object.
-			if ( isset( $condition['params'] ) && is_array( $condition['params'] ) ) {
-				$sanitized_condition['params'] = self::sanitize_precondition_params( $type, $condition['params'] );
+			if ( isset( $condition[ 'params' ] ) && is_array( $condition[ 'params' ] ) ) {
+				$sanitized_condition[ 'params' ] = self::sanitize_precondition_params( $type, $condition[ 'params' ] );
 			}
 
 			$sanitized[] = $sanitized_condition;
@@ -394,27 +394,27 @@ class ToursCpt {
 
 		switch ( $type ) {
 			case 'insertBlock':
-				if ( isset( $params['blockName'] ) ) {
-					$sanitized['blockName'] = sanitize_text_field( $params['blockName'] );
+				if ( isset( $params[ 'blockName' ] ) ) {
+					$sanitized[ 'blockName' ] = sanitize_text_field( $params[ 'blockName' ] );
 				}
-				if ( isset( $params['markerId'] ) ) {
-					$sanitized['markerId'] = sanitize_key( $params['markerId'] );
+				if ( isset( $params[ 'markerId' ] ) ) {
+					$sanitized[ 'markerId' ] = sanitize_key( $params[ 'markerId' ] );
 				}
-				if ( isset( $params['attributes'] ) && is_array( $params['attributes'] ) ) {
+				if ( isset( $params[ 'attributes' ] ) && is_array( $params[ 'attributes' ] ) ) {
 					// Allow attributes through - they're block-specific.
-					$sanitized['attributes'] = $params['attributes'];
+					$sanitized[ 'attributes' ] = $params[ 'attributes' ];
 				}
 				break;
 
 			case 'ensureSidebarOpen':
-				if ( isset( $params['sidebar'] ) ) {
-					$sanitized['sidebar'] = sanitize_text_field( $params['sidebar'] );
+				if ( isset( $params[ 'sidebar' ] ) ) {
+					$sanitized[ 'sidebar' ] = sanitize_text_field( $params[ 'sidebar' ] );
 				}
 				break;
 
 			case 'selectSidebarTab':
-				if ( isset( $params['tab'] ) ) {
-					$sanitized['tab'] = sanitize_text_field( $params['tab'] );
+				if ( isset( $params[ 'tab' ] ) ) {
+					$sanitized[ 'tab' ] = sanitize_text_field( $params[ 'tab' ] );
 				}
 				break;
 
@@ -445,17 +445,17 @@ class ToursCpt {
 			'manual',
 		];
 
-		$type = isset( $completion['type'] ) ? sanitize_key( $completion['type'] ) : 'manual';
+		$type = isset( $completion[ 'type' ] ) ? sanitize_key( $completion[ 'type' ] ) : 'manual';
 		if ( ! in_array( $type, $allowed_types, true ) ) {
 			$type = 'manual';
 		}
 
 		return [
 			'type'     => $type,
-			'store'    => isset( $completion['store'] ) ? sanitize_text_field( $completion['store'] ) : '',
-			'selector' => isset( $completion['selector'] ) ? sanitize_text_field( $completion['selector'] ) : '',
-			'expected' => $completion['expected'] ?? null,
-			'operator' => isset( $completion['operator'] ) ? sanitize_key( $completion['operator'] ) : 'equals',
+			'store'    => isset( $completion[ 'store' ] ) ? sanitize_text_field( $completion[ 'store' ] ) : '',
+			'selector' => isset( $completion[ 'selector' ] ) ? sanitize_text_field( $completion[ 'selector' ] ) : '',
+			'expected' => $completion[ 'expected' ] ?? null,
+			'operator' => isset( $completion[ 'operator' ] ) ? sanitize_key( $completion[ 'operator' ] ) : 'equals',
 		];
 	}
 
@@ -475,18 +475,18 @@ class ToursCpt {
 		$sanitized = [];
 
 		foreach ( $recovery as $action ) {
-			if ( ! is_array( $action ) || ! isset( $action['action'] ) ) {
+			if ( ! is_array( $action ) || ! isset( $action[ 'action' ] ) ) {
 				continue;
 			}
 
-			$action_type = sanitize_key( $action['action'] );
+			$action_type = sanitize_key( $action[ 'action' ] );
 			if ( ! in_array( $action_type, $allowed_actions, true ) ) {
 				continue;
 			}
 
 			$sanitized[] = [
 				'action'  => $action_type,
-				'timeout' => isset( $action['timeout'] ) ? absint( $action['timeout'] ) : 1000,
+				'timeout' => isset( $action[ 'timeout' ] ) ? absint( $action[ 'timeout' ] ) : 1000,
 			];
 		}
 
@@ -520,48 +520,48 @@ class ToursCpt {
 
 		$sanitized = [];
 
-		if ( isset( $context['tagName'] ) ) {
-			$sanitized['tagName'] = sanitize_key( $context['tagName'] );
+		if ( isset( $context[ 'tagName' ] ) ) {
+			$sanitized[ 'tagName' ] = sanitize_key( $context[ 'tagName' ] );
 		}
 
-		if ( isset( $context['role'] ) ) {
-			$sanitized['role'] = sanitize_text_field( $context['role'] );
+		if ( isset( $context[ 'role' ] ) ) {
+			$sanitized[ 'role' ] = sanitize_text_field( $context[ 'role' ] );
 		}
 
-		if ( isset( $context['classNames'] ) && is_array( $context['classNames'] ) ) {
-			$sanitized['classNames'] = array_values(
-				array_map( 'sanitize_html_class', $context['classNames'] )
+		if ( isset( $context[ 'classNames' ] ) && is_array( $context[ 'classNames' ] ) ) {
+			$sanitized[ 'classNames' ] = array_values(
+				array_map( 'sanitize_html_class', $context[ 'classNames' ] )
 			);
 		}
 
-		if ( isset( $context['label'] ) ) {
-			$sanitized['label'] = sanitize_text_field( $context['label'] );
+		if ( isset( $context[ 'label' ] ) ) {
+			$sanitized[ 'label' ] = sanitize_text_field( $context[ 'label' ] );
 		}
 
-		if ( isset( $context['textContent'] ) ) {
-			$sanitized['textContent'] = sanitize_text_field( $context['textContent'] );
+		if ( isset( $context[ 'textContent' ] ) ) {
+			$sanitized[ 'textContent' ] = sanitize_text_field( $context[ 'textContent' ] );
 		}
 
-		if ( isset( $context['dataAttrs'] ) && is_array( $context['dataAttrs'] ) ) {
-			$sanitized['dataAttrs'] = array_map( 'sanitize_text_field', $context['dataAttrs'] );
+		if ( isset( $context[ 'dataAttrs' ] ) && is_array( $context[ 'dataAttrs' ] ) ) {
+			$sanitized[ 'dataAttrs' ] = array_map( 'sanitize_text_field', $context[ 'dataAttrs' ] );
 		}
 
-		if ( isset( $context['ancestors'] ) && is_array( $context['ancestors'] ) ) {
-			$sanitized['ancestors'] = [];
-			foreach ( $context['ancestors'] as $ancestor ) {
+		if ( isset( $context[ 'ancestors' ] ) && is_array( $context[ 'ancestors' ] ) ) {
+			$sanitized[ 'ancestors' ] = [];
+			foreach ( $context[ 'ancestors' ] as $ancestor ) {
 				if ( ! is_array( $ancestor ) ) {
 					continue;
 				}
 				$sanitized_ancestor = [];
-				if ( isset( $ancestor['tagName'] ) ) {
-					$sanitized_ancestor['tagName'] = sanitize_key( $ancestor['tagName'] );
+				if ( isset( $ancestor[ 'tagName' ] ) ) {
+					$sanitized_ancestor[ 'tagName' ] = sanitize_key( $ancestor[ 'tagName' ] );
 				}
-				if ( isset( $ancestor['classNames'] ) && is_array( $ancestor['classNames'] ) ) {
-					$sanitized_ancestor['classNames'] = array_values(
-						array_map( 'sanitize_html_class', $ancestor['classNames'] )
+				if ( isset( $ancestor[ 'classNames' ] ) && is_array( $ancestor[ 'classNames' ] ) ) {
+					$sanitized_ancestor[ 'classNames' ] = array_values(
+						array_map( 'sanitize_html_class', $ancestor[ 'classNames' ] )
 					);
 				}
-				$sanitized['ancestors'][] = $sanitized_ancestor;
+				$sanitized[ 'ancestors' ][] = $sanitized_ancestor;
 			}
 		}
 

@@ -60,6 +60,55 @@ function isElementVisible( element ) {
 }
 
 /**
+ * Check if element is within the currently selected block OR the last inserted block.
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {boolean} True if within selected/tracked block.
+ */
+function isWithinSelectedBlock( element ) {
+	const wpData = window.wp?.data;
+	if ( ! wpData ) {
+		console.log( '[ACT isWithinSelectedBlock] wp.data not available' );
+		return true; // Can't check, allow element.
+	}
+
+	const blockEditor = wpData.select( 'core/block-editor' );
+	if ( ! blockEditor ) {
+		console.log( '[ACT isWithinSelectedBlock] core/block-editor not available' );
+		return true;
+	}
+
+	// First, try the currently selected block.
+	let targetClientId = blockEditor.getSelectedBlockClientId();
+	console.log( '[ACT isWithinSelectedBlock] Selected block clientId:', targetClientId );
+
+	// If no block is selected, try the last tracked block from elementAppear.
+	if ( ! targetClientId && window.__actLastAppearedBlockClientId ) {
+		targetClientId = window.__actLastAppearedBlockClientId;
+		console.log( '[ACT isWithinSelectedBlock] Using last appeared block:', targetClientId );
+	}
+
+	if ( ! targetClientId ) {
+		console.log( '[ACT isWithinSelectedBlock] No block to scope to, allowing element' );
+		return true; // No block to scope to, allow element.
+	}
+
+	// Find the target block's DOM element.
+	const ownerDoc = element.ownerDocument || document;
+	const targetBlockElement = ownerDoc.querySelector( `[data-block="${ targetClientId }"]` );
+
+	if ( ! targetBlockElement ) {
+		console.log( '[ACT isWithinSelectedBlock] Target block element not found in DOM' );
+		return true; // Can't find block, allow element.
+	}
+
+	// Check if element is inside the target block.
+	const isWithin = targetBlockElement.contains( element );
+	console.log( '[ACT isWithinSelectedBlock] Element within target block:', isWithin );
+	return isWithin;
+}
+
+/**
  * Check if element is within a container.
  *
  * @param {HTMLElement} element           Element to check.
@@ -475,6 +524,12 @@ function calculateSpecificity( element, locator, constraints ) {
 		score += 10;
 	}
 
+	// BIG bonus for being within the currently selected block.
+	// This ensures we prefer elements in the block the user is working on.
+	if ( isWithinSelectedBlock( element ) ) {
+		score += 100;
+	}
+
 	// Bonus for visibility.
 	if ( isElementVisible( element ) ) {
 		score += 5;
@@ -551,6 +606,12 @@ export function resolveTarget( target ) {
 			console.log( '[ACT resolveTarget]   After visibility filter:', elements.length );
 		}
 
+		// Apply scopeToSelectedBlock constraint - only find elements within currently selected block.
+		if ( constraints.scopeToSelectedBlock ) {
+			elements = elements.filter( isWithinSelectedBlock );
+			console.log( '[ACT resolveTarget]   After selectedBlock filter:', elements.length );
+		}
+
 		// Apply container constraint.
 		if ( constraints.withinContainer ) {
 			elements = elements.filter( ( el ) =>
@@ -586,12 +647,14 @@ export function resolveTarget( target ) {
 		}
 
 		// Disambiguate by specificity score.
+		console.log( '[ACT resolveTarget] Multiple matches (', elements.length, '), disambiguating by specificity...' );
 		const scored = elements.map( ( el ) => ( {
 			element: el,
 			score: calculateSpecificity( el, locator, constraints ),
 		} ) );
 
 		scored.sort( ( a, b ) => b.score - a.score );
+		console.log( '[ACT resolveTarget] Scores:', scored.map( ( s ) => s.score ) );
 
 		// If top two have same score, it's ambiguous - but still return first.
 		return {

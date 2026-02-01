@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.5] - 2026-02-01
+
+### Added
+
+- **Block tracking for multi-block pages**: Track newly inserted blocks via `__actLastAppearedBlockClientId` to correctly scope tours when multiple blocks of the same type exist
+- **NEW element detection in watchElementAppear**: Only trigger on newly inserted blocks, ignoring existing ones
+- **Cross-frame scroll handling**: Both highlight and CoachPanel now listen to iframe scroll events
+- **Cache versioning**: Added version key to cache to invalidate stale AI responses when prompts change
+
+### Fixed
+
+- **Block scoping issue**: When adding a second image/video block, tour now correctly highlights the NEW block instead of an existing one
+- **Highlight positioning after scroll**: Scroll element into view first, then apply highlight after 350ms delay
+- **CoachPanel follows scroll**: Modal repositions correctly when iframe content scrolls
+- **Blinking overlay**: Skip re-highlighting same element; only apply animation once per cycle
+- **Proper scroll listener cleanup**: Track and clean up all scroll listeners including iframe windows
+
+### Changed
+
+- **Task prompts updated**: Use `[data-type="core/image"]` instead of `.block-editor-media-placeholder` for tighter highlight fit
+- **Specificity scoring**: +100 bonus for elements within the tracked/selected block
+
 ## [0.3.4] - 2026-01-31
 
 ### Changed

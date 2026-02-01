@@ -152,6 +152,7 @@
 		opacity: 0;
 		transform: translateY(10px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateY(0);
@@ -295,7 +296,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 100000; /* Above WordPress admin elements */
+	z-index: 100000;
+	/* Above WordPress admin elements */
 	animation: act-overlay-fade-in 0.3s ease-out;
 }
 
@@ -303,6 +305,7 @@
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -323,6 +326,7 @@
 		opacity: 0;
 		transform: translateY(20px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateY(0);

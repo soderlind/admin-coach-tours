@@ -85,7 +85,7 @@ class Capabilities {
 	public static function map_meta_caps( array $caps, string $cap, int $user_id, array $args ): array {
 		// Handle post-type specific capabilities.
 		if ( in_array( $cap, [ 'edit_act_tour', 'delete_act_tour', 'read_act_tour' ], true ) ) {
-			$post = get_post( $args[0] ?? 0 );
+			$post = get_post( $args[ 0 ] ?? 0 );
 
 			if ( ! $post ) {
 				return [ 'do_not_allow' ];
@@ -141,7 +141,7 @@ class Capabilities {
 		}
 
 		// Grant post type caps to users with manage_options.
-		if ( ! empty( $allcaps['manage_options'] ) ) {
+		if ( ! empty( $allcaps[ 'manage_options' ] ) ) {
 			foreach ( self::POST_TYPE_CAPS as $primitive => $custom ) {
 				$allcaps[ $custom ] = true;
 			}

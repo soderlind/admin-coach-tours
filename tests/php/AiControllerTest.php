@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Tests;
 
@@ -46,22 +46,22 @@ class AiControllerTest extends TestCase {
 	 */
 	public function test_generate_draft_returns_error_when_ai_unavailable(): void {
 		// Create mock request.
-		$request = $this->createMock( \WP_REST_Request::class );
+		$request = $this->createMock( \WP_REST_Request::class);
 		$request->method( 'get_param' )
 			->willReturnCallback(
 				function ( $param ) {
 					if ( 'elementContext' === $param ) {
-							return [
-								'tagName' => 'button',
-								'role'    => 'button',
-							];
+						return [
+							'tagName' => 'button',
+							'role'    => 'button',
+						];
 					}
 					return null;
 				}
 			);
 
 		// Mock AiManager to return not available.
-		$ai_manager = $this->getMockBuilder( \stdClass::class )
+		$ai_manager = $this->getMockBuilder( \stdClass::class)
 			->addMethods( [ 'is_available' ] )
 			->getMock();
 		$ai_manager->method( 'is_available' )->willReturn( false );
@@ -103,7 +103,7 @@ class AiControllerTest extends TestCase {
 		);
 
 		// Use reflection to test private sanitize method.
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'sanitize_element_context' );
 		$method->setAccessible( true );
 
@@ -116,9 +116,9 @@ class AiControllerTest extends TestCase {
 
 		$result = $method->invoke( null, $dirty_context );
 
-		$this->assertEquals( 'button', $result['tagName'] );
-		$this->assertEquals( 'button', $result['role'] );
-		$this->assertStringNotContainsString( '<script>', $result['textContent'] );
+		$this->assertEquals( 'button', $result[ 'tagName' ] );
+		$this->assertEquals( 'button', $result[ 'role' ] );
+		$this->assertStringNotContainsString( '<script>', $result[ 'textContent' ] );
 	}
 
 	/**
@@ -143,21 +143,21 @@ class AiControllerTest extends TestCase {
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
 		// Create mock request with no task or query.
-		$request = $this->createMock( \WP_REST_Request::class );
+		$request = $this->createMock( \WP_REST_Request::class);
 		$request->method( 'get_param' )
 			->willReturnCallback(
 				function ( $param ) {
 					return match ( $param ) {
-							'taskId'   => '',
-							'query'    => '',
-							'postType' => 'post',
-							default    => null,
+						'taskId'   => '',
+						'query'    => '',
+						'postType' => 'post',
+						default    => null,
 					};
 				}
 			);
 
 		// Mock AiManager.
-		$ai_manager = $this->getMockBuilder( \stdClass::class )
+		$ai_manager = $this->getMockBuilder( \stdClass::class)
 			->addMethods( [ 'is_available', 'get_instance' ] )
 			->getMock();
 		$ai_manager->method( 'is_available' )->willReturn( true );
@@ -175,7 +175,7 @@ class AiControllerTest extends TestCase {
 		Functions\when( 'sanitize_html_class' )->returnArg();
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'sanitize_element_context' );
 		$method->setAccessible( true );
 
@@ -204,7 +204,7 @@ class AiControllerTest extends TestCase {
 		);
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'sanitize_editor_context' );
 		$method->setAccessible( true );
 
@@ -223,10 +223,10 @@ class AiControllerTest extends TestCase {
 
 		$result = $method->invoke( null, $context );
 
-		$this->assertIsArray( $result['editorBlocks'] );
-		$this->assertCount( 2, $result['editorBlocks'] );
-		$this->assertEquals( 'core/paragraph', $result['editorBlocks'][0]['name'] );
-		$this->assertTrue( $result['editorBlocks'][0]['isEmpty'] );
+		$this->assertIsArray( $result[ 'editorBlocks' ] );
+		$this->assertCount( 2, $result[ 'editorBlocks' ] );
+		$this->assertEquals( 'core/paragraph', $result[ 'editorBlocks' ][ 0 ][ 'name' ] );
+		$this->assertTrue( $result[ 'editorBlocks' ][ 0 ][ 'isEmpty' ] );
 	}
 
 	/**
@@ -236,7 +236,7 @@ class AiControllerTest extends TestCase {
 		Functions\when( 'sanitize_key' )->returnArg();
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'sanitize_editor_context' );
 		$method->setAccessible( true );
 
@@ -252,9 +252,9 @@ class AiControllerTest extends TestCase {
 
 		$result = $method->invoke( null, $context );
 
-		$this->assertTrue( $result['visibleElements']['inserterOpen'] );
-		$this->assertFalse( $result['visibleElements']['sidebarOpen'] );
-		$this->assertEquals( 'core/image', $result['visibleElements']['selectedBlockType'] );
+		$this->assertTrue( $result[ 'visibleElements' ][ 'inserterOpen' ] );
+		$this->assertFalse( $result[ 'visibleElements' ][ 'sidebarOpen' ] );
+		$this->assertEquals( 'core/image', $result[ 'visibleElements' ][ 'selectedBlockType' ] );
 	}
 
 	/**
@@ -264,7 +264,7 @@ class AiControllerTest extends TestCase {
 		Functions\when( 'sanitize_key' )->returnArg();
 		Functions\when( 'sanitize_text_field' )->returnArg();
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'sanitize_editor_context' );
 		$method->setAccessible( true );
 
@@ -283,16 +283,16 @@ class AiControllerTest extends TestCase {
 
 		$result = $method->invoke( null, $context );
 
-		$this->assertArrayHasKey( 'inserterButton', $result['uiSamples'] );
-		$this->assertEquals( '.editor-document-tools__inserter-toggle', $result['uiSamples']['inserterButton']['selector'] );
-		$this->assertTrue( $result['uiSamples']['inserterButton']['visible'] );
+		$this->assertArrayHasKey( 'inserterButton', $result[ 'uiSamples' ] );
+		$this->assertEquals( '.editor-document-tools__inserter-toggle', $result[ 'uiSamples' ][ 'inserterButton' ][ 'selector' ] );
+		$this->assertTrue( $result[ 'uiSamples' ][ 'inserterButton' ][ 'visible' ] );
 	}
 
 	/**
 	 * Test format_editor_context_for_prompt creates readable output.
 	 */
 	public function test_format_editor_context_for_prompt(): void {
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'format_editor_context_for_prompt' );
 		$method->setAccessible( true );
 
@@ -331,7 +331,7 @@ class AiControllerTest extends TestCase {
 	 * Test format_editor_context_for_prompt handles empty context.
 	 */
 	public function test_format_editor_context_for_prompt_handles_empty(): void {
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'format_editor_context_for_prompt' );
 		$method->setAccessible( true );
 
@@ -347,7 +347,7 @@ class AiControllerTest extends TestCase {
 	public function test_generate_cache_key_is_consistent(): void {
 		Functions\when( 'wp_json_encode' )->alias( 'json_encode' );
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'generate_cache_key' );
 		$method->setAccessible( true );
 
@@ -377,7 +377,7 @@ class AiControllerTest extends TestCase {
 	public function test_generate_cache_key_differs_for_different_inputs(): void {
 		Functions\when( 'wp_json_encode' )->alias( 'json_encode' );
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'generate_cache_key' );
 		$method->setAccessible( true );
 
@@ -404,7 +404,7 @@ class AiControllerTest extends TestCase {
 	public function test_generate_cache_key_includes_placeholder_status(): void {
 		Functions\when( 'wp_json_encode' )->alias( 'json_encode' );
 
-		$reflection = new \ReflectionClass( AiController::class );
+		$reflection = new \ReflectionClass( AiController::class);
 		$method     = $reflection->getMethod( 'generate_cache_key' );
 		$method->setAccessible( true );
 

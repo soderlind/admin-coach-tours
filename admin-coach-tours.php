@@ -11,7 +11,7 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.3.4
+ * Version:     0.3.5
  * Requires at least: 6.8
  * Requires PHP: 8.3
  * Author:      Per Soderlind
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.3.4';
+const VERSION = '0.3.5';
 
 /**
  * Plugin slug.
@@ -108,7 +108,7 @@ function check_requirements(): bool {
 	if ( ! empty( $errors ) ) {
 		add_action(
 			'admin_notices',
-			function () use ( $errors ) {
+			function () use ($errors) {
 				foreach ( $errors as $error ) {
 					printf(
 						'<div class="notice notice-error"><p>%s</p></div>',
@@ -198,8 +198,8 @@ function enqueue_educator_assets(): void {
 	wp_enqueue_script(
 		'admin-coach-tours-educator',
 		PLUGIN_URL . 'build/educator/index.js',
-		$asset['dependencies'],
-		$asset['version'],
+		$asset[ 'dependencies' ],
+		$asset[ 'version' ],
 		true
 	);
 
@@ -255,14 +255,14 @@ function enqueue_pupil_assets(): void {
 	wp_enqueue_script(
 		'admin-coach-tours-pupil',
 		PLUGIN_URL . 'build/pupil/index.js',
-		$pupil_asset['dependencies'],
-		$pupil_asset['version'],
+		$pupil_asset[ 'dependencies' ],
+		$pupil_asset[ 'version' ],
 		true
 	);
 
 	// Check if AI is available.
 	$ai_available = false;
-	if ( class_exists( AI\AiManager::class ) ) {
+	if ( class_exists( AI\AiManager::class) ) {
 		$ai_manager   = AI\AiManager::get_instance();
 		$ai_available = $ai_manager->is_available();
 	}
@@ -316,7 +316,7 @@ function enqueue_admin_assets( string $hook_suffix ): void {
  */
 function activate(): void {
 	// Register CPT to flush rewrite rules.
-	if ( class_exists( Cpt\ToursCpt::class ) ) {
+	if ( class_exists( Cpt\ToursCpt::class) ) {
 		Cpt\ToursCpt::register_post_type();
 	}
 	flush_rewrite_rules();

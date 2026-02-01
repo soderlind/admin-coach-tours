@@ -22,6 +22,68 @@ import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 const STORE_NAME = 'admin-coach-tours';
 
 /**
+ * Scroll an element into view, handling cross-frame scenarios.
+ * When element is inside an iframe, we need to scroll both the iframe content
+ * and ensure the iframe area is visible in the main window.
+ *
+ * @param {HTMLElement} element Element to scroll into view.
+ */
+function scrollElementIntoView( element ) {
+	if ( ! element ) {
+		return;
+	}
+
+	// Check if element is inside an iframe.
+	const ownerDoc = element.ownerDocument;
+	const isInIframe = ownerDoc !== document;
+
+	if ( isInIframe ) {
+		// First, scroll within the iframe to center the element.
+		element.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center',
+			inline: 'center',
+		} );
+
+		// Then, ensure the iframe region where the element is located
+		// is visible in the main window.
+		// Give the iframe scroll a moment to complete.
+		setTimeout( () => {
+			const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+			if ( iframe ) {
+				// Get the element's position relative to the iframe viewport.
+				const elementRect = element.getBoundingClientRect();
+				const iframeRect = iframe.getBoundingClientRect();
+
+				// Calculate where the element is in the main window coordinate system.
+				const elementTopInMain = iframeRect.top + elementRect.top;
+				const elementBottomInMain = iframeRect.top + elementRect.bottom;
+				const viewportHeight = window.innerHeight;
+
+				// Check if element is fully visible in the main window.
+				const isFullyVisible = elementTopInMain >= 100 && elementBottomInMain <= viewportHeight - 100;
+
+				if ( ! isFullyVisible ) {
+					// Scroll the main window to center the element.
+					const scrollTarget = elementTopInMain + window.scrollY - ( viewportHeight / 2 );
+					window.scrollTo( {
+						top: Math.max( 0, scrollTarget ),
+						behavior: 'smooth',
+					} );
+				}
+			}
+		}, 150 );
+	} else {
+		// Element is in main document, simple scroll.
+		element.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center',
+			inline: 'center',
+		} );
+	}
+}
+
+/**
  * Tour Runner component.
  *
  * @return {JSX.Element|null} Tour runner UI.
@@ -195,17 +257,15 @@ export default function TourRunner() {
 						}
 					}
 
-					// Highlight the element.
-					if ( highlighterRef.current ) {
-						highlighterRef.current.highlight( result.element );
-					}
+					// Scroll element into view FIRST with cross-frame support.
+					scrollElementIntoView( result.element );
 
-					// Scroll element into view.
-					result.element.scrollIntoView( {
-						behavior: 'smooth',
-						block: 'center',
-						inline: 'center',
-					} );
+					// Then highlight after scroll completes (wait for smooth scroll).
+					setTimeout( () => {
+						if ( highlighterRef.current && result.element?.isConnected ) {
+							highlighterRef.current.highlight( result.element );
+						}
+					}, 350 ); // Allow time for smooth scroll to finish
 				} else {
 					resolvedElement = null;
 					setTargetElement( null );
@@ -224,6 +284,8 @@ export default function TourRunner() {
 
 			// 3. Set up completion watcher (use resolvedElement, not state).
 			if ( currentStep.completion && resolvedElement ) {
+				console.log( '[ACT TourRunner] Setting up completion watcher for step:', stepIndex, 'type:', currentStep.completion.type, 'params:', currentStep.completion.params );
+				
 				// Small delay to ensure DOM is stable and UI is ready.
 				await new Promise( ( r ) => setTimeout( r, 100 ) );
 
@@ -265,8 +327,10 @@ export default function TourRunner() {
 								}
 							}, 300 );
 						} else {
-							// Last step - just mark complete without advancing.
-							console.log( '[ACT TourRunner] Last step completed' );
+							// Last step - end the tour.
+							console.log( '[ACT TourRunner] Last step completed, ending tour' );
+							clearInsertedBlocks();
+							nextStep(); // This will end the tour since there's no next step.
 						}
 					}
 				} );

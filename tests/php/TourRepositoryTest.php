@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Tests;
 
@@ -33,7 +33,7 @@ class TourRepositoryTest extends TestCase {
 
 		// Mock $wpdb global for save_steps.
 		global $wpdb;
-		$wpdb = new class() {
+		$wpdb = new class () {
 			public string $postmeta = 'wp_postmeta';
 			public function delete( $table, $where, $format ): bool {
 				return true;
@@ -96,9 +96,9 @@ class TourRepositoryTest extends TestCase {
 		$result = TourRepository::get( 1 );
 
 		$this->assertIsArray( $result );
-		$this->assertEquals( 1, $result['id'] );
-		$this->assertEquals( 'Test Tour', $result['title'] );
-		$this->assertEquals( 'publish', $result['status'] );
+		$this->assertEquals( 1, $result[ 'id' ] );
+		$this->assertEquals( 'Test Tour', $result[ 'title' ] );
+		$this->assertEquals( 'publish', $result[ 'status' ] );
 	}
 
 	/**

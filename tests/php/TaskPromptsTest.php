@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Tests;
 
@@ -87,7 +87,7 @@ class TaskPromptsTest extends TestCase {
 		$task = TaskPrompts::get_task( 'add-image' );
 
 		$this->assertIsArray( $task );
-		$this->assertEquals( 'add-image', $task['id'] );
+		$this->assertEquals( 'add-image', $task[ 'id' ] );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class TaskPromptsTest extends TestCase {
 		foreach ( $grouped as $category => $group ) {
 			$this->assertArrayHasKey( 'label', $group );
 			$this->assertArrayHasKey( 'tasks', $group );
-			$this->assertIsArray( $group['tasks'] );
+			$this->assertIsArray( $group[ 'tasks' ] );
 		}
 	}
 
@@ -170,10 +170,10 @@ class TaskPromptsTest extends TestCase {
 
 		$this->assertIsArray( $schema );
 		$this->assertArrayHasKey( 'type', $schema );
-		$this->assertEquals( 'object', $schema['type'] );
+		$this->assertEquals( 'object', $schema[ 'type' ] );
 		$this->assertArrayHasKey( 'properties', $schema );
-		$this->assertArrayHasKey( 'title', $schema['properties'] );
-		$this->assertArrayHasKey( 'steps', $schema['properties'] );
+		$this->assertArrayHasKey( 'title', $schema[ 'properties' ] );
+		$this->assertArrayHasKey( 'steps', $schema[ 'properties' ] );
 	}
 
 	/**

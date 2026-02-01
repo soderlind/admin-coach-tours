@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Tests;
 
@@ -52,7 +52,7 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 	 * Reset the static knowledge cache.
 	 */
 	private function resetKnowledgeCache(): void {
-		$reflection = new \ReflectionClass( GutenbergKnowledgeBase::class );
+		$reflection = new \ReflectionClass( GutenbergKnowledgeBase::class);
 		$property   = $reflection->getProperty( 'knowledge' );
 		$property->setAccessible( true );
 		$property->setValue( null, null );
@@ -97,7 +97,7 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 		$context = GutenbergKnowledgeBase::get_relevant_context( 'add image video gallery', 2 );
 
 		// Should have at most 2 blocks (the limit).
-		$this->assertLessThanOrEqual( 2, count( $context['blocks'] ) );
+		$this->assertLessThanOrEqual( 2, count( $context[ 'blocks' ] ) );
 	}
 
 	/**
@@ -153,7 +153,7 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 
 		// If there's an image block, it should appear for "image" query.
 		// Note: This depends on the actual JSON data being present.
-		$this->assertIsArray( $context['blocks'] );
+		$this->assertIsArray( $context[ 'blocks' ] );
 	}
 
 	/**

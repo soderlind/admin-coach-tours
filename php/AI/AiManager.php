@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\AI;
 
@@ -90,7 +90,7 @@ class AiManager {
 	 * @param AiProviderInterface $provider Provider instance.
 	 */
 	public function register_provider( AiProviderInterface $provider ): void {
-		$this->providers[ $provider->get_id() ] = $provider;
+		$this->providers[ $provider->get_id()] = $provider;
 	}
 
 	/**
@@ -119,7 +119,7 @@ class AiManager {
 	 */
 	public function get_active_provider(): ?AiProviderInterface {
 		$settings  = $this->get_settings();
-		$active_id = $settings['active_provider'] ?? '';
+		$active_id = $settings[ 'active_provider' ] ?? '';
 
 		if ( $active_id && isset( $this->providers[ $active_id ] ) ) {
 			$provider = $this->providers[ $active_id ];
@@ -159,18 +159,18 @@ class AiManager {
 	public function update_settings( array $settings ): bool {
 		// Sanitize settings.
 		$sanitized = [
-			'active_provider' => sanitize_key( $settings['active_provider'] ?? '' ),
-			'enabled'         => (bool) ( $settings['enabled'] ?? false ),
+			'active_provider' => sanitize_key( $settings[ 'active_provider' ] ?? '' ),
+			'enabled'         => (bool) ( $settings[ 'enabled' ] ?? false ),
 			'providers'       => [],
 		];
 
 		// Sanitize provider-specific settings.
-		if ( isset( $settings['providers'] ) && is_array( $settings['providers'] ) ) {
-			foreach ( $settings['providers'] as $provider_id => $provider_settings ) {
+		if ( isset( $settings[ 'providers' ] ) && is_array( $settings[ 'providers' ] ) ) {
+			foreach ( $settings[ 'providers' ] as $provider_id => $provider_settings ) {
 				$provider = $this->get_provider( $provider_id );
 				if ( $provider ) {
 					$schema                                 = $provider->get_settings_schema();
-					$sanitized['providers'][ $provider_id ] = $this->sanitize_provider_settings(
+					$sanitized[ 'providers' ][ $provider_id ] = $this->sanitize_provider_settings(
 						$provider_settings,
 						$schema
 					);
@@ -193,14 +193,14 @@ class AiManager {
 
 		foreach ( $schema as $key => $config ) {
 			if ( ! isset( $settings[ $key ] ) ) {
-				if ( isset( $config['default'] ) ) {
-					$sanitized[ $key ] = $config['default'];
+				if ( isset( $config[ 'default' ] ) ) {
+					$sanitized[ $key ] = $config[ 'default' ];
 				}
 				continue;
 			}
 
 			$value = $settings[ $key ];
-			$type  = $config['type'] ?? 'string';
+			$type  = $config[ 'type' ] ?? 'string';
 
 			switch ( $type ) {
 				case 'string':
@@ -227,10 +227,10 @@ class AiManager {
 					break;
 
 				case 'select':
-					if ( in_array( $value, $config['options'] ?? [], true ) ) {
+					if ( in_array( $value, $config[ 'options' ] ?? [], true ) ) {
 						$sanitized[ $key ] = $value;
-					} elseif ( isset( $config['default'] ) ) {
-						$sanitized[ $key ] = $config['default'];
+					} elseif ( isset( $config[ 'default' ] ) ) {
+						$sanitized[ $key ] = $config[ 'default' ];
 					}
 					break;
 
@@ -250,7 +250,7 @@ class AiManager {
 	public function is_available(): bool {
 		$settings = $this->get_settings();
 
-		if ( ! ( $settings['enabled'] ?? false ) ) {
+		if ( ! ( $settings[ 'enabled' ] ?? false ) ) {
 			return false;
 		}
 

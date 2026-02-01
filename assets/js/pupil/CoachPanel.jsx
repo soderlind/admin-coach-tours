@@ -57,6 +57,7 @@ export default function CoachPanel( {
 	const [ position, setPosition ] = useState( { x: 20, y: 20 } );
 	const [ isDragging, setIsDragging ] = useState( false );
 	const [ dragOffset, setDragOffset ] = useState( { x: 0, y: 0 } );
+	const [ positionKey, setPositionKey ] = useState( 0 ); // Force repositioning.
 	const panelRef = useRef( null );
 
 	const isFirstStep = stepIndex === 0;
@@ -71,45 +72,103 @@ export default function CoachPanel( {
 			return;
 		}
 
-		const rect = targetElement.getBoundingClientRect();
-		const panelWidth = 320;
-		const panelHeight = 200;
-		const padding = 20;
+		const calculatePosition = () => {
+			if ( ! targetElement?.isConnected ) {
+				return;
+			}
 
-		let x, y;
+			const rect = targetElement.getBoundingClientRect();
 
-		// Try to position to the right of the element.
-		if ( rect.right + panelWidth + padding < window.innerWidth ) {
-			x = rect.right + padding;
-			y = rect.top;
-		}
-		// Try to position to the left.
-		else if ( rect.left - panelWidth - padding > 0 ) {
-			x = rect.left - panelWidth - padding;
-			y = rect.top;
-		}
-		// Try below.
-		else if ( rect.bottom + panelHeight + padding < window.innerHeight ) {
-			x = Math.max( padding, rect.left );
-			y = rect.bottom + padding;
-		}
-		// Try above.
-		else if ( rect.top - panelHeight - padding > 0 ) {
-			x = Math.max( padding, rect.left );
-			y = rect.top - panelHeight - padding;
-		}
-		// Default to bottom-right corner.
-		else {
-			x = window.innerWidth - panelWidth - padding;
-			y = window.innerHeight - panelHeight - padding;
+			// For elements in iframes, adjust rect to main window coordinates.
+			const ownerDoc = targetElement.ownerDocument;
+			let iframeOffset = { top: 0, left: 0 };
+			if ( ownerDoc !== document ) {
+				const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+				if ( iframe ) {
+					const iframeRect = iframe.getBoundingClientRect();
+					iframeOffset = { top: iframeRect.top, left: iframeRect.left };
+				}
+			}
+
+			const adjustedRect = {
+				top: rect.top + iframeOffset.top,
+				bottom: rect.bottom + iframeOffset.top,
+				left: rect.left + iframeOffset.left,
+				right: rect.right + iframeOffset.left,
+			};
+
+			const panelWidth = 320;
+			const panelHeight = 200;
+			const padding = 20;
+
+			let x, y;
+
+			// Try to position to the right of the element.
+			if ( adjustedRect.right + panelWidth + padding < window.innerWidth ) {
+				x = adjustedRect.right + padding;
+				y = adjustedRect.top;
+			}
+			// Try to position to the left.
+			else if ( adjustedRect.left - panelWidth - padding > 0 ) {
+				x = adjustedRect.left - panelWidth - padding;
+				y = adjustedRect.top;
+			}
+			// Try below.
+			else if ( adjustedRect.bottom + panelHeight + padding < window.innerHeight ) {
+				x = Math.max( padding, adjustedRect.left );
+				y = adjustedRect.bottom + padding;
+			}
+			// Try above.
+			else if ( adjustedRect.top - panelHeight - padding > 0 ) {
+				x = Math.max( padding, adjustedRect.left );
+				y = adjustedRect.top - panelHeight - padding;
+			}
+			// Default to bottom-right corner.
+			else {
+				x = window.innerWidth - panelWidth - padding;
+				y = window.innerHeight - panelHeight - padding;
+			}
+
+			// Ensure panel stays within viewport.
+			x = Math.max( padding, Math.min( x, window.innerWidth - panelWidth - padding ) );
+			y = Math.max( padding, Math.min( y, window.innerHeight - panelHeight - padding ) );
+
+			setPosition( { x, y } );
+		};
+
+		// Initial positioning.
+		calculatePosition();
+
+		// Listen to scroll and resize events.
+		const handleScroll = () => {
+			if ( ! isDragging ) {
+				calculatePosition();
+			}
+		};
+
+		// Add listeners to main window.
+		window.addEventListener( 'scroll', handleScroll, { passive: true } );
+		window.addEventListener( 'resize', handleScroll, { passive: true } );
+
+		// Also listen to iframe window if element is inside iframe.
+		const ownerDoc = targetElement.ownerDocument;
+		const ownerWin = ownerDoc?.defaultView;
+		if ( ownerWin && ownerWin !== window ) {
+			ownerWin.addEventListener( 'scroll', handleScroll, { passive: true } );
 		}
 
-		// Ensure panel stays within viewport.
-		x = Math.max( padding, Math.min( x, window.innerWidth - panelWidth - padding ) );
-		y = Math.max( padding, Math.min( y, window.innerHeight - panelHeight - padding ) );
-
-		setPosition( { x, y } );
-	}, [ targetElement, isDragging ] );
+		return () => {
+			window.removeEventListener( 'scroll', handleScroll );
+			window.removeEventListener( 'resize', handleScroll );
+			if ( ownerWin && ownerWin !== window ) {
+				try {
+					ownerWin.removeEventListener( 'scroll', handleScroll );
+				} catch ( e ) {
+					// Window may be inaccessible.
+				}
+			}
+		};
+	}, [ targetElement, isDragging, positionKey ] );
 
 	/**
 	 * Handle drag start.

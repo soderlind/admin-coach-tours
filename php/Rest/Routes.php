@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Rest;
 
@@ -67,7 +67,7 @@ class Routes {
 	public function register_routes(): void {
 		// Tours collection.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours',
 			[
 				[
@@ -87,7 +87,7 @@ class Routes {
 
 		// Single tour.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<id>\d+)',
 			[
 				[
@@ -125,7 +125,7 @@ class Routes {
 
 		// Steps.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps',
 			[
 				[
@@ -138,7 +138,7 @@ class Routes {
 		);
 
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps/(?P<step_id>[\w-]+)',
 			[
 				[
@@ -157,7 +157,7 @@ class Routes {
 
 		// Reorder steps.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps/reorder',
 			[
 				[
@@ -183,7 +183,7 @@ class Routes {
 
 		// AI endpoint.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/generate-draft',
 			[
 				[
@@ -208,7 +208,7 @@ class Routes {
 
 		// AI status.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/status',
 			[
 				[
@@ -221,7 +221,7 @@ class Routes {
 
 		// AI tasks for pupil.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/tasks',
 			[
 				[
@@ -234,7 +234,7 @@ class Routes {
 
 		// Generate AI tour.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/generate-tour',
 			[
 				[
@@ -431,27 +431,27 @@ class Routes {
 		$data = [];
 
 		if ( $request->has_param( 'title' ) ) {
-			$data['title'] = $request->get_param( 'title' );
+			$data[ 'title' ] = $request->get_param( 'title' );
 		}
 
 		if ( $request->has_param( 'description' ) ) {
-			$data['description'] = $request->get_param( 'description' );
+			$data[ 'description' ] = $request->get_param( 'description' );
 		}
 
 		if ( $request->has_param( 'postTypes' ) ) {
-			$data['post_types'] = $request->get_param( 'postTypes' );
+			$data[ 'post_types' ] = $request->get_param( 'postTypes' );
 		}
 
 		if ( $request->has_param( 'editors' ) ) {
-			$data['editors'] = $request->get_param( 'editors' );
+			$data[ 'editors' ] = $request->get_param( 'editors' );
 		}
 
 		if ( $request->has_param( 'status' ) ) {
-			$data['status'] = $request->get_param( 'status' );
+			$data[ 'status' ] = $request->get_param( 'status' );
 		}
 
 		if ( $request->has_param( 'steps' ) ) {
-			$data['steps'] = $request->get_param( 'steps' );
+			$data[ 'steps' ] = $request->get_param( 'steps' );
 		}
 
 		$result = TourRepository::update( $id, $data );
@@ -663,17 +663,17 @@ class Routes {
 
 		// Make all fields optional for updates.
 		foreach ( $args as $key => $config ) {
-			$args[ $key ]['required'] = false;
+			$args[ $key ][ 'required' ] = false;
 		}
 
-		$args['id'] = [
+		$args[ 'id' ] = [
 			'type'              => 'integer',
 			'required'          => true,
 			'sanitize_callback' => 'absint',
 		];
 
 		// Allow steps to be updated.
-		$args['steps'] = [
+		$args[ 'steps' ] = [
 			'type'  => 'array',
 			'items' => [ 'type' => 'object' ],
 		];

@@ -781,6 +781,9 @@ export function* requestAiTour( taskId, query, postType ) {
 			editorContext,
 		};
 
+		console.log( '[ACT AI Response] Full result:', result );
+		console.log( '[ACT AI Response] Tour:', JSON.stringify( result.tour, null, 2 ) );
+
 		// Add an ID to the ephemeral tour.
 		const tour = {
 			id: 'ephemeral',

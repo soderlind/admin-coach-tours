@@ -272,43 +272,43 @@ class StepSchema {
 		}
 
 		// Validate id.
-		if ( ! is_string( $step['id'] ) || empty( $step['id'] ) ) {
+		if ( ! is_string( $step[ 'id' ] ) || empty( $step[ 'id' ] ) ) {
 			$errors[] = __( 'Step id must be a non-empty string', 'admin-coach-tours' );
 		}
 
 		// Validate order.
-		if ( ! is_int( $step['order'] ) || $step['order'] < 0 ) {
+		if ( ! is_int( $step[ 'order' ] ) || $step[ 'order' ] < 0 ) {
 			$errors[] = __( 'Step order must be a non-negative integer', 'admin-coach-tours' );
 		}
 
 		// Validate title.
-		if ( ! is_string( $step['title'] ) ) {
+		if ( ! is_string( $step[ 'title' ] ) ) {
 			$errors[] = __( 'Step title must be a string', 'admin-coach-tours' );
 		}
 
 		// Validate target.
-		$target_result = self::validate_target( $step['target'] );
+		$target_result = self::validate_target( $step[ 'target' ] );
 		if ( is_wp_error( $target_result ) ) {
 			$errors[] = $target_result->get_error_message();
 		}
 
 		// Validate completion.
-		$completion_result = self::validate_completion( $step['completion'] );
+		$completion_result = self::validate_completion( $step[ 'completion' ] );
 		if ( is_wp_error( $completion_result ) ) {
 			$errors[] = $completion_result->get_error_message();
 		}
 
 		// Validate optional preconditions.
-		if ( isset( $step['preconditions'] ) ) {
-			$preconditions_result = self::validate_preconditions( $step['preconditions'] );
+		if ( isset( $step[ 'preconditions' ] ) ) {
+			$preconditions_result = self::validate_preconditions( $step[ 'preconditions' ] );
 			if ( is_wp_error( $preconditions_result ) ) {
 				$errors[] = $preconditions_result->get_error_message();
 			}
 		}
 
 		// Validate optional recovery.
-		if ( isset( $step['recovery'] ) ) {
-			$recovery_result = self::validate_recovery( $step['recovery'] );
+		if ( isset( $step[ 'recovery' ] ) ) {
+			$recovery_result = self::validate_recovery( $step[ 'recovery' ] );
 			if ( is_wp_error( $recovery_result ) ) {
 				$errors[] = $recovery_result->get_error_message();
 			}
@@ -332,16 +332,16 @@ class StepSchema {
 			return new WP_Error( 'invalid_target', __( 'Target must be an object', 'admin-coach-tours' ) );
 		}
 
-		if ( ! isset( $target['locators'] ) || ! is_array( $target['locators'] ) ) {
+		if ( ! isset( $target[ 'locators' ] ) || ! is_array( $target[ 'locators' ] ) ) {
 			return new WP_Error( 'invalid_target', __( 'Target must have a locators array', 'admin-coach-tours' ) );
 		}
 
 		// Empty locators is allowed for draft steps.
-		if ( empty( $target['locators'] ) ) {
+		if ( empty( $target[ 'locators' ] ) ) {
 			return true;
 		}
 
-		foreach ( $target['locators'] as $i => $locator ) {
+		foreach ( $target[ 'locators' ] as $i => $locator ) {
 			if ( ! is_array( $locator ) ) {
 				return new WP_Error(
 					'invalid_locator',
@@ -354,7 +354,7 @@ class StepSchema {
 			}
 
 			// Normalize type to lowercase for comparison (sanitize_key will lowercase it).
-			$locator_type = isset( $locator['type'] ) ? strtolower( $locator['type'] ) : '';
+			$locator_type = isset( $locator[ 'type' ] ) ? strtolower( $locator[ 'type' ] ) : '';
 			if ( empty( $locator_type ) || ! in_array( $locator_type, self::LOCATOR_TYPES, true ) ) {
 				return new WP_Error(
 					'invalid_locator_type',
@@ -366,7 +366,7 @@ class StepSchema {
 				);
 			}
 
-			if ( ! isset( $locator['value'] ) || ! is_string( $locator['value'] ) || empty( $locator['value'] ) ) {
+			if ( ! isset( $locator[ 'value' ] ) || ! is_string( $locator[ 'value' ] ) || empty( $locator[ 'value' ] ) ) {
 				return new WP_Error(
 					'invalid_locator_value',
 					sprintf(
@@ -392,20 +392,20 @@ class StepSchema {
 			return new WP_Error( 'invalid_completion', __( 'Completion must be an object', 'admin-coach-tours' ) );
 		}
 
-		if ( ! isset( $completion['type'] ) || ! in_array( $completion['type'], self::COMPLETION_TYPES, true ) ) {
+		if ( ! isset( $completion[ 'type' ] ) || ! in_array( $completion[ 'type' ], self::COMPLETION_TYPES, true ) ) {
 			return new WP_Error( 'invalid_completion_type', __( 'Invalid completion type', 'admin-coach-tours' ) );
 		}
 
 		// Validate wpData-specific fields.
-		if ( 'wpData' === $completion['type'] ) {
-			if ( empty( $completion['store'] ) ) {
+		if ( 'wpData' === $completion[ 'type' ] ) {
+			if ( empty( $completion[ 'store' ] ) ) {
 				return new WP_Error(
 					'invalid_wpdata_completion',
 					__( 'wpData completion requires a store name', 'admin-coach-tours' )
 				);
 			}
 
-			if ( empty( $completion['selector'] ) ) {
+			if ( empty( $completion[ 'selector' ] ) ) {
 				return new WP_Error(
 					'invalid_wpdata_completion',
 					__( 'wpData completion requires a selector name', 'admin-coach-tours' )
@@ -413,7 +413,7 @@ class StepSchema {
 			}
 		}
 
-		if ( isset( $completion['operator'] ) && ! in_array( $completion['operator'], self::COMPLETION_OPERATORS, true ) ) {
+		if ( isset( $completion[ 'operator' ] ) && ! in_array( $completion[ 'operator' ], self::COMPLETION_OPERATORS, true ) ) {
 			return new WP_Error( 'invalid_completion_operator', __( 'Invalid completion operator', 'admin-coach-tours' ) );
 		}
 
@@ -443,7 +443,7 @@ class StepSchema {
 				);
 			}
 
-			if ( ! isset( $condition['type'] ) || ! in_array( $condition['type'], self::PRECONDITION_TYPES, true ) ) {
+			if ( ! isset( $condition[ 'type' ] ) || ! in_array( $condition[ 'type' ], self::PRECONDITION_TYPES, true ) ) {
 				return new WP_Error(
 					'invalid_precondition_type',
 					sprintf(
@@ -481,7 +481,7 @@ class StepSchema {
 				);
 			}
 
-			if ( ! isset( $action['action'] ) || ! in_array( $action['action'], self::RECOVERY_ACTIONS, true ) ) {
+			if ( ! isset( $action[ 'action' ] ) || ! in_array( $action[ 'action' ], self::RECOVERY_ACTIONS, true ) ) {
 				return new WP_Error(
 					'invalid_recovery_action_type',
 					sprintf(

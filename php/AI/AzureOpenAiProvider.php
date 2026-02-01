@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\AI;
 
@@ -196,21 +196,21 @@ class AzureOpenAiProvider implements AiProviderInterface {
 			$error_data = json_decode( $body, true );
 			return new \WP_Error(
 				'api_error',
-				$error_data['error']['message'] ?? __( 'API request failed.', 'admin-coach-tours' ),
+				$error_data[ 'error' ][ 'message' ] ?? __( 'API request failed.', 'admin-coach-tours' ),
 				[ 'status' => $code ]
 			);
 		}
 
 		$data = json_decode( $body, true );
 
-		if ( ! isset( $data['choices'][0]['message']['content'] ) ) {
+		if ( ! isset( $data[ 'choices' ][ 0 ][ 'message' ][ 'content' ] ) ) {
 			return new \WP_Error(
 				'invalid_response',
 				__( 'Invalid response from Azure OpenAI.', 'admin-coach-tours' )
 			);
 		}
 
-		$content = json_decode( $data['choices'][0]['message']['content'], true );
+		$content = json_decode( $data[ 'choices' ][ 0 ][ 'message' ][ 'content' ], true );
 
 		if ( ! $content ) {
 			return new \WP_Error(
@@ -230,8 +230,8 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 */
 	public function suggest_completion( array $element_context ): array|\WP_Error {
 		// Use heuristics instead of AI for this simple case.
-		$tag  = $element_context['tagName'] ?? '';
-		$role = $element_context['role'] ?? '';
+		$tag  = $element_context[ 'tagName' ] ?? '';
+		$role = $element_context[ 'role' ] ?? '';
 
 		// Button or link - suggest click.
 		if ( in_array( $tag, [ 'button', 'a' ], true ) || 'button' === $role || 'link' === $role ) {
@@ -250,7 +250,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 		}
 
 		// Checkbox - suggest click.
-		if ( 'checkbox' === $role || ( 'input' === $tag && 'checkbox' === ( $element_context['type'] ?? '' ) ) ) {
+		if ( 'checkbox' === $role || ( 'input' === $tag && 'checkbox' === ( $element_context[ 'type' ] ?? '' ) ) ) {
 			return [
 				'type'   => 'clickTarget',
 				'params' => [],
@@ -306,14 +306,14 @@ class AzureOpenAiProvider implements AiProviderInterface {
 	 * @return bool|\WP_Error True if valid, error otherwise.
 	 */
 	public function validate_settings( array $settings ): bool|\WP_Error {
-		if ( empty( $settings['api_key'] ) ) {
+		if ( empty( $settings[ 'api_key' ] ) ) {
 			return new \WP_Error(
 				'missing_api_key',
 				__( 'API key is required.', 'admin-coach-tours' )
 			);
 		}
 
-		if ( empty( $settings['endpoint'] ) ) {
+		if ( empty( $settings[ 'endpoint' ] ) ) {
 			return new \WP_Error(
 				'missing_endpoint',
 				__( 'Endpoint URL is required.', 'admin-coach-tours' )
@@ -321,7 +321,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 		}
 
 		// Validate endpoint URL format.
-		if ( ! filter_var( $settings['endpoint'], FILTER_VALIDATE_URL ) ) {
+		if ( ! filter_var( $settings[ 'endpoint' ], FILTER_VALIDATE_URL ) ) {
 			return new \WP_Error(
 				'invalid_endpoint',
 				__( 'Endpoint must be a valid URL.', 'admin-coach-tours' )
@@ -329,7 +329,7 @@ class AzureOpenAiProvider implements AiProviderInterface {
 		}
 
 		// Ensure endpoint uses HTTPS.
-		if ( ! str_starts_with( $settings['endpoint'], 'https://' ) ) {
+		if ( ! str_starts_with( $settings[ 'endpoint' ], 'https://' ) ) {
 			return new \WP_Error(
 				'insecure_endpoint',
 				__( 'Endpoint must use HTTPS.', 'admin-coach-tours' )
@@ -400,18 +400,18 @@ PROMPT;
 	 */
 	private function validate_and_sanitize_draft( array $content ): array {
 		$draft = [
-			'title'   => sanitize_text_field( $content['title'] ?? '' ),
-			'content' => wp_kses_post( $content['content'] ?? '' ),
+			'title'   => sanitize_text_field( $content[ 'title' ] ?? '' ),
+			'content' => wp_kses_post( $content[ 'content' ] ?? '' ),
 		];
 
-		if ( isset( $content['suggestedCompletion'] ) && is_array( $content['suggestedCompletion'] ) ) {
-			$completion    = $content['suggestedCompletion'];
+		if ( isset( $content[ 'suggestedCompletion' ] ) && is_array( $content[ 'suggestedCompletion' ] ) ) {
+			$completion    = $content[ 'suggestedCompletion' ];
 			$allowed_types = [ 'clickTarget', 'domValueChanged', 'manual', 'wpData' ];
 
-			if ( in_array( $completion['type'] ?? '', $allowed_types, true ) ) {
-				$draft['suggestedCompletion'] = [
-					'type'   => $completion['type'],
-					'params' => is_array( $completion['params'] ?? null ) ? $completion['params'] : [],
+			if ( in_array( $completion[ 'type' ] ?? '', $allowed_types, true ) ) {
+				$draft[ 'suggestedCompletion' ] = [
+					'type'   => $completion[ 'type' ],
+					'params' => is_array( $completion[ 'params' ] ?? null ) ? $completion[ 'params' ] : [],
 				];
 			}
 		}
@@ -445,13 +445,13 @@ PROMPT;
 		$response = wp_remote_post(
 			$this->build_api_url(),
 			[
-				'timeout'                                 => 60,
+				'timeout' => 60,
 				// Longer timeout for tour generation.
-												'headers' => [
-													'api-key' => $api_key,
-													'Content-Type' => 'application/json',
-												],
-				'body'                                    => wp_json_encode(
+				'headers' => [
+					'api-key'      => $api_key,
+					'Content-Type' => 'application/json',
+				],
+				'body'    => wp_json_encode(
 					[
 						'messages'        => [
 							[
@@ -481,21 +481,27 @@ PROMPT;
 			$error_data = json_decode( $body, true );
 			return new \WP_Error(
 				'api_error',
-				$error_data['error']['message'] ?? __( 'API request failed.', 'admin-coach-tours' ),
+				$error_data[ 'error' ][ 'message' ] ?? __( 'API request failed.', 'admin-coach-tours' ),
 				[ 'status' => $code ]
 			);
 		}
 
 		$data = json_decode( $body, true );
 
-		if ( ! isset( $data['choices'][0]['message']['content'] ) ) {
+		if ( ! isset( $data[ 'choices' ][ 0 ][ 'message' ][ 'content' ] ) ) {
 			return new \WP_Error(
 				'invalid_response',
 				__( 'Invalid response from Azure OpenAI.', 'admin-coach-tours' )
 			);
 		}
 
-		$content = json_decode( $data['choices'][0]['message']['content'], true );
+		$raw_content = $data[ 'choices' ][ 0 ][ 'message' ][ 'content' ];
+
+		// Log the raw AI response for debugging.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( '[ACT AI Response] Raw content from Azure OpenAI: ' . $raw_content );
+
+		$content = json_decode( $raw_content, true );
 
 		if ( ! $content ) {
 			return new \WP_Error(
@@ -504,11 +510,15 @@ PROMPT;
 			);
 		}
 
+		// Log the parsed tour structure.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log, WordPress.PHP.DevelopmentFunctions.error_log_print_r
+		error_log( '[ACT AI Response] Parsed tour: ' . print_r( $content, true ) );
+
 		// Check for scope error from freeform queries.
-		if ( isset( $content['error'] ) && 'scope' === $content['error'] ) {
+		if ( isset( $content[ 'error' ] ) && 'scope' === $content[ 'error' ] ) {
 			return new \WP_Error(
 				'out_of_scope',
-				$content['message'] ?? __( 'This question is outside the scope of the editor assistant.', 'admin-coach-tours' )
+				$content[ 'message' ] ?? __( 'This question is outside the scope of the editor assistant.', 'admin-coach-tours' )
 			);
 		}
 
@@ -523,14 +533,14 @@ PROMPT;
 	 * @return array|\WP_Error Sanitized tour or error.
 	 */
 	private function validate_and_sanitize_tour( array $content ): array|\WP_Error {
-		if ( ! isset( $content['title'] ) || ! isset( $content['steps'] ) || ! is_array( $content['steps'] ) ) {
+		if ( ! isset( $content[ 'title' ] ) || ! isset( $content[ 'steps' ] ) || ! is_array( $content[ 'steps' ] ) ) {
 			return new \WP_Error(
 				'invalid_tour_format',
 				__( 'AI response did not contain a valid tour structure.', 'admin-coach-tours' )
 			);
 		}
 
-		if ( empty( $content['steps'] ) ) {
+		if ( empty( $content[ 'steps' ] ) ) {
 			return new \WP_Error(
 				'empty_tour',
 				__( 'AI generated a tour with no steps.', 'admin-coach-tours' )
@@ -538,7 +548,7 @@ PROMPT;
 		}
 
 		$tour = [
-			'title' => sanitize_text_field( $content['title'] ),
+			'title' => sanitize_text_field( $content[ 'title' ] ),
 			'steps' => [],
 		];
 
@@ -577,12 +587,12 @@ PROMPT;
 			'wpBlock',
 		];
 
-		foreach ( $content['steps'] as $index => $step ) {
+		foreach ( $content[ 'steps' ] as $index => $step ) {
 			$sanitized_step = [
-				'id'            => sanitize_key( $step['id'] ?? 'step-' . $index ),
-				'order'         => (int) ( $step['order'] ?? $index ),
-				'title'         => sanitize_text_field( $step['title'] ?? '' ),
-				'content'       => wp_kses_post( $step['content'] ?? '' ),
+				'id'            => sanitize_key( $step[ 'id' ] ?? 'step-' . $index ),
+				'order'         => (int) ( $step[ 'order' ] ?? $index ),
+				'title'         => sanitize_text_field( $step[ 'title' ] ?? '' ),
+				'content'       => wp_kses_post( $step[ 'content' ] ?? '' ),
 				'target'        => [
 					'locators'    => [],
 					'constraints' => [
@@ -596,76 +606,76 @@ PROMPT;
 			];
 
 			// Process locators.
-			if ( isset( $step['target']['locators'] ) && is_array( $step['target']['locators'] ) ) {
-				foreach ( $step['target']['locators'] as $locator ) {
-					if ( ! isset( $locator['type'] ) || ! isset( $locator['value'] ) ) {
+			if ( isset( $step[ 'target' ][ 'locators' ] ) && is_array( $step[ 'target' ][ 'locators' ] ) ) {
+				foreach ( $step[ 'target' ][ 'locators' ] as $locator ) {
+					if ( ! isset( $locator[ 'type' ] ) || ! isset( $locator[ 'value' ] ) ) {
 						continue;
 					}
 
-					if ( ! in_array( $locator['type'], $allowed_locator_types, true ) ) {
+					if ( ! in_array( $locator[ 'type' ], $allowed_locator_types, true ) ) {
 						continue;
 					}
 
-					$sanitized_step['target']['locators'][] = [
-						'type'     => $locator['type'],
-						'value'    => sanitize_text_field( $locator['value'] ),
-						'weight'   => (int) ( $locator['weight'] ?? 50 ),
-						'fallback' => (bool) ( $locator['fallback'] ?? false ),
+					$sanitized_step[ 'target' ][ 'locators' ][] = [
+						'type'     => $locator[ 'type' ],
+						'value'    => sanitize_text_field( $locator[ 'value' ] ),
+						'weight'   => (int) ( $locator[ 'weight' ] ?? 50 ),
+						'fallback' => (bool) ( $locator[ 'fallback' ] ?? false ),
 					];
 				}
 			}
 
 			// Process constraints.
-			if ( isset( $step['target']['constraints'] ) && is_array( $step['target']['constraints'] ) ) {
-				$constraints                             = $step['target']['constraints'];
-				$sanitized_step['target']['constraints'] = [
-					'visible'        => (bool) ( $constraints['visible'] ?? true ),
-					'inEditorIframe' => (bool) ( $constraints['inEditorIframe'] ?? false ),
+			if ( isset( $step[ 'target' ][ 'constraints' ] ) && is_array( $step[ 'target' ][ 'constraints' ] ) ) {
+				$constraints                             = $step[ 'target' ][ 'constraints' ];
+				$sanitized_step[ 'target' ][ 'constraints' ] = [
+					'visible'        => (bool) ( $constraints[ 'visible' ] ?? true ),
+					'inEditorIframe' => (bool) ( $constraints[ 'inEditorIframe' ] ?? false ),
 				];
 			}
 
 			// Process preconditions.
-			if ( isset( $step['preconditions'] ) && is_array( $step['preconditions'] ) ) {
-				foreach ( $step['preconditions'] as $precondition ) {
-					if ( ! isset( $precondition['type'] ) ) {
+			if ( isset( $step[ 'preconditions' ] ) && is_array( $step[ 'preconditions' ] ) ) {
+				foreach ( $step[ 'preconditions' ] as $precondition ) {
+					if ( ! isset( $precondition[ 'type' ] ) ) {
 						continue;
 					}
 
-					if ( ! in_array( $precondition['type'], $allowed_precondition_types, true ) ) {
+					if ( ! in_array( $precondition[ 'type' ], $allowed_precondition_types, true ) ) {
 						continue;
 					}
 
 					$sanitized_precondition = [
-						'type' => $precondition['type'],
+						'type' => $precondition[ 'type' ],
 					];
 
-					if ( isset( $precondition['params'] ) && is_array( $precondition['params'] ) ) {
-						$sanitized_precondition['params'] = array_map( 'sanitize_text_field', $precondition['params'] );
+					if ( isset( $precondition[ 'params' ] ) && is_array( $precondition[ 'params' ] ) ) {
+						$sanitized_precondition[ 'params' ] = array_map( 'sanitize_text_field', $precondition[ 'params' ] );
 					}
 
-					$sanitized_step['preconditions'][] = $sanitized_precondition;
+					$sanitized_step[ 'preconditions' ][] = $sanitized_precondition;
 				}
 			}
 
 			// Process completion.
-			if ( isset( $step['completion'] ) && is_array( $step['completion'] ) ) {
-				$completion_type = $step['completion']['type'] ?? 'manual';
+			if ( isset( $step[ 'completion' ] ) && is_array( $step[ 'completion' ] ) ) {
+				$completion_type = $step[ 'completion' ][ 'type' ] ?? 'manual';
 
 				if ( in_array( $completion_type, $allowed_completion_types, true ) ) {
-					$sanitized_step['completion'] = [
+					$sanitized_step[ 'completion' ] = [
 						'type' => $completion_type,
 					];
 
-					if ( isset( $step['completion']['params'] ) && is_array( $step['completion']['params'] ) ) {
-						$sanitized_step['completion']['params'] = array_map(
+					if ( isset( $step[ 'completion' ][ 'params' ] ) && is_array( $step[ 'completion' ][ 'params' ] ) ) {
+						$sanitized_step[ 'completion' ][ 'params' ] = array_map(
 							'sanitize_text_field',
-							$step['completion']['params']
+							$step[ 'completion' ][ 'params' ]
 						);
 					}
 				}
 			}
 
-			$tour['steps'][] = $sanitized_step;
+			$tour[ 'steps' ][] = $sanitized_step;
 		}
 
 		return $tour;

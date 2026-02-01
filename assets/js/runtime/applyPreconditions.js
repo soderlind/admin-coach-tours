@@ -489,6 +489,8 @@ export function clearInsertedBlocks() {
 	insertedBlocks.clear();
 	insertedBlocksByStep.clear();
 	currentStepIndex = 0;
+	// Also clear the last appeared block tracking.
+	delete window.__actLastAppearedBlockClientId;
 	console.log( '[ACT clearInsertedBlocks] Cleared all tracking' );
 }
 

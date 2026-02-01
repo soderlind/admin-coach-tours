@@ -64,6 +64,7 @@ export default class Highlighter {
 		this.targetElement = null;
 		this.resizeObserver = null;
 		this.styleElement = null;
+		this._isAnimating = false;
 
 		this._init();
 	}
@@ -113,9 +114,15 @@ export default class Highlighter {
 			return;
 		}
 
-		// Clear previous target.
+		// If already highlighting this exact element, skip.
+		if ( this.targetElement === element ) {
+			return;
+		}
+
+		// Clear previous target properly (including scroll listeners).
 		if ( this.targetElement ) {
 			this.resizeObserver.unobserve( this.targetElement );
+			this._removeScrollListeners();
 		}
 
 		this.targetElement = element;
@@ -129,9 +136,10 @@ export default class Highlighter {
 		// Show spotlight.
 		this.spotlightElement.style.display = 'block';
 
-		// Apply pulse animation if enabled.
-		if ( this.options.usePulse ) {
+		// Apply pulse animation if enabled (only if not already animating).
+		if ( this.options.usePulse && ! this._isAnimating ) {
 			this.spotlightElement.style.animation = 'act-pulse 2s infinite';
+			this._isAnimating = true;
 		}
 
 		// Add scroll listener to update position.
@@ -189,7 +197,10 @@ export default class Highlighter {
 			this._updatePosition();
 		};
 
-		// Listen to all scrollable ancestors.
+		// Track which windows we're listening to for cleanup.
+		this._scrollWindows = [];
+
+		// Listen to all scrollable ancestors in the element's document.
 		let parent = this.targetElement?.parentElement;
 		while ( parent ) {
 			if ( parent.scrollHeight > parent.clientHeight ) {
@@ -200,13 +211,25 @@ export default class Highlighter {
 			parent = parent.parentElement;
 		}
 
-		// Also listen to window scroll.
+		// Check if element is inside an iframe.
+		const ownerDoc = this.targetElement?.ownerDocument;
+		const ownerWin = ownerDoc?.defaultView;
+
+		if ( ownerWin && ownerWin !== window ) {
+			// Element is in an iframe - listen to iframe window scroll.
+			ownerWin.addEventListener( 'scroll', this._scrollHandler, { passive: true } );
+			ownerWin.addEventListener( 'resize', this._scrollHandler, { passive: true } );
+			this._scrollWindows.push( ownerWin );
+		}
+
+		// Also listen to main window scroll and resize.
 		window.addEventListener( 'scroll', this._scrollHandler, {
 			passive: true,
 		} );
 		window.addEventListener( 'resize', this._scrollHandler, {
 			passive: true,
 		} );
+		this._scrollWindows.push( window );
 	}
 
 	/**
@@ -219,14 +242,25 @@ export default class Highlighter {
 			return;
 		}
 
+		// Remove from parent elements.
 		let parent = this.targetElement?.parentElement;
 		while ( parent ) {
 			parent.removeEventListener( 'scroll', this._scrollHandler );
 			parent = parent.parentElement;
 		}
 
-		window.removeEventListener( 'scroll', this._scrollHandler );
-		window.removeEventListener( 'resize', this._scrollHandler );
+		// Remove from all tracked windows (main window + any iframe windows).
+		if ( this._scrollWindows ) {
+			for ( const win of this._scrollWindows ) {
+				try {
+					win.removeEventListener( 'scroll', this._scrollHandler );
+					win.removeEventListener( 'resize', this._scrollHandler );
+				} catch ( e ) {
+					// Window may have been closed or inaccessible.
+				}
+			}
+			this._scrollWindows = [];
+		}
 
 		this._scrollHandler = null;
 	}
@@ -244,6 +278,7 @@ export default class Highlighter {
 		if ( this.spotlightElement ) {
 			this.spotlightElement.style.display = 'none';
 			this.spotlightElement.style.animation = 'none';
+			this._isAnimating = false;
 		}
 	}
 
