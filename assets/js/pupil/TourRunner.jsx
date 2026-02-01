@@ -7,7 +7,7 @@
  * @since   0.1.0
  */
 
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch, dispatch as wpDispatch, select as wpSelect } from '@wordpress/data';
 import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -17,8 +17,71 @@ import Highlighter from './Highlighter.js';
 import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarget.js';
 import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
+import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 
 const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Scroll an element into view, handling cross-frame scenarios.
+ * When element is inside an iframe, we need to scroll both the iframe content
+ * and ensure the iframe area is visible in the main window.
+ *
+ * @param {HTMLElement} element Element to scroll into view.
+ */
+function scrollElementIntoView( element ) {
+	if ( ! element ) {
+		return;
+	}
+
+	// Check if element is inside an iframe.
+	const ownerDoc = element.ownerDocument;
+	const isInIframe = ownerDoc !== document;
+
+	if ( isInIframe ) {
+		// First, scroll within the iframe to center the element.
+		element.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center',
+			inline: 'center',
+		} );
+
+		// Then, ensure the iframe region where the element is located
+		// is visible in the main window.
+		// Give the iframe scroll a moment to complete.
+		setTimeout( () => {
+			const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+			if ( iframe ) {
+				// Get the element's position relative to the iframe viewport.
+				const elementRect = element.getBoundingClientRect();
+				const iframeRect = iframe.getBoundingClientRect();
+
+				// Calculate where the element is in the main window coordinate system.
+				const elementTopInMain = iframeRect.top + elementRect.top;
+				const elementBottomInMain = iframeRect.top + elementRect.bottom;
+				const viewportHeight = window.innerHeight;
+
+				// Check if element is fully visible in the main window.
+				const isFullyVisible = elementTopInMain >= 100 && elementBottomInMain <= viewportHeight - 100;
+
+				if ( ! isFullyVisible ) {
+					// Scroll the main window to center the element.
+					const scrollTarget = elementTopInMain + window.scrollY - ( viewportHeight / 2 );
+					window.scrollTo( {
+						top: Math.max( 0, scrollTarget ),
+						behavior: 'smooth',
+					} );
+				}
+			}
+		}, 150 );
+	} else {
+		// Element is in main document, simple scroll.
+		element.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center',
+			inline: 'center',
+		} );
+	}
+}
 
 /**
  * Tour Runner component.
@@ -32,10 +95,10 @@ export default function TourRunner() {
 	const [ resolutionError, setResolutionError ] = useState( null );
 	const [ resolution, setResolution ] = useState( null );
 	const [ isApplyingPreconditions, setIsApplyingPreconditions ] = useState( false );
-	const [ completionWatcher, setCompletionWatcher ] = useState( null );
 	const [ repeatCounter, setRepeatCounter ] = useState( 0 );
 	const highlighterRef = useRef( null );
 	const previousStepIndexRef = useRef( null );
+	const completionWatcherRef = useRef( null ); // Use ref to avoid stale closure in cleanup.
 
 	// Get playback state from store.
 	const {
@@ -64,7 +127,6 @@ export default function TourRunner() {
 		nextStep,
 		previousStep,
 		repeatStep,
-		markStepComplete,
 	} = useDispatch( STORE_NAME );
 
 	/**
@@ -106,9 +168,11 @@ export default function TourRunner() {
 			setResolutionError( null );
 			setIsApplyingPreconditions( true );
 
-			// Cancel any existing completion watcher.
-			if ( completionWatcher?.cancel ) {
-				completionWatcher.cancel();
+			// Cancel any existing completion watcher using ref (avoids stale closure).
+			if ( completionWatcherRef.current?.cancel ) {
+				console.log( '[ACT TourRunner] Cancelling previous completion watcher' );
+				completionWatcherRef.current.cancel();
+				completionWatcherRef.current = null;
 			}
 
 			// Handle step transition: leave previous step, enter new step.
@@ -171,17 +235,37 @@ export default function TourRunner() {
 						recovered: result.recovered || false,
 					} );
 
-					// Highlight the element.
-					if ( highlighterRef.current ) {
-						highlighterRef.current.highlight( result.element );
+					// If the element is inside a block, select it in WordPress data store.
+					// Check the element itself and traverse up to find parent block.
+					let blockClientId = result.element.getAttribute( 'data-block' );
+					if ( ! blockClientId ) {
+						const blockWrapper = result.element.closest( '[data-block]' );
+						if ( blockWrapper ) {
+							blockClientId = blockWrapper.getAttribute( 'data-block' );
+							console.log( '[ACT TourRunner] Found parent block:', blockClientId );
+						}
+					}
+					if ( blockClientId ) {
+						try {
+							const blockEditorDispatch = wpDispatch( 'core/block-editor' );
+							if ( blockEditorDispatch?.selectBlock ) {
+								await blockEditorDispatch.selectBlock( blockClientId );
+								console.log( '[ACT TourRunner] Selected block:', blockClientId );
+							}
+						} catch ( err ) {
+							console.warn( '[ACT TourRunner] Could not select block:', err );
+						}
 					}
 
-					// Scroll element into view.
-					result.element.scrollIntoView( {
-						behavior: 'smooth',
-						block: 'center',
-						inline: 'center',
-					} );
+					// Scroll element into view FIRST with cross-frame support.
+					scrollElementIntoView( result.element );
+
+					// Then highlight after scroll completes (wait for smooth scroll).
+					setTimeout( () => {
+						if ( highlighterRef.current && result.element?.isConnected ) {
+							highlighterRef.current.highlight( result.element );
+						}
+					}, 350 ); // Allow time for smooth scroll to finish
 				} else {
 					resolvedElement = null;
 					setTargetElement( null );
@@ -190,6 +274,7 @@ export default function TourRunner() {
 						success: false,
 						error: result.error,
 					} );
+					console.log( '[ACT TourRunner] Target resolution failed, NOT auto-advancing. Error:', result.error );
 
 					if ( highlighterRef.current ) {
 						highlighterRef.current.clear();
@@ -199,6 +284,8 @@ export default function TourRunner() {
 
 			// 3. Set up completion watcher (use resolvedElement, not state).
 			if ( currentStep.completion && resolvedElement ) {
+				console.log( '[ACT TourRunner] Setting up completion watcher for step:', stepIndex, 'type:', currentStep.completion.type, 'params:', currentStep.completion.params );
+				
 				// Small delay to ensure DOM is stable and UI is ready.
 				await new Promise( ( r ) => setTimeout( r, 100 ) );
 
@@ -210,25 +297,40 @@ export default function TourRunner() {
 					currentStep.completion,
 					resolvedElement // Use local variable, not stale state!
 				);
-				setCompletionWatcher( watcher );
+				completionWatcherRef.current = watcher; // Store in ref for reliable cleanup.
 
 				// Wait for completion.
-				watcher.promise.then( ( completionResult ) => {
+				watcher.promise.then( async ( completionResult ) => {
 					if ( ! isMounted ) {
 						return;
 					}
 
 					if ( completionResult.success ) {
-						markStepComplete( currentStep.id );
+						console.log( '[ACT TourRunner] Completion detected for step:', stepIndex );
 
 						// Auto-advance if not the last step.
 						if ( stepIndex < totalSteps - 1 ) {
-							// Small delay before advancing.
+							// Look ahead: wait for the next step's expected block before advancing.
+							const tourSteps = currentTour?.steps || [];
+
+							const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
+
+							if ( lookAheadResult.waited ) {
+								console.log( '[ACT TourRunner] Waited for block:', lookAheadResult.blockType, 'success:', lookAheadResult.success );
+							}
+
+							// Advance after a small delay.
 							setTimeout( () => {
 								if ( isMounted ) {
+									console.log( '[ACT TourRunner] Auto-advancing from step:', stepIndex );
 									nextStep();
 								}
-							}, 500 );
+							}, 300 );
+						} else {
+							// Last step - end the tour.
+							console.log( '[ACT TourRunner] Last step completed, ending tour' );
+							clearInsertedBlocks();
+							nextStep(); // This will end the tour since there's no next step.
 						}
 					}
 				} );
@@ -239,8 +341,11 @@ export default function TourRunner() {
 
 		return () => {
 			isMounted = false;
-			if ( completionWatcher?.cancel ) {
-				completionWatcher.cancel();
+			// Use ref for cleanup to avoid stale closure.
+			if ( completionWatcherRef.current?.cancel ) {
+				console.log( '[ACT TourRunner] Cleanup: Cancelling completion watcher' );
+				completionWatcherRef.current.cancel();
+				completionWatcherRef.current = null;
 			}
 		};
 	}, [ isPlaying, currentStep, stepIndex, repeatCounter ] );
@@ -248,40 +353,53 @@ export default function TourRunner() {
 	/**
 	 * Handle manual continue (for manual completion type or finish).
 	 */
-	const handleContinue = useCallback( () => {
-		if ( completionWatcher?.confirm ) {
-			completionWatcher.confirm();
+	const handleContinue = useCallback( async () => {
+		if ( completionWatcherRef.current?.confirm ) {
+			completionWatcherRef.current.confirm();
 		} else {
-			// Just advance to next step (or end tour if last step).
+			// Look ahead: wait for next step's expected block before advancing.
+			if ( stepIndex < totalSteps - 1 ) {
+				const tourSteps = currentTour?.steps || [];
+				const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
+
+				if ( lookAheadResult.waited ) {
+					console.log( '[ACT TourRunner] Manual continue waited for block:', lookAheadResult.blockType );
+				}
+			}
+
+			// Advance to next step (or end tour if last step).
 			nextStep();
 		}
-	}, [ completionWatcher, nextStep ] );
+	}, [ nextStep, stepIndex, totalSteps, currentTour ] );
 
 	/**
 	 * Handle repeat step.
 	 */
 	const handleRepeat = useCallback( () => {
-		// Cancel current watcher.
-		if ( completionWatcher?.cancel ) {
-			completionWatcher.cancel();
+		// Cancel current watcher using ref.
+		if ( completionWatcherRef.current?.cancel ) {
+			completionWatcherRef.current.cancel();
+			completionWatcherRef.current = null;
 		}
 		// Increment counter to trigger useEffect re-run.
 		setRepeatCounter( ( c ) => c + 1 );
 		repeatStep();
-	}, [ completionWatcher, repeatStep ] );
+	}, [ repeatStep ] );
 
 	/**
 	 * Handle stop tour.
 	 */
 	const handleStop = useCallback( () => {
-		if ( completionWatcher?.cancel ) {
-			completionWatcher.cancel();
+		// Cancel watcher using ref.
+		if ( completionWatcherRef.current?.cancel ) {
+			completionWatcherRef.current.cancel();
+			completionWatcherRef.current = null;
 		}
 		// Clear inserted blocks tracking when tour stops.
 		clearInsertedBlocks();
 		previousStepIndexRef.current = null;
 		stopTour();
-	}, [ completionWatcher, stopTour ] );
+	}, [ stopTour ] );
 
 	// Don't render if not playing.
 	if ( ! isPlaying || ! currentTour || ! currentStep ) {
@@ -297,13 +415,10 @@ export default function TourRunner() {
 			targetElement={ targetElement }
 			resolutionError={ resolutionError }
 			isApplyingPreconditions={ isApplyingPreconditions }
-			isPaused={ false }
 			onContinue={ handleContinue }
 			onRepeat={ handleRepeat }
 			onPrevious={ previousStep }
 			onNext={ nextStep }
-			onPause={ () => {} }
-			onResume={ () => {} }
 			onStop={ handleStop }
 		/>
 	);

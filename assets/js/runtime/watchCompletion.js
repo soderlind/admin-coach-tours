@@ -438,6 +438,8 @@ function createManualWatcher( options = {} ) {
 
 /**
  * Watch for element to appear in DOM.
+ * Tracks the last appeared block for scoping in subsequent steps.
+ * IMPORTANT: Waits for a NEW element, not just any existing match.
  *
  * @param {string} selector CSS selector.
  * @param {Object} options  Options.
@@ -446,13 +448,68 @@ function createManualWatcher( options = {} ) {
 function watchElementAppear( selector, options = {} ) {
 	const { timeout = 0 } = options;
 
+	// Helper to get all matching elements with their clientIds.
+	const getMatchingClientIds = () => {
+		const clientIds = new Set();
+		
+		// Check main document.
+		document.querySelectorAll( selector ).forEach( ( el ) => {
+			let clientId = el.getAttribute( 'data-block' );
+			if ( ! clientId ) {
+				const wrapper = el.closest( '[data-block]' );
+				clientId = wrapper?.getAttribute( 'data-block' );
+			}
+			if ( clientId ) {
+				clientIds.add( clientId );
+			}
+		} );
+
+		// Check iframe.
+		const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+		iframe?.contentDocument?.querySelectorAll( selector ).forEach( ( el ) => {
+			let clientId = el.getAttribute( 'data-block' );
+			if ( ! clientId ) {
+				const wrapper = el.closest( '[data-block]' );
+				clientId = wrapper?.getAttribute( 'data-block' );
+			}
+			if ( clientId ) {
+				clientIds.add( clientId );
+			}
+		} );
+
+		return clientIds;
+	};
+
+	// Capture existing elements BEFORE watching.
+	const existingClientIds = getMatchingClientIds();
+	console.log( '[ACT watchElementAppear] Existing matches:', existingClientIds.size, 'for selector:', selector );
+
 	return createWatcher( () => {
-		const element = document.querySelector( selector );
-		return element !== null;
-	}, timeout ).then( ( result ) => ( {
-		...result,
-		event: result.success ? 'elementAppeared' : null,
-	} ) );
+		// Get current matches and look for NEW ones.
+		const currentClientIds = getMatchingClientIds();
+		
+		for ( const clientId of currentClientIds ) {
+			if ( ! existingClientIds.has( clientId ) ) {
+				// Found a NEW element! Store it for later retrieval.
+				window.__actNewlyAppearedBlockClientId = clientId;
+				console.log( '[ACT watchElementAppear] NEW element appeared:', clientId );
+				return true;
+			}
+		}
+		return false;
+	}, timeout ).then( ( result ) => {
+		// Track the block that appeared for scoping in next step.
+		if ( result.success && window.__actNewlyAppearedBlockClientId ) {
+			window.__actLastAppearedBlockClientId = window.__actNewlyAppearedBlockClientId;
+			console.log( '[ACT watchElementAppear] Tracked appeared block:', window.__actLastAppearedBlockClientId );
+			delete window.__actNewlyAppearedBlockClientId;
+		}
+
+		return {
+			...result,
+			event: result.success ? 'elementAppeared' : null,
+		};
+	} );
 }
 
 /**

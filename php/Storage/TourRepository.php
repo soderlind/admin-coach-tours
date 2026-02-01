@@ -46,32 +46,32 @@ class TourRepository {
 
 		$query_args = [
 			'post_type'      => ToursCpt::POST_TYPE,
-			'post_status'    => $args['status'],
-			'posts_per_page' => $args['per_page'],
+			'post_status'    => $args[ 'status' ],
+			'posts_per_page' => $args[ 'per_page' ],
 			'orderby'        => 'menu_order title',
 			'order'          => 'ASC',
 		];
 
 		// Filter by editor scope.
-		if ( ! empty( $args['editor'] ) ) {
-			$query_args['meta_query'][] = [
+		if ( ! empty( $args[ 'editor' ] ) ) {
+			$query_args[ 'meta_query' ][] = [
 				'key'     => ToursCpt::META_EDITOR,
-				'value'   => sanitize_key( $args['editor'] ),
+				'value'   => sanitize_key( $args[ 'editor' ] ),
 				'compare' => '=',
 			];
 		}
 
 		// Filter by post types.
-		if ( ! empty( $args['post_types'] ) && is_array( $args['post_types'] ) ) {
-			$query_args['meta_query'][] = [
+		if ( ! empty( $args[ 'post_types' ] ) && is_array( $args[ 'post_types' ] ) ) {
+			$query_args[ 'meta_query' ][] = [
 				'key'     => ToursCpt::META_POST_TYPES,
-				'value'   => array_map( 'sanitize_key', $args['post_types'] ),
+				'value'   => array_map( 'sanitize_key', $args[ 'post_types' ] ),
 				'compare' => 'IN',
 			];
 		}
 
-		if ( isset( $query_args['meta_query'] ) && count( $query_args['meta_query'] ) > 1 ) {
-			$query_args['meta_query']['relation'] = 'AND';
+		if ( isset( $query_args[ 'meta_query' ] ) && count( $query_args[ 'meta_query' ] ) > 1 ) {
+			$query_args[ 'meta_query' ][ 'relation' ] = 'AND';
 		}
 
 		$query = new WP_Query( $query_args );
@@ -158,7 +158,7 @@ class TourRepository {
 		usort(
 			$steps,
 			function ( $a, $b ) {
-				return ( $a['order'] ?? 0 ) <=> ( $b['order'] ?? 0 );
+				return ( $a[ 'order' ] ?? 0 ) <=> ( $b[ 'order' ] ?? 0 );
 			}
 		);
 
@@ -180,7 +180,7 @@ class TourRepository {
 	 * @return int|WP_Error Tour ID on success, WP_Error on failure.
 	 */
 	public static function create( array $data ): int|WP_Error {
-		if ( empty( $data['title'] ) ) {
+		if ( empty( $data[ 'title' ] ) ) {
 			return new WP_Error(
 				'missing_title',
 				__( 'Tour title is required', 'admin-coach-tours' ),
@@ -189,7 +189,7 @@ class TourRepository {
 		}
 
 		// Validate steps if provided.
-		$steps = $data['steps'] ?? [];
+		$steps = $data[ 'steps' ] ?? [];
 		if ( ! empty( $steps ) ) {
 			$validation = StepSchema::validate_all( $steps );
 			if ( is_wp_error( $validation ) ) {
@@ -199,8 +199,8 @@ class TourRepository {
 
 		$post_data = [
 			'post_type'   => ToursCpt::POST_TYPE,
-			'post_title'  => sanitize_text_field( $data['title'] ),
-			'post_status' => isset( $data['status'] ) ? sanitize_key( $data['status'] ) : 'draft',
+			'post_title'  => sanitize_text_field( $data[ 'title' ] ),
+			'post_status' => isset( $data[ 'status' ] ) ? sanitize_key( $data[ 'status' ] ) : 'draft',
 			'post_author' => get_current_user_id(),
 		];
 
@@ -211,8 +211,8 @@ class TourRepository {
 		}
 
 		// Save meta.
-		update_post_meta( $tour_id, ToursCpt::META_EDITOR, $data['editor'] ?? 'block' );
-		update_post_meta( $tour_id, ToursCpt::META_POST_TYPES, $data['postTypes'] ?? [ 'post', 'page' ] );
+		update_post_meta( $tour_id, ToursCpt::META_EDITOR, $data[ 'editor' ] ?? 'block' );
+		update_post_meta( $tour_id, ToursCpt::META_POST_TYPES, $data[ 'postTypes' ] ?? [ 'post', 'page' ] );
 		update_post_meta( $tour_id, ToursCpt::META_SCHEMA_VERSION, ToursCpt::SCHEMA_VERSION );
 
 		// Save steps.
@@ -240,8 +240,8 @@ class TourRepository {
 		}
 
 		// Validate steps if provided.
-		if ( isset( $data['steps'] ) ) {
-			$validation = StepSchema::validate_all( $data['steps'] );
+		if ( isset( $data[ 'steps' ] ) ) {
+			$validation = StepSchema::validate_all( $data[ 'steps' ] );
 			if ( is_wp_error( $validation ) ) {
 				return $validation;
 			}
@@ -249,11 +249,11 @@ class TourRepository {
 
 		// Update post data if provided.
 		$post_data = [ 'ID' => $tour_id ];
-		if ( isset( $data['title'] ) ) {
-			$post_data['post_title'] = sanitize_text_field( $data['title'] );
+		if ( isset( $data[ 'title' ] ) ) {
+			$post_data[ 'post_title' ] = sanitize_text_field( $data[ 'title' ] );
 		}
-		if ( isset( $data['status'] ) ) {
-			$post_data['post_status'] = sanitize_key( $data['status'] );
+		if ( isset( $data[ 'status' ] ) ) {
+			$post_data[ 'post_status' ] = sanitize_key( $data[ 'status' ] );
 		}
 
 		if ( count( $post_data ) > 1 ) {
@@ -264,16 +264,16 @@ class TourRepository {
 		}
 
 		// Update meta.
-		if ( isset( $data['editor'] ) ) {
-			update_post_meta( $tour_id, ToursCpt::META_EDITOR, $data['editor'] );
+		if ( isset( $data[ 'editor' ] ) ) {
+			update_post_meta( $tour_id, ToursCpt::META_EDITOR, $data[ 'editor' ] );
 		}
-		if ( isset( $data['postTypes'] ) ) {
-			update_post_meta( $tour_id, ToursCpt::META_POST_TYPES, $data['postTypes'] );
+		if ( isset( $data[ 'postTypes' ] ) ) {
+			update_post_meta( $tour_id, ToursCpt::META_POST_TYPES, $data[ 'postTypes' ] );
 		}
 
 		// Update steps.
-		if ( isset( $data['steps'] ) ) {
-			self::save_steps( $tour_id, $data['steps'] );
+		if ( isset( $data[ 'steps' ] ) ) {
+			self::save_steps( $tour_id, $data[ 'steps' ] );
 		}
 
 		return true;
@@ -321,9 +321,9 @@ class TourRepository {
 		// Ensure order is sequential.
 		$steps = array_values( $steps );
 		foreach ( $steps as $i => &$step ) {
-			$step['order'] = $i;
-			if ( empty( $step['id'] ) ) {
-				$step['id'] = wp_generate_uuid4();
+			$step[ 'order' ] = $i;
+			if ( empty( $step[ 'id' ] ) ) {
+				$step[ 'id' ] = wp_generate_uuid4();
 			}
 		}
 
@@ -371,22 +371,22 @@ class TourRepository {
 	 */
 	public static function add_step( int $tour_id, array $step, int $index = -1 ): array|WP_Error {
 		// Validate step.
-		if ( empty( $step['id'] ) ) {
-			$step['id'] = wp_generate_uuid4();
+		if ( empty( $step[ 'id' ] ) ) {
+			$step[ 'id' ] = wp_generate_uuid4();
 		}
 
 		$steps = self::get_steps( $tour_id );
 
 		// Set order.
 		if ( $index < 0 || $index >= count( $steps ) ) {
-			$step['order'] = count( $steps );
+			$step[ 'order' ] = count( $steps );
 			$steps[]       = $step;
 		} else {
-			$step['order'] = $index;
+			$step[ 'order' ] = $index;
 			array_splice( $steps, $index, 0, [ $step ] );
 			// Re-index orders.
 			foreach ( $steps as $i => &$s ) {
-				$s['order'] = $i;
+				$s[ 'order' ] = $i;
 			}
 		}
 
@@ -414,7 +414,7 @@ class TourRepository {
 		$found = false;
 
 		foreach ( $steps as &$step ) {
-			if ( $step['id'] === $step_id ) {
+			if ( $step[ 'id' ] === $step_id ) {
 				$step  = array_merge( $step, $data );
 				$found = true;
 
@@ -452,7 +452,7 @@ class TourRepository {
 		$filtered = array_filter(
 			$steps,
 			function ( $step ) use ( $step_id ) {
-				return $step['id'] !== $step_id;
+				return $step[ 'id' ] !== $step_id;
 			}
 		);
 
@@ -481,7 +481,7 @@ class TourRepository {
 		$steps_map = [];
 
 		foreach ( $steps as $step ) {
-			$steps_map[ $step['id'] ] = $step;
+			$steps_map[ $step[ 'id' ] ] = $step;
 		}
 
 		$reordered = [];
@@ -497,9 +497,9 @@ class TourRepository {
 					[ 'status' => 404 ]
 				);
 			}
-			$step           = $steps_map[ $id ];
-			$step['order']  = $i;
-			$reordered[]    = $step;
+			$step          = $steps_map[ $id ];
+			$step[ 'order' ] = $i;
+			$reordered[]   = $step;
 		}
 
 		self::save_steps( $tour_id, $reordered );
@@ -526,7 +526,10 @@ class TourRepository {
 						'title'         => '',
 						'instruction'   => '',
 						'hint'          => '',
-						'target'        => [ 'locators' => [], 'constraints' => [] ],
+						'target'        => [
+							'locators'    => [],
+							'constraints' => [],
+						],
 						'preconditions' => [],
 						'completion'    => [ 'type' => 'manual' ],
 						'recovery'      => [],
@@ -539,7 +542,6 @@ class TourRepository {
 		}
 
 		// Future migrations would go here.
-		// if ( $version < 2 ) { ... }
 
 		return $steps;
 	}

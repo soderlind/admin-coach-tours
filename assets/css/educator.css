@@ -61,7 +61,7 @@
 	border: 1px solid #e0e0e0;
 }
 
-.act-new-tour-form > * + * {
+.act-new-tour-form>*+* {
 	margin-top: 12px;
 }
 
@@ -114,7 +114,7 @@
 	border-color: #007cba;
 }
 
-.act-step-item + .act-step-item {
+.act-step-item+.act-step-item {
 	margin-top: 8px;
 }
 
@@ -172,7 +172,8 @@
  * Step content.
  */
 .act-step-content {
-	min-width: 0; /* Allow text truncation */
+	min-width: 0;
+	/* Allow text truncation */
 	flex: 1;
 }
 

@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Rest;
 
@@ -67,7 +67,7 @@ class Routes {
 	public function register_routes(): void {
 		// Tours collection.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours',
 			[
 				[
@@ -87,7 +87,7 @@ class Routes {
 
 		// Single tour.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<id>\d+)',
 			[
 				[
@@ -125,7 +125,7 @@ class Routes {
 
 		// Steps.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps',
 			[
 				[
@@ -138,7 +138,7 @@ class Routes {
 		);
 
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps/(?P<step_id>[\w-]+)',
 			[
 				[
@@ -157,7 +157,7 @@ class Routes {
 
 		// Reorder steps.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/tours/(?P<tour_id>\d+)/steps/reorder',
 			[
 				[
@@ -183,7 +183,7 @@ class Routes {
 
 		// AI endpoint.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/generate-draft',
 			[
 				[
@@ -208,13 +208,56 @@ class Routes {
 
 		// AI status.
 		register_rest_route(
-			self::NAMESPACE,
+			self::NAMESPACE ,
 			'/ai/status',
 			[
 				[
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => [ AiController::class, 'get_status' ],
 					'permission_callback' => [ $this, 'can_edit_tours' ],
+				],
+			]
+		);
+
+		// AI tasks for pupil.
+		register_rest_route(
+			self::NAMESPACE ,
+			'/ai/tasks',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ AiController::class, 'get_tasks' ],
+					'permission_callback' => [ $this, 'can_run_tours' ],
+				],
+			]
+		);
+
+		// Generate AI tour.
+		register_rest_route(
+			self::NAMESPACE ,
+			'/ai/generate-tour',
+			[
+				[
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => [ AiController::class, 'generate_tour' ],
+					'permission_callback' => [ $this, 'can_run_tours' ],
+					'args'                => [
+						'taskId'   => [
+							'type'        => 'string',
+							'default'     => '',
+							'description' => __( 'ID of a predefined task.', 'admin-coach-tours' ),
+						],
+						'query'    => [
+							'type'        => 'string',
+							'default'     => '',
+							'description' => __( 'Freeform user query.', 'admin-coach-tours' ),
+						],
+						'postType' => [
+							'type'        => 'string',
+							'default'     => 'post',
+							'description' => __( 'The post type being edited.', 'admin-coach-tours' ),
+						],
+					],
 				],
 			]
 		);
@@ -303,11 +346,11 @@ class Routes {
 	 */
 	public function get_tours( \WP_REST_Request $request ) {
 		$args = [
-			'post_type'  => $request->get_param( 'post_type' ),
-			'editor'     => $request->get_param( 'editor' ),
-			'status'     => $request->get_param( 'status' ),
-			'per_page'   => $request->get_param( 'per_page' ),
-			'page'       => $request->get_param( 'page' ),
+			'post_type' => $request->get_param( 'post_type' ),
+			'editor'    => $request->get_param( 'editor' ),
+			'status'    => $request->get_param( 'status' ),
+			'per_page'  => $request->get_param( 'per_page' ),
+			'page'      => $request->get_param( 'page' ),
 		];
 
 		// Filter out null values.
@@ -388,27 +431,27 @@ class Routes {
 		$data = [];
 
 		if ( $request->has_param( 'title' ) ) {
-			$data['title'] = $request->get_param( 'title' );
+			$data[ 'title' ] = $request->get_param( 'title' );
 		}
 
 		if ( $request->has_param( 'description' ) ) {
-			$data['description'] = $request->get_param( 'description' );
+			$data[ 'description' ] = $request->get_param( 'description' );
 		}
 
 		if ( $request->has_param( 'postTypes' ) ) {
-			$data['post_types'] = $request->get_param( 'postTypes' );
+			$data[ 'post_types' ] = $request->get_param( 'postTypes' );
 		}
 
 		if ( $request->has_param( 'editors' ) ) {
-			$data['editors'] = $request->get_param( 'editors' );
+			$data[ 'editors' ] = $request->get_param( 'editors' );
 		}
 
 		if ( $request->has_param( 'status' ) ) {
-			$data['status'] = $request->get_param( 'status' );
+			$data[ 'status' ] = $request->get_param( 'status' );
 		}
 
 		if ( $request->has_param( 'steps' ) ) {
-			$data['steps'] = $request->get_param( 'steps' );
+			$data[ 'steps' ] = $request->get_param( 'steps' );
 		}
 
 		$result = TourRepository::update( $id, $data );
@@ -450,10 +493,10 @@ class Routes {
 		$tour_id = $request->get_param( 'tour_id' );
 
 		$step_data = [
-			'title'        => $request->get_param( 'title' ) ?? '',
-			'content'      => $request->get_param( 'content' ) ?? '',
-			'target'       => $request->get_param( 'target' ),
-			'completion'   => $request->get_param( 'completion' ),
+			'title'         => $request->get_param( 'title' ) ?? '',
+			'content'       => $request->get_param( 'content' ) ?? '',
+			'target'        => $request->get_param( 'target' ),
+			'completion'    => $request->get_param( 'completion' ),
 			'preconditions' => $request->get_param( 'preconditions' ),
 		];
 
@@ -620,17 +663,17 @@ class Routes {
 
 		// Make all fields optional for updates.
 		foreach ( $args as $key => $config ) {
-			$args[ $key ]['required'] = false;
+			$args[ $key ][ 'required' ] = false;
 		}
 
-		$args['id'] = [
+		$args[ 'id' ] = [
 			'type'              => 'integer',
 			'required'          => true,
 			'sanitize_callback' => 'absint',
 		];
 
 		// Allow steps to be updated.
-		$args['steps'] = [
+		$args[ 'steps' ] = [
 			'type'  => 'array',
 			'items' => [ 'type' => 'object' ],
 		];
@@ -645,24 +688,24 @@ class Routes {
 	 */
 	private function get_step_create_args(): array {
 		return [
-			'tour_id'      => [
+			'tour_id'       => [
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			],
-			'title'        => [
+			'title'         => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			'content'      => [
+			'content'       => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			'target'       => [
+			'target'        => [
 				'type'     => 'object',
 				'required' => true,
 			],
-			'completion'   => [
+			'completion'    => [
 				'type' => 'object',
 			],
 			'preconditions' => [
@@ -679,32 +722,32 @@ class Routes {
 	 */
 	private function get_step_update_args(): array {
 		return [
-			'tour_id'      => [
+			'tour_id'       => [
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			],
-			'step_id'      => [
+			'step_id'       => [
 				'type'     => 'string',
 				'required' => true,
 			],
-			'title'        => [
+			'title'         => [
 				'type' => 'string',
 			],
-			'content'      => [
+			'content'       => [
 				'type' => 'string',
 			],
-			'target'       => [
+			'target'        => [
 				'type' => 'object',
 			],
-			'completion'   => [
+			'completion'    => [
 				'type' => 'object',
 			],
 			'preconditions' => [
 				'type'  => 'array',
 				'items' => [ 'type' => 'object' ],
 			],
-			'recovery'     => [
+			'recovery'      => [
 				'type'  => 'array',
 				'items' => [ 'type' => 'object' ],
 			],

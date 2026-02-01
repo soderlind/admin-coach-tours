@@ -699,3 +699,135 @@ export function setSidebarOpen( isOpen ) {
 		isOpen,
 	};
 }
+
+// ============================================================================
+// AI Tour Generation Actions (Pupil Mode)
+// ============================================================================
+
+/**
+ * Set AI tour loading state.
+ *
+ * @param {boolean} isLoading Loading state.
+ * @return {Object} Action object.
+ */
+export function setAiTourLoading( isLoading ) {
+	return {
+		type: ACTION_TYPES.SET_AI_TOUR_LOADING,
+		isLoading,
+	};
+}
+
+/**
+ * Set AI tour error.
+ *
+ * @param {string|null} error Error message.
+ * @return {Object} Action object.
+ */
+export function setAiTourError( error ) {
+	return {
+		type: ACTION_TYPES.SET_AI_TOUR_ERROR,
+		error,
+	};
+}
+
+/**
+ * Receive an ephemeral tour from AI.
+ *
+ * @param {Object} tour Generated tour object.
+ * @return {Object} Action object.
+ */
+export function receiveEphemeralTour( tour ) {
+	return {
+		type: ACTION_TYPES.RECEIVE_EPHEMERAL_TOUR,
+		tour,
+	};
+}
+
+/**
+ * Clear ephemeral tour.
+ *
+ * @return {Object} Action object.
+ */
+export function clearEphemeralTour() {
+	return {
+		type: ACTION_TYPES.CLEAR_EPHEMERAL_TOUR,
+	};
+}
+
+/**
+ * Request AI to generate a tour.
+ *
+ * @param {string} taskId   Predefined task ID (optional).
+ * @param {string} query    Freeform user query (optional).
+ * @param {string} postType Current post type.
+ * @return {Generator} Generator that handles AI tour generation.
+ */
+export function* requestAiTour( taskId, query, postType ) {
+	// Set loading state.
+	yield setAiTourLoading( true );
+	yield setAiTourError( null );
+
+	try {
+		// Gather editor context to help AI generate accurate selectors.
+		const editorContext = yield {
+			type: 'GATHER_EDITOR_CONTEXT',
+		};
+
+		const result = yield {
+			type: 'REQUEST_AI_TOUR',
+			taskId,
+			query,
+			postType,
+			editorContext,
+		};
+
+		console.log( '[ACT AI Response] Full result:', result );
+		console.log( '[ACT AI Response] Tour:', JSON.stringify( result.tour, null, 2 ) );
+
+		// Add an ID to the ephemeral tour.
+		const tour = {
+			id: 'ephemeral',
+			...result.tour,
+		};
+
+		yield receiveEphemeralTour( tour );
+
+		// Ensure an empty block placeholder exists for "/" quick inserter tours.
+		yield {
+			type: 'ENSURE_EMPTY_PLACEHOLDER',
+		};
+
+		// Automatically start the tour.
+		yield startTour( 'ephemeral', 'pupil' );
+
+		return tour;
+	} catch ( error ) {
+		yield setAiTourError( error.message || 'Failed to generate tour' );
+		throw error;
+	} finally {
+		yield setAiTourLoading( false );
+	}
+}
+
+/**
+ * Start an ephemeral tour directly (for pre-loaded tours).
+ *
+ * @param {Object} tour Tour object with title and steps.
+ * @return {Generator} Generator that sets up and starts the tour.
+ */
+export function* startEphemeralTour( tour ) {
+	// Add ID if not present.
+	const tourWithId = {
+		id: 'ephemeral',
+		...tour,
+	};
+
+	yield receiveEphemeralTour( tourWithId );
+
+	// Ensure an empty block placeholder exists for "/" quick inserter tours.
+	yield {
+		type: 'ENSURE_EMPTY_PLACEHOLDER',
+	};
+
+	yield startTour( 'ephemeral', 'pupil' );
+}

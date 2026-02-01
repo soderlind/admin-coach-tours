@@ -45,6 +45,11 @@ export const DEFAULT_STATE = {
 	aiDraftLoading: false,
 	aiDraftError: null,
 	aiDraftResult: null,
+
+	// AI tour generation (pupil mode).
+	aiTourLoading: false,
+	aiTourError: null,
+	ephemeralTour: null,
 };
 
 /**
@@ -101,6 +106,12 @@ export const ACTION_TYPES = {
 
 	// UI.
 	SET_SIDEBAR_OPEN: 'SET_SIDEBAR_OPEN',
+
+	// Ephemeral AI tours.
+	SET_AI_TOUR_LOADING: 'SET_AI_TOUR_LOADING',
+	RECEIVE_EPHEMERAL_TOUR: 'RECEIVE_EPHEMERAL_TOUR',
+	SET_AI_TOUR_ERROR: 'SET_AI_TOUR_ERROR',
+	CLEAR_EPHEMERAL_TOUR: 'CLEAR_EPHEMERAL_TOUR',
 };
 
 /**
@@ -498,6 +509,46 @@ export default function reducer( state = DEFAULT_STATE, action ) {
 			return {
 				...state,
 				sidebarOpen: action.isOpen,
+			};
+
+		// AI tour generation (pupil mode).
+		case ACTION_TYPES.SET_AI_TOUR_LOADING:
+			return {
+				...state,
+				aiTourLoading: action.isLoading,
+				aiTourError: action.isLoading ? null : state.aiTourError,
+			};
+
+		case ACTION_TYPES.SET_AI_TOUR_ERROR:
+			return {
+				...state,
+				aiTourError: action.error,
+				aiTourLoading: false,
+			};
+
+		case ACTION_TYPES.RECEIVE_EPHEMERAL_TOUR:
+			return {
+				...state,
+				ephemeralTour: action.tour,
+				aiTourLoading: false,
+				aiTourError: null,
+				// Also put it in tours with special 'ephemeral' key.
+				tours: {
+					...state.tours,
+					ephemeral: action.tour,
+				},
+			};
+
+		case ACTION_TYPES.CLEAR_EPHEMERAL_TOUR:
+			return {
+				...state,
+				ephemeralTour: null,
+				aiTourError: null,
+				aiTourLoading: false,
+				// Remove from tours.
+				tours: Object.fromEntries(
+					Object.entries( state.tours ).filter( ( [ key ] ) => key !== 'ephemeral' )
+				),
 			};
 
 		default:

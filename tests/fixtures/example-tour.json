@@ -3,8 +3,13 @@
 	"title": "Getting Started with the Block Editor",
 	"description": "Learn the basics of creating content with the WordPress block editor.",
 	"status": "publish",
-	"postTypes": ["post", "page"],
-	"editors": ["block"],
+	"postTypes": [
+		"post",
+		"page"
+	],
+	"editors": [
+		"block"
+	],
 	"version": 1,
 	"steps": [
 		{

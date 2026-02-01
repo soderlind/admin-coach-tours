@@ -8,7 +8,7 @@
  * @since   0.1.0
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\AI;
 
@@ -54,6 +54,16 @@ interface AiProviderInterface {
 	 * @return array|\WP_Error Suggested completion or error.
 	 */
 	public function suggest_completion( array $element_context ): array|\WP_Error;
+
+	/**
+	 * Generate a complete tour using AI.
+	 *
+	 * @since 0.3.0
+	 * @param string $system_prompt The system prompt with task instructions.
+	 * @param string $user_message  Optional user message for freeform queries.
+	 * @return array|\WP_Error Generated tour with title and steps, or error.
+	 */
+	public function generate_tour( string $system_prompt, string $user_message = '' ): array|\WP_Error;
 
 	/**
 	 * Get provider settings schema.

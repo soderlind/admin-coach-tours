@@ -5,7 +5,7 @@
  * @package AdminCoachTours
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AdminCoachTours\Tests;
 
@@ -159,9 +159,9 @@ class StepSchemaTest extends TestCase {
 
 		$this->assertIsArray( $schema );
 		$this->assertArrayHasKey( 'type', $schema );
-		$this->assertEquals( 'object', $schema['type'] );
+		$this->assertEquals( 'object', $schema[ 'type' ] );
 		$this->assertArrayHasKey( 'properties', $schema );
-		$this->assertArrayHasKey( 'id', $schema['properties'] );
-		$this->assertArrayHasKey( 'target', $schema['properties'] );
+		$this->assertArrayHasKey( 'id', $schema[ 'properties' ] );
+		$this->assertArrayHasKey( 'target', $schema[ 'properties' ] );
 	}
 }
