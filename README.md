@@ -1,113 +1,94 @@
 # Admin Coach Tours
 
-Interactive guided tours for WordPress admin interfaces.
+[![Version](https://img.shields.io/badge/version-0.3.5-blue.svg)](https://github.com/soderlind/admin-coach-tours)
+[![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-blue.svg)](https://wordpress.org)
+[![PHP](https://img.shields.io/badge/PHP-8.3%2B-purple.svg)](https://php.net)
+[![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-## Description
+AI-powered interactive tutorials for the WordPress block editor.
 
-Admin Coach Tours enables **Educators** to create interactive guided tours within wp-admin (Gutenberg block editor) and allows **Pupils** to run these tours with a guided overlay experience.
+## Overview
 
-### Features
+Admin Coach Tours helps WordPress users learn the block editor through AI-generated step-by-step tutorials. Click **"Help me..."** in the editor, select a task or ask a question, and get an interactive guided tour tailored to your needs.
 
-- **Educator Mode**: Create and edit tours directly in the block editor
-  - Pick UI elements as tour step targets
-  - Reorder, add, and delete steps with drag-and-drop
-  - AI-powered step draft generation (optional)
-  - Define completion conditions for each step
+## Features
 
-- **Pupil Mode**: Run tours with an interactive overlay
-  - Visual highlighting of target elements
-  - Progress tracking with step-by-step navigation
-  - Repeat steps until confident
-  - Automatic progression on completion
+- **AI-Generated Tours** — On-demand tutorials created by AI based on your request
+- **12 Predefined Tasks** — Common tasks like adding images, videos, headings, and more
+- **Freeform Questions** — Ask anything about the block editor
+- **Interactive Overlay** — Visual highlighting guides you through each step
+- **Smart Block Targeting** — Accurately identifies and highlights the correct elements
+- **Automatic Progression** — Tours advance when you complete each action
 
 ## Requirements
 
 - WordPress 6.8+
 - PHP 8.3+
 - sodium extension (for API key encryption)
+- AI provider API key (OpenAI, Azure OpenAI, or Anthropic)
 
 ## Installation
 
-1. Upload the `admin-coach-tours` folder to `/wp-content/plugins/`
-2. Activate the plugin through the 'Plugins' menu
-3. Navigate to **Tours** in the admin menu
+1. Upload `admin-coach-tours` to `/wp-content/plugins/`
+2. Activate the plugin
+3. Go to **Tours → Settings** to configure AI
+
+## Setup
+
+### Configure AI Provider
+
+1. Navigate to **Tours → Settings**
+2. Enable AI Features
+3. Select your provider:
+   - **OpenAI** — Add your API key
+   - **Azure OpenAI** — Add your API key and endpoint URL
+   - **Anthropic** — Add your API key
+4. Save settings
 
 ## Usage
 
-### Creating a Tour (Educator)
+### Getting Help in the Editor
 
-1. Go to **Tours → Add New**
-2. Open the Tour Editor sidebar panel
-3. Click **Add Step** to create a new step
-4. Use the **Pick Target** button to select a UI element
-5. Configure the step content and completion type
-6. Save the tour
+1. Open any post or page in the block editor
+2. Click the **"Help me..."** button (bottom-right)
+3. Choose from the options:
 
-### Running a Tour (Pupil)
+**Common Tasks:**
+| Category | Tasks |
+|----------|-------|
+| Media | Add image, Add video, Create gallery, Add cover |
+| Text | Add heading, Create list, Add quote, Create table |
+| Design | Add button, Create columns |
+| Embed | Embed YouTube |
 
-1. Tours appear automatically based on their scope settings
-2. Click **Start Tour** to begin
-3. Follow the highlighted elements
-4. Complete each step's action to progress
-5. Click **Done** when finished
+**Or Ask a Question:**
+Type any question about the block editor and press Enter.
 
-### AI Features (Optional)
+4. Follow the highlighted steps to complete the task
+5. Each step auto-advances when you perform the action
 
-1. Go to **Tours → Settings**
-2. Enable AI Features
-3. Configure your AI provider (OpenAI, Azure OpenAI, or Anthropic)
-4. Add your API key (and endpoint URL for Azure OpenAI)
-5. Use the **AI Draft** button when editing steps
+### Tour Controls
 
-## Step Completion Types
+- **Previous/Next** — Navigate between steps
+- **Skip** — Skip a step you already know
+- **Stop** — Exit the tour at any time
 
-| Type | Description |
-|------|-------------|
-| `clickTarget` | Complete when the target element is clicked |
-| `domValueChanged` | Complete when an input value changes |
-| `wpData` | Complete when a @wordpress/data store state changes |
-| `manual` | User manually clicks "Done" |
-| `elementAppear` | Complete when a specific element appears |
-| `elementDisappear` | Complete when a specific element disappears |
-| `customEvent` | Complete when a custom DOM event fires |
+## How It Works
 
-## Preconditions
+1. **You ask** — Select a task or type a question
+2. **AI generates** — The AI creates a custom tour with step-by-step instructions
+3. **You follow** — Interactive overlay highlights each target element
+4. **You learn** — Complete actions to progress through the tour
 
-Preconditions ensure the UI is in the correct state before showing a step:
-
-- `ensureEditor` - Ensure specific editor type is active
-- `ensureSidebarOpen` - Open the sidebar
-- `ensureSidebarClosed` - Close the sidebar
-- `selectSidebarTab` - Select a specific sidebar tab
-- `openInserter` - Open the block inserter
-- `closeInserter` - Close the block inserter
-- `selectBlock` - Select a specific block
-- `focusElement` - Focus a specific element
-- `scrollIntoView` - Scroll element into view
-- `openModal` - Open a modal
-- `closeModal` - Close a modal
+Tours are generated on-demand and not stored — each request creates a fresh, context-aware tutorial.
 
 ## REST API
 
-### Endpoints
-
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/wp-json/admin-coach-tours/v1/tours` | List tours |
-| POST | `/wp-json/admin-coach-tours/v1/tours` | Create tour |
-| GET | `/wp-json/admin-coach-tours/v1/tours/{id}` | Get tour |
-| PUT | `/wp-json/admin-coach-tours/v1/tours/{id}` | Update tour |
-| DELETE | `/wp-json/admin-coach-tours/v1/tours/{id}` | Delete tour |
-| POST | `/wp-json/admin-coach-tours/v1/ai/generate-draft` | Generate AI draft |
-| GET | `/wp-json/admin-coach-tours/v1/ai/status` | Get AI status |
-
-### Query Parameters
-
-Tours can be filtered by:
-
-- `post_type` - Filter by post type scope
-- `editor` - Filter by editor type (`block` or `classic`)
-- `status` - Filter by status (`publish`, `draft`, `any`)
+| GET | `/wp-json/admin-coach-tours/v1/ai/tasks` | List available tasks |
+| POST | `/wp-json/admin-coach-tours/v1/ai/tour` | Generate AI tour |
+| GET | `/wp-json/admin-coach-tours/v1/ai/status` | Check AI availability |
 
 ## Development
 
@@ -121,104 +102,62 @@ npm install
 ### Build
 
 ```bash
-npm run build
-```
-
-### Development Mode
-
-```bash
-npm run start
+npm run build        # Production build
+npm run start        # Development mode with watch
 ```
 
 ### Testing
 
 ```bash
-# PHP tests
-composer test
-
-# JavaScript tests
-npm run test
-
-# Watch mode
-npm run test:watch
+composer test        # PHP tests
+npm run test         # JavaScript tests
+npm run test:watch   # Watch mode
 ```
 
 ### Linting
 
 ```bash
-# PHP
-composer lint
-
-# JavaScript
-npm run lint
-```
-
-## File Structure
-
-```
-admin-coach-tours/
-├── admin-coach-tours.php    # Main plugin file
-├── php/
-│   ├── AI/                  # AI integration
-│   ├── Cpt/                 # Custom post type
-│   ├── Rest/                # REST API endpoints
-│   ├── Security/            # Capabilities & encryption
-│   ├── Settings/            # Settings page
-│   ├── Storage/             # Data repository
-│   └── Validation/          # Schema validation
-├── assets/
-│   ├── js/
-│   │   ├── educator/        # Educator UI components
-│   │   ├── pupil/           # Pupil UI components
-│   │   ├── runtime/         # Core runtime utilities
-│   │   ├── store/           # @wordpress/data store
-│   │   └── types/           # Type definitions
-│   └── css/                 # Stylesheets
-└── tests/
-    ├── php/                 # PHPUnit tests
-    ├── js/                  # Vitest tests
-    └── fixtures/            # Test fixtures
+composer lint        # PHP (WPCS)
+npm run lint         # JavaScript (ESLint)
 ```
 
 ## Hooks
 
-### Actions
-
-- `act_tour_started` - Fired when a tour starts
-- `act_tour_completed` - Fired when a tour completes
-- `act_step_completed` - Fired when a step completes
-
 ### Filters
 
-- `act_tour_data` - Filter tour data before display
-- `act_step_data` - Filter step data before display
-- `act_ai_providers` - Register additional AI providers
-- `act_locator_types` - Register additional locator types
-- `act_completion_types` - Register additional completion types
+| Filter | Description |
+|--------|-------------|
+| `act_ai_providers` | Register additional AI providers |
+| `act_ai_tasks` | Modify available task definitions |
+| `act_tour_data` | Filter tour data before display |
+
+### Actions
+
+| Action | Description |
+|--------|-------------|
+| `act_tour_started` | Fired when a tour starts |
+| `act_tour_completed` | Fired when a tour completes |
+| `act_step_completed` | Fired when a step completes |
 
 ## Capabilities
 
 | Capability | Description | Default Roles |
 |------------|-------------|---------------|
-| `act_edit_tours` | Create and edit tours | Administrator, Editor |
-| `act_run_tours` | Run tours | All logged-in users |
 | `act_use_ai` | Use AI features | Administrator |
+| `act_run_tours` | Run tours | All logged-in users |
 
 ## Security
 
-- API keys are encrypted using libsodium
-- All REST endpoints require authentication
-- Nonce verification on all AJAX requests
+- API keys encrypted with libsodium
+- All endpoints require authentication
 - Capability checks on all operations
 - Input sanitization and output escaping
 
 ## License
 
-GPL v2 or later
+GPL v2 or later — see [LICENSE](LICENSE) for details.
 
 ## Credits
 
-Built with:
-- [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts)
-- [@wordpress/data](https://www.npmjs.com/package/@wordpress/data)
-- [@dnd-kit](https://dndkit.com/)
+- Built with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts) and [@wordpress/data](https://www.npmjs.com/package/@wordpress/data)
+- AI integration supports OpenAI, Azure OpenAI, and Anthropic
