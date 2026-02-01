@@ -237,7 +237,7 @@ export default function CoachPanel( {
 								icon={ arrowRight }
 								label={ __( 'Next', 'admin-coach-tours' ) }
 								onClick={ onNext }
-								disabled={ isApplyingPreconditions }
+								disabled={ isApplyingPreconditions || !! resolutionError }
 								size="small"
 							/>
 						) }

@@ -7,7 +7,7 @@
  * @since   0.1.0
  */
 
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch, dispatch as wpDispatch, select as wpSelect } from '@wordpress/data';
 import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -33,10 +33,10 @@ export default function TourRunner() {
 	const [ resolutionError, setResolutionError ] = useState( null );
 	const [ resolution, setResolution ] = useState( null );
 	const [ isApplyingPreconditions, setIsApplyingPreconditions ] = useState( false );
-	const [ completionWatcher, setCompletionWatcher ] = useState( null );
 	const [ repeatCounter, setRepeatCounter ] = useState( 0 );
 	const highlighterRef = useRef( null );
 	const previousStepIndexRef = useRef( null );
+	const completionWatcherRef = useRef( null ); // Use ref to avoid stale closure in cleanup.
 
 	// Get playback state from store.
 	const {
@@ -65,7 +65,6 @@ export default function TourRunner() {
 		nextStep,
 		previousStep,
 		repeatStep,
-		markStepComplete,
 	} = useDispatch( STORE_NAME );
 
 	/**
@@ -107,9 +106,11 @@ export default function TourRunner() {
 			setResolutionError( null );
 			setIsApplyingPreconditions( true );
 
-			// Cancel any existing completion watcher.
-			if ( completionWatcher?.cancel ) {
-				completionWatcher.cancel();
+			// Cancel any existing completion watcher using ref (avoids stale closure).
+			if ( completionWatcherRef.current?.cancel ) {
+				console.log( '[ACT TourRunner] Cancelling previous completion watcher' );
+				completionWatcherRef.current.cancel();
+				completionWatcherRef.current = null;
 			}
 
 			// Handle step transition: leave previous step, enter new step.
@@ -172,6 +173,28 @@ export default function TourRunner() {
 						recovered: result.recovered || false,
 					} );
 
+					// If the element is inside a block, select it in WordPress data store.
+					// Check the element itself and traverse up to find parent block.
+					let blockClientId = result.element.getAttribute( 'data-block' );
+					if ( ! blockClientId ) {
+						const blockWrapper = result.element.closest( '[data-block]' );
+						if ( blockWrapper ) {
+							blockClientId = blockWrapper.getAttribute( 'data-block' );
+							console.log( '[ACT TourRunner] Found parent block:', blockClientId );
+						}
+					}
+					if ( blockClientId ) {
+						try {
+							const blockEditorDispatch = wpDispatch( 'core/block-editor' );
+							if ( blockEditorDispatch?.selectBlock ) {
+								await blockEditorDispatch.selectBlock( blockClientId );
+								console.log( '[ACT TourRunner] Selected block:', blockClientId );
+							}
+						} catch ( err ) {
+							console.warn( '[ACT TourRunner] Could not select block:', err );
+						}
+					}
+
 					// Highlight the element.
 					if ( highlighterRef.current ) {
 						highlighterRef.current.highlight( result.element );
@@ -191,6 +214,7 @@ export default function TourRunner() {
 						success: false,
 						error: result.error,
 					} );
+					console.log( '[ACT TourRunner] Target resolution failed, NOT auto-advancing. Error:', result.error );
 
 					if ( highlighterRef.current ) {
 						highlighterRef.current.clear();
@@ -211,36 +235,38 @@ export default function TourRunner() {
 					currentStep.completion,
 					resolvedElement // Use local variable, not stale state!
 				);
-				setCompletionWatcher( watcher );
+				completionWatcherRef.current = watcher; // Store in ref for reliable cleanup.
 
 				// Wait for completion.
-				watcher.promise.then( ( completionResult ) => {
+				watcher.promise.then( async ( completionResult ) => {
 					if ( ! isMounted ) {
 						return;
 					}
 
 					if ( completionResult.success ) {
-						markStepComplete( currentStep.id );
+						console.log( '[ACT TourRunner] Completion detected for step:', stepIndex );
 
 						// Auto-advance if not the last step.
 						if ( stepIndex < totalSteps - 1 ) {
 							// Look ahead: wait for the next step's expected block before advancing.
 							const tourSteps = currentTour?.steps || [];
 
-							( async () => {
-								const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
+							const lookAheadResult = await waitForNextStepBlock( tourSteps, stepIndex, 5000 );
 
-								if ( lookAheadResult.waited ) {
-									console.log( '[ACT TourRunner] Waited for block:', lookAheadResult.blockType, 'success:', lookAheadResult.success );
+							if ( lookAheadResult.waited ) {
+								console.log( '[ACT TourRunner] Waited for block:', lookAheadResult.blockType, 'success:', lookAheadResult.success );
+							}
+
+							// Advance after a small delay.
+							setTimeout( () => {
+								if ( isMounted ) {
+									console.log( '[ACT TourRunner] Auto-advancing from step:', stepIndex );
+									nextStep();
 								}
-
-								// Advance after a small delay.
-								setTimeout( () => {
-									if ( isMounted ) {
-										nextStep();
-									}
-								}, 300 );
-							} )();
+							}, 300 );
+						} else {
+							// Last step - just mark complete without advancing.
+							console.log( '[ACT TourRunner] Last step completed' );
 						}
 					}
 				} );
@@ -251,8 +277,11 @@ export default function TourRunner() {
 
 		return () => {
 			isMounted = false;
-			if ( completionWatcher?.cancel ) {
-				completionWatcher.cancel();
+			// Use ref for cleanup to avoid stale closure.
+			if ( completionWatcherRef.current?.cancel ) {
+				console.log( '[ACT TourRunner] Cleanup: Cancelling completion watcher' );
+				completionWatcherRef.current.cancel();
+				completionWatcherRef.current = null;
 			}
 		};
 	}, [ isPlaying, currentStep, stepIndex, repeatCounter ] );
@@ -261,8 +290,8 @@ export default function TourRunner() {
 	 * Handle manual continue (for manual completion type or finish).
 	 */
 	const handleContinue = useCallback( async () => {
-		if ( completionWatcher?.confirm ) {
-			completionWatcher.confirm();
+		if ( completionWatcherRef.current?.confirm ) {
+			completionWatcherRef.current.confirm();
 		} else {
 			// Look ahead: wait for next step's expected block before advancing.
 			if ( stepIndex < totalSteps - 1 ) {
@@ -277,33 +306,36 @@ export default function TourRunner() {
 			// Advance to next step (or end tour if last step).
 			nextStep();
 		}
-	}, [ completionWatcher, nextStep, stepIndex, totalSteps, currentTour ] );
+	}, [ nextStep, stepIndex, totalSteps, currentTour ] );
 
 	/**
 	 * Handle repeat step.
 	 */
 	const handleRepeat = useCallback( () => {
-		// Cancel current watcher.
-		if ( completionWatcher?.cancel ) {
-			completionWatcher.cancel();
+		// Cancel current watcher using ref.
+		if ( completionWatcherRef.current?.cancel ) {
+			completionWatcherRef.current.cancel();
+			completionWatcherRef.current = null;
 		}
 		// Increment counter to trigger useEffect re-run.
 		setRepeatCounter( ( c ) => c + 1 );
 		repeatStep();
-	}, [ completionWatcher, repeatStep ] );
+	}, [ repeatStep ] );
 
 	/**
 	 * Handle stop tour.
 	 */
 	const handleStop = useCallback( () => {
-		if ( completionWatcher?.cancel ) {
-			completionWatcher.cancel();
+		// Cancel watcher using ref.
+		if ( completionWatcherRef.current?.cancel ) {
+			completionWatcherRef.current.cancel();
+			completionWatcherRef.current = null;
 		}
 		// Clear inserted blocks tracking when tour stops.
 		clearInsertedBlocks();
 		previousStepIndexRef.current = null;
 		stopTour();
-	}, [ completionWatcher, stopTour ] );
+	}, [ stopTour ] );
 
 	// Don't render if not playing.
 	if ( ! isPlaying || ! currentTour || ! currentStep ) {
