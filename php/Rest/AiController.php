@@ -300,18 +300,19 @@ class AiController {
 
 			foreach ( $context[ 'editorBlocks' ] as $block ) {
 				$status = [];
-				if ( $block[ 'isEmpty' ] ) {
+				if ( ! empty( $block[ 'isEmpty' ] ) ) {
 					$status[] = 'empty';
 				}
-				if ( $block[ 'isSelected' ] ) {
+				if ( ! empty( $block[ 'isSelected' ] ) ) {
 					$status[] = 'SELECTED';
 				}
 				$status_str = empty( $status ) ? '' : ' (' . implode( ', ', $status ) . ')';
-				$lines[]    = "- #{$block[ 'order' ]}: {$block[ 'name' ]}{$status_str}";
+				$order      = $block[ 'order' ] ?? '?';
+				$lines[]    = "- #{$order}: {$block[ 'name' ]}{$status_str}";
 
 				// Show targeting options.
 				$targets = [];
-				if ( $block[ 'isSelected' ] ) {
+				if ( ! empty( $block[ 'isSelected' ] ) ) {
 					$targets[] = 'wpBlock: "selected" (recommended - currently selected)';
 				}
 				if ( ! empty( $block[ 'clientId' ] ) ) {

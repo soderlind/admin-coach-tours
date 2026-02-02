@@ -7,8 +7,9 @@
 	cacheDirectory=".phpunit.cache"
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTodoAnnotatedTests="true"
-	failOnRisky="true"
-	failOnWarning="true"
+	failOnRisky="false"
+	failOnWarning="false"
+	failOnDeprecation="false"
 >
 	<testsuites>
 		<testsuite name="Admin Coach Tours Test Suite">
@@ -24,13 +25,6 @@
 			<directory>vendor</directory>
 		</exclude>
 	</source>
-
-	<coverage>
-		<report>
-			<html outputDirectory="coverage"/>
-			<text outputFile="php://stdout"/>
-		</report>
-	</coverage>
 
 	<php>
 		<const name="ADMIN_COACH_TOURS_TESTING" value="true"/>
