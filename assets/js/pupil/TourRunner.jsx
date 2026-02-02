@@ -18,6 +18,7 @@ import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarg
 import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
 import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
+import { ensureEmptyPlaceholder } from '../runtime/ensureEmptyPlaceholder.js';
 
 const STORE_NAME = 'admin-coach-tours';
 
@@ -98,6 +99,7 @@ export default function TourRunner() {
 	const [ repeatCounter, setRepeatCounter ] = useState( 0 );
 	const highlighterRef = useRef( null );
 	const previousStepIndexRef = useRef( null );
+	const previousTourIdRef = useRef( null ); // Track tour changes to reset step tracking.
 	const completionWatcherRef = useRef( null ); // Use ref to avoid stale closure in cleanup.
 
 	// Get playback state from store.
@@ -165,6 +167,16 @@ export default function TourRunner() {
 		let isMounted = true;
 		let resolvedElement = null; // Track the resolved element locally.
 		const previousStepIndex = previousStepIndexRef.current;
+		const previousTourId = previousTourIdRef.current;
+		const currentTourId = currentTour?.id;
+
+		// Detect new tour - reset step tracking to avoid onLeaveStep from old tour.
+		const isNewTour = previousTourId !== null && previousTourId !== currentTourId;
+		if ( isNewTour ) {
+			console.log( '[ACT TourRunner] New tour detected, resetting step tracking' );
+			previousStepIndexRef.current = null;
+		}
+		previousTourIdRef.current = currentTourId;
 
 		const setupStep = async () => {
 			setResolutionError( null );
@@ -177,8 +189,20 @@ export default function TourRunner() {
 				completionWatcherRef.current = null;
 			}
 
+			// For step 0 that uses wpBlock:selected, ensure an empty paragraph is selected.
+			// This is critical because React re-renders can cause the selection to be lost
+			// between when ensureEmptyPlaceholder runs in the action and when we get here.
+			const usesSelectedBlock = currentStep?.target?.locators?.some(
+				( loc ) => loc.type === 'wpBlock' && loc.value === 'selected'
+			);
+			if ( stepIndex === 0 && usesSelectedBlock ) {
+				console.log( '[ACT TourRunner] Step 0 uses wpBlock:selected - ensuring empty paragraph is selected' );
+				await ensureEmptyPlaceholder();
+			}
+
 			// Handle step transition: leave previous step, enter new step.
-			if ( previousStepIndex !== null && previousStepIndex !== stepIndex ) {
+			// Skip onLeaveStep if this is a new tour (don't clean up from previous tour).
+			if ( previousStepIndex !== null && previousStepIndex !== stepIndex && ! isNewTour ) {
 				await onLeaveStep( previousStepIndex );
 			}
 			await onEnterStep( stepIndex );

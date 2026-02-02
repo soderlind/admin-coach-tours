@@ -285,6 +285,17 @@ The AI generates tours in this structure:
 | `ensureSidebarOpen` | Open the settings sidebar |
 | `insertBlock` | Insert a block (with `params.blockName`) |
 
+### First Step Targeting Rule
+
+When generating tours to **add** a block, the AI is instructed to:
+
+1. **ALWAYS target an empty paragraph** for the first step
+2. **NEVER target existing content blocks** (images, headings, etc.)
+3. Look for blocks marked `(empty, SELECTED)` in the editor state
+4. Use `wpBlock: "selected"` for the first step
+
+This ensures the tour teaches users to add *new* content rather than accidentally modifying existing content.
+
 ## Contextual Retry (AI Learning)
 
 When a tour fails and the user clicks "Try Again", the plugin sends failure context to help the AI learn:

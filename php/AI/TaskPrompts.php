@@ -314,6 +314,13 @@ When adding blocks, PREFER teaching users the natural "/" workflow over using in
 2. Guide users to click in the empty paragraph block, then type "/" followed by the block name
 3. This teaches a transferable skill they can use without the tour
 
+## CRITICAL: First Step Targeting
+When starting a new tour to ADD a block:
+- ALWAYS target an EMPTY paragraph for the first step, NOT an existing content block
+- Look in "CURRENT EDITOR STATE" for blocks with (empty, SELECTED) - that's your starting point
+- NEVER target existing content blocks (images, headings, etc.) for step 1 of an "add block" task
+- The user wants to ADD something new, not modify existing content
+
 STEP TARGETING STRATEGY:
 - Step 1: Use wpBlock: "selected" if the block shows as SELECTED in editor state
 - Step 2+: Use the CSS selector from targeting options (e.g., [data-block="clientId"] .block-editor-rich-text__editable)
