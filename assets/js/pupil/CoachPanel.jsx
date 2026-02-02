@@ -314,11 +314,11 @@ export default function CoachPanel( {
 				position: 'fixed',
 				top: position.y,
 				left: position.x,
-				width: '320px',
-				maxHeight: '400px',
+				width: '360px',
+				maxHeight: '450px',
 				backgroundColor: '#fff',
-				borderRadius: '8px',
-				boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+				borderRadius: '12px',
+				boxShadow: '0 8px 32px rgba(0, 0, 0, 0.18)',
 				zIndex: 9999990,
 				display: 'flex',
 				flexDirection: 'column',
@@ -330,19 +330,37 @@ export default function CoachPanel( {
 			<div
 				className="act-panel-header"
 				style={ {
-					padding: '12px 16px',
+					padding: '16px 20px',
 					borderBottom: '1px solid #e0e0e0',
 					cursor: 'grab',
 					userSelect: 'none',
+					background: 'linear-gradient(to bottom, #fafafa, #fff)',
+					borderRadius: '12px 12px 0 0',
 				} }
 			>
-				<Flex justify="space-between" align="center">
+				<Flex justify="space-between" align="flex-start">
 					<FlexBlock>
-						<strong className="act-panel-title">
+						<strong
+							className="act-panel-title"
+							style={ {
+								fontSize: '16px',
+								lineHeight: '1.4',
+								display: 'block',
+								marginBottom: '6px',
+								color: '#1e1e1e',
+							} }
+						>
 							{ step?.title ||
 								__( 'Step', 'admin-coach-tours' ) + ` ${ stepIndex + 1 }` }
 						</strong>
-						<div className="act-panel-progress" style={ { fontSize: '12px', color: '#666' } }>
+						<div
+							className="act-panel-progress"
+							style={ {
+								fontSize: '13px',
+								color: '#757575',
+								fontWeight: '500',
+							} }
+						>
 							{ `${ stepIndex + 1 } / ${ totalSteps }` }
 							{ tourTitle && ` • ${ tourTitle }` }
 						</div>
@@ -362,9 +380,12 @@ export default function CoachPanel( {
 			<div
 				className="act-panel-body"
 				style={ {
-					padding: '16px',
+					padding: '20px',
 					flex: 1,
 					overflow: 'auto',
+					fontSize: '14px',
+					lineHeight: '1.6',
+					color: '#1e1e1e',
 				} }
 			>
 				{ renderContent() }
@@ -374,8 +395,10 @@ export default function CoachPanel( {
 			<div
 				className="act-panel-footer"
 				style={ {
-					padding: '12px 16px',
+					padding: '14px 20px',
 					borderTop: '1px solid #e0e0e0',
+					background: '#fafafa',
+					borderRadius: '0 0 12px 12px',
 				} }
 			>
 				{ renderControls() }
