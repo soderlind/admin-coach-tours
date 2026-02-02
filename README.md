@@ -31,7 +31,7 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 1. Upload `admin-coach-tours` to `/wp-content/plugins/`
 2. Activate the plugin
-3. Go to **Tours → Settings** to configure AI
+3. Go to **Tools → Coach Tours** to configure AI
 
 ## Setup
 
