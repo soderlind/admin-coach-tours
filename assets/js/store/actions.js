@@ -731,6 +731,19 @@ export function setAiTourError( error ) {
 }
 
 /**
+ * Set last failure context for contextual retry.
+ *
+ * @param {Object|null} failureContext Context about the failure (step, selector, error).
+ * @return {Object} Action object.
+ */
+export function setLastFailureContext( failureContext ) {
+	return {
+		type: ACTION_TYPES.SET_LAST_FAILURE_CONTEXT,
+		failureContext,
+	};
+}
+
+/**
  * Receive an ephemeral tour from AI.
  *
  * @param {Object} tour Generated tour object.
@@ -757,12 +770,13 @@ export function clearEphemeralTour() {
 /**
  * Request AI to generate a tour.
  *
- * @param {string} taskId   Predefined task ID (optional).
- * @param {string} query    Freeform user query (optional).
- * @param {string} postType Current post type.
+ * @param {string}      taskId         Predefined task ID (optional).
+ * @param {string}      query          Freeform user query (optional).
+ * @param {string}      postType       Current post type.
+ * @param {Object|null} failureContext Context from a previous failed attempt (for retry).
  * @return {Generator} Generator that handles AI tour generation.
  */
-export function* requestAiTour( taskId, query, postType ) {
+export function* requestAiTour( taskId, query, postType, failureContext = null ) {
 	// Set loading state.
 	yield setAiTourLoading( true );
 	yield setAiTourError( null );
@@ -779,6 +793,7 @@ export function* requestAiTour( taskId, query, postType ) {
 			query,
 			postType,
 			editorContext,
+			failureContext,
 		};
 
 		console.log( '[ACT AI Response] Full result:', result );

@@ -143,7 +143,7 @@ const controls = {
 	/**
 	 * Handle AI tour generation requests.
 	 *
-	 * @param {Object} action Action with taskId, query, postType, and editorContext.
+	 * @param {Object} action Action with taskId, query, postType, editorContext, and optional failureContext.
 	 * @return {Promise} API response with generated tour.
 	 */
 	REQUEST_AI_TOUR( action ) {
@@ -155,6 +155,7 @@ const controls = {
 				query: action.query,
 				postType: action.postType,
 				editorContext: action.editorContext || null,
+				failureContext: action.failureContext || null,
 			},
 		} );
 	},

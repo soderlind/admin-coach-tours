@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.6] - 2026-02-02
+
+### Added
+
+- **Error handling with retry**: Added "Try Again" and "Dismiss" buttons when AI tour generation fails
+- **Retry for tasks loading errors**: Added retry button when tasks fail to load
+- **Contextual retry for AI learning**: When a tour fails and user retries, the failure context (failed step, selectors that didn't work) is sent to AI so it can generate better selectors
+- **Failure context in store**: New `lastFailureContext` state, `setLastFailureContext` action, and `getLastFailureContext` selector
+- **Tour failure escalation**: If step retry fails, the entire tour is marked as failed with detailed context for the next attempt
+
+### Changed
+
+- **Skip cache on retry**: When retrying with failure context, cache is bypassed to get a fresh AI response
+- **requestAiTour accepts failureContext**: Fourth parameter allows passing previous failure details
+
 ## [0.3.5] - 2026-02-01
 
 ### Added

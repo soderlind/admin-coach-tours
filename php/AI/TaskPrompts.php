@@ -172,9 +172,10 @@ class TaskPrompts {
 	 * @param string $gutenberg_context    RAG context from GutenbergKnowledgeBase.
 	 * @param string $post_type            The current post type.
 	 * @param string $editor_context       Current editor state (blocks, UI elements).
+	 * @param string $failure_context      Context from previous failed attempt (for retry).
 	 * @return string The system prompt.
 	 */
-	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, string $editor_context = '' ): string {
+	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, string $editor_context = '', string $failure_context = '' ): string {
 		$task = self::get_task( $task_id );
 
 		// Base system prompt.
@@ -329,6 +330,7 @@ Only use insertBlock precondition when the "/" workflow isn't practical (e.g., c
 - Task: {$task_id}
 
 {$editor_context}
+{$failure_context}
 
 ## Gutenberg Reference
 {$gutenberg_context}

@@ -473,6 +473,16 @@ export function getAiTourError( state ) {
 }
 
 /**
+ * Get last failure context for contextual retry.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Failure context.
+ */
+export function getLastFailureContext( state ) {
+	return state.lastFailureContext;
+}
+
+/**
  * Get ephemeral tour.
  *
  * @param {Object} state Store state.

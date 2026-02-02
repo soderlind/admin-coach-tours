@@ -127,6 +127,8 @@ export default function TourRunner() {
 		nextStep,
 		previousStep,
 		repeatStep,
+		setAiTourError,
+		setLastFailureContext,
 	} = useDispatch( STORE_NAME );
 
 	/**
@@ -279,6 +281,29 @@ export default function TourRunner() {
 					if ( highlighterRef.current ) {
 						highlighterRef.current.clear();
 					}
+
+					// If this is a retry that also failed, consider the entire AI tour generation failed.
+					// Stop the tour and show an error to the user.
+					if ( repeatCounter > 0 ) {
+						console.log( '[ACT TourRunner] Retry also failed. Failing the entire tour.' );
+
+						// Store failure context for contextual retry.
+						setLastFailureContext( {
+							stepIndex,
+							stepId: currentStep.id,
+							stepTitle: currentStep.title,
+							targetLocators: currentStep.target?.locators || [],
+							error: result.error,
+							reason: 'Step retry failed - target element could not be found after second attempt',
+						} );
+
+						clearInsertedBlocks();
+						previousStepIndexRef.current = null;
+						stopTour();
+						setAiTourError(
+							__( 'The generated tour could not complete. The AI may have produced incorrect steps.', 'admin-coach-tours' )
+						);
+					}
 				}
 			}
 
@@ -348,7 +373,7 @@ export default function TourRunner() {
 				completionWatcherRef.current = null;
 			}
 		};
-	}, [ isPlaying, currentStep, stepIndex, repeatCounter ] );
+	}, [ isPlaying, currentStep, stepIndex, repeatCounter, stopTour, setAiTourError ] );
 
 	/**
 	 * Handle manual continue (for manual completion type or finish).

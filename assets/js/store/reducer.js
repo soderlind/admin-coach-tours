@@ -50,6 +50,7 @@ export const DEFAULT_STATE = {
 	aiTourLoading: false,
 	aiTourError: null,
 	ephemeralTour: null,
+	lastFailureContext: null,
 };
 
 /**
@@ -112,6 +113,7 @@ export const ACTION_TYPES = {
 	RECEIVE_EPHEMERAL_TOUR: 'RECEIVE_EPHEMERAL_TOUR',
 	SET_AI_TOUR_ERROR: 'SET_AI_TOUR_ERROR',
 	CLEAR_EPHEMERAL_TOUR: 'CLEAR_EPHEMERAL_TOUR',
+	SET_LAST_FAILURE_CONTEXT: 'SET_LAST_FAILURE_CONTEXT',
 };
 
 /**
@@ -545,10 +547,17 @@ export default function reducer( state = DEFAULT_STATE, action ) {
 				ephemeralTour: null,
 				aiTourError: null,
 				aiTourLoading: false,
+				lastFailureContext: null,
 				// Remove from tours.
 				tours: Object.fromEntries(
 					Object.entries( state.tours ).filter( ( [ key ] ) => key !== 'ephemeral' )
 				),
+			};
+
+		case ACTION_TYPES.SET_LAST_FAILURE_CONTEXT:
+			return {
+				...state,
+				lastFailureContext: action.failureContext,
 			};
 
 		default:

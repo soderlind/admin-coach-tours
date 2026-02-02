@@ -40,6 +40,8 @@ export default function PupilLauncher() {
 	const [ chatQuery, setChatQuery ] = useState( '' );
 	const [ activeTab, setActiveTab ] = useState( 'tasks' );
 	const [ localLoading, setLocalLoading ] = useState( false );
+	// Track last request for retry functionality.
+	const [ lastRequest, setLastRequest ] = useState( null );
 	const inputRef = useRef( null );
 
 	// Get state from store.
@@ -48,6 +50,7 @@ export default function PupilLauncher() {
 		aiTourError,
 		isPlaying,
 		aiAvailable,
+		lastFailureContext,
 	} = useSelect( ( select ) => {
 		const store = select( STORE_NAME );
 		return {
@@ -56,6 +59,8 @@ export default function PupilLauncher() {
 			isPlaying: store.getCurrentTour() !== null,
 			// Check if AI is available from localized data.
 			aiAvailable: window.adminCoachTours?.aiAvailable ?? false,
+			// Failure context for contextual retry.
+			lastFailureContext: store.getLastFailureContext?.() ?? null,
 		};
 	}, [] );
 
@@ -71,7 +76,7 @@ export default function PupilLauncher() {
 	}, [ isPlaying, localLoading ] );
 
 	// Get dispatch actions.
-	const { requestAiTour, clearEphemeralTour } = useDispatch( STORE_NAME );
+	const { requestAiTour, clearEphemeralTour, setAiTourError, setLastFailureContext } = useDispatch( STORE_NAME );
 
 	/**
 	 * Fetch available tasks when launcher opens.
@@ -116,6 +121,8 @@ export default function PupilLauncher() {
 			setLocalLoading( true );
 			setIsOpen( false );
 			const postType = window.adminCoachTours?.postType || 'post';
+			// Track request for retry.
+			setLastRequest( { type: 'task', taskId, postType } );
 			requestAiTour( taskId, '', postType );
 		},
 		[ requestAiTour ]
@@ -135,11 +142,57 @@ export default function PupilLauncher() {
 			setLocalLoading( true );
 			setIsOpen( false );
 			const postType = window.adminCoachTours?.postType || 'post';
-			requestAiTour( '', chatQuery.trim(), postType );
+			const query = chatQuery.trim();
+			// Track request for retry.
+			setLastRequest( { type: 'chat', query, postType } );
+			requestAiTour( '', query, postType );
 			setChatQuery( '' );
 		},
 		[ chatQuery, requestAiTour ]
 	);
+
+	/**
+	 * Retry last failed request.
+	 * Passes failure context to AI so it can learn from the error.
+	 */
+	const handleRetry = useCallback( () => {
+		if ( ! lastRequest ) {
+			return;
+		}
+
+		// Clear error and retry.
+		setAiTourError( null );
+		setLocalLoading( true );
+		setIsOpen( false );
+
+		// Pass failure context so AI can generate better selectors.
+		if ( lastRequest.type === 'task' ) {
+			requestAiTour( lastRequest.taskId, '', lastRequest.postType, lastFailureContext );
+		} else if ( lastRequest.type === 'chat' ) {
+			requestAiTour( '', lastRequest.query, lastRequest.postType, lastFailureContext );
+		}
+
+		// Clear failure context after passing it.
+		setLastFailureContext( null );
+	}, [ lastRequest, lastFailureContext, requestAiTour, setAiTourError, setLastFailureContext ] );
+
+	/**
+	 * Dismiss error and clear last request.
+	 */
+	const handleDismissError = useCallback( () => {
+		setAiTourError( null );
+		setLastRequest( null );
+		setLastFailureContext( null );
+		setLocalLoading( false );
+	}, [ setAiTourError, setLastFailureContext ] );
+
+	/**
+	 * Retry loading tasks.
+	 */
+	const handleRetryTasks = useCallback( () => {
+		setTasksError( null );
+		setTasks( [] ); // Clear to trigger re-fetch.
+	}, [] );
 
 	/**
 	 * Toggle launcher open/closed.
@@ -299,15 +352,54 @@ export default function PupilLauncher() {
 
 					{ /* Content */ }
 					<div className="act-pupil-launcher__content">
-						{ /* Error Display */ }
-						{ ( aiTourError || tasksError ) && (
+						{ /* AI Tour Error with Retry */ }
+						{ aiTourError && (
 							<div className="act-pupil-launcher__error">
-								{ aiTourError || tasksError }
+								<p className="act-pupil-launcher__error-message">
+									{ aiTourError }
+								</p>
+								<p className="act-pupil-launcher__error-hint">
+									{ __( 'This might be a temporary issue.', 'admin-coach-tours' ) }
+								</p>
+								<div className="act-pupil-launcher__error-actions">
+									{ lastRequest && (
+										<button
+											className="act-pupil-launcher__retry-btn"
+											onClick={ handleRetry }
+											disabled={ isAiTourLoading }
+										>
+											{ __( 'Try Again', 'admin-coach-tours' ) }
+										</button>
+									) }
+									<button
+										className="act-pupil-launcher__dismiss-btn"
+										onClick={ handleDismissError }
+									>
+										{ __( 'Dismiss', 'admin-coach-tours' ) }
+									</button>
+								</div>
+							</div>
+						) }
+
+						{ /* Tasks Loading Error with Retry */ }
+						{ tasksError && ! aiTourError && (
+							<div className="act-pupil-launcher__error">
+								<p className="act-pupil-launcher__error-message">
+									{ tasksError }
+								</p>
+								<div className="act-pupil-launcher__error-actions">
+									<button
+										className="act-pupil-launcher__retry-btn"
+										onClick={ handleRetryTasks }
+									>
+										{ __( 'Try Again', 'admin-coach-tours' ) }
+									</button>
+								</div>
 							</div>
 						) }
 
 						{ /* Tasks Tab */ }
-						{ activeTab === 'tasks' && (
+						{ activeTab === 'tasks' && ! tasksError && (
 							<div className="act-pupil-launcher__tasks">
 								{ isTasksLoading && (
 									<div className="act-pupil-launcher__loading">

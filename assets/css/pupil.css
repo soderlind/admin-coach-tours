@@ -235,6 +235,57 @@
 	border-bottom: 1px solid #f0d0d0;
 }
 
+.act-pupil-launcher__error-message {
+	margin: 0 0 4px;
+	font-weight: 500;
+}
+
+.act-pupil-launcher__error-hint {
+	margin: 0 0 12px;
+	font-size: 12px;
+	color: #8e5152;
+}
+
+.act-pupil-launcher__error-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.act-pupil-launcher__retry-btn,
+.act-pupil-launcher__dismiss-btn {
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 500;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.15s ease;
+}
+
+.act-pupil-launcher__retry-btn {
+	background: #d63638;
+	color: #fff;
+}
+
+.act-pupil-launcher__retry-btn:hover:not(:disabled) {
+	background: #b32d2e;
+}
+
+.act-pupil-launcher__retry-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.act-pupil-launcher__dismiss-btn {
+	background: transparent;
+	color: #d63638;
+	border: 1px solid #d63638;
+}
+
+.act-pupil-launcher__dismiss-btn:hover {
+	background: rgba(214, 54, 56, 0.1);
+}
+
 /* Loading */
 .act-pupil-launcher__loading {
 	padding: 32px;

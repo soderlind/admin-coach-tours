@@ -1,6 +1,6 @@
 # Admin Coach Tours
 
-[![Version](https://img.shields.io/badge/version-0.3.5-blue.svg)](https://github.com/soderlind/admin-coach-tours)
+[![Version](https://img.shields.io/badge/version-0.3.6-blue.svg)](https://github.com/soderlind/admin-coach-tours)
 [![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-blue.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-purple.svg)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)

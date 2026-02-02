@@ -377,6 +377,81 @@ class AiController {
 	}
 
 	/**
+	 * Sanitize failure context from frontend.
+	 *
+	 * @since 0.3.6
+	 * @param array $context Raw failure context.
+	 * @return array Sanitized context.
+	 */
+	private static function sanitize_failure_context( array $context ): array {
+		$sanitized = [
+			'stepIndex' => isset( $context[ 'stepIndex' ] ) ? absint( $context[ 'stepIndex' ] ) : 0,
+			'stepId'    => isset( $context[ 'stepId' ] ) ? sanitize_text_field( $context[ 'stepId' ] ) : '',
+			'stepTitle' => isset( $context[ 'stepTitle' ] ) ? sanitize_text_field( $context[ 'stepTitle' ] ) : '',
+			'error'     => isset( $context[ 'error' ] ) ? sanitize_text_field( $context[ 'error' ] ) : '',
+			'reason'    => isset( $context[ 'reason' ] ) ? sanitize_text_field( $context[ 'reason' ] ) : '',
+		];
+
+		// Sanitize locators array.
+		if ( isset( $context[ 'targetLocators' ] ) && is_array( $context[ 'targetLocators' ] ) ) {
+			$sanitized[ 'targetLocators' ] = [];
+			foreach ( array_slice( $context[ 'targetLocators' ], 0, 5 ) as $locator ) {
+				$sanitized[ 'targetLocators' ][] = [
+					'type'   => isset( $locator[ 'type' ] ) ? sanitize_key( $locator[ 'type' ] ) : '',
+					'value'  => isset( $locator[ 'value' ] ) ? sanitize_text_field( $locator[ 'value' ] ) : '',
+					'weight' => isset( $locator[ 'weight' ] ) ? absint( $locator[ 'weight' ] ) : 0,
+				];
+			}
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Format failure context for AI prompt.
+	 *
+	 * This helps the AI learn from previous failures and generate better selectors.
+	 *
+	 * @since 0.3.6
+	 * @param array $context Sanitized failure context.
+	 * @return string Formatted context for prompt.
+	 */
+	private static function format_failure_context_for_prompt( array $context ): string {
+		$lines = [
+			'',
+			'⚠️ PREVIOUS ATTEMPT FAILED - PLEASE FIX:',
+			'',
+			'The previous tour generation failed at step ' . ( $context[ 'stepIndex' ] + 1 ) . '.',
+		];
+
+		if ( ! empty( $context[ 'stepTitle' ] ) ) {
+			$lines[] = 'Step title: "' . $context[ 'stepTitle' ] . '"';
+		}
+
+		if ( ! empty( $context[ 'error' ] ) ) {
+			$lines[] = 'Error: ' . $context[ 'error' ];
+		}
+
+		if ( ! empty( $context[ 'targetLocators' ] ) ) {
+			$lines[] = '';
+			$lines[] = 'The following selectors DID NOT WORK:';
+			foreach ( $context[ 'targetLocators' ] as $locator ) {
+				$lines[] = '  ❌ ' . $locator[ 'type' ] . ': "' . $locator[ 'value' ] . '"';
+			}
+		}
+
+		$lines[] = '';
+		$lines[] = 'REQUIREMENTS FOR THIS RETRY:';
+		$lines[] = '1. Use DIFFERENT selectors than the ones that failed';
+		$lines[] = '2. Prefer more general, reliable selectors (aria-label, data-type attributes)';
+		$lines[] = '3. Consider if the step order is correct - maybe a precondition is missing';
+		$lines[] = '4. Double-check inEditorIframe constraint - is the element really in/out of the iframe?';
+		$lines[] = '';
+
+		return implode( "\n", $lines );
+	}
+
+	/**
 	 * Get available AI tasks for pupils.
 	 *
 	 * @since 0.3.0
@@ -510,6 +585,13 @@ class AiController {
 			$editor_context = self::sanitize_editor_context( $raw_editor_context );
 		}
 
+		// Get and sanitize failure context (for retry with learning).
+		$raw_failure_context = $request->get_param( 'failureContext' );
+		$failure_context     = null;
+		if ( is_array( $raw_failure_context ) ) {
+			$failure_context = self::sanitize_failure_context( $raw_failure_context );
+		}
+
 		// Require either a task or a query.
 		if ( empty( $task_id ) && empty( $query ) ) {
 			return new \WP_Error(
@@ -519,19 +601,22 @@ class AiController {
 			);
 		}
 
-		// Check cache first.
-		$cache_key   = self::generate_cache_key( $task_id, $query, $post_type, $editor_context );
-		$cached_tour = self::get_cached_tour( $cache_key );
+		// Don't use cache when retrying with failure context.
+		if ( empty( $failure_context ) ) {
+			// Check cache first.
+			$cache_key   = self::generate_cache_key( $task_id, $query, $post_type, $editor_context );
+			$cached_tour = self::get_cached_tour( $cache_key );
 
-		if ( false !== $cached_tour ) {
-			// Return cached tour.
-			return rest_ensure_response(
-				[
-					'tour'      => $cached_tour,
-					'ephemeral' => true,
-					'cached'    => true,
-				]
-			);
+			if ( false !== $cached_tour ) {
+				// Return cached tour.
+				return rest_ensure_response(
+					[
+						'tour'      => $cached_tour,
+						'ephemeral' => true,
+						'cached'    => true,
+					]
+				);
+			}
 		}
 
 		// Get relevant Gutenberg context based on task/query.
@@ -547,13 +632,20 @@ class AiController {
 			$editor_context_prompt = self::format_editor_context_for_prompt( $editor_context );
 		}
 
-		// Build the system prompt with editor context.
+		// Format failure context for prompt (contextual retry).
+		$failure_context_prompt = '';
+		if ( ! empty( $failure_context ) ) {
+			$failure_context_prompt = self::format_failure_context_for_prompt( $failure_context );
+		}
+
+		// Build the system prompt with editor context and failure context.
 		$system_prompt = TaskPrompts::get_system_prompt(
 			$task_id,
 			$query,
 			$gutenberg_context,
 			$post_type,
-			$editor_context_prompt
+			$editor_context_prompt,
+			$failure_context_prompt
 		);
 
 		// Generate the tour.
