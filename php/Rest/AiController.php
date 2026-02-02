@@ -167,7 +167,7 @@ class AiController {
 		// Ancestors (limited depth).
 		if ( isset( $context[ 'ancestors' ] ) && is_array( $context[ 'ancestors' ] ) ) {
 			$sanitized[ 'ancestors' ] = [];
-			$max_ancestors          = min( 3, count( $context[ 'ancestors' ] ) );
+			$max_ancestors            = min( 3, count( $context[ 'ancestors' ] ) );
 
 			for ( $i = 0; $i < $max_ancestors; $i++ ) {
 				$ancestor           = $context[ 'ancestors' ][ $i ];
@@ -238,7 +238,7 @@ class AiController {
 
 		// Visible elements.
 		if ( isset( $context[ 'visibleElements' ] ) && is_array( $context[ 'visibleElements' ] ) ) {
-			$ve                           = $context[ 'visibleElements' ];
+			$ve                             = $context[ 'visibleElements' ];
 			$sanitized[ 'visibleElements' ] = [
 				'inserterOpen'      => isset( $ve[ 'inserterOpen' ] ) ? (bool) $ve[ 'inserterOpen' ] : false,
 				'sidebarOpen'       => isset( $ve[ 'sidebarOpen' ] ) ? (bool) $ve[ 'sidebarOpen' ] : false,
@@ -250,7 +250,7 @@ class AiController {
 
 		// UI samples.
 		if ( isset( $context[ 'uiSamples' ] ) && is_array( $context[ 'uiSamples' ] ) ) {
-			$samples                = $context[ 'uiSamples' ];
+			$samples                  = $context[ 'uiSamples' ];
 			$sanitized[ 'uiSamples' ] = [];
 
 			foreach ( [ 'inserterButton', 'publishButton', 'settingsButton', 'searchInput' ] as $key ) {
