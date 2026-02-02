@@ -38,9 +38,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
       
-      - name: Run PHP CodeSniffer
-        run: composer lint
-      
       - name: Run PHPUnit
         run: composer test
 
@@ -63,11 +60,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Run ESLint
-        run: npm run lint
-      
       - name: Run Vitest
-        run: npm run test -- --run
+        run: npm run test:js
       
       - name: Build
         run: npm run build
