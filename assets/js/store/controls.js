@@ -156,6 +156,7 @@ const controls = {
 				postType: action.postType,
 				editorContext: action.editorContext || null,
 				failureContext: action.failureContext || null,
+				locale: window.adminCoachTours?.locale || '',
 			},
 		} );
 	},

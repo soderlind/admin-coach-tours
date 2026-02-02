@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-02-02
+
+### Added
+
+- **Localized AI responses**: Tours are now generated in the user's WordPress language. The AI prompt includes language instructions based on the WordPress locale setting.
+- **Language detection**: Uses WordPress `format_code_lang()` for accurate language name detection from locale codes.
+- **Script translations for pupil mode**: Added `wp_set_script_translations()` for the pupil script to enable JavaScript translations.
+- **Norwegian (Bokmål) translation**: Full translation coverage with `.po`, `.mo`, and `.json` files for both PHP and JavaScript strings.
+- **i18n npm scripts**: Added translation workflow scripts (`i18n:make-pot`, `i18n:update-po`, `i18n:make-mo`, `i18n:make-json`, `i18n:make-php`).
+- **WordPress readme.txt**: Added standard WordPress.org plugin readme file.
+- **PHPUnit tests for locale**: Tests for language instruction generation and backward compatibility.
+
+### Changed
+
+- **TaskPrompts::get_system_prompt()**: Now accepts optional `$locale` parameter to include language instructions in AI prompts.
+- **REST API endpoint**: `/ai/generate-tour` now accepts `locale` parameter.
+- **JavaScript store**: `REQUEST_AI_TOUR` action now sends locale from `window.adminCoachTours.locale`.
+
 ## [0.3.9] - 2026-02-02
 
 ### Fixed

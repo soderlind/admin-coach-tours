@@ -257,6 +257,11 @@ class Routes {
 							'default'     => 'post',
 							'description' => __( 'The post type being edited.', 'admin-coach-tours' ),
 						],
+						'locale'   => [
+							'type'        => 'string',
+							'default'     => '',
+							'description' => __( 'User locale for AI response language.', 'admin-coach-tours' ),
+						],
 					],
 				],
 			]

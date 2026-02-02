@@ -1,0 +1,138 @@
+{
+	"translation-revision-date": "2025-01-01 12:00+0100",
+	"generator": "WP-CLI",
+	"source": "build/educator/index.js",
+	"domain": "messages",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"lang": "nb_NO",
+				"plural-forms": "nplurals=2; plural=(n != 1);"
+			},
+			"Failed to save steps.": [
+				"Kunne ikke lagre trinn."
+			],
+			"Tour Steps": [
+				"Omvisningstrinn"
+			],
+			"Tour Info": [
+				"Omvisningsinfo"
+			],
+			"Untitled Tour": [
+				"Omvisning uten tittel"
+			],
+			"Published": [
+				"Publisert"
+			],
+			"Draft": [
+				"Utkast"
+			],
+			"Use the block editor canvas as a sandbox to create your tour steps. Pick elements from the editor to target them in your tour.": [
+				"Bruk blokkeditorens lerret som en sandkasse for å lage omvisningstrinnene dine. Velg elementer fra editoren for å målrette dem i omvisningen din."
+			],
+			"Steps": [
+				"Trinn"
+			],
+			"Steps saved successfully!": [
+				"Trinn lagret!"
+			],
+			"Saving…": [
+				"Lagrer…"
+			],
+			"Save Steps": [
+				"Lagre trinn"
+			],
+			"Test Tour": [
+				"Test omvisning"
+			],
+			"Edit Step": [
+				"Rediger trinn"
+			],
+			"Click an element to select it as target": [
+				"Klikk på et element for å velge det som mål"
+			],
+			"Cancel": [
+				"Avbryt"
+			],
+			"Failed to save step.": [
+				"Kunne ikke lagre trinn."
+			],
+			"Target Element": [
+				"Målelement"
+			],
+			"Test": [
+				"Test"
+			],
+			"Re-pick": [
+				"Velg på nytt"
+			],
+			"Target found successfully!": [
+				"Mål funnet!"
+			],
+			"Target not found. Consider re-picking.": [
+				"Mål ikke funnet. Vurder å velge på nytt."
+			],
+			"Pick Target Element": [
+				"Velg målelement"
+			],
+			"Step Title": [
+				"Trinntittel"
+			],
+			"e.g., Click the Add Block button": [
+				"f.eks. Klikk på Legg til blokk-knappen"
+			],
+			"Step Content": [
+				"Trinninnhold"
+			],
+			"Explain what the user should do and why…": [
+				"Forklar hva brukeren skal gjøre og hvorfor…"
+			],
+			"AI Assistance": [
+				"AI-assistanse"
+			],
+			"Generating draft…": [
+				"Genererer utkast…"
+			],
+			"Apply": [
+				"Bruk"
+			],
+			"Dismiss": [
+				"Avvis"
+			],
+			"Generate with AI": [
+				"Generer med AI"
+			],
+			"Completion Condition": [
+				"Fullføringsbetingelse"
+			],
+			"Save Step": [
+				"Lagre trinn"
+			],
+			"Drag to reorder": [
+				"Dra for å endre rekkefølge"
+			],
+			"Untitled Step": [
+				"Trinn uten tittel"
+			],
+			"Edit step": [
+				"Rediger trinn"
+			],
+			"Delete step": [
+				"Slett trinn"
+			],
+			"Are you sure you want to delete this step?": [
+				"Er du sikker på at du vil slette dette trinnet?"
+			],
+			"No steps yet. Click the button below to add your first step.": [
+				"Ingen trinn ennå. Klikk på knappen nedenfor for å legge til ditt første trinn."
+			],
+			"Add First Step": [
+				"Legg til første trinn"
+			],
+			"Add Step": [
+				"Legg til trinn"
+			]
+		}
+	}
+}

@@ -1,0 +1,967 @@
+# Norwegian Bokmål translation for Admin Coach Tours.
+# Copyright (C) 2025 Developer
+# This file is distributed under the same license as the Admin Coach Tours plugin.
+# Per Søderlind <per@soderlind.no>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Admin Coach Tours 0.3.9\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-coach-tours\n"
+"POT-Creation-Date: 2025-01-01T00:00:00+00:00\n"
+"PO-Revision-Date: 2025-01-01 12:00+0100\n"
+"Last-Translator: Per Søderlind <per@soderlind.no>\n"
+"Language-Team: Norwegian Bokmål\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WP-CLI\n"
+"X-Domain: admin-coach-tours\n"
+
+#. Plugin Name of the plugin
+msgid "Admin Coach Tours"
+msgstr "Admin Coach Omvisninger"
+
+#. Plugin URI of the plugin
+msgid "https://developer.developer.developer"
+msgstr "https://developer.developer.developer"
+
+#. Description of the plugin
+msgid "Interactive step-by-step WordPress editor tours for educators and learners, with AI‑powered step generation."
+msgstr "Interaktive trinn-for-trinn omvisninger i WordPress-editoren for undervisere og elever, med AI-drevet generering av trinn."
+
+#. Author of the plugin
+msgid "Developer"
+msgstr "Utvikler"
+
+#. Author URI of the plugin
+msgid "https://developer.developer"
+msgstr "https://developer.developer"
+
+#: php/Ai/AiController.php:61
+msgid "AI is not configured or enabled."
+msgstr "AI er ikke konfigurert eller aktivert."
+
+#: php/Ai/AiController.php:92
+msgid "Failed to make AI request."
+msgstr "Kunne ikke utføre AI-forespørsel."
+
+#: php/Ai/AiController.php:127
+msgid "AI response contained no content."
+msgstr "AI-svaret inneholdt ikke noe innhold."
+
+#: php/Ai/AiController.php:141
+#: php/Ai/AiController.php:155
+msgid "AI response was not valid JSON."
+msgstr "AI-svaret var ikke gyldig JSON."
+
+#: php/Ai/AiController.php:172
+#: php/Ai/AiController.php:189
+msgid "AI response did not contain expected steps array."
+msgstr "AI-svaret inneholdt ikke forventet trinn-array."
+
+#: php/Ai/AiController.php:202
+#: php/Ai/AiController.php:220
+msgid "Validation errors:"
+msgstr "Valideringsfeil:"
+
+#: php/Ai/AiController.php:238
+msgid "Unknown error during AI request."
+msgstr "Ukjent feil under AI-forespørsel."
+
+#: php/Ai/Providers/AnthropicProvider.php:42
+msgid "API Key"
+msgstr "API-nøkkel"
+
+#: php/Ai/Providers/AnthropicProvider.php:43
+msgid "Your Anthropic API key."
+msgstr "Din Anthropic API-nøkkel."
+
+#: php/Ai/Providers/AnthropicProvider.php:50
+#: php/Ai/Providers/AzureOpenAiProvider.php:67
+#: php/Ai/Providers/OpenAiProvider.php:50
+msgid "Model"
+msgstr "Modell"
+
+#: php/Ai/Providers/AnthropicProvider.php:51
+msgid "The Anthropic model to use."
+msgstr "Anthropic-modellen som skal brukes."
+
+#: php/Ai/Providers/AnthropicProvider.php:148
+#: php/Ai/Providers/AzureOpenAiProvider.php:186
+#: php/Ai/Providers/OpenAiProvider.php:131
+msgid "API request failed"
+msgstr "API-forespørsel mislyktes"
+
+#: php/Ai/Providers/AnthropicProvider.php:161
+#: php/Ai/Providers/AzureOpenAiProvider.php:199
+#: php/Ai/Providers/OpenAiProvider.php:144
+msgid "Unexpected response format"
+msgstr "Uventet responsformat"
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:43
+msgid "Endpoint URL"
+msgstr "Endepunkt-URL"
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:44
+msgid "Your Azure OpenAI endpoint URL."
+msgstr "Din Azure OpenAI endepunkt-URL."
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:51
+msgid "Your Azure OpenAI API key."
+msgstr "Din Azure OpenAI API-nøkkel."
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:59
+msgid "Deployment Name"
+msgstr "Distribusjonsnavn"
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:60
+msgid "Your Azure OpenAI deployment name."
+msgstr "Ditt Azure OpenAI distribusjonsnavn."
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:68
+msgid "The Azure OpenAI model."
+msgstr "Azure OpenAI-modellen."
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:76
+msgid "API Version"
+msgstr "API-versjon"
+
+#: php/Ai/Providers/AzureOpenAiProvider.php:77
+msgid "Azure OpenAI API version."
+msgstr "Azure OpenAI API-versjon."
+
+#: php/Ai/Providers/OpenAiProvider.php:42
+msgid "Your OpenAI API key."
+msgstr "Din OpenAI API-nøkkel."
+
+#: php/Ai/Providers/OpenAiProvider.php:51
+msgid "The OpenAI model to use."
+msgstr "OpenAI-modellen som skal brukes."
+
+#: php/PostTypes/CoachTourPostType.php:53
+msgid "Coach Tours"
+msgstr "Coach Omvisninger"
+
+#: php/PostTypes/CoachTourPostType.php:54
+msgid "Coach Tour"
+msgstr "Coach Omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:56
+msgid "Add New"
+msgstr "Legg til ny"
+
+#: php/PostTypes/CoachTourPostType.php:57
+msgid "Add New Tour"
+msgstr "Legg til ny omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:58
+msgid "Edit Tour"
+msgstr "Rediger omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:59
+msgid "New Tour"
+msgstr "Ny omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:60
+msgid "View Tour"
+msgstr "Vis omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:61
+msgid "View Tours"
+msgstr "Vis omvisninger"
+
+#: php/PostTypes/CoachTourPostType.php:62
+msgid "Search Tours"
+msgstr "Søk i omvisninger"
+
+#: php/PostTypes/CoachTourPostType.php:63
+msgid "No tours found."
+msgstr "Ingen omvisninger funnet."
+
+#: php/PostTypes/CoachTourPostType.php:64
+msgid "No tours found in Trash."
+msgstr "Ingen omvisninger funnet i papirkurven."
+
+#: php/PostTypes/CoachTourPostType.php:65
+msgid "Parent Tour:"
+msgstr "Overordnet omvisning:"
+
+#: php/PostTypes/CoachTourPostType.php:66
+msgid "All Tours"
+msgstr "Alle omvisninger"
+
+#: php/PostTypes/CoachTourPostType.php:67
+msgid "Tour Archives"
+msgstr "Omvisningsarkiv"
+
+#: php/PostTypes/CoachTourPostType.php:68
+msgid "Tour Attributes"
+msgstr "Omvisningsattributter"
+
+#: php/PostTypes/CoachTourPostType.php:69
+msgid "Insert into tour"
+msgstr "Sett inn i omvisning"
+
+#: php/PostTypes/CoachTourPostType.php:70
+msgid "Uploaded to this tour"
+msgstr "Lastet opp til denne omvisningen"
+
+#: php/PostTypes/CoachTourPostType.php:71
+msgid "Tours list"
+msgstr "Omvisningsliste"
+
+#: php/PostTypes/CoachTourPostType.php:72
+msgid "Tours list navigation"
+msgstr "Omvisningslistnavigering"
+
+#: php/PostTypes/CoachTourPostType.php:73
+msgid "Filter tours list"
+msgstr "Filtrer omvisningsliste"
+
+#: php/PostTypes/CoachTourPostType.php:74
+msgid "Tour published."
+msgstr "Omvisning publisert."
+
+#: php/PostTypes/CoachTourPostType.php:75
+msgid "Tour scheduled."
+msgstr "Omvisning planlagt."
+
+#: php/PostTypes/CoachTourPostType.php:76
+msgid "Tour updated."
+msgstr "Omvisning oppdatert."
+
+#: php/PredefinedTasks/TaskManager.php:45
+msgid "Media"
+msgstr "Media"
+
+#: php/PredefinedTasks/TaskManager.php:49
+msgid "Text & Content"
+msgstr "Tekst og innhold"
+
+#: php/PredefinedTasks/TaskManager.php:53
+msgid "Embeds"
+msgstr "Innbygging"
+
+#: php/PredefinedTasks/TaskManager.php:57
+msgid "Design & Layout"
+msgstr "Design og layout"
+
+#: php/PredefinedTasks/TaskManager.php:67
+msgid "Add an image"
+msgstr "Legg til et bilde"
+
+#: php/PredefinedTasks/TaskManager.php:68
+msgid "Learn how to insert and configure an Image block"
+msgstr "Lær hvordan du setter inn og konfigurerer en bildeblokk"
+
+#: php/PredefinedTasks/TaskManager.php:73
+msgid "Create a gallery"
+msgstr "Lag et galleri"
+
+#: php/PredefinedTasks/TaskManager.php:74
+msgid "Learn how to add and customize a Gallery block"
+msgstr "Lær hvordan du legger til og tilpasser en galleributikk"
+
+#: php/PredefinedTasks/TaskManager.php:79
+msgid "Add a video"
+msgstr "Legg til en video"
+
+#: php/PredefinedTasks/TaskManager.php:80
+msgid "Learn how to embed or upload videos"
+msgstr "Lær hvordan du bygger inn eller laster opp videoer"
+
+#: php/PredefinedTasks/TaskManager.php:85
+msgid "Insert an audio file"
+msgstr "Sett inn en lydfil"
+
+#: php/PredefinedTasks/TaskManager.php:86
+msgid "Learn how to add audio blocks for podcasts or music"
+msgstr "Lær hvordan du legger til lydblokker for podcaster eller musikk"
+
+#: php/PredefinedTasks/TaskManager.php:91
+msgid "Add a cover image"
+msgstr "Legg til et forsidebilde"
+
+#: php/PredefinedTasks/TaskManager.php:92
+msgid "Learn how to create a cover block with text overlay"
+msgstr "Lær hvordan du lager en forside-blokk med tekstoverlegg"
+
+#: php/PredefinedTasks/TaskManager.php:101
+msgid "Create a heading"
+msgstr "Lag en overskrift"
+
+#: php/PredefinedTasks/TaskManager.php:102
+msgid "Learn how to add and style heading blocks"
+msgstr "Lær hvordan du legger til og styler overskriftsblokker"
+
+#: php/PredefinedTasks/TaskManager.php:107
+msgid "Make a list"
+msgstr "Lag en liste"
+
+#: php/PredefinedTasks/TaskManager.php:108
+msgid "Learn how to create bulleted or numbered lists"
+msgstr "Lær hvordan du lager punktlister eller nummererte lister"
+
+#: php/PredefinedTasks/TaskManager.php:113
+msgid "Add a quote"
+msgstr "Legg til et sitat"
+
+#: php/PredefinedTasks/TaskManager.php:114
+msgid "Learn how to insert and style quote blocks"
+msgstr "Lær hvordan du setter inn og styler sitatblokker"
+
+#: php/PredefinedTasks/TaskManager.php:119
+msgid "Create a table"
+msgstr "Lag en tabell"
+
+#: php/PredefinedTasks/TaskManager.php:120
+msgid "Learn how to add and format data tables"
+msgstr "Lær hvordan du legger til og formaterer datatabeller"
+
+#: php/PredefinedTasks/TaskManager.php:125
+msgid "Add a button"
+msgstr "Legg til en knapp"
+
+#: php/PredefinedTasks/TaskManager.php:126
+msgid "Learn how to create call-to-action buttons"
+msgstr "Lær hvordan du lager handlingsoppfordringsknapper"
+
+#: php/PredefinedTasks/TaskManager.php:135
+msgid "Embed a YouTube video"
+msgstr "Bygg inn en YouTube-video"
+
+#: php/PredefinedTasks/TaskManager.php:136
+msgid "Learn how to add YouTube videos to your content"
+msgstr "Lær hvordan du legger til YouTube-videoer i innholdet ditt"
+
+#: php/PredefinedTasks/TaskManager.php:141
+msgid "Embed a Twitter/X post"
+msgstr "Bygg inn et Twitter/X-innlegg"
+
+#: php/PredefinedTasks/TaskManager.php:142
+msgid "Learn how to embed tweets in your posts"
+msgstr "Lær hvordan du bygger inn tweets i innleggene dine"
+
+#: php/PredefinedTasks/TaskManager.php:147
+msgid "Add a Spotify embed"
+msgstr "Legg til en Spotify-innbygging"
+
+#: php/PredefinedTasks/TaskManager.php:148
+msgid "Learn how to embed Spotify playlists or tracks"
+msgstr "Lær hvordan du bygger inn Spotify-spillelister eller spor"
+
+#: php/PredefinedTasks/TaskManager.php:153
+msgid "Embed a map"
+msgstr "Bygg inn et kart"
+
+#: php/PredefinedTasks/TaskManager.php:154
+msgid "Learn how to add Google Maps or other map embeds"
+msgstr "Lær hvordan du legger til Google Maps eller andre kartinnbygginger"
+
+#: php/PredefinedTasks/TaskManager.php:163
+msgid "Create columns"
+msgstr "Lag kolonner"
+
+#: php/PredefinedTasks/TaskManager.php:164
+msgid "Learn how to create multi-column layouts"
+msgstr "Lær hvordan du lager flerkollonne-oppsett"
+
+#: php/PredefinedTasks/TaskManager.php:169
+msgid "Add a group block"
+msgstr "Legg til en gruppeblokk"
+
+#: php/PredefinedTasks/TaskManager.php:170
+msgid "Learn how to group blocks together"
+msgstr "Lær hvordan du grupperer blokker sammen"
+
+#: php/PredefinedTasks/TaskManager.php:175
+msgid "Use a spacer"
+msgstr "Bruk en mellomromsblokk"
+
+#: php/PredefinedTasks/TaskManager.php:176
+msgid "Learn how to add vertical spacing between elements"
+msgstr "Lær hvordan du legger til vertikal mellomrom mellom elementer"
+
+#: php/PredefinedTasks/TaskManager.php:181
+msgid "Create a separator"
+msgstr "Lag en skillelinje"
+
+#: php/PredefinedTasks/TaskManager.php:182
+msgid "Learn how to add horizontal dividers"
+msgstr "Lær hvordan du legger til horisontale skillelinjer"
+
+#: php/PredefinedTasks/TaskManager.php:187
+msgid "Add a row"
+msgstr "Legg til en rad"
+
+#: php/PredefinedTasks/TaskManager.php:188
+msgid "Learn how to create horizontal block rows"
+msgstr "Lær hvordan du lager horisontale blokkrader"
+
+#: php/PredefinedTasks/TaskManager.php:193
+msgid "Use a stack"
+msgstr "Bruk en stabel"
+
+#: php/PredefinedTasks/TaskManager.php:194
+msgid "Learn how to stack blocks vertically"
+msgstr "Lær hvordan du stabler blokker vertikalt"
+
+#: php/Rest/Routes.php:248
+msgid "ID of a predefined task."
+msgstr "ID til en forhåndsdefinert oppgave."
+
+#: php/Rest/Routes.php:253
+msgid "Freeform user query."
+msgstr "Friformet brukerforespørsel."
+
+#: php/Rest/Routes.php:258
+msgid "The post type being edited."
+msgstr "Innholdstypen som redigeres."
+
+#: php/Rest/Routes.php:275
+#: php/Rest/Routes.php:300
+#: php/Rest/Routes.php:325
+msgid "You must be logged in."
+msgstr "Du må være logget inn."
+
+#: php/Rest/Routes.php:283
+msgid "You do not have permission to run tours."
+msgstr "Du har ikke tillatelse til å kjøre omvisninger."
+
+#: php/Rest/Routes.php:308
+msgid "You do not have permission to edit tours."
+msgstr "Du har ikke tillatelse til å redigere omvisninger."
+
+#: php/Rest/Routes.php:333
+msgid "You do not have permission to use AI features."
+msgstr "Du har ikke tillatelse til å bruke AI-funksjoner."
+
+#: php/Rest/Routes.php:378
+#: php/Rest/Routes.php:426
+msgid "Tour not found."
+msgstr "Omvisning ikke funnet."
+
+#: php/Rest/Routes.php:586
+msgid "Filter by post type scope."
+msgstr "Filtrer etter innholdstype-omfang."
+
+#: php/Rest/Routes.php:592
+msgid "Filter by editor type."
+msgstr "Filtrer etter redigeringstype."
+
+#: php/Rest/Routes.php:599
+msgid "Filter by status."
+msgstr "Filtrer etter status."
+
+#: php/Security/Capabilities.php:197
+msgid "You do not have permission to perform this action."
+msgstr "Du har ikke tillatelse til å utføre denne handlingen."
+
+#: php/Security/Capabilities.php:208
+msgid "Cookie nonce is invalid."
+msgstr "Cookie-nonce er ugyldig."
+
+#: php/Settings/SettingsPage.php:108
+msgid "General Settings"
+msgstr "Generelle innstillinger"
+
+#: php/Settings/SettingsPage.php:125
+msgid "Enable Pupil Mode"
+msgstr "Aktiver elevmodus"
+
+#: php/Settings/SettingsPage.php:131
+msgid "Allow users to run tours in pupil mode."
+msgstr "Tillat brukere å kjøre omvisninger i elevmodus."
+
+#: php/Settings/SettingsPage.php:138
+msgid "AI Settings"
+msgstr "AI-innstillinger"
+
+#: php/Settings/SettingsPage.php:155
+msgid "Enable AI Features"
+msgstr "Aktiver AI-funksjoner"
+
+#: php/Settings/SettingsPage.php:161
+msgid "Enable AI-powered step draft generation."
+msgstr "Aktiver AI-drevet generering av trinnutkast."
+
+#: php/Settings/SettingsPage.php:177
+msgid "AI Provider"
+msgstr "AI-leverandør"
+
+#: php/Settings/SettingsPage.php:257
+msgid "You do not have sufficient permissions."
+msgstr "Du har ikke tilstrekkelige tillatelser."
+
+#: php/Settings/SettingsPage.php:281
+msgid "Configure AI providers for generating step drafts and completion suggestions."
+msgstr "Konfigurer AI-leverandører for generering av trinnutkast og fullføringsforslag."
+
+#: php/Settings/SettingsPage.php:290
+msgid "No AI provider is currently configured. Add an API key below to enable AI features."
+msgstr "Ingen AI-leverandør er konfigurert for øyeblikket. Legg til en API-nøkkel nedenfor for å aktivere AI-funksjoner."
+
+#: php/Settings/SettingsPage.php:327
+msgid "configured"
+msgstr "konfigurert"
+
+#: php/Settings/SettingsPage.php:333
+msgid "Select the AI provider to use for generating step drafts."
+msgstr "Velg AI-leverandøren som skal brukes for å generere trinnutkast."
+
+#: php/Settings/SettingsPage.php:386
+msgid "Leave empty to keep current"
+msgstr "La stå tom for å beholde gjeldende"
+
+#: php/Settings/SettingsPage.php:390
+msgid "API key is set"
+msgstr "API-nøkkel er satt"
+
+#: php/Storage/TourRepository.php:102
+#: php/Storage/TourRepository.php:237
+#: php/Storage/TourRepository.php:295
+msgid "Tour not found"
+msgstr "Omvisning ikke funnet"
+
+#: php/Storage/TourRepository.php:186
+msgid "Tour title is required"
+msgstr "Omvisningstittel er påkrevd"
+
+#: php/Storage/TourRepository.php:305
+msgid "Failed to delete tour"
+msgstr "Kunne ikke slette omvisning"
+
+#: php/Storage/TourRepository.php:433
+#: php/Storage/TourRepository.php:462
+msgid "Step not found"
+msgstr "Trinn ikke funnet"
+
+#. translators: %s: step ID
+#: php/Storage/TourRepository.php:494
+#, php-format
+msgid "Step not found: %s"
+msgstr "Trinn ikke funnet: %s"
+
+#. translators: %s: field name
+#: php/Validation/StepSchema.php:264
+#, php-format
+msgid "Missing required field: %s"
+msgstr "Mangler påkrevd felt: %s"
+
+#: php/Validation/StepSchema.php:276
+msgid "Step id must be a non-empty string"
+msgstr "Trinn-ID må være en ikke-tom streng"
+
+#: php/Validation/StepSchema.php:281
+msgid "Step order must be a non-negative integer"
+msgstr "Trinnrekkefølge må være et ikke-negativt heltall"
+
+#: php/Validation/StepSchema.php:286
+msgid "Step title must be a string"
+msgstr "Trinntittel må være en streng"
+
+#: php/Validation/StepSchema.php:332
+msgid "Target must be an object"
+msgstr "Mål må være et objekt"
+
+#: php/Validation/StepSchema.php:336
+msgid "Target must have a locators array"
+msgstr "Mål må ha en locators-array"
+
+#. translators: %d: locator index
+#: php/Validation/StepSchema.php:350
+#, php-format
+msgid "Locator at index %d must be an object"
+msgstr "Locator ved indeks %d må være et objekt"
+
+#. translators: %d: locator index
+#: php/Validation/StepSchema.php:363
+#, php-format
+msgid "Invalid locator type at index %d"
+msgstr "Ugyldig locator-type ved indeks %d"
+
+#. translators: %d: locator index
+#: php/Validation/StepSchema.php:374
+#, php-format
+msgid "Locator value at index %d must be a non-empty string"
+msgstr "Locator-verdi ved indeks %d må være en ikke-tom streng"
+
+#: php/Validation/StepSchema.php:392
+msgid "Completion must be an object"
+msgstr "Fullføring må være et objekt"
+
+#: php/Validation/StepSchema.php:396
+msgid "Invalid completion type"
+msgstr "Ugyldig fullføringstype"
+
+#: php/Validation/StepSchema.php:404
+msgid "wpData completion requires a store name"
+msgstr "wpData-fullføring krever et butikknavn"
+
+#: php/Validation/StepSchema.php:411
+msgid "wpData completion requires a selector name"
+msgstr "wpData-fullføring krever et velgernavn"
+
+#: php/Validation/StepSchema.php:417
+msgid "Invalid completion operator"
+msgstr "Ugyldig fullføringsoperator"
+
+#: php/Validation/StepSchema.php:431
+msgid "Preconditions must be an array"
+msgstr "Forhåndsbetingelser må være en array"
+
+#. translators: %d: precondition index
+#: php/Validation/StepSchema.php:440
+#, php-format
+msgid "Precondition at index %d must be an object"
+msgstr "Forhåndsbetingelse ved indeks %d må være et objekt"
+
+#. translators: %d: precondition index
+#: php/Validation/StepSchema.php:451
+#, php-format
+msgid "Invalid precondition type at index %d"
+msgstr "Ugyldig forhåndsbetingelsestype ved indeks %d"
+
+#: php/Validation/StepSchema.php:469
+msgid "Recovery must be an array"
+msgstr "Gjenoppretting må være en array"
+
+#. translators: %d: recovery action index
+#: php/Validation/StepSchema.php:478
+#, php-format
+msgid "Recovery action at index %d must be an object"
+msgstr "Gjenopprettingshandling ved indeks %d må være et objekt"
+
+#. translators: %d: recovery action index
+#: php/Validation/StepSchema.php:489
+#, php-format
+msgid "Invalid recovery action type at index %d"
+msgstr "Ugyldig gjenopprettingshandlingstype ved indeks %d"
+
+#. translators: 1: step index, 2: error message
+#: php/Validation/StepSchema.php:513
+#, php-format
+msgid "Step %1$d: %2$s"
+msgstr "Trinn %1$d: %2$s"
+
+#: assets/js/educator/EducatorSidebar.jsx:138
+msgid "Failed to save steps."
+msgstr "Kunne ikke lagre trinn."
+
+#: assets/js/educator/EducatorSidebar.jsx:190
+#: assets/js/educator/EducatorSidebar.jsx:216
+#: assets/js/educator/EducatorSidebar.jsx:221
+msgid "Tour Steps"
+msgstr "Omvisningstrinn"
+
+#: assets/js/educator/EducatorSidebar.jsx:226
+msgid "Tour Info"
+msgstr "Omvisningsinfo"
+
+#: assets/js/educator/EducatorSidebar.jsx:233
+msgid "Untitled Tour"
+msgstr "Omvisning uten tittel"
+
+#: assets/js/educator/EducatorSidebar.jsx:248
+msgid "Published"
+msgstr "Publisert"
+
+#: assets/js/educator/EducatorSidebar.jsx:252
+msgid "Draft"
+msgstr "Utkast"
+
+#: assets/js/educator/EducatorSidebar.jsx:260
+msgid "Use the block editor canvas as a sandbox to create your tour steps. Pick elements from the editor to target them in your tour."
+msgstr "Bruk blokkeditorens lerret som en sandkasse for å lage omvisningstrinnene dine. Velg elementer fra editoren for å målrette dem i omvisningen din."
+
+#: assets/js/educator/EducatorSidebar.jsx:269
+msgid "Steps"
+msgstr "Trinn"
+
+#: assets/js/educator/EducatorSidebar.jsx:286
+msgid "Steps saved successfully!"
+msgstr "Trinn lagret!"
+
+#: assets/js/educator/EducatorSidebar.jsx:312
+msgid "Saving…"
+msgstr "Lagrer…"
+
+#: assets/js/educator/EducatorSidebar.jsx:316
+msgid "Save Steps"
+msgstr "Lagre trinn"
+
+#: assets/js/educator/EducatorSidebar.jsx:327
+msgid "Test Tour"
+msgstr "Test omvisning"
+
+#: assets/js/educator/EducatorSidebar.jsx:335
+msgid "Edit Step"
+msgstr "Rediger trinn"
+
+#: assets/js/educator/PickerOverlay.jsx:433
+msgid "Click an element to select it as target"
+msgstr "Klikk på et element for å velge det som mål"
+
+#: assets/js/educator/PickerOverlay.jsx:443
+#: assets/js/educator/StepEditor.jsx:383
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: assets/js/educator/StepEditor.jsx:113
+msgid "Failed to save step."
+msgstr "Kunne ikke lagre trinn."
+
+#: assets/js/educator/StepEditor.jsx:200
+msgid "Target Element"
+msgstr "Målelement"
+
+#: assets/js/educator/StepEditor.jsx:217
+msgid "Test"
+msgstr "Test"
+
+#: assets/js/educator/StepEditor.jsx:226
+msgid "Re-pick"
+msgstr "Velg på nytt"
+
+#: assets/js/educator/StepEditor.jsx:237
+msgid "Target found successfully!"
+msgstr "Mål funnet!"
+
+#: assets/js/educator/StepEditor.jsx:241
+msgid "Target not found. Consider re-picking."
+msgstr "Mål ikke funnet. Vurder å velge på nytt."
+
+#: assets/js/educator/StepEditor.jsx:254
+msgid "Pick Target Element"
+msgstr "Velg målelement"
+
+#: assets/js/educator/StepEditor.jsx:264
+msgid "Step Title"
+msgstr "Trinntittel"
+
+#: assets/js/educator/StepEditor.jsx:267
+msgid "e.g., Click the Add Block button"
+msgstr "f.eks. Klikk på Legg til blokk-knappen"
+
+#: assets/js/educator/StepEditor.jsx:273
+msgid "Step Content"
+msgstr "Trinninnhold"
+
+#: assets/js/educator/StepEditor.jsx:276
+msgid "Explain what the user should do and why…"
+msgstr "Forklar hva brukeren skal gjøre og hvorfor…"
+
+#: assets/js/educator/StepEditor.jsx:287
+msgid "AI Assistance"
+msgstr "AI-assistanse"
+
+#: assets/js/educator/StepEditor.jsx:293
+msgid "Generating draft…"
+msgstr "Genererer utkast…"
+
+#: assets/js/educator/StepEditor.jsx:309
+msgid "Apply"
+msgstr "Bruk"
+
+#: assets/js/educator/StepEditor.jsx:319
+#: assets/js/pupil/PupilLauncher.jsx:385
+msgid "Dismiss"
+msgstr "Avvis"
+
+#: assets/js/educator/StepEditor.jsx:330
+msgid "Generate with AI"
+msgstr "Generer med AI"
+
+#: assets/js/educator/StepEditor.jsx:345
+msgid "Completion Condition"
+msgstr "Fullføringsbetingelse"
+
+#: assets/js/educator/StepEditor.jsx:393
+msgid "Save Step"
+msgstr "Lagre trinn"
+
+#: assets/js/educator/StepList.jsx:86
+msgid "Drag to reorder"
+msgstr "Dra for å endre rekkefølge"
+
+#: assets/js/educator/StepList.jsx:98
+msgid "Untitled Step"
+msgstr "Trinn uten tittel"
+
+#: assets/js/educator/StepList.jsx:113
+msgid "Edit step"
+msgstr "Rediger trinn"
+
+#: assets/js/educator/StepList.jsx:119
+msgid "Delete step"
+msgstr "Slett trinn"
+
+#: assets/js/educator/StepList.jsx:190
+msgid "Are you sure you want to delete this step?"
+msgstr "Er du sikker på at du vil slette dette trinnet?"
+
+#: assets/js/educator/StepList.jsx:202
+msgid "No steps yet. Click the button below to add your first step."
+msgstr "Ingen trinn ennå. Klikk på knappen nedenfor for å legge til ditt første trinn."
+
+#: assets/js/educator/StepList.jsx:208
+msgid "Add First Step"
+msgstr "Legg til første trinn"
+
+#: assets/js/educator/StepList.jsx:245
+msgid "Add Step"
+msgstr "Legg til trinn"
+
+#: assets/js/pupil/CoachPanel.jsx:244
+msgid "Preparing…"
+msgstr "Forbereder…"
+
+#: assets/js/pupil/CoachPanel.jsx:256
+msgid "This step expects a specific block type:"
+msgstr "Dette trinnet forventer en bestemt blokktype:"
+
+#. translators: %s: block type name
+#: assets/js/pupil/CoachPanel.jsx:265
+#, js-format
+msgid "Please insert or select a %s block first, then try again."
+msgstr "Vennligst sett inn eller velg en %s-blokk først, og prøv deretter igjen."
+
+#: assets/js/pupil/CoachPanel.jsx:272
+msgid "Could not find the target element. The UI may have changed."
+msgstr "Kunne ikke finne målelementet. Brukergrensesnittet kan ha endret seg."
+
+#: assets/js/pupil/CoachPanel.jsx:279
+#: assets/js/pupil/PupilLauncher.jsx:378
+#: assets/js/pupil/PupilLauncher.jsx:402
+msgid "Try Again"
+msgstr "Prøv igjen"
+
+#: assets/js/pupil/CoachPanel.jsx:313
+msgid "Finish"
+msgstr "Fullfør"
+
+#: assets/js/pupil/CoachPanel.jsx:314
+msgid "Continue"
+msgstr "Fortsett"
+
+#: assets/js/pupil/CoachPanel.jsx:319
+msgid "Next"
+msgstr "Neste"
+
+#: assets/js/pupil/CoachPanel.jsx:376
+msgid "Step"
+msgstr "Trinn"
+
+#: assets/js/pupil/CoachPanel.jsx:393
+msgid "Close tour"
+msgstr "Lukk omvisning"
+
+#: assets/js/pupil/PupilLauncher.jsx:101
+msgid "AI is not available."
+msgstr "AI er ikke tilgjengelig."
+
+#: assets/js/pupil/PupilLauncher.jsx:105
+msgid "Failed to load tasks."
+msgstr "Kunne ikke laste oppgaver."
+
+#: assets/js/pupil/PupilLauncher.jsx:226
+#: assets/js/pupil/PupilLauncher.jsx:307
+msgid "Open AI Coach"
+msgstr "Åpne AI Coach"
+
+#: assets/js/pupil/PupilLauncher.jsx:234
+msgid "AI Coach"
+msgstr "AI Coach"
+
+#: assets/js/pupil/PupilLauncher.jsx:238
+#: assets/js/pupil/PupilLauncher.jsx:338
+msgid "Close"
+msgstr "Lukk"
+
+#: assets/js/pupil/PupilLauncher.jsx:245
+msgid "AI is not configured yet."
+msgstr "AI er ikke konfigurert ennå."
+
+#: assets/js/pupil/PupilLauncher.jsx:247
+msgid "Go to "
+msgstr "Gå til "
+
+#: assets/js/pupil/PupilLauncher.jsx:249
+msgid "Tools → Coach Tours"
+msgstr "Verktøy → Coach Omvisninger"
+
+#: assets/js/pupil/PupilLauncher.jsx:251
+msgid " to add your API key."
+msgstr " for å legge til din API-nøkkel."
+
+#: assets/js/pupil/PupilLauncher.jsx:278
+msgid "Creating your guided tour..."
+msgstr "Lager din veiledede omvisning..."
+
+#: assets/js/pupil/PupilLauncher.jsx:281
+msgid "AI is analyzing the editor and generating step-by-step instructions."
+msgstr "AI analyserer editoren og genererer trinn-for-trinn instruksjoner."
+
+#: assets/js/pupil/PupilLauncher.jsx:284
+msgid "This usually takes a few seconds."
+msgstr "Dette tar vanligvis noen få sekunder."
+
+#: assets/js/pupil/PupilLauncher.jsx:325
+msgid "Creating your tour..."
+msgstr "Lager omvisningen din..."
+
+#: assets/js/pupil/PupilLauncher.jsx:328
+msgid "AI is generating step-by-step instructions"
+msgstr "AI genererer trinn-for-trinn instruksjoner"
+
+#: assets/js/pupil/PupilLauncher.jsx:334
+msgid "What would you like to learn?"
+msgstr "Hva vil du lære?"
+
+#: assets/js/pupil/PupilLauncher.jsx:350
+msgid "Common Tasks"
+msgstr "Vanlige oppgaver"
+
+#: assets/js/pupil/PupilLauncher.jsx:356
+msgid "Ask a Question"
+msgstr "Still et spørsmål"
+
+#: assets/js/pupil/PupilLauncher.jsx:369
+msgid "This might be a temporary issue."
+msgstr "Dette kan være et midlertidig problem."
+
+#: assets/js/pupil/PupilLauncher.jsx:413
+msgid "Loading tasks..."
+msgstr "Laster oppgaver..."
+
+#: assets/js/pupil/PupilLauncher.jsx:453
+msgid "Ask about the WordPress editor:"
+msgstr "Spør om WordPress-editoren:"
+
+#: assets/js/pupil/PupilLauncher.jsx:462
+msgid "e.g., How do I add a gallery?"
+msgstr "f.eks. Hvordan legger jeg til et galleri?"
+
+#: assets/js/pupil/PupilLauncher.jsx:471
+msgid "Generating..."
+msgstr "Genererer..."
+
+#: assets/js/pupil/PupilLauncher.jsx:472
+msgid "Get Tour"
+msgstr "Få omvisning"
+
+#: assets/js/pupil/PupilLauncher.jsx:476
+msgid "AI will create a step-by-step tour to guide you."
+msgstr "AI vil lage en trinn-for-trinn omvisning for å veilede deg."
+
+#. translators: %s: block type name
+#: assets/js/pupil/TourRunner.jsx:349
+#, js-format
+msgid "Could not find the %s block. Make sure to insert or select the correct block, then try again."
+msgstr "Kunne ikke finne %s-blokken. Sørg for å sette inn eller velge riktig blokk, og prøv deretter igjen."
+
+#: assets/js/pupil/TourRunner.jsx:352
+msgid "The generated tour could not complete. Try again to get a fresh set of instructions."
+msgstr "Den genererte omvisningen kunne ikke fullføres. Prøv igjen for å få nye instruksjoner."

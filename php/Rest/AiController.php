@@ -167,7 +167,7 @@ class AiController {
 		// Ancestors (limited depth).
 		if ( isset( $context[ 'ancestors' ] ) && is_array( $context[ 'ancestors' ] ) ) {
 			$sanitized[ 'ancestors' ] = [];
-			$max_ancestors          = min( 3, count( $context[ 'ancestors' ] ) );
+			$max_ancestors            = min( 3, count( $context[ 'ancestors' ] ) );
 
 			for ( $i = 0; $i < $max_ancestors; $i++ ) {
 				$ancestor           = $context[ 'ancestors' ][ $i ];
@@ -238,7 +238,7 @@ class AiController {
 
 		// Visible elements.
 		if ( isset( $context[ 'visibleElements' ] ) && is_array( $context[ 'visibleElements' ] ) ) {
-			$ve                           = $context[ 'visibleElements' ];
+			$ve                             = $context[ 'visibleElements' ];
 			$sanitized[ 'visibleElements' ] = [
 				'inserterOpen'      => isset( $ve[ 'inserterOpen' ] ) ? (bool) $ve[ 'inserterOpen' ] : false,
 				'sidebarOpen'       => isset( $ve[ 'sidebarOpen' ] ) ? (bool) $ve[ 'sidebarOpen' ] : false,
@@ -250,7 +250,7 @@ class AiController {
 
 		// UI samples.
 		if ( isset( $context[ 'uiSamples' ] ) && is_array( $context[ 'uiSamples' ] ) ) {
-			$samples                = $context[ 'uiSamples' ];
+			$samples                  = $context[ 'uiSamples' ];
 			$sanitized[ 'uiSamples' ] = [];
 
 			foreach ( [ 'inserterButton', 'publishButton', 'settingsButton', 'searchInput' ] as $key ) {
@@ -577,6 +577,12 @@ class AiController {
 		$task_id   = sanitize_key( $request->get_param( 'taskId' ) ?? '' );
 		$query     = sanitize_text_field( $request->get_param( 'query' ) ?? '' );
 		$post_type = sanitize_key( $request->get_param( 'postType' ) ?? 'post' );
+		$locale    = sanitize_text_field( $request->get_param( 'locale' ) ?? '' );
+
+		// Fall back to WordPress user locale if not provided.
+		if ( empty( $locale ) ) {
+			$locale = get_user_locale();
+		}
 
 		// Get and sanitize editor context.
 		$raw_editor_context = $request->get_param( 'editorContext' );
@@ -645,7 +651,8 @@ class AiController {
 			$gutenberg_context,
 			$post_type,
 			$editor_context_prompt,
-			$failure_context_prompt
+			$failure_context_prompt,
+			$locale
 		);
 
 		// Generate the tour.
