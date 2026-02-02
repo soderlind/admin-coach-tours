@@ -680,8 +680,10 @@ class AiController {
 			);
 		}
 
-		// Cache the successful result.
-		self::cache_tour( $cache_key, $result );
+		// Cache the successful result (only if we have a cache key).
+		if ( isset( $cache_key ) ) {
+			self::cache_tour( $cache_key, $result );
+		}
 
 		// Return the ephemeral tour (not persisted).
 		return rest_ensure_response(
