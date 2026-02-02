@@ -5,6 +5,8 @@
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-purple.svg)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
+>NOTE: This plugin is currently in beta. 
+
 AI-powered interactive tutorials for the WordPress block editor.
 
 ## Overview
