@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	Button,
 	Spinner,
@@ -32,6 +32,7 @@ import { arrowRight, close } from '@wordpress/icons';
  * @param {string}           props.tourTitle                Tour title.
  * @param {HTMLElement|null} props.targetElement            Resolved target element.
  * @param {string|null}      props.resolutionError          Target resolution error.
+ * @param {string|null}      props.expectedBlockType        Expected block type when resolution fails.
  * @param {boolean}          props.isApplyingPreconditions  Whether preconditions are being applied.
  * @param {Function}         props.onContinue               Continue/complete handler.
  * @param {Function}         props.onRepeat                 Repeat step handler.
@@ -47,6 +48,7 @@ export default function CoachPanel( {
 	tourTitle,
 	targetElement,
 	resolutionError,
+	expectedBlockType,
 	isApplyingPreconditions,
 	onContinue,
 	onRepeat,
@@ -247,12 +249,32 @@ export default function CoachPanel( {
 		if ( resolutionError ) {
 			return (
 				<div className="act-panel-error">
-					<p>
-						{ __(
-							'Could not find the target element. The UI may have changed.',
-							'admin-coach-tours'
-						) }
-					</p>
+					{ expectedBlockType ? (
+						<>
+							<p style={ { marginBottom: '8px' } }>
+								<strong>
+									{ __(
+										'This step expects a specific block type:',
+										'admin-coach-tours'
+									) }
+								</strong>
+							</p>
+							<p style={ { marginBottom: '12px', color: '#1e1e1e' } }>
+								{ sprintf(
+									/* translators: %s: block type name */
+									__( 'Please insert or select a %s block first, then try again.', 'admin-coach-tours' ),
+									expectedBlockType
+								) }
+							</p>
+						</>
+					) : (
+						<p style={ { marginBottom: '12px' } }>
+							{ __(
+								'Could not find the target element. The UI may have changed.',
+								'admin-coach-tours'
+							) }
+						</p>
+					) }
 					<Button variant="secondary" onClick={ onRepeat }>
 						{ __( 'Try Again', 'admin-coach-tours' ) }
 					</Button>
