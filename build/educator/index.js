@@ -1,1 +1,11987 @@
-(()=>{"use strict";var e,t,n={997(e){e.exports=window.wp.blocks}},r={};function o(e){var t=r[e];if(void 0!==t)return t.exports;var i=r[e]={exports:{}};return n[e](i,i.exports,o),i.exports}o.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return o.d(t,{a:t}),t},t=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,o.t=function(n,r){if(1&r&&(n=this(n)),8&r)return n;if("object"==typeof n&&n){if(4&r&&n.__esModule)return n;if(16&r&&"function"==typeof n.then)return n}var i=Object.create(null);o.r(i);var a={};e=e||[null,t({}),t([]),t(t)];for(var s=2&r&&n;("object"==typeof s||"function"==typeof s)&&!~e.indexOf(s);s=t(s))Object.getOwnPropertyNames(s).forEach(e=>a[e]=()=>n[e]);return a.default=()=>n,o.d(i,a),i},o.d=(e,t)=>{for(var n in t)o.o(t,n)&&!o.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},o.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),o.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})};var i={};o.r(i),o.d(i,{activatePicker:()=>F,addStep:()=>W,clearAiDraft:()=>Q,clearEphemeralTour:()=>ae,clearResolvedTarget:()=>B,createTour:()=>T,deactivatePicker:()=>q,deleteStep:()=>K,endTour:()=>C,fetchTour:()=>E,fetchTours:()=>b,incrementResolutionAttempts:()=>j,markStepComplete:()=>N,nextStep:()=>R,previousStep:()=>A,receiveEphemeralTour:()=>ie,receiveTour:()=>m,receiveTours:()=>h,reorderSteps:()=>X,repeatStep:()=>k,requestAiDraft:()=>ee,requestAiTour:()=>se,resetCompletion:()=>L,saveTour:()=>y,selectStep:()=>$,setAiDraftError:()=>Z,setAiDraftLoading:()=>Y,setAiDraftResult:()=>J,setAiTourError:()=>re,setAiTourLoading:()=>ne,setCompletionSatisfied:()=>O,setCurrentStep:()=>_,setCurrentTour:()=>v,setLastError:()=>U,setLastFailureContext:()=>oe,setMode:()=>D,setPendingChanges:()=>H,setRecovering:()=>M,setResolvedTarget:()=>P,setSidebarOpen:()=>te,setToursError:()=>g,setToursLoading:()=>f,skipStep:()=>I,startEphemeralTour:()=>le,startPicking:()=>V,startTour:()=>x,stopPicking:()=>G,stopTour:()=>w,updateStep:()=>z,updateTour:()=>S});var a={};o.r(a),o.d(a,{getAiDraft:()=>$e,getAiDraftError:()=>qe,getAiDraftResult:()=>Ge,getAiTourError:()=>We,getCurrentStep:()=>Ee,getCurrentStepIndex:()=>be,getCurrentTour:()=>ve,getCurrentTourId:()=>me,getEphemeralTour:()=>Xe,getLastError:()=>Ne,getLastFailureContext:()=>Ke,getMode:()=>Ce,getPickingStepId:()=>Be,getProgress:()=>xe,getResolutionAttempts:()=>Le,getResolvedTarget:()=>De,getSelectedStep:()=>je,getSelectedStepId:()=>Me,getSkippedSteps:()=>Ie,getTotalSteps:()=>ye,getTour:()=>de,getTours:()=>ue,getToursByEditor:()=>he,getToursById:()=>ce,getToursByPostType:()=>ge,getToursError:()=>fe,hasNextStep:()=>Te,hasPendingChanges:()=>Ue,hasPreviousStep:()=>Se,isAiDraftLoading:()=>Fe,isAiDrafting:()=>Ve,isAiTourLoading:()=>ze,isCompletionSatisfied:()=>Ae,isEducatorMode:()=>we,isEphemeralTourActive:()=>Ye,isPickerActive:()=>Pe,isPupilMode:()=>_e,isRecovering:()=>Oe,isSidebarOpen:()=>He,isTourActive:()=>Re,isToursLoading:()=>pe,wasStepSkipped:()=>ke});var s={};o.r(s),o.d(s,{getTour:()=>et,getTours:()=>Qe,getToursByPostType:()=>tt});const l=window.wp.plugins,c=window.wp.data,u={tours:{},toursLoading:!1,toursError:null,currentTourId:null,currentStepIndex:0,mode:null,completionSatisfied:!1,skippedSteps:[],isPickerActive:!1,pickingStepId:null,selectedStepId:null,pendingChanges:!1,tourProgress:{},isRecovering:!1,lastError:null,resolvedTarget:null,resolutionAttempts:0,sidebarOpen:!1,aiDraftLoading:!1,aiDraftError:null,aiDraftResult:null,aiTourLoading:!1,aiTourError:null,ephemeralTour:null,lastFailureContext:null},d={SET_TOURS_LOADING:"SET_TOURS_LOADING",SET_TOURS_ERROR:"SET_TOURS_ERROR",RECEIVE_TOURS:"RECEIVE_TOURS",RECEIVE_TOUR:"RECEIVE_TOUR",SET_CURRENT_TOUR:"SET_CURRENT_TOUR",START_TOUR:"START_TOUR",END_TOUR:"END_TOUR",SET_CURRENT_STEP:"SET_CURRENT_STEP",NEXT_STEP:"NEXT_STEP",PREVIOUS_STEP:"PREVIOUS_STEP",SKIP_STEP:"SKIP_STEP",REPEAT_STEP:"REPEAT_STEP",SET_MODE:"SET_MODE",SET_COMPLETION_SATISFIED:"SET_COMPLETION_SATISFIED",RESET_COMPLETION:"RESET_COMPLETION",SET_RESOLVED_TARGET:"SET_RESOLVED_TARGET",CLEAR_RESOLVED_TARGET:"CLEAR_RESOLVED_TARGET",SET_RECOVERING:"SET_RECOVERING",INCREMENT_RESOLUTION_ATTEMPTS:"INCREMENT_RESOLUTION_ATTEMPTS",SET_LAST_ERROR:"SET_LAST_ERROR",ACTIVATE_PICKER:"ACTIVATE_PICKER",DEACTIVATE_PICKER:"DEACTIVATE_PICKER",SELECT_STEP:"SELECT_STEP",SET_PENDING_CHANGES:"SET_PENDING_CHANGES",UPDATE_STEP:"UPDATE_STEP",ADD_STEP:"ADD_STEP",DELETE_STEP:"DELETE_STEP",REORDER_STEPS:"REORDER_STEPS",SET_AI_DRAFT_LOADING:"SET_AI_DRAFT_LOADING",SET_AI_DRAFT_ERROR:"SET_AI_DRAFT_ERROR",SET_AI_DRAFT_RESULT:"SET_AI_DRAFT_RESULT",CLEAR_AI_DRAFT:"CLEAR_AI_DRAFT",SET_SIDEBAR_OPEN:"SET_SIDEBAR_OPEN",SET_AI_TOUR_LOADING:"SET_AI_TOUR_LOADING",RECEIVE_EPHEMERAL_TOUR:"RECEIVE_EPHEMERAL_TOUR",SET_AI_TOUR_ERROR:"SET_AI_TOUR_ERROR",CLEAR_EPHEMERAL_TOUR:"CLEAR_EPHEMERAL_TOUR",SET_LAST_FAILURE_CONTEXT:"SET_LAST_FAILURE_CONTEXT"},p=()=>"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){const t=16*Math.random()|0;return("x"===e?t:3&t|8).toString(16)});function f(e){return{type:d.SET_TOURS_LOADING,isLoading:e}}function g(e){return{type:d.SET_TOURS_ERROR,error:e}}function h(e){return{type:d.RECEIVE_TOURS,tours:e}}function m(e){return{type:d.RECEIVE_TOUR,tour:e}}function*v(e){if(e){try{const t=yield{type:"API_FETCH",request:{path:`/admin-coach-tours/v1/tours/${e}`,method:"GET"}};t&&t.id&&(yield m(t))}catch(t){console.log("[ACT] Tour not found, creating placeholder for:",e),yield m({id:e,title:"",steps:[],status:"draft"})}yield{type:d.SET_CURRENT_TOUR,tourId:e}}else yield{type:d.SET_CURRENT_TOUR,tourId:null}}function b(e={}){return{type:"FETCH_TOURS",args:e}}function E(e){return{type:"FETCH_TOUR",tourId:e}}function*y(e,t){try{const n=yield{type:"SAVE_TOUR",tourId:e,tourData:t};return n?.id&&(yield m(n)),n}catch(e){throw e}}function*T(e){try{const t=yield{type:"CREATE_TOUR",data:e};return t?.id&&(yield m(t)),t}catch(e){throw e}}function*S(e,t){try{const n=yield{type:"UPDATE_TOUR",tourId:e,data:t};return n?.id&&(yield m(n)),n}catch(e){throw e}}function x(e,t="pupil"){return{type:d.START_TOUR,tourId:e,mode:t}}function C(){return{type:d.END_TOUR}}function w(){return C()}function _(e){return{type:d.SET_CURRENT_STEP,stepIndex:e}}function R(){return{type:d.NEXT_STEP}}function A(){return{type:d.PREVIOUS_STEP}}function I(){return{type:d.SKIP_STEP}}function k(){return{type:d.REPEAT_STEP}}function D(e){return{type:d.SET_MODE,mode:e}}function O(e){return{type:d.SET_COMPLETION_SATISFIED,satisfied:e}}function L(){return{type:d.RESET_COMPLETION}}function N(){return R()}function P(e){return{type:d.SET_RESOLVED_TARGET,target:e}}function B(){return{type:d.CLEAR_RESOLVED_TARGET}}function M(e){return{type:d.SET_RECOVERING,isRecovering:e}}function j(){return{type:d.INCREMENT_RESOLUTION_ATTEMPTS}}function U(e){return{type:d.SET_LAST_ERROR,error:e}}function F(e=null){return{type:d.ACTIVATE_PICKER,stepId:e}}function V(e=null){return F(e)}function q(){return{type:d.DEACTIVATE_PICKER}}function G(){return q()}function $(e){return{type:d.SELECT_STEP,stepId:e}}function H(e){return{type:d.SET_PENDING_CHANGES,pending:e}}function*z(e,t,n){yield{type:d.UPDATE_STEP,tourId:e,stepId:t,updates:n}}function*W(e,t={},n=null){const r={id:p(),order:0,title:"",instruction:"",hint:"",target:{locators:[],constraints:{visible:!0}},preconditions:[],completion:{type:"manual"},recovery:[{action:"reapplyPreconditions",timeout:1e3}],tags:[],version:1,...t};yield{type:d.ADD_STEP,tourId:e,step:r,index:n}}function*K(e,t){yield{type:d.DELETE_STEP,tourId:e,stepId:t}}function*X(e,t){yield{type:d.REORDER_STEPS,tourId:e,stepIds:t}}function Y(e){return{type:d.SET_AI_DRAFT_LOADING,isLoading:e}}function Z(e){return{type:d.SET_AI_DRAFT_ERROR,error:e}}function J(e){return{type:d.SET_AI_DRAFT_RESULT,result:e}}function Q(){return{type:d.CLEAR_AI_DRAFT}}function*ee(e,t){yield Y(!0),yield Z(null);try{const n=yield{type:"REQUEST_AI_DRAFT",elementContext:e,postType:t};return yield J(n),n}catch(e){throw yield Z(e.message||"Failed to generate AI draft"),e}finally{yield Y(!1)}}function te(e){return{type:d.SET_SIDEBAR_OPEN,isOpen:e}}function ne(e){return{type:d.SET_AI_TOUR_LOADING,isLoading:e}}function re(e){return{type:d.SET_AI_TOUR_ERROR,error:e}}function oe(e){return{type:d.SET_LAST_FAILURE_CONTEXT,failureContext:e}}function ie(e){return{type:d.RECEIVE_EPHEMERAL_TOUR,tour:e}}function ae(){return{type:d.CLEAR_EPHEMERAL_TOUR}}function*se(e,t,n,r=null){yield ne(!0),yield re(null);try{const o=yield{type:"GATHER_EDITOR_CONTEXT"},i=yield{type:"REQUEST_AI_TOUR",taskId:e,query:t,postType:n,editorContext:o,failureContext:r};console.log("[ACT AI Response] Full result:",i),console.log("[ACT AI Response] Tour:",JSON.stringify(i.tour,null,2));const a={id:"ephemeral",...i.tour};return yield ie(a),yield{type:"ENSURE_EMPTY_PLACEHOLDER"},yield x("ephemeral","pupil"),a}catch(e){throw yield re(e.message||"Failed to generate tour"),e}finally{yield ne(!1)}}function*le(e){const t={id:"ephemeral",...e};yield ie(t),yield{type:"ENSURE_EMPTY_PLACEHOLDER"},yield x("ephemeral","pupil")}function ce(e){return e.tours}const ue=(0,c.createSelector)(e=>Object.values(e.tours),e=>[e.tours]);function de(e,t){return e.tours[t]||null}function pe(e){return e.toursLoading}function fe(e){return e.toursError}const ge=(0,c.createSelector)((e,t)=>ue(e).filter(e=>e.postTypes&&e.postTypes.includes(t)&&"publish"===e.status),(e,t)=>[e.tours,t]),he=(0,c.createSelector)((e,t)=>ue(e).filter(e=>e.editor===t&&"publish"===e.status),(e,t)=>[e.tours,t]);function me(e){return e.currentTourId}function ve(e){return e.currentTourId?e.tours[e.currentTourId]:null}function be(e){return e.currentStepIndex}const Ee=(0,c.createSelector)(e=>{const t=ve(e);return t&&t.steps&&t.steps[e.currentStepIndex]||null},e=>[e.tours,e.currentTourId,e.currentStepIndex]);function ye(e){const t=ve(e);return t?.steps?.length||0}function Te(e){return e.currentStepIndex<ye(e)-1}function Se(e){return e.currentStepIndex>0}function xe(e){const t=ye(e);return 0===t?0:Math.round((e.currentStepIndex+1)/t*100)}function Ce(e){return e.mode}function we(e){return"educator"===e.mode}function _e(e){return"pupil"===e.mode}function Re(e){return null!==e.currentTourId&&null!==e.mode}function Ae(e){return e.completionSatisfied}function Ie(e){return e.skippedSteps}function ke(e,t){return e.skippedSteps.includes(t)}function De(e){return e.resolvedTarget}function Oe(e){return e.isRecovering}function Le(e){return e.resolutionAttempts}function Ne(e){return e.lastError}function Pe(e){return e.isPickerActive}function Be(e){return e.pickingStepId||null}function Me(e){return e.selectedStepId}const je=(0,c.createSelector)(e=>{const t=ve(e);return t&&e.selectedStepId?t.steps.find(t=>t.id===e.selectedStepId):null},e=>[e.tours,e.currentTourId,e.selectedStepId]);function Ue(e){return e.pendingChanges}function Fe(e){return e.aiDraftLoading}function Ve(e){return Fe(e)}function qe(e){return e.aiDraftError}function Ge(e){return e.aiDraftResult}function $e(e){return Ge(e)}function He(e){return e.sidebarOpen}function ze(e){return e.aiTourLoading}function We(e){return e.aiTourError}function Ke(e){return e.lastFailureContext}function Xe(e){return e.ephemeralTour}function Ye(e){return"ephemeral"===e.currentTourId&&"pupil"===e.mode}const Ze=window.wp.apiFetch;var Je=o.n(Ze);function*Qe(){yield f(!0);try{const e=yield{type:"API_FETCH",request:{path:"/admin-coach-tours/v1/tours",method:"GET"}};yield h(e)}catch(e){yield g(e.message||"Failed to fetch tours")}}function*et(e){yield f(!0);try{const t=yield{type:"API_FETCH",request:{path:`/admin-coach-tours/v1/tours/${e}`,method:"GET"}};yield m(t)}catch(e){yield g(e.message||"Failed to fetch tour")}}function*tt(e){yield f(!0);try{const t=yield{type:"API_FETCH",request:{path:`/admin-coach-tours/v1/tours?post_type=${e}&editor=block`,method:"GET"}};yield h(t)}catch(e){yield g(e.message||"Failed to fetch tours")}}function nt(){const e={inserterOpen:!1,sidebarOpen:!1,sidebarTab:null,toolbarVisible:!1,hasSelectedBlock:!1,selectedBlockType:null};try{const t=(0,c.select)("core/editor");t?.isInserterOpened&&(e.inserterOpen=t.isInserterOpened());const n=(0,c.select)("core/edit-post");if(n?.getActiveGeneralSidebarName){const t=n.getActiveGeneralSidebarName();e.sidebarOpen=!!t,e.sidebarTab=t||null}const r=(0,c.select)("core/block-editor");if(r?.getSelectedBlock){const t=r.getSelectedBlock();e.hasSelectedBlock=!!t,e.selectedBlockType=t?.name||null}e.toolbarVisible=!!document.querySelector(".block-editor-block-toolbar")}catch(e){console.warn("[ACT] Error getting visible elements:",e)}return e}function rt(){try{const e=(0,c.select)("core/block-editor");if(!e?.getBlocks)return[];const t=e.getBlocks(),n=e.getSelectedBlockClientId?.()||null,r=document.querySelector('iframe[name="editor-canvas"]'),o=r?.contentDocument||null;return t.map((e,t)=>{const r={name:e.name,clientId:e.clientId,isEmpty:ot(e),isSelected:e.clientId===n,order:t};if(o){const t=o.querySelector(`[data-block="${e.clientId}"]`);t&&(r.domInfo={tagName:t.tagName.toLowerCase(),dataType:t.getAttribute("data-type"),dataBlock:e.clientId,hasRichText:!!t.querySelector(".block-editor-rich-text__editable"),editableSelector:t.querySelector(".block-editor-rich-text__editable")?`[data-block="${e.clientId}"] .block-editor-rich-text__editable`:null})}return r})}catch(e){return console.warn("[ACT] Error getting editor blocks:",e),[]}}function ot(e){return!(e&&("core/paragraph"===e.name?e.attributes?.content&&""!==e.attributes.content:"core/image"===e.name?e.attributes?.url:"core/video"!==e.name||e.attributes?.src))}function it(){const e={inserterButton:null,publishButton:null,settingsButton:null,searchInput:null,emptyBlockPlaceholder:null};try{const t=[".editor-document-tools__inserter-toggle","button.block-editor-inserter-toggle",'[aria-label="Toggle block inserter"]'];for(const n of t){const t=document.querySelector(n);if(t){e.inserterButton={selector:n,ariaLabel:t.getAttribute("aria-label")||null,visible:at(t)};break}}const n=[".editor-post-publish-button",".editor-post-save-draft"];for(const t of n){const n=document.querySelector(t);if(n){e.publishButton={selector:t,text:n.textContent?.trim()||null,visible:at(n)};break}}const r=document.querySelector('button[aria-label="Settings"]');r&&(e.settingsButton={selector:'button[aria-label="Settings"]',visible:at(r)});const o=document.querySelector(".components-search-control__input");o&&(e.searchInput={selector:".components-search-control__input",visible:at(o)});const i=[{selector:".block-editor-default-block-appender__content",inIframe:!0},{selector:'[data-empty="true"] .block-editor-rich-text__editable',inIframe:!0},{selector:'p[data-empty="true"]',inIframe:!0},{selector:".block-editor-default-block-appender__content",inIframe:!1}];for(const{selector:t,inIframe:n}of i){let r=null;if(n){const e=document.querySelector('iframe[name="editor-canvas"]');e?.contentDocument&&(r=e.contentDocument.querySelector(t))}else r=document.querySelector(t);if(r){e.emptyBlockPlaceholder={selector:t,inIframe:n,placeholder:r.getAttribute("data-placeholder")||r.getAttribute("aria-label")||null,visible:!0};break}}}catch(e){console.warn("[ACT] Error sampling UI elements:",e)}return e}function at(e){if(!e)return!1;const t=e.getBoundingClientRect(),n=window.getComputedStyle(e);return t.width>0&&t.height>0&&"hidden"!==n.visibility&&"none"!==n.display}function st(e){if(null==e||""===e)return!0;if("string"==typeof e)return""===e.trim();if("object"==typeof e&&null!==e){if("number"==typeof e.length)return 0===e.length;if("function"==typeof e.toString){const t=e.toString();if("[object Object]"!==t)return""===t.trim()}if("function"==typeof e.toJSON){const t=e.toJSON();if("string"==typeof t)return""===t.trim()}}return!(!Array.isArray(e)||0!==e.length)}async function lt(e){await new Promise(e=>setTimeout(e,100));const t=document.querySelector('iframe[name="editor-canvas"]'),n=t?.contentDocument||document,r=n.querySelector(`[data-block="${e}"]`);if(!r)return console.warn("[ACT focusBlock] Block element not found:",e),!1;const o=['[contenteditable="true"]',".block-editor-rich-text__editable","textarea",'input[type="text"]'];let i=null;for(const e of o)if(i=r.querySelector(e),i)break;if(i||(i=r),i.scrollIntoView({behavior:"smooth",block:"center"}),i.focus(),"true"===i.getAttribute("contenteditable")){const e=n.getSelection(),t=n.createRange();t.selectNodeContents(i),t.collapse(!1),e?.removeAllRanges(),e?.addRange(t)}return console.log("[ACT focusBlock] Focused:",i.tagName,i.className),!0}const ct={API_FETCH:e=>Je()(e.request),GATHER_EDITOR_CONTEXT:()=>({editorBlocks:rt(),visibleElements:nt(),uiSamples:it(),wpVersion:window.adminCoachTours?.wpVersion||"unknown",timestamp:Date.now()}),ENSURE_EMPTY_PLACEHOLDER:()=>async function(){if(function(){try{const e=(0,c.select)("core/block-editor");return!!e?.getBlocks&&!!e.getBlocks().find(e=>"core/paragraph"===e.name&&st(e.attributes?.content))}catch(e){return console.warn("[ACT] Error checking for empty paragraph:",e),!1}}()){const e=(0,c.select)("core/block-editor"),t=(e?.getBlocks()||[]).find(e=>"core/paragraph"===e.name&&st(e.attributes?.content));return t&&(await(0,c.dispatch)("core/block-editor").selectBlock(t.clientId),console.log("[ACT] Selected existing empty paragraph:",t.clientId),await lt(t.clientId)),{wasInserted:!1,clientId:t?.clientId||null}}console.log("[ACT] No empty paragraph found, inserting one");const e=await async function(){try{const{createBlock:e}=await Promise.resolve().then(o.t.bind(o,997,23)),t=(0,c.dispatch)("core/block-editor");if(!t||!e)return console.warn("[ACT] Block editor not available for inserting paragraph"),null;const n=e("core/paragraph",{content:""}),r=(0,c.select)("core/block-editor"),i=(r?.getBlocks()||[]).length;return await t.insertBlock(n,i,"",!1),await t.selectBlock(n.clientId),console.log("[ACT] Inserted and selected empty paragraph block:",n.clientId),n.clientId}catch(e){return console.error("[ACT] Error inserting empty paragraph:",e),null}}();return e?(await async function(e,t=3e3,n=50){const r=Date.now();for(;Date.now()-r<t;){if(e())return!0;await new Promise(e=>setTimeout(e,n))}return!1}(()=>{const t=document.querySelector('iframe[name="editor-canvas"]'),n=t?.contentDocument;return!!(n||document).querySelector(`[data-block="${e}"]`)},3e3)?(console.log("[ACT] Block appeared in DOM:",e),await lt(e)):console.warn("[ACT] Block inserted but not found in DOM:",e),{wasInserted:!0,clientId:e}):{wasInserted:!1,clientId:null}}(),FETCH_TOUR:e=>Je()({path:`/admin-coach-tours/v1/tours/${e.tourId}`,method:"GET"}),FETCH_TOURS(e){const t=new URLSearchParams;e.args.postType&&t.append("post_type",e.args.postType),e.args.editor&&t.append("editor",e.args.editor);const n=t.toString(),r="/admin-coach-tours/v1/tours"+(n?`?${n}`:"");return Je()({path:r,method:"GET"})},SAVE_TOUR:e=>(console.log("[ACT Controls] SAVE_TOUR:",e.tourId,e.tourData),console.log("[ACT Controls] Steps count:",e.tourData?.steps?.length),Je()({path:`/admin-coach-tours/v1/tours/${e.tourId}`,method:"PUT",data:e.tourData})),CREATE_TOUR:e=>Je()({path:"/admin-coach-tours/v1/tours",method:"POST",data:e.data}),UPDATE_TOUR:e=>Je()({path:`/admin-coach-tours/v1/tours/${e.tourId}`,method:"PUT",data:e.data}),REQUEST_AI_DRAFT:e=>Je()({path:"/admin-coach-tours/v1/ai/generate-draft",method:"POST",data:{elementContext:e.elementContext,postType:e.postType}}),REQUEST_AI_TOUR:e=>Je()({path:"/admin-coach-tours/v1/ai/generate-tour",method:"POST",data:{taskId:e.taskId,query:e.query,postType:e.postType,editorContext:e.editorContext||null,failureContext:e.failureContext||null}}),FETCH_AI_TASKS:()=>Je()({path:"/admin-coach-tours/v1/ai/tasks",method:"GET"})},ut="admin-coach-tours",dt=(0,c.createReduxStore)(ut,{reducer:function(e=u,t){switch(t.type){case d.SET_TOURS_LOADING:return{...e,toursLoading:t.isLoading};case d.SET_TOURS_ERROR:return{...e,toursError:t.error,toursLoading:!1};case d.RECEIVE_TOURS:return{...e,tours:t.tours.reduce((e,t)=>(e[t.id]=t,e),{...e.tours}),toursLoading:!1,toursError:null};case d.RECEIVE_TOUR:return{...e,tours:{...e.tours,[t.tour.id]:t.tour},toursLoading:!1};case d.SET_CURRENT_TOUR:return{...e,currentTourId:t.tourId,currentStepIndex:0,mode:t.tourId?"educator":null,selectedStepId:null};case d.START_TOUR:return{...e,currentTourId:t.tourId,currentStepIndex:0,mode:t.mode||"pupil",completionSatisfied:!1,skippedSteps:[],lastError:null,resolutionAttempts:0};case d.END_TOUR:return{...e,currentTourId:null,currentStepIndex:0,mode:null,completionSatisfied:!1,resolvedTarget:null,isRecovering:!1,lastError:null};case d.SET_CURRENT_STEP:return{...e,currentStepIndex:t.stepIndex,completionSatisfied:!1,resolvedTarget:null,resolutionAttempts:0,lastError:null};case d.NEXT_STEP:{const t=e.tours[e.currentTourId],n=e.currentStepIndex+1;return t&&n<t.steps.length?{...e,currentStepIndex:n,completionSatisfied:!1,resolvedTarget:null,resolutionAttempts:0,lastError:null}:{...e,currentTourId:null,currentStepIndex:0,mode:null,completionSatisfied:!1,resolvedTarget:null}}case d.PREVIOUS_STEP:return{...e,currentStepIndex:Math.max(0,e.currentStepIndex-1),completionSatisfied:!1,resolvedTarget:null,resolutionAttempts:0};case d.SKIP_STEP:{const t=e.tours[e.currentTourId],n=t?.steps[e.currentStepIndex],r=e.currentStepIndex+1,o=t&&r<t.steps.length,i=n?[...e.skippedSteps,n.id]:e.skippedSteps;return o?{...e,currentStepIndex:r,skippedSteps:i,completionSatisfied:!1,resolvedTarget:null,resolutionAttempts:0}:{...e,skippedSteps:i,currentTourId:null,currentStepIndex:0,mode:null}}case d.REPEAT_STEP:return{...e,completionSatisfied:!1,resolvedTarget:null,resolutionAttempts:0,lastError:null,isRecovering:!1};case d.SET_MODE:return{...e,mode:t.mode};case d.SET_COMPLETION_SATISFIED:return{...e,completionSatisfied:t.satisfied};case d.RESET_COMPLETION:return{...e,completionSatisfied:!1};case d.SET_RESOLVED_TARGET:return{...e,resolvedTarget:t.target,lastError:null};case d.CLEAR_RESOLVED_TARGET:return{...e,resolvedTarget:null};case d.SET_RECOVERING:return{...e,isRecovering:t.isRecovering};case d.INCREMENT_RESOLUTION_ATTEMPTS:return{...e,resolutionAttempts:e.resolutionAttempts+1};case d.SET_LAST_ERROR:return{...e,lastError:t.error};case d.ACTIVATE_PICKER:return{...e,isPickerActive:!0,pickingStepId:t.stepId||null};case d.DEACTIVATE_PICKER:return{...e,isPickerActive:!1,pickingStepId:null};case d.SELECT_STEP:return{...e,selectedStepId:t.stepId};case d.SET_PENDING_CHANGES:return{...e,pendingChanges:t.pending};case d.UPDATE_STEP:{const n=e.tours[t.tourId];if(!n)return e;const r=n.steps.map(e=>e.id===t.stepId?{...e,...t.updates}:e);return{...e,tours:{...e.tours,[t.tourId]:{...n,steps:r}},pendingChanges:!0}}case d.ADD_STEP:{const n=e.tours[t.tourId];if(!n)return e;const r=[...n.steps],o=t.index??r.length;return r.splice(o,0,t.step),r.forEach((e,t)=>{e.order=t}),{...e,tours:{...e.tours,[t.tourId]:{...n,steps:r}},selectedStepId:t.step.id,pendingChanges:!0}}case d.DELETE_STEP:{const n=e.tours[t.tourId];if(!n)return e;const r=n.steps.filter(e=>e.id!==t.stepId);return r.forEach((e,t)=>{e.order=t}),{...e,tours:{...e.tours,[t.tourId]:{...n,steps:r}},selectedStepId:e.selectedStepId===t.stepId?null:e.selectedStepId,pendingChanges:!0}}case d.REORDER_STEPS:{const n=e.tours[t.tourId];if(!n)return e;const r={};n.steps.forEach(e=>{r[e.id]=e});const o=t.stepIds.map((e,t)=>({...r[e],order:t}));return{...e,tours:{...e.tours,[t.tourId]:{...n,steps:o}},pendingChanges:!0}}case d.SET_AI_DRAFT_LOADING:return{...e,aiDraftLoading:t.isLoading,aiDraftError:t.isLoading?null:e.aiDraftError};case d.SET_AI_DRAFT_ERROR:return{...e,aiDraftError:t.error,aiDraftLoading:!1};case d.SET_AI_DRAFT_RESULT:return{...e,aiDraftResult:t.result,aiDraftLoading:!1,aiDraftError:null};case d.CLEAR_AI_DRAFT:return{...e,aiDraftResult:null,aiDraftError:null,aiDraftLoading:!1};case d.SET_SIDEBAR_OPEN:return{...e,sidebarOpen:t.isOpen};case d.SET_AI_TOUR_LOADING:return{...e,aiTourLoading:t.isLoading,aiTourError:t.isLoading?null:e.aiTourError};case d.SET_AI_TOUR_ERROR:return{...e,aiTourError:t.error,aiTourLoading:!1};case d.RECEIVE_EPHEMERAL_TOUR:return{...e,ephemeralTour:t.tour,aiTourLoading:!1,aiTourError:null,tours:{...e.tours,ephemeral:t.tour}};case d.CLEAR_EPHEMERAL_TOUR:return{...e,ephemeralTour:null,aiTourError:null,aiTourLoading:!1,lastFailureContext:null,tours:Object.fromEntries(Object.entries(e.tours).filter(([e])=>"ephemeral"!==e))};case d.SET_LAST_FAILURE_CONTEXT:return{...e,lastFailureContext:t.failureContext};default:return e}},actions:i,selectors:a,resolvers:s,controls:ct,initialState:u});(0,c.select)(ut)||(0,c.register)(dt);const pt=window.wp.editor,ft=window.wp.element,gt=window.wp.i18n,ht=window.wp.components,mt=window.wp.primitives,vt=window.ReactJSXRuntime;var bt=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"M12 4a8 8 0 1 1 .001 16.001A8 8 0 0 1 12 4Zm0 1.5a6.5 6.5 0 1 0-.001 13.001A6.5 6.5 0 0 0 12 5.5Zm.75 11h-1.5V15h1.5v1.5Zm-.445-9.234a3 3 0 0 1 .445 5.89V14h-1.5v-1.25c0-.57.452-.958.917-1.01A1.5 1.5 0 0 0 12 8.75a1.5 1.5 0 0 0-1.5 1.5H9a3 3 0 0 1 3.305-2.984Z"})}),Et=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z"})}),yt=(0,vt.jsx)(mt.SVG,{viewBox:"0 0 24 24",xmlns:"http://www.w3.org/2000/svg",children:(0,vt.jsx)(mt.Path,{d:"M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z"})}),Tt=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z"})}),St=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{fillRule:"evenodd",clipRule:"evenodd",d:"M12 5.5A2.25 2.25 0 0 0 9.878 7h4.244A2.251 2.251 0 0 0 12 5.5ZM12 4a3.751 3.751 0 0 0-3.675 3H5v1.5h1.27l.818 8.997a2.75 2.75 0 0 0 2.739 2.501h4.347a2.75 2.75 0 0 0 2.738-2.5L17.73 8.5H19V7h-3.325A3.751 3.751 0 0 0 12 4Zm4.224 4.5H7.776l.806 8.861a1.25 1.25 0 0 0 1.245 1.137h4.347a1.25 1.25 0 0 0 1.245-1.137l.805-8.861Z"})}),xt=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z"})});const Ct=window.React;var wt=o.n(Ct);const _t=window.ReactDOM,Rt="undefined"!=typeof window&&void 0!==window.document&&void 0!==window.document.createElement;function At(e){const t=Object.prototype.toString.call(e);return"[object Window]"===t||"[object global]"===t}function It(e){return"nodeType"in e}function kt(e){var t,n;return e?At(e)?e:It(e)&&null!=(t=null==(n=e.ownerDocument)?void 0:n.defaultView)?t:window:window}function Dt(e){const{Document:t}=kt(e);return e instanceof t}function Ot(e){return!At(e)&&e instanceof kt(e).HTMLElement}function Lt(e){return e instanceof kt(e).SVGElement}function Nt(e){return e?At(e)?e.document:It(e)?Dt(e)?e:Ot(e)||Lt(e)?e.ownerDocument:document:document:document}const Pt=Rt?Ct.useLayoutEffect:Ct.useEffect;function Bt(e){const t=(0,Ct.useRef)(e);return Pt(()=>{t.current=e}),(0,Ct.useCallback)(function(){for(var e=arguments.length,n=new Array(e),r=0;r<e;r++)n[r]=arguments[r];return null==t.current?void 0:t.current(...n)},[])}function Mt(e,t){void 0===t&&(t=[e]);const n=(0,Ct.useRef)(e);return Pt(()=>{n.current!==e&&(n.current=e)},t),n}function jt(e,t){const n=(0,Ct.useRef)();return(0,Ct.useMemo)(()=>{const t=e(n.current);return n.current=t,t},[...t])}function Ut(e){const t=Bt(e),n=(0,Ct.useRef)(null),r=(0,Ct.useCallback)(e=>{e!==n.current&&(null==t||t(e,n.current)),n.current=e},[]);return[n,r]}function Ft(e){const t=(0,Ct.useRef)();return(0,Ct.useEffect)(()=>{t.current=e},[e]),t.current}let Vt={};function qt(e,t){return(0,Ct.useMemo)(()=>{if(t)return t;const n=null==Vt[e]?0:Vt[e]+1;return Vt[e]=n,e+"-"+n},[e,t])}function Gt(e){return function(t){for(var n=arguments.length,r=new Array(n>1?n-1:0),o=1;o<n;o++)r[o-1]=arguments[o];return r.reduce((t,n)=>{const r=Object.entries(n);for(const[n,o]of r){const r=t[n];null!=r&&(t[n]=r+e*o)}return t},{...t})}}const $t=Gt(1),Ht=Gt(-1);function zt(e){if(!e)return!1;const{KeyboardEvent:t}=kt(e.target);return t&&e instanceof t}function Wt(e){if(function(e){if(!e)return!1;const{TouchEvent:t}=kt(e.target);return t&&e instanceof t}(e)){if(e.touches&&e.touches.length){const{clientX:t,clientY:n}=e.touches[0];return{x:t,y:n}}if(e.changedTouches&&e.changedTouches.length){const{clientX:t,clientY:n}=e.changedTouches[0];return{x:t,y:n}}}return function(e){return"clientX"in e&&"clientY"in e}(e)?{x:e.clientX,y:e.clientY}:null}const Kt=Object.freeze({Translate:{toString(e){if(!e)return;const{x:t,y:n}=e;return"translate3d("+(t?Math.round(t):0)+"px, "+(n?Math.round(n):0)+"px, 0)"}},Scale:{toString(e){if(!e)return;const{scaleX:t,scaleY:n}=e;return"scaleX("+t+") scaleY("+n+")"}},Transform:{toString(e){if(e)return[Kt.Translate.toString(e),Kt.Scale.toString(e)].join(" ")}},Transition:{toString(e){let{property:t,duration:n,easing:r}=e;return t+" "+n+"ms "+r}}}),Xt="a,frame,iframe,input:not([type=hidden]):not(:disabled),select:not(:disabled),textarea:not(:disabled),button:not(:disabled),*[tabindex]";function Yt(e){return e.matches(Xt)?e:e.querySelector(Xt)}const Zt={display:"none"};function Jt(e){let{id:t,value:n}=e;return wt().createElement("div",{id:t,style:Zt},n)}function Qt(e){let{id:t,announcement:n,ariaLiveType:r="assertive"}=e;return wt().createElement("div",{id:t,style:{position:"fixed",top:0,left:0,width:1,height:1,margin:-1,border:0,padding:0,overflow:"hidden",clip:"rect(0 0 0 0)",clipPath:"inset(100%)",whiteSpace:"nowrap"},role:"status","aria-live":r,"aria-atomic":!0},n)}const en=(0,Ct.createContext)(null),tn={draggable:"\n    To pick up a draggable item, press the space bar.\n    While dragging, use the arrow keys to move the item.\n    Press space again to drop the item in its new position, or press escape to cancel.\n  "},nn={onDragStart(e){let{active:t}=e;return"Picked up draggable item "+t.id+"."},onDragOver(e){let{active:t,over:n}=e;return n?"Draggable item "+t.id+" was moved over droppable area "+n.id+".":"Draggable item "+t.id+" is no longer over a droppable area."},onDragEnd(e){let{active:t,over:n}=e;return n?"Draggable item "+t.id+" was dropped over droppable area "+n.id:"Draggable item "+t.id+" was dropped."},onDragCancel(e){let{active:t}=e;return"Dragging was cancelled. Draggable item "+t.id+" was dropped."}};function rn(e){let{announcements:t=nn,container:n,hiddenTextDescribedById:r,screenReaderInstructions:o=tn}=e;const{announce:i,announcement:a}=function(){const[e,t]=(0,Ct.useState)("");return{announce:(0,Ct.useCallback)(e=>{null!=e&&t(e)},[]),announcement:e}}(),s=qt("DndLiveRegion"),[l,c]=(0,Ct.useState)(!1);if((0,Ct.useEffect)(()=>{c(!0)},[]),function(e){const t=(0,Ct.useContext)(en);(0,Ct.useEffect)(()=>{if(!t)throw new Error("useDndMonitor must be used within a children of <DndContext>");return t(e)},[e,t])}((0,Ct.useMemo)(()=>({onDragStart(e){let{active:n}=e;i(t.onDragStart({active:n}))},onDragMove(e){let{active:n,over:r}=e;t.onDragMove&&i(t.onDragMove({active:n,over:r}))},onDragOver(e){let{active:n,over:r}=e;i(t.onDragOver({active:n,over:r}))},onDragEnd(e){let{active:n,over:r}=e;i(t.onDragEnd({active:n,over:r}))},onDragCancel(e){let{active:n,over:r}=e;i(t.onDragCancel({active:n,over:r}))}}),[i,t])),!l)return null;const u=wt().createElement(wt().Fragment,null,wt().createElement(Jt,{id:r,value:o.draggable}),wt().createElement(Qt,{id:s,announcement:a}));return n?(0,_t.createPortal)(u,n):u}var on;function an(){}function sn(e,t){return(0,Ct.useMemo)(()=>({sensor:e,options:null!=t?t:{}}),[e,t])}!function(e){e.DragStart="dragStart",e.DragMove="dragMove",e.DragEnd="dragEnd",e.DragCancel="dragCancel",e.DragOver="dragOver",e.RegisterDroppable="registerDroppable",e.SetDroppableDisabled="setDroppableDisabled",e.UnregisterDroppable="unregisterDroppable"}(on||(on={}));const ln=Object.freeze({x:0,y:0});function cn(e,t){return Math.sqrt(Math.pow(e.x-t.x,2)+Math.pow(e.y-t.y,2))}function un(e,t){let{data:{value:n}}=e,{data:{value:r}}=t;return n-r}function dn(e,t){let{data:{value:n}}=e,{data:{value:r}}=t;return r-n}function pn(e){let{left:t,top:n,height:r,width:o}=e;return[{x:t,y:n},{x:t+o,y:n},{x:t,y:n+r},{x:t+o,y:n+r}]}function fn(e,t){if(!e||0===e.length)return null;const[n]=e;return t?n[t]:n}function gn(e,t,n){return void 0===t&&(t=e.left),void 0===n&&(n=e.top),{x:t+.5*e.width,y:n+.5*e.height}}const hn=e=>{let{collisionRect:t,droppableRects:n,droppableContainers:r}=e;const o=gn(t,t.left,t.top),i=[];for(const e of r){const{id:t}=e,r=n.get(t);if(r){const n=cn(gn(r),o);i.push({id:t,data:{droppableContainer:e,value:n}})}}return i.sort(un)};function mn(e,t){const n=Math.max(t.top,e.top),r=Math.max(t.left,e.left),o=Math.min(t.left+t.width,e.left+e.width),i=Math.min(t.top+t.height,e.top+e.height),a=o-r,s=i-n;if(r<o&&n<i){const n=t.width*t.height,r=e.width*e.height,o=a*s;return Number((o/(n+r-o)).toFixed(4))}return 0}const vn=e=>{let{collisionRect:t,droppableRects:n,droppableContainers:r}=e;const o=[];for(const e of r){const{id:r}=e,i=n.get(r);if(i){const n=mn(i,t);n>0&&o.push({id:r,data:{droppableContainer:e,value:n}})}}return o.sort(dn)};function bn(e,t){return e&&t?{x:e.left-t.left,y:e.top-t.top}:ln}function En(e){return function(t){for(var n=arguments.length,r=new Array(n>1?n-1:0),o=1;o<n;o++)r[o-1]=arguments[o];return r.reduce((t,n)=>({...t,top:t.top+e*n.y,bottom:t.bottom+e*n.y,left:t.left+e*n.x,right:t.right+e*n.x}),{...t})}}const yn=En(1);const Tn={ignoreTransform:!1};function Sn(e,t){void 0===t&&(t=Tn);let n=e.getBoundingClientRect();if(t.ignoreTransform){const{transform:t,transformOrigin:r}=kt(e).getComputedStyle(e);t&&(n=function(e,t,n){const r=function(e){if(e.startsWith("matrix3d(")){const t=e.slice(9,-1).split(/, /);return{x:+t[12],y:+t[13],scaleX:+t[0],scaleY:+t[5]}}if(e.startsWith("matrix(")){const t=e.slice(7,-1).split(/, /);return{x:+t[4],y:+t[5],scaleX:+t[0],scaleY:+t[3]}}return null}(t);if(!r)return e;const{scaleX:o,scaleY:i,x:a,y:s}=r,l=e.left-a-(1-o)*parseFloat(n),c=e.top-s-(1-i)*parseFloat(n.slice(n.indexOf(" ")+1)),u=o?e.width/o:e.width,d=i?e.height/i:e.height;return{width:u,height:d,top:c,right:l+u,bottom:c+d,left:l}}(n,t,r))}const{top:r,left:o,width:i,height:a,bottom:s,right:l}=n;return{top:r,left:o,width:i,height:a,bottom:s,right:l}}function xn(e){return Sn(e,{ignoreTransform:!0})}function Cn(e,t){const n=[];return e?function r(o){if(null!=t&&n.length>=t)return n;if(!o)return n;if(Dt(o)&&null!=o.scrollingElement&&!n.includes(o.scrollingElement))return n.push(o.scrollingElement),n;if(!Ot(o)||Lt(o))return n;if(n.includes(o))return n;const i=kt(e).getComputedStyle(o);return o!==e&&function(e,t){void 0===t&&(t=kt(e).getComputedStyle(e));const n=/(auto|scroll|overlay)/;return["overflow","overflowX","overflowY"].some(e=>{const r=t[e];return"string"==typeof r&&n.test(r)})}(o,i)&&n.push(o),function(e,t){return void 0===t&&(t=kt(e).getComputedStyle(e)),"fixed"===t.position}(o,i)?n:r(o.parentNode)}(e):n}function wn(e){const[t]=Cn(e,1);return null!=t?t:null}function Rn(e){return Rt&&e?At(e)?e:It(e)?Dt(e)||e===Nt(e).scrollingElement?window:Ot(e)?e:null:null:null}function An(e){return At(e)?e.scrollX:e.scrollLeft}function In(e){return At(e)?e.scrollY:e.scrollTop}function kn(e){return{x:An(e),y:In(e)}}var Dn;function On(e){return!(!Rt||!e)&&e===document.scrollingElement}function Ln(e){const t={x:0,y:0},n=On(e)?{height:window.innerHeight,width:window.innerWidth}:{height:e.clientHeight,width:e.clientWidth},r={x:e.scrollWidth-n.width,y:e.scrollHeight-n.height};return{isTop:e.scrollTop<=t.y,isLeft:e.scrollLeft<=t.x,isBottom:e.scrollTop>=r.y,isRight:e.scrollLeft>=r.x,maxScroll:r,minScroll:t}}!function(e){e[e.Forward=1]="Forward",e[e.Backward=-1]="Backward"}(Dn||(Dn={}));const Nn={x:.2,y:.2};function Pn(e,t,n,r,o){let{top:i,left:a,right:s,bottom:l}=n;void 0===r&&(r=10),void 0===o&&(o=Nn);const{isTop:c,isBottom:u,isLeft:d,isRight:p}=Ln(e),f={x:0,y:0},g={x:0,y:0},h=t.height*o.y,m=t.width*o.x;return!c&&i<=t.top+h?(f.y=Dn.Backward,g.y=r*Math.abs((t.top+h-i)/h)):!u&&l>=t.bottom-h&&(f.y=Dn.Forward,g.y=r*Math.abs((t.bottom-h-l)/h)),!p&&s>=t.right-m?(f.x=Dn.Forward,g.x=r*Math.abs((t.right-m-s)/m)):!d&&a<=t.left+m&&(f.x=Dn.Backward,g.x=r*Math.abs((t.left+m-a)/m)),{direction:f,speed:g}}function Bn(e){if(e===document.scrollingElement){const{innerWidth:e,innerHeight:t}=window;return{top:0,left:0,right:e,bottom:t,width:e,height:t}}const{top:t,left:n,right:r,bottom:o}=e.getBoundingClientRect();return{top:t,left:n,right:r,bottom:o,width:e.clientWidth,height:e.clientHeight}}function Mn(e){return e.reduce((e,t)=>$t(e,kn(t)),ln)}const jn=[["x",["left","right"],function(e){return e.reduce((e,t)=>e+An(t),0)}],["y",["top","bottom"],function(e){return e.reduce((e,t)=>e+In(t),0)}]];class Un{constructor(e,t){this.rect=void 0,this.width=void 0,this.height=void 0,this.top=void 0,this.bottom=void 0,this.right=void 0,this.left=void 0;const n=Cn(t),r=Mn(n);this.rect={...e},this.width=e.width,this.height=e.height;for(const[e,t,o]of jn)for(const i of t)Object.defineProperty(this,i,{get:()=>{const t=o(n),a=r[e]-t;return this.rect[i]+a},enumerable:!0});Object.defineProperty(this,"rect",{enumerable:!1})}}class Fn{constructor(e){this.target=void 0,this.listeners=[],this.removeAll=()=>{this.listeners.forEach(e=>{var t;return null==(t=this.target)?void 0:t.removeEventListener(...e)})},this.target=e}add(e,t,n){var r;null==(r=this.target)||r.addEventListener(e,t,n),this.listeners.push([e,t,n])}}function Vn(e,t){const n=Math.abs(e.x),r=Math.abs(e.y);return"number"==typeof t?Math.sqrt(n**2+r**2)>t:"x"in t&&"y"in t?n>t.x&&r>t.y:"x"in t?n>t.x:"y"in t&&r>t.y}var qn,Gn;function $n(e){e.preventDefault()}function Hn(e){e.stopPropagation()}!function(e){e.Click="click",e.DragStart="dragstart",e.Keydown="keydown",e.ContextMenu="contextmenu",e.Resize="resize",e.SelectionChange="selectionchange",e.VisibilityChange="visibilitychange"}(qn||(qn={})),function(e){e.Space="Space",e.Down="ArrowDown",e.Right="ArrowRight",e.Left="ArrowLeft",e.Up="ArrowUp",e.Esc="Escape",e.Enter="Enter",e.Tab="Tab"}(Gn||(Gn={}));const zn={start:[Gn.Space,Gn.Enter],cancel:[Gn.Esc],end:[Gn.Space,Gn.Enter,Gn.Tab]},Wn=(e,t)=>{let{currentCoordinates:n}=t;switch(e.code){case Gn.Right:return{...n,x:n.x+25};case Gn.Left:return{...n,x:n.x-25};case Gn.Down:return{...n,y:n.y+25};case Gn.Up:return{...n,y:n.y-25}}};class Kn{constructor(e){this.props=void 0,this.autoScrollEnabled=!1,this.referenceCoordinates=void 0,this.listeners=void 0,this.windowListeners=void 0,this.props=e;const{event:{target:t}}=e;this.props=e,this.listeners=new Fn(Nt(t)),this.windowListeners=new Fn(kt(t)),this.handleKeyDown=this.handleKeyDown.bind(this),this.handleCancel=this.handleCancel.bind(this),this.attach()}attach(){this.handleStart(),this.windowListeners.add(qn.Resize,this.handleCancel),this.windowListeners.add(qn.VisibilityChange,this.handleCancel),setTimeout(()=>this.listeners.add(qn.Keydown,this.handleKeyDown))}handleStart(){const{activeNode:e,onStart:t}=this.props,n=e.node.current;n&&function(e,t){if(void 0===t&&(t=Sn),!e)return;const{top:n,left:r,bottom:o,right:i}=t(e);wn(e)&&(o<=0||i<=0||n>=window.innerHeight||r>=window.innerWidth)&&e.scrollIntoView({block:"center",inline:"center"})}(n),t(ln)}handleKeyDown(e){if(zt(e)){const{active:t,context:n,options:r}=this.props,{keyboardCodes:o=zn,coordinateGetter:i=Wn,scrollBehavior:a="smooth"}=r,{code:s}=e;if(o.end.includes(s))return void this.handleEnd(e);if(o.cancel.includes(s))return void this.handleCancel(e);const{collisionRect:l}=n.current,c=l?{x:l.left,y:l.top}:ln;this.referenceCoordinates||(this.referenceCoordinates=c);const u=i(e,{active:t,context:n.current,currentCoordinates:c});if(u){const t=Ht(u,c),r={x:0,y:0},{scrollableAncestors:o}=n.current;for(const n of o){const o=e.code,{isTop:i,isRight:s,isLeft:l,isBottom:c,maxScroll:d,minScroll:p}=Ln(n),f=Bn(n),g={x:Math.min(o===Gn.Right?f.right-f.width/2:f.right,Math.max(o===Gn.Right?f.left:f.left+f.width/2,u.x)),y:Math.min(o===Gn.Down?f.bottom-f.height/2:f.bottom,Math.max(o===Gn.Down?f.top:f.top+f.height/2,u.y))},h=o===Gn.Right&&!s||o===Gn.Left&&!l,m=o===Gn.Down&&!c||o===Gn.Up&&!i;if(h&&g.x!==u.x){const e=n.scrollLeft+t.x,i=o===Gn.Right&&e<=d.x||o===Gn.Left&&e>=p.x;if(i&&!t.y)return void n.scrollTo({left:e,behavior:a});r.x=i?n.scrollLeft-e:o===Gn.Right?n.scrollLeft-d.x:n.scrollLeft-p.x,r.x&&n.scrollBy({left:-r.x,behavior:a});break}if(m&&g.y!==u.y){const e=n.scrollTop+t.y,i=o===Gn.Down&&e<=d.y||o===Gn.Up&&e>=p.y;if(i&&!t.x)return void n.scrollTo({top:e,behavior:a});r.y=i?n.scrollTop-e:o===Gn.Down?n.scrollTop-d.y:n.scrollTop-p.y,r.y&&n.scrollBy({top:-r.y,behavior:a});break}}this.handleMove(e,$t(Ht(u,this.referenceCoordinates),r))}}}handleMove(e,t){const{onMove:n}=this.props;e.preventDefault(),n(t)}handleEnd(e){const{onEnd:t}=this.props;e.preventDefault(),this.detach(),t()}handleCancel(e){const{onCancel:t}=this.props;e.preventDefault(),this.detach(),t()}detach(){this.listeners.removeAll(),this.windowListeners.removeAll()}}function Xn(e){return Boolean(e&&"distance"in e)}function Yn(e){return Boolean(e&&"delay"in e)}Kn.activators=[{eventName:"onKeyDown",handler:(e,t,n)=>{let{keyboardCodes:r=zn,onActivation:o}=t,{active:i}=n;const{code:a}=e.nativeEvent;if(r.start.includes(a)){const t=i.activatorNode.current;return!(t&&e.target!==t||(e.preventDefault(),null==o||o({event:e.nativeEvent}),0))}return!1}}];class Zn{constructor(e,t,n){var r;void 0===n&&(n=function(e){const{EventTarget:t}=kt(e);return e instanceof t?e:Nt(e)}(e.event.target)),this.props=void 0,this.events=void 0,this.autoScrollEnabled=!0,this.document=void 0,this.activated=!1,this.initialCoordinates=void 0,this.timeoutId=null,this.listeners=void 0,this.documentListeners=void 0,this.windowListeners=void 0,this.props=e,this.events=t;const{event:o}=e,{target:i}=o;this.props=e,this.events=t,this.document=Nt(i),this.documentListeners=new Fn(this.document),this.listeners=new Fn(n),this.windowListeners=new Fn(kt(i)),this.initialCoordinates=null!=(r=Wt(o))?r:ln,this.handleStart=this.handleStart.bind(this),this.handleMove=this.handleMove.bind(this),this.handleEnd=this.handleEnd.bind(this),this.handleCancel=this.handleCancel.bind(this),this.handleKeydown=this.handleKeydown.bind(this),this.removeTextSelection=this.removeTextSelection.bind(this),this.attach()}attach(){const{events:e,props:{options:{activationConstraint:t,bypassActivationConstraint:n}}}=this;if(this.listeners.add(e.move.name,this.handleMove,{passive:!1}),this.listeners.add(e.end.name,this.handleEnd),e.cancel&&this.listeners.add(e.cancel.name,this.handleCancel),this.windowListeners.add(qn.Resize,this.handleCancel),this.windowListeners.add(qn.DragStart,$n),this.windowListeners.add(qn.VisibilityChange,this.handleCancel),this.windowListeners.add(qn.ContextMenu,$n),this.documentListeners.add(qn.Keydown,this.handleKeydown),t){if(null!=n&&n({event:this.props.event,activeNode:this.props.activeNode,options:this.props.options}))return this.handleStart();if(Yn(t))return this.timeoutId=setTimeout(this.handleStart,t.delay),void this.handlePending(t);if(Xn(t))return void this.handlePending(t)}this.handleStart()}detach(){this.listeners.removeAll(),this.windowListeners.removeAll(),setTimeout(this.documentListeners.removeAll,50),null!==this.timeoutId&&(clearTimeout(this.timeoutId),this.timeoutId=null)}handlePending(e,t){const{active:n,onPending:r}=this.props;r(n,e,this.initialCoordinates,t)}handleStart(){const{initialCoordinates:e}=this,{onStart:t}=this.props;e&&(this.activated=!0,this.documentListeners.add(qn.Click,Hn,{capture:!0}),this.removeTextSelection(),this.documentListeners.add(qn.SelectionChange,this.removeTextSelection),t(e))}handleMove(e){var t;const{activated:n,initialCoordinates:r,props:o}=this,{onMove:i,options:{activationConstraint:a}}=o;if(!r)return;const s=null!=(t=Wt(e))?t:ln,l=Ht(r,s);if(!n&&a){if(Xn(a)){if(null!=a.tolerance&&Vn(l,a.tolerance))return this.handleCancel();if(Vn(l,a.distance))return this.handleStart()}return Yn(a)&&Vn(l,a.tolerance)?this.handleCancel():void this.handlePending(a,l)}e.cancelable&&e.preventDefault(),i(s)}handleEnd(){const{onAbort:e,onEnd:t}=this.props;this.detach(),this.activated||e(this.props.active),t()}handleCancel(){const{onAbort:e,onCancel:t}=this.props;this.detach(),this.activated||e(this.props.active),t()}handleKeydown(e){e.code===Gn.Esc&&this.handleCancel()}removeTextSelection(){var e;null==(e=this.document.getSelection())||e.removeAllRanges()}}const Jn={cancel:{name:"pointercancel"},move:{name:"pointermove"},end:{name:"pointerup"}};class Qn extends Zn{constructor(e){const{event:t}=e,n=Nt(t.target);super(e,Jn,n)}}Qn.activators=[{eventName:"onPointerDown",handler:(e,t)=>{let{nativeEvent:n}=e,{onActivation:r}=t;return!(!n.isPrimary||0!==n.button||(null==r||r({event:n}),0))}}];const er={move:{name:"mousemove"},end:{name:"mouseup"}};var tr;!function(e){e[e.RightClick=2]="RightClick"}(tr||(tr={})),class extends Zn{constructor(e){super(e,er,Nt(e.event.target))}}.activators=[{eventName:"onMouseDown",handler:(e,t)=>{let{nativeEvent:n}=e,{onActivation:r}=t;return n.button!==tr.RightClick&&(null==r||r({event:n}),!0)}}];const nr={cancel:{name:"touchcancel"},move:{name:"touchmove"},end:{name:"touchend"}};var rr,or;(class extends Zn{constructor(e){super(e,nr)}static setup(){return window.addEventListener(nr.move.name,e,{capture:!1,passive:!1}),function(){window.removeEventListener(nr.move.name,e)};function e(){}}}).activators=[{eventName:"onTouchStart",handler:(e,t)=>{let{nativeEvent:n}=e,{onActivation:r}=t;const{touches:o}=n;return!(o.length>1||(null==r||r({event:n}),0))}}],function(e){e[e.Pointer=0]="Pointer",e[e.DraggableRect=1]="DraggableRect"}(rr||(rr={})),function(e){e[e.TreeOrder=0]="TreeOrder",e[e.ReversedTreeOrder=1]="ReversedTreeOrder"}(or||(or={}));const ir={x:{[Dn.Backward]:!1,[Dn.Forward]:!1},y:{[Dn.Backward]:!1,[Dn.Forward]:!1}};var ar,sr;!function(e){e[e.Always=0]="Always",e[e.BeforeDragging=1]="BeforeDragging",e[e.WhileDragging=2]="WhileDragging"}(ar||(ar={})),function(e){e.Optimized="optimized"}(sr||(sr={}));const lr=new Map;function cr(e,t){return jt(n=>e?n||("function"==typeof t?t(e):e):null,[t,e])}function ur(e){let{callback:t,disabled:n}=e;const r=Bt(t),o=(0,Ct.useMemo)(()=>{if(n||"undefined"==typeof window||void 0===window.ResizeObserver)return;const{ResizeObserver:e}=window;return new e(r)},[n]);return(0,Ct.useEffect)(()=>()=>null==o?void 0:o.disconnect(),[o]),o}function dr(e){return new Un(Sn(e),e)}function pr(e,t,n){void 0===t&&(t=dr);const[r,o]=(0,Ct.useState)(null);function i(){o(r=>{if(!e)return null;var o;if(!1===e.isConnected)return null!=(o=null!=r?r:n)?o:null;const i=t(e);return JSON.stringify(r)===JSON.stringify(i)?r:i})}const a=function(e){let{callback:t,disabled:n}=e;const r=Bt(t),o=(0,Ct.useMemo)(()=>{if(n||"undefined"==typeof window||void 0===window.MutationObserver)return;const{MutationObserver:e}=window;return new e(r)},[r,n]);return(0,Ct.useEffect)(()=>()=>null==o?void 0:o.disconnect(),[o]),o}({callback(t){if(e)for(const n of t){const{type:t,target:r}=n;if("childList"===t&&r instanceof HTMLElement&&r.contains(e)){i();break}}}}),s=ur({callback:i});return Pt(()=>{i(),e?(null==s||s.observe(e),null==a||a.observe(document.body,{childList:!0,subtree:!0})):(null==s||s.disconnect(),null==a||a.disconnect())},[e]),r}const fr=[];function gr(e,t){void 0===t&&(t=[]);const n=(0,Ct.useRef)(null);return(0,Ct.useEffect)(()=>{n.current=null},t),(0,Ct.useEffect)(()=>{const t=e!==ln;t&&!n.current&&(n.current=e),!t&&n.current&&(n.current=null)},[e]),n.current?Ht(e,n.current):ln}function hr(e){return(0,Ct.useMemo)(()=>e?function(e){const t=e.innerWidth,n=e.innerHeight;return{top:0,left:0,right:t,bottom:n,width:t,height:n}}(e):null,[e])}const mr=[];const vr=[{sensor:Qn,options:{}},{sensor:Kn,options:{}}],br={current:{}},Er={draggable:{measure:xn},droppable:{measure:xn,strategy:ar.WhileDragging,frequency:sr.Optimized},dragOverlay:{measure:Sn}};class yr extends Map{get(e){var t;return null!=e&&null!=(t=super.get(e))?t:void 0}toArray(){return Array.from(this.values())}getEnabled(){return this.toArray().filter(e=>{let{disabled:t}=e;return!t})}getNodeFor(e){var t,n;return null!=(t=null==(n=this.get(e))?void 0:n.node.current)?t:void 0}}const Tr={activatorEvent:null,active:null,activeNode:null,activeNodeRect:null,collisions:null,containerNodeRect:null,draggableNodes:new Map,droppableRects:new Map,droppableContainers:new yr,over:null,dragOverlay:{nodeRef:{current:null},rect:null,setRef:an},scrollableAncestors:[],scrollableAncestorRects:[],measuringConfiguration:Er,measureDroppableContainers:an,windowRect:null,measuringScheduled:!1},Sr={activatorEvent:null,activators:[],active:null,activeNodeRect:null,ariaDescribedById:{draggable:""},dispatch:an,draggableNodes:new Map,over:null,measureDroppableContainers:an},xr=(0,Ct.createContext)(Sr),Cr=(0,Ct.createContext)(Tr);function wr(){return{draggable:{active:null,initialCoordinates:{x:0,y:0},nodes:new Map,translate:{x:0,y:0}},droppable:{containers:new yr}}}function _r(e,t){switch(t.type){case on.DragStart:return{...e,draggable:{...e.draggable,initialCoordinates:t.initialCoordinates,active:t.active}};case on.DragMove:return null==e.draggable.active?e:{...e,draggable:{...e.draggable,translate:{x:t.coordinates.x-e.draggable.initialCoordinates.x,y:t.coordinates.y-e.draggable.initialCoordinates.y}}};case on.DragEnd:case on.DragCancel:return{...e,draggable:{...e.draggable,active:null,initialCoordinates:{x:0,y:0},translate:{x:0,y:0}}};case on.RegisterDroppable:{const{element:n}=t,{id:r}=n,o=new yr(e.droppable.containers);return o.set(r,n),{...e,droppable:{...e.droppable,containers:o}}}case on.SetDroppableDisabled:{const{id:n,key:r,disabled:o}=t,i=e.droppable.containers.get(n);if(!i||r!==i.key)return e;const a=new yr(e.droppable.containers);return a.set(n,{...i,disabled:o}),{...e,droppable:{...e.droppable,containers:a}}}case on.UnregisterDroppable:{const{id:n,key:r}=t,o=e.droppable.containers.get(n);if(!o||r!==o.key)return e;const i=new yr(e.droppable.containers);return i.delete(n),{...e,droppable:{...e.droppable,containers:i}}}default:return e}}function Rr(e){let{disabled:t}=e;const{active:n,activatorEvent:r,draggableNodes:o}=(0,Ct.useContext)(xr),i=Ft(r),a=Ft(null==n?void 0:n.id);return(0,Ct.useEffect)(()=>{if(!t&&!r&&i&&null!=a){if(!zt(i))return;if(document.activeElement===i.target)return;const e=o.get(a);if(!e)return;const{activatorNode:t,node:n}=e;if(!t.current&&!n.current)return;requestAnimationFrame(()=>{for(const e of[t.current,n.current]){if(!e)continue;const t=Yt(e);if(t){t.focus();break}}})}},[r,t,o,a,i]),null}const Ar=(0,Ct.createContext)({...ln,scaleX:1,scaleY:1});var Ir;!function(e){e[e.Uninitialized=0]="Uninitialized",e[e.Initializing=1]="Initializing",e[e.Initialized=2]="Initialized"}(Ir||(Ir={}));const kr=(0,Ct.memo)(function(e){var t,n,r,o;let{id:i,accessibility:a,autoScroll:s=!0,children:l,sensors:c=vr,collisionDetection:u=vn,measuring:d,modifiers:p,...f}=e;const g=(0,Ct.useReducer)(_r,void 0,wr),[h,m]=g,[v,b]=function(){const[e]=(0,Ct.useState)(()=>new Set),t=(0,Ct.useCallback)(t=>(e.add(t),()=>e.delete(t)),[e]);return[(0,Ct.useCallback)(t=>{let{type:n,event:r}=t;e.forEach(e=>{var t;return null==(t=e[n])?void 0:t.call(e,r)})},[e]),t]}(),[E,y]=(0,Ct.useState)(Ir.Uninitialized),T=E===Ir.Initialized,{draggable:{active:S,nodes:x,translate:C},droppable:{containers:w}}=h,_=null!=S?x.get(S):null,R=(0,Ct.useRef)({initial:null,translated:null}),A=(0,Ct.useMemo)(()=>{var e;return null!=S?{id:S,data:null!=(e=null==_?void 0:_.data)?e:br,rect:R}:null},[S,_]),I=(0,Ct.useRef)(null),[k,D]=(0,Ct.useState)(null),[O,L]=(0,Ct.useState)(null),N=Mt(f,Object.values(f)),P=qt("DndDescribedBy",i),B=(0,Ct.useMemo)(()=>w.getEnabled(),[w]),M=(j=d,(0,Ct.useMemo)(()=>({draggable:{...Er.draggable,...null==j?void 0:j.draggable},droppable:{...Er.droppable,...null==j?void 0:j.droppable},dragOverlay:{...Er.dragOverlay,...null==j?void 0:j.dragOverlay}}),[null==j?void 0:j.draggable,null==j?void 0:j.droppable,null==j?void 0:j.dragOverlay]));var j;const{droppableRects:U,measureDroppableContainers:F,measuringScheduled:V}=function(e,t){let{dragging:n,dependencies:r,config:o}=t;const[i,a]=(0,Ct.useState)(null),{frequency:s,measure:l,strategy:c}=o,u=(0,Ct.useRef)(e),d=function(){switch(c){case ar.Always:return!1;case ar.BeforeDragging:return n;default:return!n}}(),p=Mt(d),f=(0,Ct.useCallback)(function(e){void 0===e&&(e=[]),p.current||a(t=>null===t?e:t.concat(e.filter(e=>!t.includes(e))))},[p]),g=(0,Ct.useRef)(null),h=jt(t=>{if(d&&!n)return lr;if(!t||t===lr||u.current!==e||null!=i){const t=new Map;for(let n of e){if(!n)continue;if(i&&i.length>0&&!i.includes(n.id)&&n.rect.current){t.set(n.id,n.rect.current);continue}const e=n.node.current,r=e?new Un(l(e),e):null;n.rect.current=r,r&&t.set(n.id,r)}return t}return t},[e,i,n,d,l]);return(0,Ct.useEffect)(()=>{u.current=e},[e]),(0,Ct.useEffect)(()=>{d||f()},[n,d]),(0,Ct.useEffect)(()=>{i&&i.length>0&&a(null)},[JSON.stringify(i)]),(0,Ct.useEffect)(()=>{d||"number"!=typeof s||null!==g.current||(g.current=setTimeout(()=>{f(),g.current=null},s))},[s,d,f,...r]),{droppableRects:h,measureDroppableContainers:f,measuringScheduled:null!=i}}(B,{dragging:T,dependencies:[C.x,C.y],config:M.droppable}),q=function(e,t){const n=null!=t?e.get(t):void 0,r=n?n.node.current:null;return jt(e=>{var n;return null==t?null:null!=(n=null!=r?r:e)?n:null},[r,t])}(x,S),G=(0,Ct.useMemo)(()=>O?Wt(O):null,[O]),$=function(){const e=!1===(null==k?void 0:k.autoScrollEnabled),t="object"==typeof s?!1===s.enabled:!1===s,n=T&&!e&&!t;return"object"==typeof s?{...s,enabled:n}:{enabled:n}}(),H=function(e,t){return cr(e,t)}(q,M.draggable.measure);!function(e){let{activeNode:t,measure:n,initialRect:r,config:o=!0}=e;const i=(0,Ct.useRef)(!1),{x:a,y:s}="boolean"==typeof o?{x:o,y:o}:o;Pt(()=>{if(!a&&!s||!t)return void(i.current=!1);if(i.current||!r)return;const e=null==t?void 0:t.node.current;if(!e||!1===e.isConnected)return;const o=bn(n(e),r);if(a||(o.x=0),s||(o.y=0),i.current=!0,Math.abs(o.x)>0||Math.abs(o.y)>0){const t=wn(e);t&&t.scrollBy({top:o.y,left:o.x})}},[t,a,s,r,n])}({activeNode:null!=S?x.get(S):null,config:$.layoutShiftCompensation,initialRect:H,measure:M.draggable.measure});const z=pr(q,M.draggable.measure,H),W=pr(q?q.parentElement:null),K=(0,Ct.useRef)({activatorEvent:null,active:null,activeNode:q,collisionRect:null,collisions:null,droppableRects:U,draggableNodes:x,draggingNode:null,draggingNodeRect:null,droppableContainers:w,over:null,scrollableAncestors:[],scrollAdjustedTranslate:null}),X=w.getNodeFor(null==(t=K.current.over)?void 0:t.id),Y=function(e){let{measure:t}=e;const[n,r]=(0,Ct.useState)(null),o=ur({callback:(0,Ct.useCallback)(e=>{for(const{target:n}of e)if(Ot(n)){r(e=>{const r=t(n);return e?{...e,width:r.width,height:r.height}:r});break}},[t])}),i=(0,Ct.useCallback)(e=>{const n=function(e){if(!e)return null;if(e.children.length>1)return e;const t=e.children[0];return Ot(t)?t:e}(e);null==o||o.disconnect(),n&&(null==o||o.observe(n)),r(n?t(n):null)},[t,o]),[a,s]=Ut(i);return(0,Ct.useMemo)(()=>({nodeRef:a,rect:n,setRef:s}),[n,a,s])}({measure:M.dragOverlay.measure}),Z=null!=(n=Y.nodeRef.current)?n:q,J=T?null!=(r=Y.rect)?r:z:null,Q=Boolean(Y.nodeRef.current&&Y.rect),ee=bn(te=Q?null:z,cr(te));var te;const ne=hr(Z?kt(Z):null),re=function(e){const t=(0,Ct.useRef)(e),n=jt(n=>e?n&&n!==fr&&e&&t.current&&e.parentNode===t.current.parentNode?n:Cn(e):fr,[e]);return(0,Ct.useEffect)(()=>{t.current=e},[e]),n}(T?null!=X?X:q:null),oe=function(e,t){void 0===t&&(t=Sn);const[n]=e,r=hr(n?kt(n):null),[o,i]=(0,Ct.useState)(mr);function a(){i(()=>e.length?e.map(e=>On(e)?r:new Un(t(e),e)):mr)}const s=ur({callback:a});return Pt(()=>{null==s||s.disconnect(),a(),e.forEach(e=>null==s?void 0:s.observe(e))},[e]),o}(re),ie=function(e,t){let{transform:n,...r}=t;return null!=e&&e.length?e.reduce((e,t)=>t({transform:e,...r}),n):n}(p,{transform:{x:C.x-ee.x,y:C.y-ee.y,scaleX:1,scaleY:1},activatorEvent:O,active:A,activeNodeRect:z,containerNodeRect:W,draggingNodeRect:J,over:K.current.over,overlayNodeRect:Y.rect,scrollableAncestors:re,scrollableAncestorRects:oe,windowRect:ne}),ae=G?$t(G,C):null,se=function(e){const[t,n]=(0,Ct.useState)(null),r=(0,Ct.useRef)(e),o=(0,Ct.useCallback)(e=>{const t=Rn(e.target);t&&n(e=>e?(e.set(t,kn(t)),new Map(e)):null)},[]);return(0,Ct.useEffect)(()=>{const t=r.current;if(e!==t){i(t);const a=e.map(e=>{const t=Rn(e);return t?(t.addEventListener("scroll",o,{passive:!0}),[t,kn(t)]):null}).filter(e=>null!=e);n(a.length?new Map(a):null),r.current=e}return()=>{i(e),i(t)};function i(e){e.forEach(e=>{const t=Rn(e);null==t||t.removeEventListener("scroll",o)})}},[o,e]),(0,Ct.useMemo)(()=>e.length?t?Array.from(t.values()).reduce((e,t)=>$t(e,t),ln):Mn(e):ln,[e,t])}(re),le=gr(se),ce=gr(se,[z]),ue=$t(ie,le),de=J?yn(J,ie):null,pe=A&&de?u({active:A,collisionRect:de,droppableRects:U,droppableContainers:B,pointerCoordinates:ae}):null,fe=fn(pe,"id"),[ge,he]=(0,Ct.useState)(null),me=function(e,t,n){return{...e,scaleX:t&&n?t.width/n.width:1,scaleY:t&&n?t.height/n.height:1}}(Q?ie:$t(ie,ce),null!=(o=null==ge?void 0:ge.rect)?o:null,z),ve=(0,Ct.useRef)(null),be=(0,Ct.useCallback)((e,t)=>{let{sensor:n,options:r}=t;if(null==I.current)return;const o=x.get(I.current);if(!o)return;const i=e.nativeEvent,a=new n({active:I.current,activeNode:o,event:i,options:r,context:K,onAbort(e){if(!x.get(e))return;const{onDragAbort:t}=N.current,n={id:e};null==t||t(n),v({type:"onDragAbort",event:n})},onPending(e,t,n,r){if(!x.get(e))return;const{onDragPending:o}=N.current,i={id:e,constraint:t,initialCoordinates:n,offset:r};null==o||o(i),v({type:"onDragPending",event:i})},onStart(e){const t=I.current;if(null==t)return;const n=x.get(t);if(!n)return;const{onDragStart:r}=N.current,o={activatorEvent:i,active:{id:t,data:n.data,rect:R}};(0,_t.unstable_batchedUpdates)(()=>{null==r||r(o),y(Ir.Initializing),m({type:on.DragStart,initialCoordinates:e,active:t}),v({type:"onDragStart",event:o}),D(ve.current),L(i)})},onMove(e){m({type:on.DragMove,coordinates:e})},onEnd:s(on.DragEnd),onCancel:s(on.DragCancel)});function s(e){return async function(){const{active:t,collisions:n,over:r,scrollAdjustedTranslate:o}=K.current;let a=null;if(t&&o){const{cancelDrop:s}=N.current;a={activatorEvent:i,active:t,collisions:n,delta:o,over:r},e===on.DragEnd&&"function"==typeof s&&await Promise.resolve(s(a))&&(e=on.DragCancel)}I.current=null,(0,_t.unstable_batchedUpdates)(()=>{m({type:e}),y(Ir.Uninitialized),he(null),D(null),L(null),ve.current=null;const t=e===on.DragEnd?"onDragEnd":"onDragCancel";if(a){const e=N.current[t];null==e||e(a),v({type:t,event:a})}})}}ve.current=a},[x]),Ee=(0,Ct.useCallback)((e,t)=>(n,r)=>{const o=n.nativeEvent,i=x.get(r);if(null!==I.current||!i||o.dndKit||o.defaultPrevented)return;const a={active:i};!0===e(n,t.options,a)&&(o.dndKit={capturedBy:t.sensor},I.current=r,be(n,t))},[x,be]),ye=function(e,t){return(0,Ct.useMemo)(()=>e.reduce((e,n)=>{const{sensor:r}=n;return[...e,...r.activators.map(e=>({eventName:e.eventName,handler:t(e.handler,n)}))]},[]),[e,t])}(c,Ee);!function(e){(0,Ct.useEffect)(()=>{if(!Rt)return;const t=e.map(e=>{let{sensor:t}=e;return null==t.setup?void 0:t.setup()});return()=>{for(const e of t)null==e||e()}},e.map(e=>{let{sensor:t}=e;return t}))}(c),Pt(()=>{z&&E===Ir.Initializing&&y(Ir.Initialized)},[z,E]),(0,Ct.useEffect)(()=>{const{onDragMove:e}=N.current,{active:t,activatorEvent:n,collisions:r,over:o}=K.current;if(!t||!n)return;const i={active:t,activatorEvent:n,collisions:r,delta:{x:ue.x,y:ue.y},over:o};(0,_t.unstable_batchedUpdates)(()=>{null==e||e(i),v({type:"onDragMove",event:i})})},[ue.x,ue.y]),(0,Ct.useEffect)(()=>{const{active:e,activatorEvent:t,collisions:n,droppableContainers:r,scrollAdjustedTranslate:o}=K.current;if(!e||null==I.current||!t||!o)return;const{onDragOver:i}=N.current,a=r.get(fe),s=a&&a.rect.current?{id:a.id,rect:a.rect.current,data:a.data,disabled:a.disabled}:null,l={active:e,activatorEvent:t,collisions:n,delta:{x:o.x,y:o.y},over:s};(0,_t.unstable_batchedUpdates)(()=>{he(s),null==i||i(l),v({type:"onDragOver",event:l})})},[fe]),Pt(()=>{K.current={activatorEvent:O,active:A,activeNode:q,collisionRect:de,collisions:pe,droppableRects:U,draggableNodes:x,draggingNode:Z,draggingNodeRect:J,droppableContainers:w,over:ge,scrollableAncestors:re,scrollAdjustedTranslate:ue},R.current={initial:J,translated:de}},[A,q,pe,de,x,Z,J,U,w,ge,re,ue]),function(e){let{acceleration:t,activator:n=rr.Pointer,canScroll:r,draggingRect:o,enabled:i,interval:a=5,order:s=or.TreeOrder,pointerCoordinates:l,scrollableAncestors:c,scrollableAncestorRects:u,delta:d,threshold:p}=e;const f=function(e){let{delta:t,disabled:n}=e;const r=Ft(t);return jt(e=>{if(n||!r||!e)return ir;const o=Math.sign(t.x-r.x),i=Math.sign(t.y-r.y);return{x:{[Dn.Backward]:e.x[Dn.Backward]||-1===o,[Dn.Forward]:e.x[Dn.Forward]||1===o},y:{[Dn.Backward]:e.y[Dn.Backward]||-1===i,[Dn.Forward]:e.y[Dn.Forward]||1===i}}},[n,t,r])}({delta:d,disabled:!i}),[g,h]=function(){const e=(0,Ct.useRef)(null);return[(0,Ct.useCallback)((t,n)=>{e.current=setInterval(t,n)},[]),(0,Ct.useCallback)(()=>{null!==e.current&&(clearInterval(e.current),e.current=null)},[])]}(),m=(0,Ct.useRef)({x:0,y:0}),v=(0,Ct.useRef)({x:0,y:0}),b=(0,Ct.useMemo)(()=>{switch(n){case rr.Pointer:return l?{top:l.y,bottom:l.y,left:l.x,right:l.x}:null;case rr.DraggableRect:return o}},[n,o,l]),E=(0,Ct.useRef)(null),y=(0,Ct.useCallback)(()=>{const e=E.current;if(!e)return;const t=m.current.x*v.current.x,n=m.current.y*v.current.y;e.scrollBy(t,n)},[]),T=(0,Ct.useMemo)(()=>s===or.TreeOrder?[...c].reverse():c,[s,c]);(0,Ct.useEffect)(()=>{if(i&&c.length&&b){for(const e of T){if(!1===(null==r?void 0:r(e)))continue;const n=c.indexOf(e),o=u[n];if(!o)continue;const{direction:i,speed:s}=Pn(e,o,b,t,p);for(const e of["x","y"])f[e][i[e]]||(s[e]=0,i[e]=0);if(s.x>0||s.y>0)return h(),E.current=e,g(y,a),m.current=s,void(v.current=i)}m.current={x:0,y:0},v.current={x:0,y:0},h()}else h()},[t,y,r,h,i,a,JSON.stringify(b),JSON.stringify(f),g,c,T,u,JSON.stringify(p)])}({...$,delta:C,draggingRect:de,pointerCoordinates:ae,scrollableAncestors:re,scrollableAncestorRects:oe});const Te=(0,Ct.useMemo)(()=>({active:A,activeNode:q,activeNodeRect:z,activatorEvent:O,collisions:pe,containerNodeRect:W,dragOverlay:Y,draggableNodes:x,droppableContainers:w,droppableRects:U,over:ge,measureDroppableContainers:F,scrollableAncestors:re,scrollableAncestorRects:oe,measuringConfiguration:M,measuringScheduled:V,windowRect:ne}),[A,q,z,O,pe,W,Y,x,w,U,ge,F,re,oe,M,V,ne]),Se=(0,Ct.useMemo)(()=>({activatorEvent:O,activators:ye,active:A,activeNodeRect:z,ariaDescribedById:{draggable:P},dispatch:m,draggableNodes:x,over:ge,measureDroppableContainers:F}),[O,ye,A,z,m,P,x,ge,F]);return wt().createElement(en.Provider,{value:b},wt().createElement(xr.Provider,{value:Se},wt().createElement(Cr.Provider,{value:Te},wt().createElement(Ar.Provider,{value:me},l)),wt().createElement(Rr,{disabled:!1===(null==a?void 0:a.restoreFocus)})),wt().createElement(rn,{...a,hiddenTextDescribedById:P}))}),Dr=(0,Ct.createContext)(null),Or="button";const Lr={timeout:25};function Nr(e,t,n){const r=e.slice();return r.splice(n<0?r.length+n:n,0,r.splice(t,1)[0]),r}function Pr(e,t){return e.reduce((e,n,r)=>{const o=t.get(n);return o&&(e[r]=o),e},Array(e.length))}function Br(e){return null!==e&&e>=0}const Mr=e=>{let{rects:t,activeIndex:n,overIndex:r,index:o}=e;const i=Nr(t,r,n),a=t[o],s=i[o];return s&&a?{x:s.left-a.left,y:s.top-a.top,scaleX:s.width/a.width,scaleY:s.height/a.height}:null},jr={scaleX:1,scaleY:1},Ur=e=>{var t;let{activeIndex:n,activeNodeRect:r,index:o,rects:i,overIndex:a}=e;const s=null!=(t=i[n])?t:r;if(!s)return null;if(o===n){const e=i[a];return e?{x:0,y:n<a?e.top+e.height-(s.top+s.height):e.top-s.top,...jr}:null}const l=function(e,t,n){const r=e[t],o=e[t-1],i=e[t+1];return r?n<t?o?r.top-(o.top+o.height):i?i.top-(r.top+r.height):0:i?i.top-(r.top+r.height):o?r.top-(o.top+o.height):0:0}(i,o,n);return o>n&&o<=a?{x:0,y:-s.height-l,...jr}:o<n&&o>=a?{x:0,y:s.height+l,...jr}:{x:0,y:0,...jr}},Fr="Sortable",Vr=wt().createContext({activeIndex:-1,containerId:Fr,disableTransforms:!1,items:[],overIndex:-1,useDragOverlay:!1,sortedRects:[],strategy:Mr,disabled:{draggable:!1,droppable:!1}});function qr(e){let{children:t,id:n,items:r,strategy:o=Mr,disabled:i=!1}=e;const{active:a,dragOverlay:s,droppableRects:l,over:c,measureDroppableContainers:u}=(0,Ct.useContext)(Cr),d=qt(Fr,n),p=Boolean(null!==s.rect),f=(0,Ct.useMemo)(()=>r.map(e=>"object"==typeof e&&"id"in e?e.id:e),[r]),g=null!=a,h=a?f.indexOf(a.id):-1,m=c?f.indexOf(c.id):-1,v=(0,Ct.useRef)(f),b=!function(e,t){if(e===t)return!0;if(e.length!==t.length)return!1;for(let n=0;n<e.length;n++)if(e[n]!==t[n])return!1;return!0}(f,v.current),E=-1!==m&&-1===h||b,y=function(e){return"boolean"==typeof e?{draggable:e,droppable:e}:e}(i);Pt(()=>{b&&g&&u(f)},[b,f,g,u]),(0,Ct.useEffect)(()=>{v.current=f},[f]);const T=(0,Ct.useMemo)(()=>({activeIndex:h,containerId:d,disabled:y,disableTransforms:E,items:f,overIndex:m,useDragOverlay:p,sortedRects:Pr(f,l),strategy:o}),[h,d,y.draggable,y.droppable,E,f,m,l,p,o]);return wt().createElement(Vr.Provider,{value:T},t)}const Gr=e=>{let{id:t,items:n,activeIndex:r,overIndex:o}=e;return Nr(n,r,o).indexOf(t)},$r=e=>{let{containerId:t,isSorting:n,wasDragging:r,index:o,items:i,newIndex:a,previousItems:s,previousContainerId:l,transition:c}=e;return!(!c||!r||s!==i&&o===a||!n&&(a===o||t!==l))},Hr={duration:200,easing:"ease"},zr="transform",Wr=Kt.Transition.toString({property:zr,duration:0,easing:"linear"}),Kr={roleDescription:"sortable"};function Xr(e){let{animateLayoutChanges:t=$r,attributes:n,disabled:r,data:o,getNewIndex:i=Gr,id:a,strategy:s,resizeObserverConfig:l,transition:c=Hr}=e;const{items:u,containerId:d,activeIndex:p,disabled:f,disableTransforms:g,sortedRects:h,overIndex:m,useDragOverlay:v,strategy:b}=(0,Ct.useContext)(Vr),E=function(e,t){var n,r;return"boolean"==typeof e?{draggable:e,droppable:!1}:{draggable:null!=(n=null==e?void 0:e.draggable)?n:t.draggable,droppable:null!=(r=null==e?void 0:e.droppable)?r:t.droppable}}(r,f),y=u.indexOf(a),T=(0,Ct.useMemo)(()=>({sortable:{containerId:d,index:y,items:u},...o}),[d,o,y,u]),S=(0,Ct.useMemo)(()=>u.slice(u.indexOf(a)),[u,a]),{rect:x,node:C,isOver:w,setNodeRef:_}=function(e){let{data:t,disabled:n=!1,id:r,resizeObserverConfig:o}=e;const i=qt("Droppable"),{active:a,dispatch:s,over:l,measureDroppableContainers:c}=(0,Ct.useContext)(xr),u=(0,Ct.useRef)({disabled:n}),d=(0,Ct.useRef)(!1),p=(0,Ct.useRef)(null),f=(0,Ct.useRef)(null),{disabled:g,updateMeasurementsFor:h,timeout:m}={...Lr,...o},v=Mt(null!=h?h:r),b=ur({callback:(0,Ct.useCallback)(()=>{d.current?(null!=f.current&&clearTimeout(f.current),f.current=setTimeout(()=>{c(Array.isArray(v.current)?v.current:[v.current]),f.current=null},m)):d.current=!0},[m]),disabled:g||!a}),E=(0,Ct.useCallback)((e,t)=>{b&&(t&&(b.unobserve(t),d.current=!1),e&&b.observe(e))},[b]),[y,T]=Ut(E),S=Mt(t);return(0,Ct.useEffect)(()=>{b&&y.current&&(b.disconnect(),d.current=!1,b.observe(y.current))},[y,b]),(0,Ct.useEffect)(()=>(s({type:on.RegisterDroppable,element:{id:r,key:i,disabled:n,node:y,rect:p,data:S}}),()=>s({type:on.UnregisterDroppable,key:i,id:r})),[r]),(0,Ct.useEffect)(()=>{n!==u.current.disabled&&(s({type:on.SetDroppableDisabled,id:r,key:i,disabled:n}),u.current.disabled=n)},[r,i,n,s]),{active:a,rect:p,isOver:(null==l?void 0:l.id)===r,node:y,over:l,setNodeRef:T}}({id:a,data:T,disabled:E.droppable,resizeObserverConfig:{updateMeasurementsFor:S,...l}}),{active:R,activatorEvent:A,activeNodeRect:I,attributes:k,setNodeRef:D,listeners:O,isDragging:L,over:N,setActivatorNodeRef:P,transform:B}=function(e){let{id:t,data:n,disabled:r=!1,attributes:o}=e;const i=qt("Draggable"),{activators:a,activatorEvent:s,active:l,activeNodeRect:c,ariaDescribedById:u,draggableNodes:d,over:p}=(0,Ct.useContext)(xr),{role:f=Or,roleDescription:g="draggable",tabIndex:h=0}=null!=o?o:{},m=(null==l?void 0:l.id)===t,v=(0,Ct.useContext)(m?Ar:Dr),[b,E]=Ut(),[y,T]=Ut(),S=function(e,t){return(0,Ct.useMemo)(()=>e.reduce((e,n)=>{let{eventName:r,handler:o}=n;return e[r]=e=>{o(e,t)},e},{}),[e,t])}(a,t),x=Mt(n);return Pt(()=>(d.set(t,{id:t,key:i,node:b,activatorNode:y,data:x}),()=>{const e=d.get(t);e&&e.key===i&&d.delete(t)}),[d,t]),{active:l,activatorEvent:s,activeNodeRect:c,attributes:(0,Ct.useMemo)(()=>({role:f,tabIndex:h,"aria-disabled":r,"aria-pressed":!(!m||f!==Or)||void 0,"aria-roledescription":g,"aria-describedby":u.draggable}),[r,f,h,m,g,u.draggable]),isDragging:m,listeners:r?void 0:S,node:b,over:p,setNodeRef:E,setActivatorNodeRef:T,transform:v}}({id:a,data:T,attributes:{...Kr,...n},disabled:E.draggable}),M=function(){for(var e=arguments.length,t=new Array(e),n=0;n<e;n++)t[n]=arguments[n];return(0,Ct.useMemo)(()=>e=>{t.forEach(t=>t(e))},t)}(_,D),j=Boolean(R),U=j&&!g&&Br(p)&&Br(m),F=!v&&L,V=F&&U?B:null,q=U?null!=V?V:(null!=s?s:b)({rects:h,activeNodeRect:I,activeIndex:p,overIndex:m,index:y}):null,G=Br(p)&&Br(m)?i({id:a,items:u,activeIndex:p,overIndex:m}):y,$=null==R?void 0:R.id,H=(0,Ct.useRef)({activeId:$,items:u,newIndex:G,containerId:d}),z=u!==H.current.items,W=t({active:R,containerId:d,isDragging:L,isSorting:j,id:a,index:y,items:u,newIndex:H.current.newIndex,previousItems:H.current.items,previousContainerId:H.current.containerId,transition:c,wasDragging:null!=H.current.activeId}),K=function(e){let{disabled:t,index:n,node:r,rect:o}=e;const[i,a]=(0,Ct.useState)(null),s=(0,Ct.useRef)(n);return Pt(()=>{if(!t&&n!==s.current&&r.current){const e=o.current;if(e){const t=Sn(r.current,{ignoreTransform:!0}),n={x:e.left-t.left,y:e.top-t.top,scaleX:e.width/t.width,scaleY:e.height/t.height};(n.x||n.y)&&a(n)}}n!==s.current&&(s.current=n)},[t,n,r,o]),(0,Ct.useEffect)(()=>{i&&a(null)},[i]),i}({disabled:!W,index:y,node:C,rect:x});return(0,Ct.useEffect)(()=>{j&&H.current.newIndex!==G&&(H.current.newIndex=G),d!==H.current.containerId&&(H.current.containerId=d),u!==H.current.items&&(H.current.items=u)},[j,G,d,u]),(0,Ct.useEffect)(()=>{if($===H.current.activeId)return;if(null!=$&&null==H.current.activeId)return void(H.current.activeId=$);const e=setTimeout(()=>{H.current.activeId=$},50);return()=>clearTimeout(e)},[$]),{active:R,activeIndex:p,attributes:k,data:T,rect:x,index:y,newIndex:G,items:u,isOver:w,isSorting:j,isDragging:L,listeners:O,node:C,overIndex:m,over:N,setNodeRef:M,setActivatorNodeRef:P,setDroppableNodeRef:_,setDraggableNodeRef:D,transform:null!=K?K:q,transition:K||z&&H.current.newIndex===y?Wr:F&&!zt(A)||!c?void 0:j||W?Kt.Transition.toString({...c,property:zr}):void 0}}function Yr(e){if(!e)return!1;const t=e.data.current;return!!(t&&"sortable"in t&&"object"==typeof t.sortable&&"containerId"in t.sortable&&"items"in t.sortable&&"index"in t.sortable)}const Zr=[Gn.Down,Gn.Right,Gn.Up,Gn.Left],Jr=(e,t)=>{let{context:{active:n,collisionRect:r,droppableRects:o,droppableContainers:i,over:a,scrollableAncestors:s}}=t;if(Zr.includes(e.code)){if(e.preventDefault(),!n||!r)return;const t=[];i.getEnabled().forEach(n=>{if(!n||null!=n&&n.disabled)return;const i=o.get(n.id);if(i)switch(e.code){case Gn.Down:r.top<i.top&&t.push(n);break;case Gn.Up:r.top>i.top&&t.push(n);break;case Gn.Left:r.left>i.left&&t.push(n);break;case Gn.Right:r.left<i.left&&t.push(n)}});const u=(e=>{let{collisionRect:t,droppableRects:n,droppableContainers:r}=e;const o=pn(t),i=[];for(const e of r){const{id:t}=e,r=n.get(t);if(r){const n=pn(r),a=o.reduce((e,t,r)=>e+cn(n[r],t),0),s=Number((a/4).toFixed(4));i.push({id:t,data:{droppableContainer:e,value:s}})}}return i.sort(un)})({active:n,collisionRect:r,droppableRects:o,droppableContainers:t,pointerCoordinates:null});let d=fn(u,"id");if(d===(null==a?void 0:a.id)&&u.length>1&&(d=u[1].id),null!=d){const e=i.get(n.id),t=i.get(d),a=t?o.get(t.id):null,u=null==t?void 0:t.node.current;if(u&&a&&e&&t){const n=Cn(u).some((e,t)=>s[t]!==e),o=Qr(e,t),i=(c=t,!(!Yr(l=e)||!Yr(c))&&!!Qr(l,c)&&l.data.current.sortable.index<c.data.current.sortable.index),d=n||!o?{x:0,y:0}:{x:i?r.width-a.width:0,y:i?r.height-a.height:0},p={x:a.left,y:a.top};return d.x&&d.y?p:Ht(p,d)}}}var l,c};function Qr(e,t){return!(!Yr(e)||!Yr(t))&&e.data.current.sortable.containerId===t.data.current.sortable.containerId}function eo({step:e,onEdit:t,onDelete:n}){const{attributes:r,listeners:o,setNodeRef:i,transform:a,transition:s,isDragging:l}=Xr({id:e.id}),c={transform:Kt.Transform.toString(a),transition:s??void 0,opacity:l?.5:1};return(0,vt.jsx)("div",{ref:i,style:c,className:"act-step-item "+(l?"is-dragging":""),children:(0,vt.jsxs)(ht.Flex,{align:"center",gap:2,children:[(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)("button",{type:"button",className:"act-step-drag-handle",...r,...o,"aria-label":(0,gt.__)("Drag to reorder","admin-coach-tours"),children:(0,vt.jsx)("span",{className:"dashicons dashicons-move",style:{width:20,height:20}})})}),(0,vt.jsx)(ht.FlexItem,{className:"act-step-order",children:(0,vt.jsx)("span",{className:"act-step-number",children:e.order+1})}),(0,vt.jsxs)(ht.FlexBlock,{className:"act-step-content",children:[(0,vt.jsx)("div",{className:"act-step-title",children:e.title||(0,gt.__)("Untitled Step","admin-coach-tours")}),e.target?.locators?.length>0&&(0,vt.jsx)("div",{className:"act-step-target-info",children:(0,vt.jsxs)("code",{children:[e.target.locators[0].value.substring(0,30),e.target.locators[0].value.length>30?"…":""]})})]}),(0,vt.jsxs)(ht.FlexItem,{className:"act-step-actions",children:[(0,vt.jsx)(ht.Button,{icon:Tt,label:(0,gt.__)("Edit step","admin-coach-tours"),onClick:()=>t(e),size:"small"}),(0,vt.jsx)(ht.Button,{icon:St,label:(0,gt.__)("Delete step","admin-coach-tours"),onClick:()=>n(e.id),size:"small",isDestructive:!0})]})]})})}function to({tourId:e,steps:t=[],onEditStep:n,onAddStep:r}){const{reorderSteps:o,deleteStep:i}=(0,c.useDispatch)("admin-coach-tours"),a=function(){for(var e=arguments.length,t=new Array(e),n=0;n<e;n++)t[n]=arguments[n];return(0,Ct.useMemo)(()=>[...t].filter(e=>null!=e),[...t])}(sn(Qn,{activationConstraint:{distance:8}}),sn(Kn,{coordinateGetter:Jr})),s=(0,ft.useCallback)(n=>{const{active:r,over:i}=n;if(r.id!==i?.id){const n=t.findIndex(e=>e.id===r.id),a=t.findIndex(e=>e.id===i?.id);if(-1!==n&&-1!==a){const r=Nr(t.map(e=>e.id),n,a);o(e,r)}}},[e,t,o]),l=(0,ft.useCallback)(t=>{window.confirm((0,gt.__)("Are you sure you want to delete this step?","admin-coach-tours"))&&i(e,t)},[e,i]);if(0===t.length)return(0,vt.jsxs)("div",{className:"act-step-list-empty",children:[(0,vt.jsx)("p",{children:(0,gt.__)("No steps yet. Click the button below to add your first step.","admin-coach-tours")}),(0,vt.jsx)(ht.Button,{variant:"primary",icon:xt,onClick:r,children:(0,gt.__)("Add First Step","admin-coach-tours")})]});const u=[...t].sort((e,t)=>e.order-t.order);return(0,vt.jsxs)("div",{className:"act-step-list",children:[(0,vt.jsx)(kr,{sensors:a,collisionDetection:hn,onDragEnd:s,children:(0,vt.jsx)(qr,{items:u.map(e=>e.id),strategy:Ur,children:u.map(e=>(0,vt.jsx)(eo,{step:e,onEdit:n,onDelete:l},e.id))})}),(0,vt.jsx)("div",{className:"act-step-list-footer act-button-group",children:(0,vt.jsx)(ht.Button,{variant:"secondary",icon:xt,onClick:r,children:(0,gt.__)("Add Step","admin-coach-tours")})})]})}var no=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"m21.5 9.1-6.6-6.6-4.2 5.6c-1.2-.1-2.4.1-3.6.7-.1 0-.1.1-.2.1-.5.3-.9.6-1.2.9l3.7 3.7-5.7 5.7v1.1h1.1l5.7-5.7 3.7 3.7c.4-.4.7-.8.9-1.2.1-.1.1-.2.2-.3.6-1.1.8-2.4.6-3.6l5.6-4.1zm-7.3 3.5.1.9c.1.9 0 1.8-.4 2.6l-6-6c.8-.4 1.7-.5 2.6-.4l.9.1L15 4.9 19.1 9l-4.9 3.6z"})}),ro=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"})}),oo=(0,vt.jsx)(mt.SVG,{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",children:(0,vt.jsx)(mt.Path,{d:"M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z"})});function io(e){if(!e)return!1;if(!e.isConnected)return!1;const t=window.getComputedStyle(e);if("none"===t.display||"hidden"===t.visibility||"0"===t.opacity)return!1;const n=e.getBoundingClientRect();return 0!==n.width||0!==n.height}function ao(e){const t=window.wp?.data;if(!t)return console.log("[ACT isWithinSelectedBlock] wp.data not available"),!0;const n=t.select("core/block-editor");if(!n)return console.log("[ACT isWithinSelectedBlock] core/block-editor not available"),!0;let r=n.getSelectedBlockClientId();if(console.log("[ACT isWithinSelectedBlock] Selected block clientId:",r),!r&&window.__actLastAppearedBlockClientId&&(r=window.__actLastAppearedBlockClientId,console.log("[ACT isWithinSelectedBlock] Using last appeared block:",r)),!r)return console.log("[ACT isWithinSelectedBlock] No block to scope to, allowing element"),!0;const o=(e.ownerDocument||document).querySelector(`[data-block="${r}"]`);if(!o)return console.log("[ACT isWithinSelectedBlock] Target block element not found in DOM"),!0;const i=o.contains(e);return console.log("[ACT isWithinSelectedBlock] Element within target block:",i),i}function so(e,t){if(!t)return!0;const n=(e.ownerDocument||document).querySelector(t);return!!n&&n.contains(e)}function lo(e,t=document){try{return Array.from(t.querySelectorAll(e))}catch{return[]}}function co(e,t=document){switch(e.type){case"css":return lo(e.value,t);case"role":return function(e,t=document){const[n,r]=e.split(":").map(e=>e.trim()),o=Array.from(t.querySelectorAll(`[role="${n}"]`)),i={button:'button, input[type="button"], input[type="submit"]',textbox:'input[type="text"], input:not([type]), textarea',link:"a[href]",checkbox:'input[type="checkbox"]',radio:'input[type="radio"]',listbox:"select",option:"option",heading:"h1, h2, h3, h4, h5, h6",img:"img[alt]",navigation:"nav",main:"main",complementary:"aside",banner:"header",contentinfo:"footer",search:'[role="search"]',form:"form",region:"section[aria-label], section[aria-labelledby]",tab:'[role="tab"]',tabpanel:'[role="tabpanel"]',tablist:'[role="tablist"]',menu:'[role="menu"]',menuitem:'[role="menuitem"]',dialog:'dialog, [role="dialog"]'};let a=[];i[n]&&(a=Array.from(t.querySelectorAll(i[n])));const s=[...o,...a];return r?s.filter(e=>{const t=function(e){if(e.getAttribute("aria-label"))return e.getAttribute("aria-label");const t=e.getAttribute("aria-labelledby");if(t){const e=document.getElementById(t);if(e)return e.textContent?.trim()||""}if(e.id){const t=document.querySelector(`label[for="${e.id}"]`);if(t)return t.textContent?.trim()||""}return e.getAttribute("title")?e.getAttribute("title"):"BUTTON"===e.tagName||"A"===e.tagName||"button"===e.getAttribute("role")?e.textContent?.trim()||"":"INPUT"===e.tagName&&e.value?e.value:""}(e);return t&&t.toLowerCase().includes(r.toLowerCase())}):s}(e.value,t);case"testid":case"testId":return function(e,t=document){return Array.from(t.querySelectorAll(`[data-testid="${e}"]`))}(e.value,t);case"dataattribute":case"dataAttribute":return function(e,t=document){const[n,r]=e.split(":").map(e=>e.trim()),o=r?`[data-${n}="${r}"]`:`[data-${n}]`;try{return Array.from(t.querySelectorAll(o))}catch{return[]}}(e.value,t);case"arialabel":case"ariaLabel":return function(e,t=document){return Array.from(t.querySelectorAll("[aria-label]")).filter(t=>{const n=t.getAttribute("aria-label");return n&&n.toLowerCase().includes(e.toLowerCase())})}(e.value,t);case"contextual":return function(e,t=document){const n=e.split(">>").map(e=>e.trim());if(2===n.length){const[e,r]=n,o=t.querySelector(e);return o?Array.from(o.querySelectorAll(r)):[]}return lo(e)}(e.value,t);case"wpBlock":case"wpblock":return function(e,t=document){if("inserted"===e||e.startsWith("inserted:")){const n="inserted"===e?"act-inserted-block":e.substring(9),r=window.__actInsertedBlocks;if(console.log("[ACT findByWpBlock] Looking for inserted block, markerId:",n,"map exists:",!!r,"has key:",r?.has?.(n)),r?.has?.(n)){const e=r.get(n);console.log("[ACT findByWpBlock] Looking for inserted block:",n,"clientId:",e);let o=t.querySelector(`[data-block="${e}"]`);if(!o){const n=document.querySelector('iframe[name="editor-canvas"]'),r=n?.contentDocument;r&&r!==t&&(o=r.querySelector(`[data-block="${e}"]`),console.log("[ACT findByWpBlock] Searched iframe, found:",!!o))}if(o||t===document||(o=document.querySelector(`[data-block="${e}"]`),console.log("[ACT findByWpBlock] Searched main doc, found:",!!o)),o)return console.log("[ACT findByWpBlock] Found inserted block element"),[o]}return console.log("[ACT findByWpBlock] Inserted block not found for marker:",n,"Available markers:",r?Array.from(r.keys()):"none"),[]}const n=window.wp?.data;if(!n)return console.log("[ACT findByWpBlock] wp.data not available"),[];const r=n.select("core/block-editor");if(!r)return console.log("[ACT findByWpBlock] core/block-editor store not available"),[];const o=r.getBlocks();console.log("[ACT findByWpBlock] Found",o.length,"blocks in editor");let i=null;if("first"===e)i=o[0]?.clientId;else if("last"===e)i=o[o.length-1]?.clientId;else if("selected"===e)i=r.getSelectedBlockClientId();else if(e.startsWith("type:")){const t=e.substring(5).split(":"),n=t[0],r=t[1]?parseInt(t[1],10):0,a=o.filter(e=>e.name===n);console.log("[ACT findByWpBlock] Looking for type:",n,"- found",a.length),i=a[r]?.clientId}else if(e.startsWith("nth:")){const t=parseInt(e.substring(4),10);i=o[t]?.clientId}if(!i)return console.log("[ACT findByWpBlock] No matching block found for:",e),[];console.log("[ACT findByWpBlock] Target clientId:",i);const a=t.querySelector(`[data-block="${i}"]`);return a?(console.log("[ACT findByWpBlock] Found element:",a.tagName),[a]):(console.log("[ACT findByWpBlock] Element not found in DOM"),[])}(e.value,t);default:return[]}}function uo(e,t,n){let r=t.weight||50;return e.id&&(r+=20),e.getAttribute("data-testid")&&(r+=15),n?.withinContainer&&so(e,n.withinContainer)&&(r+=10),ao(e)&&(r+=100),io(e)&&(r+=5),r}const po="admin-coach-tours";function fo({step:e,tourId:t,postType:n,onClose:r}){const[o,i]=(0,ft.useState)(e.title||""),[a,s]=(0,ft.useState)(e.content||""),[l,u]=(0,ft.useState)(e.completion?.type||"manual"),[d,p]=(0,ft.useState)(e.completion?.params||{}),[f,g]=(0,ft.useState)(!1),[h,m]=(0,ft.useState)(null),[v,b]=(0,ft.useState)(null),{aiDraft:E,isAiDrafting:y,aiDraftError:T}=(0,c.useSelect)(e=>{const t=e(po);return{aiDraft:t.getAiDraft(),isAiDrafting:t.isAiDrafting(),aiDraftError:t.getAiDraftError()}},[]),{updateStep:S,requestAiDraft:x,clearAiDraft:C,startPicking:w}=(0,c.useDispatch)(po),_=[{type:"clickTarget",label:"Click Target",description:"Complete when user clicks the target element",requiresTarget:!0,params:[]},{type:"domValueChanged",label:"Value Changed",description:"Complete when element value changes",requiresTarget:!0,params:[{name:"expectedValue",type:"string",optional:!0,description:"Expected value (if not set, any change completes)"},{name:"attributeName",type:"string",optional:!0,description:"Attribute to watch (defaults to value/textContent)"}]},{type:"wpData",label:"Store Change",description:"Complete when @wordpress/data store value changes",requiresTarget:!1,params:[{name:"storeName",type:"string",required:!0,description:"Store name (e.g., core/block-editor)"},{name:"selector",type:"string",required:!0,description:"Selector function name"},{name:"args",type:"array",optional:!0,description:"Arguments for selector"},{name:"expectedValue",type:"any",optional:!0,description:"Expected value"},{name:"comparator",type:"string",optional:!0,description:"equals, notEquals, truthy, falsy, contains, greaterThan, lessThan"}]},{type:"manual",label:"Manual",description:"Complete when user clicks continue button",requiresTarget:!1,params:[]},{type:"elementAppear",label:"Element Appears",description:"Complete when an element appears in DOM",requiresTarget:!1,params:[{name:"selector",type:"string",required:!0,description:"CSS selector for element"}]},{type:"elementDisappear",label:"Element Disappears",description:"Complete when an element is removed from DOM",requiresTarget:!1,params:[{name:"selector",type:"string",required:!0,description:"CSS selector for element"}]},{type:"customEvent",label:"Custom Event",description:"Complete when a custom event is dispatched",requiresTarget:!1,params:[{name:"eventName",type:"string",required:!0,description:"Custom event name"}]}],R=(0,ft.useCallback)(()=>{if(e.target){const t=function(e){const t=function(e){if(console.log("[ACT resolveTarget] Starting resolution",e),!e||!e.locators||0===e.locators.length)return console.log("[ACT resolveTarget] No locators provided"),{success:!1,error:"No locators provided"};const t=e.constraints||{};console.log("[ACT resolveTarget] Constraints:",t);const n=t.inEditorIframe||t.withinContainer&&[".editor-styles-wrapper",".block-editor-block-list__layout"].includes(t.withinContainer);console.log("[ACT resolveTarget] shouldSearchIframe:",n);let r=document;if(n){const e=function(){const e=document.querySelector('iframe[name="editor-canvas"]');return e?.contentDocument||null}();if(console.log("[ACT resolveTarget] iframeDoc:",e?"found":"NOT FOUND"),!e)return{success:!1,error:"Editor iframe not found"};r=e}const o=[...e.locators].sort((e,t)=>e.fallback!==t.fallback?e.fallback?1:-1:(t.weight||50)-(e.weight||50)),i=o.filter(e=>!e.fallback),a=o.filter(e=>e.fallback);console.log("[ACT resolveTarget] Trying",i.length,"primary +",a.length,"fallback locators");for(const e of[...i,...a]){let n=co(e,r);if(console.log("[ACT resolveTarget] Locator",e.type,":",e.value.substring(0,50),"-> found",n.length,"raw matches"),!1!==t.visible&&(n=n.filter(io),console.log("[ACT resolveTarget]   After visibility filter:",n.length)),t.scopeToSelectedBlock&&(n=n.filter(ao),console.log("[ACT resolveTarget]   After selectedBlock filter:",n.length)),t.withinContainer&&(n=n.filter(e=>so(e,t.withinContainer)),console.log("[ACT resolveTarget]   After container filter:",n.length)),0===n.length)continue;if(1===n.length)return console.log("[ACT resolveTarget] SUCCESS! Found element with",e.type),{success:!0,element:n[0],usedLocator:e};if("number"==typeof t.index&&n[t.index])return{success:!0,element:n[t.index],usedLocator:e};console.log("[ACT resolveTarget] Multiple matches (",n.length,"), disambiguating by specificity...");const o=n.map(n=>({element:n,score:uo(n,e,t)}));return o.sort((e,t)=>t.score-e.score),console.log("[ACT resolveTarget] Scores:",o.map(e=>e.score)),{success:!0,element:o[0].element,usedLocator:e}}return console.log("[ACT resolveTarget] FAILED - No matching element found after trying all locators"),{success:!1,error:"No matching element found"}}(e);return{success:t.success,element:t.element,usedLocator:t.usedLocator,error:t.error,elementInfo:t.element?{tagName:t.element.tagName.toLowerCase(),id:t.element.id||null,className:t.element.className||null,textContent:t.element.textContent?.slice(0,50)||null,rect:t.element.getBoundingClientRect()}:null}}(e.target);b(t),setTimeout(()=>b(null),5e3)}},[e.target]),A=(0,ft.useCallback)(async()=>{g(!0),m(null);try{await S(t,e.id,{title:o.trim(),content:a.trim(),completion:{type:l,params:d}}),r()}catch(e){m(e.message||(0,gt.__)("Failed to save step.","admin-coach-tours"))}finally{g(!1)}},[t,e.id,o,a,l,d,S,r]),I=(0,ft.useCallback)(()=>{if(e.target){const t={...e.elementContext||{selector:e.target,stepId:e.id},existingTitle:o,existingContent:a};x(t,n)}},[e.id,e.target,e.elementContext,o,a,n,x]),k=(0,ft.useCallback)(()=>{E&&(E.title&&i(E.title),E.content&&s(E.content),E.suggestedCompletion&&(u(E.suggestedCompletion.type),p(E.suggestedCompletion||{})),C())},[E,C]),D=(0,ft.useCallback)(()=>{w(e.id)},[e.id,w]),O=(0,ft.useCallback)((e,t)=>{p(n=>({...n,[e]:t}))},[]),L=_.find(e=>e.type===l);return(0,vt.jsxs)("div",{className:"act-step-editor",children:[h&&(0,vt.jsx)(ht.Notice,{status:"error",isDismissible:!1,children:h}),(0,vt.jsx)(ht.BaseControl,{__nextHasNoMarginBottom:!0,label:(0,gt.__)("Target Element","admin-coach-tours"),className:"act-step-editor-target",children:(0,vt.jsx)("div",{className:"act-target-info",children:e.target?.locators?.length>0?(0,vt.jsxs)(vt.Fragment,{children:[(0,vt.jsx)("code",{className:"act-target-selector",children:e.target.locators[0].value}),(0,vt.jsxs)(ht.Flex,{gap:2,style:{marginTop:"8px"},children:[(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"secondary",size:"small",icon:no,onClick:R,children:(0,gt.__)("Test","admin-coach-tours")})}),(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"tertiary",size:"small",onClick:D,children:(0,gt.__)("Re-pick","admin-coach-tours")})})]}),v&&(0,vt.jsx)(ht.Notice,{status:v.success?"success":"error",isDismissible:!1,className:"act-target-test-result",children:v.success?(0,gt.__)("Target found successfully!","admin-coach-tours"):(0,gt.__)("Target not found. Consider re-picking.","admin-coach-tours")})]}):(0,vt.jsx)(ht.Button,{variant:"primary",icon:no,onClick:D,children:(0,gt.__)("Pick Target Element","admin-coach-tours")})})}),(0,vt.jsx)(ht.TextControl,{__next40pxDefaultSize:!0,__nextHasNoMarginBottom:!0,label:(0,gt.__)("Step Title","admin-coach-tours"),value:o,onChange:i,placeholder:(0,gt.__)("e.g., Click the Add Block button","admin-coach-tours")}),(0,vt.jsx)(ht.TextareaControl,{__nextHasNoMarginBottom:!0,label:(0,gt.__)("Step Content","admin-coach-tours"),value:a,onChange:s,placeholder:(0,gt.__)("Explain what the user should do and why…","admin-coach-tours"),rows:4}),e.target&&(0,vt.jsxs)(ht.BaseControl,{__nextHasNoMarginBottom:!0,label:(0,gt.__)("AI Assistance","admin-coach-tours"),className:"act-ai-draft-section",children:[y?(0,vt.jsxs)(ht.Flex,{align:"center",gap:2,children:[(0,vt.jsx)(ht.Spinner,{}),(0,vt.jsx)("span",{children:(0,gt.__)("Generating draft…","admin-coach-tours")})]}):E?(0,vt.jsxs)("div",{className:"act-ai-draft",children:[(0,vt.jsxs)("div",{className:"act-ai-draft-preview",children:[(0,vt.jsx)("strong",{children:E.title}),(0,vt.jsxs)("p",{children:[E.content?.substring(0,100),"…"]})]}),(0,vt.jsxs)(ht.Flex,{gap:2,children:[(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"primary",size:"small",icon:Et,onClick:k,children:(0,gt.__)("Apply","admin-coach-tours")})}),(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"tertiary",size:"small",icon:ro,onClick:()=>C(),children:(0,gt.__)("Dismiss","admin-coach-tours")})})]})]}):(0,vt.jsx)(ht.Button,{variant:"secondary",icon:oo,onClick:I,children:(0,gt.__)("Generate with AI","admin-coach-tours")}),T&&(0,vt.jsx)(ht.Notice,{status:"error",isDismissible:!1,children:T})]}),(0,vt.jsx)(ht.SelectControl,{__next40pxDefaultSize:!0,__nextHasNoMarginBottom:!0,label:(0,gt.__)("Completion Condition","admin-coach-tours"),value:l,options:_.map(e=>({value:e.type,label:e.label})),onChange:e=>{u(e),p({})},help:L?.description}),L?.params&&L.params.length>0&&(0,vt.jsx)("div",{className:"act-completion-params",children:L.params.map(e=>(0,vt.jsx)(ht.TextControl,{__next40pxDefaultSize:!0,__nextHasNoMarginBottom:!0,label:e.name,value:d[e.name]||"",onChange:t=>O(e.name,t),help:e.description,required:e.required},e.name))}),(0,vt.jsx)("div",{className:"act-step-editor-actions",children:(0,vt.jsxs)(ht.Flex,{justify:"flex-end",gap:2,children:[(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"tertiary",onClick:r,children:(0,gt.__)("Cancel","admin-coach-tours")})}),(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)(ht.Button,{variant:"primary",onClick:A,isBusy:f,disabled:f||!o.trim(),children:(0,gt.__)("Save Step","admin-coach-tours")})})]})})]})}const go=[/^css-/i,/^sc-/i,/^emotion-/i,/^_/i,/^jsx-/i,/^styles?__/i,/^[a-z]{1,2}[0-9]+/i,/^[0-9]/i,/^svelte-/i];function ho(e){return e.filter(e=>{return!((t=e).length<=3||go.some(e=>e.test(t)));var t})}function mo(e){const t={},n=e.attributes;for(let e=0;e<n.length;e++){const r=n[e];if(r.name.startsWith("data-")){const e=r.name.slice(5);["reactid","react-checksum","v-"].some(t=>e.startsWith(t))||(t[e]=r.value)}}return t}function vo(e){if(e.getAttribute("role"))return e.getAttribute("role");const t=e.tagName.toLowerCase(),n=e.getAttribute("type"),r={button:"button",a:e.hasAttribute("href")?"link":null,input:{text:"textbox",search:"searchbox",email:"textbox",url:"textbox",tel:"textbox",password:"textbox",checkbox:"checkbox",radio:"radio",submit:"button",button:"button",reset:"button",range:"slider"},textarea:"textbox",select:"listbox",option:"option",img:e.hasAttribute("alt")?"img":null,nav:"navigation",main:"main",header:"banner",footer:"contentinfo",aside:"complementary",form:"form",h1:"heading",h2:"heading",h3:"heading",h4:"heading",h5:"heading",h6:"heading",ul:"list",ol:"list",li:"listitem",table:"table",dialog:"dialog"};return"input"===t&&r.input[n]?r.input[n]:r[t]||null}function bo(e){if(e.getAttribute("aria-label"))return e.getAttribute("aria-label");const t=e.getAttribute("aria-labelledby");if(t){const e=document.getElementById(t);if(e)return e.textContent?.trim()||null}if(e.id){const t=document.querySelector(`label[for="${e.id}"]`);if(t)return t.textContent?.trim()||null}if(e.getAttribute("title"))return e.getAttribute("title");const n=e.tagName.toLowerCase();if("button"===n||"a"===n||"button"===e.getAttribute("role")){const t=e.textContent?.trim();if(t&&t.length<100)return t}return null}function Eo(e){return!(e&&!/^block-[a-f0-9-]{36}$/i.test(e)&&!/^[a-f0-9-]{36}$/i.test(e)&&!/^[a-f0-9]{8,}$/i.test(e)&&!/[-_][a-f0-9]{8,}/i.test(e))}const yo="admin-coach-tours",To=[".act-picker-overlay",".act-picker-highlight",".act-picker-toolbar",".edit-post-sidebar","#adminmenumain","#wpadminbar",".components-popover",".components-modal__screen-overlay",'iframe[name="editor-canvas"]'];function So(){return document.querySelector('iframe[name="editor-canvas"]')}function xo(e){for(const t of To){if(e.matches(t))return!0;if(e.closest(t))return!0}return!1}function Co({onCancel:e}){const[t,n]=(0,ft.useState)(null),[r,o]=(0,ft.useState)(null),i=(0,ft.useRef)(null),{pickingStepId:a,currentTourId:s}=(0,c.useSelect)(e=>{const t=e(yo);return{pickingStepId:t.getPickingStepId?.()||null,currentTourId:t.getCurrentTourId?.()||null}},[]),{stopPicking:l,addStep:u,updateStep:d}=(0,c.useDispatch)(yo),p=(0,ft.useRef)(!1),f=(0,ft.useRef)(null),g=(0,ft.useRef)(null),h=(0,ft.useCallback)((e,t=!1)=>{if(g.current)return;g.current=setTimeout(()=>{g.current=null},16);let r=null;if(t){if(r=e.target,r&&!xo(r)){if(r===f.current)return;f.current=r,p.current=!0;const e=So();if(e){const t=e.getBoundingClientRect(),i=r.getBoundingClientRect();n(r),o({top:t.top+i.top,left:t.left+i.left,width:i.width,height:i.height})}}}else if(r=document.elementsFromPoint(e.clientX,e.clientY).find(e=>!(e.closest(".act-picker-overlay")||xo(e)||"IFRAME"===e.tagName&&"editor-canvas"===e.name)),r&&r!==f.current){f.current=r,p.current=!1,n(r);const e=r.getBoundingClientRect();o({top:e.top,left:e.left,width:e.width,height:e.height})}},[]),m=(0,ft.useCallback)(e=>{e.preventDefault(),e.stopPropagation();const t=f.current;if(!t)return;const n=function(e,t={}){const{inEditorIframe:n=!1}=t,r=[],o={visible:!0};n&&(o.inEditorIframe=!0);const i=e.getAttribute("data-testid");i&&!Eo(i)&&r.push({type:"testId",value:i,weight:100,fallback:!1}),e.id&&!Eo(e.id)&&r.push({type:"css",value:`#${CSS.escape(e.id)}`,weight:95,fallback:!1});const a=vo(e),s=bo(e);if(a){const e=s?`${a}:${s}`:a;r.push({type:"role",value:e,weight:80,fallback:!1})}const l=mo(e);for(const[e,t]of Object.entries(l)){if("testid"===e||"reactid"===e)continue;if("block"===e&&t&&/^[a-f0-9-]{36}$/i.test(t))continue;const n="type"===e?85:e.startsWith("wp-")?75:70;if(r.push({type:"dataAttribute",value:t?`${e}:${t}`:e,weight:n,fallback:!1}),r.filter(e=>"dataAttribute"===e.type).length>=2)break}const c=function(e,t=3){const n=[];let r=e,o=0;for(;r&&r!==document.body&&o<t;){const e=r.tagName.toLowerCase();if(r.id&&0===o){n.unshift(`#${CSS.escape(r.id)}`);break}let t=e;const i=ho(Array.from(r.classList));i.length>0&&(t+=i.slice(0,2).map(e=>`.${CSS.escape(e)}`).join(""));const a=r.getAttribute("data-testid");if(a&&0===o)t=`[data-testid="${a}"]`;else{const n=r.getAttribute("type");n&&"input"===e&&(t+=`[type="${n}"]`);const o=r.getAttribute("name");o&&["input","select","textarea"].includes(e)&&(t+=`[name="${o}"]`)}if(r.parentElement&&0===o){const e=Array.from(r.parentElement.children).filter(e=>e.tagName===r.tagName);e.length>1&&(t+=`:nth-of-type(${e.indexOf(r)+1})`)}n.unshift(t),r=r.parentElement,o++}return n.join(" > ")}(e,3);c&&r.push({type:"css",value:c,weight:60,fallback:!1});const u=e.getAttribute("aria-label");u&&r.push({type:"ariaLabel",value:u,weight:40,fallback:!0});const d=function(e,t=5){const n=["main","nav","aside","header","footer","section","article","form","dialog"],r=["main","navigation","complementary","banner","contentinfo","region","form","dialog","search"];let o=e.parentElement,i=0;for(;o&&o!==document.body&&i<t;){const e=o.tagName.toLowerCase(),t=o.getAttribute("role");if(n.includes(e)||r.includes(t)){let n=e;if(o.id)n=`#${CSS.escape(o.id)}`;else if(t)n=`[role="${t}"]`;else if(o.classList.length>0){const e=ho(Array.from(o.classList));e.length>0&&(n+=`.${CSS.escape(e[0])}`)}return{element:o,selector:n,type:t||e}}const a=["edit-post-sidebar","block-editor","editor-styles-wrapper","components-popover","components-modal","interface-interface-skeleton"];for(const e of a)if(o.classList.contains(e))return{element:o,selector:`.${e}`,type:"editor-region"};o=o.parentElement,i++}return null}(e);if(d){o.withinContainer=d.selector;const t=e.tagName.toLowerCase(),n=ho(Array.from(e.classList));let i=t;n.length>0&&(i+=`.${CSS.escape(n[0])}`),r.push({type:"contextual",value:`${d.selector} >> ${i}`,weight:50,fallback:!0});const a=e.getAttribute("data-type");a&&r.push({type:"css",value:`[data-type="${a}"]:first-of-type`,weight:45,fallback:!0})}if(0===r.length){const t=e.tagName.toLowerCase(),n=e.parentElement;if(n){const o=Array.from(n.children).indexOf(e)+1;r.push({type:"css",value:`${t}:nth-child(${o})`,weight:10,fallback:!0})}}return r.sort((e,t)=>(t.weight||50)-(e.weight||50)),{locators:r,constraints:o}}(t,{inEditorIframe:p.current}),r=function(e){const t={tagName:e.tagName.toLowerCase()},n=vo(e);n&&(t.role=n),e.id&&!/^[a-z0-9_-]{20,}$/i.test(e.id)&&(t.id=e.id);const r=ho(Array.from(e.classList));r.length>0&&(t.classNames=r.slice(0,5));const o=e.textContent?.trim();o&&o.length<=200?t.textContent=o:o&&(t.textContent=`${o.slice(0,197)}...`),e.placeholder&&(t.placeholder=e.placeholder);const i=bo(e);i&&i!==t.textContent&&(t.label=i);const a=mo(e),s=Object.keys(a).filter(e=>e.startsWith("wp-")||"block"===e||"type"===e||"testid"===e);s.length>0&&(t.dataAttrs={},s.forEach(e=>{t.dataAttrs[e]=a[e]}));const l=[];let c=e.parentElement,u=0;for(;c&&c!==document.body&&u<3;){const e={tagName:c.tagName.toLowerCase()},t=vo(c);t&&(e.role=t),c.id&&!/^[a-z0-9_-]{20,}$/i.test(c.id)&&(e.id=c.id);const n=ho(Array.from(c.classList));n.length>0&&(e.classNames=n.slice(0,3)),l.push(e),c=c.parentElement,u++}return l.length>0&&(t.ancestors=l),t}(t),o={target:n,elementContext:r,completion:{type:"clickTarget",params:{}}};a?d(s,a,{target:n,elementContext:r}):u(s,o),l()},[a,s,u,d,l]),v=(0,ft.useCallback)(t=>{"Escape"===t.key&&(l(),e?.())},[l,e]),b=(0,ft.useRef)({handleMouseMove:h,handleClick:m,handleKeyDown:v});(0,ft.useEffect)(()=>{b.current={handleMouseMove:h,handleClick:m,handleKeyDown:v}},[h,m,v]),(0,ft.useEffect)(()=>{const e=e=>b.current.handleMouseMove(e,!1),t=e=>b.current.handleClick(e),n=e=>b.current.handleKeyDown(e),r=e=>b.current.handleMouseMove(e,!0),o=e=>{e.preventDefault(),e.stopPropagation(),b.current.handleClick(e)};document.addEventListener("mousemove",e,!0),document.addEventListener("click",t,!0),document.addEventListener("keydown",n,!0),document.body.style.overflow="hidden";let i=null,a=null;const s=()=>{const e=So();e?.contentDocument&&e.contentDocument!==i&&(i&&(i.removeEventListener("mousemove",r,!0),i.removeEventListener("click",o,!0),i.removeEventListener("keydown",n,!0)),i=e.contentDocument,i.addEventListener("mousemove",r,!0),i.addEventListener("click",o,!0),i.addEventListener("keydown",n,!0))};return s(),a=setInterval(s,500),()=>{document.removeEventListener("mousemove",e,!0),document.removeEventListener("click",t,!0),document.removeEventListener("keydown",n,!0),document.body.style.overflow="",g.current&&clearTimeout(g.current),a&&clearInterval(a),i&&(i.removeEventListener("mousemove",r,!0),i.removeEventListener("click",o,!0),i.removeEventListener("keydown",n,!0))}},[]);const E=(0,vt.jsxs)("div",{ref:i,className:"act-picker-overlay",style:{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999998,cursor:"crosshair",pointerEvents:"none"},children:[r?(0,vt.jsx)("div",{className:"act-picker-highlight",style:{position:"fixed",top:r.top,left:r.left,width:r.width,height:r.height,border:"3px solid #007cba",backgroundColor:"rgba(0, 124, 186, 0.15)",pointerEvents:"none",zIndex:9999999,boxSizing:"border-box",borderRadius:"3px",transition:"top 0.08s ease-out, left 0.08s ease-out, width 0.08s ease-out, height 0.08s ease-out",boxShadow:"0 0 0 2px rgba(0, 124, 186, 0.3)"}}):null,(()=>{if(!t)return null;const e=t.tagName.toLowerCase(),n=t.id,r=Array.from(t.classList).slice(0,3).join(".");let o=e;return n?o+=`#${n}`:r&&(o+=`.${r}`),(0,vt.jsx)("div",{className:"act-picker-element-info",style:{position:"fixed",bottom:"80px",left:"50%",transform:"translateX(-50%)",backgroundColor:"rgba(0, 0, 0, 0.8)",color:"#fff",padding:"8px 16px",borderRadius:"4px",fontFamily:"monospace",fontSize:"13px",maxWidth:"80%",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",zIndex:9999999},children:o})})(),(0,vt.jsxs)("div",{className:"act-picker-toolbar",style:{position:"fixed",bottom:"20px",left:"50%",transform:"translateX(-50%)",display:"flex",gap:"12px",backgroundColor:"#fff",padding:"12px 20px",borderRadius:"8px",boxShadow:"0 4px 12px rgba(0, 0, 0, 0.15)",zIndex:9999999,pointerEvents:"auto"},children:[(0,vt.jsx)("span",{style:{alignSelf:"center",fontWeight:500},children:(0,gt.__)("Click an element to select it as target","admin-coach-tours")}),(0,vt.jsx)(ht.Button,{variant:"tertiary",icon:ro,onClick:()=>{l(),e?.()},children:(0,gt.__)("Cancel","admin-coach-tours")})]})]});return(0,ft.createPortal)(E,document.body)}const wo="admin-coach-tours";(0,l.registerPlugin)("admin-coach-tours-educator",{render:function(){const[e,t]=(0,ft.useState)(null),[n,r]=(0,ft.useState)(!1),[o,i]=(0,ft.useState)(!1),{postType:a,postId:s,postTitle:l,postStatus:u,isSaving:d}=(0,c.useSelect)(e=>{const t=e("core/editor");return{postType:t?.getCurrentPostType?.()||"",postId:t?.getCurrentPostId?.()||0,postTitle:t?.getEditedPostAttribute?.("title")||"",postStatus:t?.getEditedPostAttribute?.("status")||"draft",isSaving:t?.isSavingPost?.()||!1}},[]),{currentTour:p,selectedStep:f,isPickerActive:g,isLoading:h}=(0,c.useSelect)(e=>{const t=e(wo);return{currentTour:t.getCurrentTour(),selectedStep:t.getSelectedStep(),isPickerActive:t.isPickerActive(),isLoading:t.isToursLoading()}},[]),{setCurrentTour:m,saveTour:v,startPicking:b,stopPicking:E,selectStep:y}=(0,c.useDispatch)(wo),{enableComplementaryArea:T}=(0,c.useDispatch)("core/interface");if((0,ft.useEffect)(()=>{"act_tour"===a&&s&&s!==p?.id&&m(s)},[a,s,p?.id,m]),(0,ft.useEffect)(()=>{if("act_tour"===a){const e=setTimeout(()=>{T("core","admin-coach-tours-educator/admin-coach-tours-sidebar")},100);return()=>clearTimeout(e)}},[a,T]),"act_tour"!==a)return null;const S=(0,ft.useCallback)(()=>{b()},[b]),x=(0,ft.useCallback)(()=>{E()},[E]),C=(0,ft.useCallback)(()=>{if(p?.id){const e=(p.postTypes||["post"])[0]||"post",t=new URL(window.location.origin+"/wp-admin/post-new.php");"post"!==e&&t.searchParams.set("post_type",e),t.searchParams.set("act_tour",p.id.toString()),console.log("[ACT Educator] Opening test URL:",t.toString()),window.open(t.toString(),"_blank")}},[p?.id,p?.postTypes]);if(h&&!p)return(0,vt.jsx)(vt.Fragment,{children:(0,vt.jsx)(pt.PluginSidebar,{name:"admin-coach-tours-sidebar",title:(0,gt.__)("Tour Steps","admin-coach-tours"),icon:bt,children:(0,vt.jsx)("div",{className:"act-educator-sidebar",children:(0,vt.jsx)(ht.PanelBody,{children:(0,vt.jsx)(ht.Flex,{justify:"center",style:{padding:"24px"},children:(0,vt.jsx)(ht.Spinner,{})})})})})});const w=p?.steps||[];return(0,vt.jsxs)(vt.Fragment,{children:[(0,vt.jsx)(pt.PluginSidebarMoreMenuItem,{target:"admin-coach-tours-sidebar",icon:bt,children:(0,gt.__)("Tour Steps","admin-coach-tours")}),(0,vt.jsx)(pt.PluginSidebar,{name:"admin-coach-tours-sidebar",title:(0,gt.__)("Tour Steps","admin-coach-tours"),icon:bt,children:(0,vt.jsxs)("div",{className:"act-educator-sidebar",children:[(0,vt.jsxs)(ht.PanelBody,{title:(0,gt.__)("Tour Info","admin-coach-tours"),initialOpen:!1,children:[(0,vt.jsxs)(ht.Flex,{justify:"space-between",align:"center",children:[(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)("strong",{children:l||(0,gt.__)("Untitled Tour","admin-coach-tours")})}),(0,vt.jsx)(ht.FlexItem,{children:(0,vt.jsx)("span",{className:"act-tour-status"+("publish"===u?" act-tour-status--published":""),children:"publish"===u?(0,gt.__)("Published","admin-coach-tours"):(0,gt.__)("Draft","admin-coach-tours")})})]}),(0,vt.jsx)("p",{className:"act-help-text",style:{marginTop:"8px"},children:(0,gt.__)("Use the block editor canvas as a sandbox to create your tour steps. Pick elements from the editor to target them in your tour.","admin-coach-tours")})]}),(0,vt.jsxs)(ht.PanelBody,{title:(0,gt.__)("Steps","admin-coach-tours")+` (${w.length})`,initialOpen:!0,children:[e&&(0,vt.jsx)(ht.Notice,{status:"error",isDismissible:!0,onRemove:()=>t(null),children:e}),o&&(0,vt.jsx)(ht.Notice,{status:"success",isDismissible:!1,children:(0,gt.__)("Steps saved successfully!","admin-coach-tours")}),(0,vt.jsx)(to,{tourId:s,steps:w,onEditStep:e=>{var t;return y(null!==(t=e?.id)&&void 0!==t?t:null)},onAddStep:S}),w.length>0&&(0,vt.jsxs)("div",{className:"act-actions-footer",children:[(0,vt.jsx)(ht.Button,{variant:"primary",icon:Et,onClick:async()=>{if(p?.id){r(!0),t(null),i(!1);try{const e={steps:p.steps||[]};await v(p.id,e),i(!0),setTimeout(()=>i(!1),3e3)}catch(e){t(e.message||(0,gt.__)("Failed to save steps.","admin-coach-tours"))}finally{r(!1)}}},isBusy:n,disabled:n||d,children:n?(0,gt.__)("Saving…","admin-coach-tours"):(0,gt.__)("Save Steps","admin-coach-tours")}),(0,vt.jsx)(ht.Button,{variant:"secondary",icon:yt,onClick:C,disabled:0===w.length,children:(0,gt.__)("Test Tour","admin-coach-tours")})]})]}),f&&(0,vt.jsx)(ht.PanelBody,{title:(0,gt.__)("Edit Step","admin-coach-tours"),initialOpen:!0,children:(0,vt.jsx)(fo,{step:f,tourId:s,postType:"act_tour",onClose:()=>y(null)})})]})}),g&&(0,vt.jsx)(Co,{onCancel:x})]})},icon:null})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/js/educator/EducatorSidebar.jsx"
+/*!************************************************!*\
+  !*** ./assets/js/educator/EducatorSidebar.jsx ***!
+  \************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EducatorSidebar)
+/* harmony export */ });
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/check.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/help.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/seen.mjs");
+/* harmony import */ var _StepList_tsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StepList.tsx */ "./assets/js/educator/StepList.tsx");
+/* harmony import */ var _StepEditor_tsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./StepEditor.tsx */ "./assets/js/educator/StepEditor.tsx");
+/* harmony import */ var _PickerOverlay_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PickerOverlay.jsx */ "./assets/js/educator/PickerOverlay.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/**
+ * Educator Sidebar Panel.
+ *
+ * Main sidebar panel for tour authoring in the block editor.
+ * Only loads when editing an act_tour post type.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+
+
+
+
+
+
+const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Educator Sidebar component.
+ *
+ * @return {JSX.Element|null} Sidebar component or null if not on act_tour.
+ */
+function EducatorSidebar() {
+  const [savingError, setSavingError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [isSavingSteps, setIsSavingSteps] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [saveSuccess, setSaveSuccess] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+
+  // Get data from editor store.
+  const {
+    postType,
+    postId,
+    postTitle,
+    postStatus,
+    isSaving
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
+    const editorStore = select('core/editor');
+    return {
+      postType: editorStore?.getCurrentPostType?.() || '',
+      postId: editorStore?.getCurrentPostId?.() || 0,
+      postTitle: editorStore?.getEditedPostAttribute?.('title') || '',
+      postStatus: editorStore?.getEditedPostAttribute?.('status') || 'draft',
+      isSaving: editorStore?.isSavingPost?.() || false
+    };
+  }, []);
+
+  // Get data from our store.
+  const {
+    currentTour,
+    selectedStep,
+    isPickerActive,
+    isLoading
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
+    const store = select(STORE_NAME);
+    return {
+      currentTour: store.getCurrentTour(),
+      selectedStep: store.getSelectedStep(),
+      isPickerActive: store.isPickerActive(),
+      isLoading: store.isToursLoading()
+    };
+  }, []);
+
+  // Get dispatch actions.
+  const {
+    setCurrentTour,
+    saveTour,
+    startPicking,
+    stopPicking,
+    selectStep
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useDispatch)(STORE_NAME);
+
+  // Get interface dispatch for opening sidebar (works in newer WP).
+  const {
+    enableComplementaryArea
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useDispatch)('core/interface');
+
+  // Auto-set current tour when editing an act_tour post.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (postType === 'act_tour' && postId && postId !== currentTour?.id) {
+      setCurrentTour(postId);
+    }
+  }, [postType, postId, currentTour?.id, setCurrentTour]);
+
+  // Auto-open sidebar when editing an act_tour.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (postType === 'act_tour') {
+      // Small delay to ensure sidebar is registered.
+      const timer = setTimeout(() => {
+        enableComplementaryArea('core', 'admin-coach-tours-educator/admin-coach-tours-sidebar');
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [postType, enableComplementaryArea]);
+
+  // Don't render if not editing an act_tour.
+  if (postType !== 'act_tour') {
+    return null;
+  }
+
+  /**
+   * Handle saving tour steps.
+   */
+  const handleSaveSteps = async () => {
+    if (!currentTour?.id) {
+      return;
+    }
+    setIsSavingSteps(true);
+    setSavingError(null);
+    setSaveSuccess(false);
+    try {
+      const tourData = {
+        steps: currentTour.steps || []
+      };
+      await saveTour(currentTour.id, tourData);
+      setSaveSuccess(true);
+
+      // Clear success message after 3 seconds.
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      setSavingError(error.message || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Failed to save steps.', 'admin-coach-tours'));
+    } finally {
+      setIsSavingSteps(false);
+    }
+  };
+
+  /**
+   * Handle starting to pick an element for a step.
+   */
+  const handleStartPicking = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(() => {
+    startPicking();
+  }, [startPicking]);
+
+  /**
+   * Handle canceling picking.
+   */
+  const handleCancelPicking = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(() => {
+    stopPicking();
+  }, [stopPicking]);
+
+  /**
+   * Handle testing the tour (preview mode).
+   * Opens a new post in the tour's target post type with the tour parameter.
+   */
+  const handleTestTour = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(() => {
+    if (currentTour?.id) {
+      // Get the first configured post type for this tour.
+      const targetPostTypes = currentTour.postTypes || ['post'];
+      const targetPostType = targetPostTypes[0] || 'post';
+
+      // Build the URL to create a new post of that type with the tour parameter.
+      // Use URLSearchParams to properly encode parameters.
+      const adminUrl = new URL(window.location.origin + '/wp-admin/post-new.php');
+      if (targetPostType !== 'post') {
+        adminUrl.searchParams.set('post_type', targetPostType);
+      }
+      adminUrl.searchParams.set('act_tour', currentTour.id.toString());
+      console.log('[ACT Educator] Opening test URL:', adminUrl.toString());
+
+      // Open in new tab for testing.
+      window.open(adminUrl.toString(), '_blank');
+    }
+  }, [currentTour?.id, currentTour?.postTypes]);
+
+  // Show loading state.
+  if (isLoading && !currentTour) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_editor__WEBPACK_IMPORTED_MODULE_0__.PluginSidebar, {
+        name: "admin-coach-tours-sidebar",
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tour Steps', 'admin-coach-tours'),
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          className: "act-educator-sidebar",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Flex, {
+              justify: "center",
+              style: {
+                padding: '24px'
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Spinner, {})
+            })
+          })
+        })
+      })
+    });
+  }
+  const steps = currentTour?.steps || [];
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_editor__WEBPACK_IMPORTED_MODULE_0__.PluginSidebarMoreMenuItem, {
+      target: "admin-coach-tours-sidebar",
+      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tour Steps', 'admin-coach-tours')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_editor__WEBPACK_IMPORTED_MODULE_0__.PluginSidebar, {
+      name: "admin-coach-tours-sidebar",
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tour Steps', 'admin-coach-tours'),
+      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        className: "act-educator-sidebar",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Tour Info', 'admin-coach-tours'),
+          initialOpen: false,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Flex, {
+            justify: "space-between",
+            align: "center",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FlexItem, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("strong", {
+                children: postTitle || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Untitled Tour', 'admin-coach-tours')
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FlexItem, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+                className: `act-tour-status${postStatus === 'publish' ? ' act-tour-status--published' : ''}`,
+                children: postStatus === 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Published', 'admin-coach-tours') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Draft', 'admin-coach-tours')
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+            className: "act-help-text",
+            style: {
+              marginTop: '8px'
+            },
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Use the block editor canvas as a sandbox to create your tour steps. Pick elements from the editor to target them in your tour.', 'admin-coach-tours')
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Steps', 'admin-coach-tours') + ` (${steps.length})`,
+          initialOpen: true,
+          children: [savingError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Notice, {
+            status: "error",
+            isDismissible: true,
+            onRemove: () => setSavingError(null),
+            children: savingError
+          }), saveSuccess && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Notice, {
+            status: "success",
+            isDismissible: false,
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Steps saved successfully!', 'admin-coach-tours')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_StepList_tsx__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            tourId: postId,
+            steps: steps,
+            onEditStep: step => {
+              var _step$id;
+              return selectStep((_step$id = step?.id) !== null && _step$id !== void 0 ? _step$id : null);
+            },
+            onAddStep: handleStartPicking
+          }), steps.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+            className: "act-actions-footer",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+              variant: "primary",
+              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+              onClick: handleSaveSteps,
+              isBusy: isSavingSteps,
+              disabled: isSavingSteps || isSaving,
+              children: isSavingSteps ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Saving…', 'admin-coach-tours') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Steps', 'admin-coach-tours')
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+              variant: "secondary",
+              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
+              onClick: handleTestTour,
+              disabled: steps.length === 0,
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Test Tour', 'admin-coach-tours')
+            })]
+          })]
+        }), selectedStep && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit Step', 'admin-coach-tours'),
+          initialOpen: true,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_StepEditor_tsx__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            step: selectedStep,
+            tourId: postId,
+            postType: "act_tour",
+            onClose: () => selectStep(null)
+          })
+        })]
+      })
+    }), isPickerActive && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_PickerOverlay_jsx__WEBPACK_IMPORTED_MODULE_10__["default"], {
+      onCancel: handleCancelPicking
+    })]
+  });
+}
+
+/***/ },
+
+/***/ "./assets/js/educator/PickerOverlay.jsx"
+/*!**********************************************!*\
+  !*** ./assets/js/educator/PickerOverlay.jsx ***!
+  \**********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PickerOverlay)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.mjs");
+/* harmony import */ var _runtime_captureLocatorBundle_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../runtime/captureLocatorBundle.js */ "./assets/js/runtime/captureLocatorBundle.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/**
+ * Picker Overlay Component.
+ *
+ * Full-page overlay that allows educators to pick a UI element as a tour step target.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+
+
+
+
+const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Elements to exclude from picking.
+ */
+const EXCLUDED_SELECTORS = ['.act-picker-overlay', '.act-picker-highlight', '.act-picker-toolbar', '.edit-post-sidebar', '#adminmenumain', '#wpadminbar', '.components-popover', '.components-modal__screen-overlay', 'iframe[name="editor-canvas"]' // Exclude iframe itself; pick elements inside
+];
+
+/**
+ * Get the editor iframe element if present.
+ *
+ * @return {HTMLIFrameElement|null} The editor iframe or null.
+ */
+function getEditorIframe() {
+  // WordPress 6.8+ uses an iframe for the block editor content.
+  return document.querySelector('iframe[name="editor-canvas"]');
+}
+
+/**
+ * Check if element should be excluded from picking.
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {boolean} True if excluded.
+ */
+function isExcluded(element) {
+  // Check if element matches any excluded selectors.
+  for (const selector of EXCLUDED_SELECTORS) {
+    if (element.matches(selector)) {
+      return true;
+    }
+    // Check if any ancestor matches.
+    if (element.closest(selector)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Picker Overlay component.
+ *
+ * @param {Object}   props          Component props.
+ * @param {Function} props.onCancel Cancel handler.
+ * @return {JSX.Element|null} Overlay portal.
+ */
+function PickerOverlay({
+  onCancel
+}) {
+  const [hoveredElement, setHoveredElement] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [highlightRect, setHighlightRect] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const overlayRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  // Get picking state.
+  const {
+    pickingStepId,
+    currentTourId
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useSelect)(select => {
+    const store = select(STORE_NAME);
+    return {
+      pickingStepId: store.getPickingStepId?.() || null,
+      currentTourId: store.getCurrentTourId?.() || null
+    };
+  }, []);
+
+  // Get dispatch actions.
+  const {
+    stopPicking,
+    addStep,
+    updateStep
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useDispatch)(STORE_NAME);
+
+  // Track if element is from iframe.
+  const iframeElementRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+  // Track last processed element to avoid redundant updates.
+  const lastElementRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  // Throttle timer ref.
+  const throttleRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  /**
+   * Handle mouse move - track hovered element.
+   * Throttled to reduce flickering.
+   *
+   * @param {MouseEvent} event      Mouse event.
+   * @param {boolean}    fromIframe Whether event is from iframe.
+   */
+  const handleMouseMove = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, fromIframe = false) => {
+    // Throttle updates to 60fps (16ms).
+    if (throttleRef.current) {
+      return;
+    }
+    throttleRef.current = setTimeout(() => {
+      throttleRef.current = null;
+    }, 16);
+    let targetElement = null;
+    if (fromIframe) {
+      // Event is from iframe - use event.target directly.
+      targetElement = event.target;
+      if (targetElement && !isExcluded(targetElement)) {
+        // Skip if same element (avoid redundant updates).
+        if (targetElement === lastElementRef.current) {
+          return;
+        }
+        lastElementRef.current = targetElement;
+        iframeElementRef.current = true;
+
+        // Get iframe to calculate position offset.
+        const iframe = getEditorIframe();
+        if (iframe) {
+          const iframeRect = iframe.getBoundingClientRect();
+          const elRect = targetElement.getBoundingClientRect();
+          setHoveredElement(targetElement);
+          setHighlightRect({
+            top: iframeRect.top + elRect.top,
+            left: iframeRect.left + elRect.left,
+            width: elRect.width,
+            height: elRect.height
+          });
+        }
+      }
+    } else {
+      // Event is from main document.
+      const elementsAtPoint = document.elementsFromPoint(event.clientX, event.clientY);
+
+      // Find first non-excluded element.
+      targetElement = elementsAtPoint.find(el => {
+        // Skip our overlay elements.
+        if (el.closest('.act-picker-overlay')) {
+          return false;
+        }
+        // Skip excluded elements.
+        if (isExcluded(el)) {
+          return false;
+        }
+        // Skip the iframe itself - we handle its contents separately.
+        if (el.tagName === 'IFRAME' && el.name === 'editor-canvas') {
+          return false;
+        }
+        return true;
+      });
+      if (targetElement && targetElement !== lastElementRef.current) {
+        lastElementRef.current = targetElement;
+        iframeElementRef.current = false;
+        setHoveredElement(targetElement);
+
+        // Get element rect for highlight.
+        const rect = targetElement.getBoundingClientRect();
+        setHighlightRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height
+        });
+      }
+    }
+  }, [] // No dependencies - uses refs
+  );
+
+  /**
+   * Handle click - capture the element.
+   */
+  const handleClick = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
+    // Prevent default and stop propagation.
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Use ref for the element (more reliable than state).
+    const element = lastElementRef.current;
+    if (!element) {
+      return;
+    }
+
+    // Capture locator bundle from element.
+    const inIframe = iframeElementRef.current;
+    const target = (0,_runtime_captureLocatorBundle_js__WEBPACK_IMPORTED_MODULE_5__.captureLocatorBundle)(element, {
+      inEditorIframe: inIframe
+    });
+    const elementContext = (0,_runtime_captureLocatorBundle_js__WEBPACK_IMPORTED_MODULE_5__.captureElementContext)(element);
+
+    // Create step data.
+    const stepData = {
+      target,
+      elementContext,
+      // For AI drafting.
+      completion: {
+        type: 'clickTarget',
+        params: {}
+      }
+    };
+    if (pickingStepId) {
+      // Updating existing step - include elementContext for AI drafting.
+      updateStep(currentTourId, pickingStepId, {
+        target,
+        elementContext
+      });
+    } else {
+      // Adding new step.
+      addStep(currentTourId, stepData);
+    }
+
+    // Stop picking mode.
+    stopPicking();
+  }, [pickingStepId, currentTourId, addStep, updateStep, stopPicking]);
+
+  /**
+   * Handle escape key.
+   */
+  const handleKeyDown = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
+    if (event.key === 'Escape') {
+      stopPicking();
+      onCancel?.();
+    }
+  }, [stopPicking, onCancel]);
+
+  // Use refs to store latest handlers so we don't need to re-attach listeners.
+  const handlersRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)({
+    handleMouseMove,
+    handleClick,
+    handleKeyDown
+  });
+
+  // Update refs when handlers change.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    handlersRef.current = {
+      handleMouseMove,
+      handleClick,
+      handleKeyDown
+    };
+  }, [handleMouseMove, handleClick, handleKeyDown]);
+
+  // Set up event listeners for main document and iframe.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    // Stable wrappers that use refs.
+    const onMouseMove = event => handlersRef.current.handleMouseMove(event, false);
+    const onClick = event => handlersRef.current.handleClick(event);
+    const onKeyDown = event => handlersRef.current.handleKeyDown(event);
+    const onIframeMouseMove = event => handlersRef.current.handleMouseMove(event, true);
+    const onIframeClick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      handlersRef.current.handleClick(event);
+    };
+
+    // Main document listeners.
+    document.addEventListener('mousemove', onMouseMove, true);
+    document.addEventListener('click', onClick, true);
+    document.addEventListener('keydown', onKeyDown, true);
+
+    // Prevent scroll while picking.
+    document.body.style.overflow = 'hidden';
+
+    // Track iframe doc for cleanup.
+    let iframeDoc = null;
+    let pollInterval = null;
+
+    /**
+     * Attempt to attach listeners to iframe.
+     */
+    const attachIframeListeners = () => {
+      const iframe = getEditorIframe();
+      if (iframe?.contentDocument && iframe.contentDocument !== iframeDoc) {
+        // Remove old listeners if doc changed.
+        if (iframeDoc) {
+          iframeDoc.removeEventListener('mousemove', onIframeMouseMove, true);
+          iframeDoc.removeEventListener('click', onIframeClick, true);
+          iframeDoc.removeEventListener('keydown', onKeyDown, true);
+        }
+        iframeDoc = iframe.contentDocument;
+        iframeDoc.addEventListener('mousemove', onIframeMouseMove, true);
+        iframeDoc.addEventListener('click', onIframeClick, true);
+        iframeDoc.addEventListener('keydown', onKeyDown, true);
+      }
+    };
+
+    // Initial attempt.
+    attachIframeListeners();
+
+    // Poll for iframe (it may load after mount).
+    pollInterval = setInterval(attachIframeListeners, 500);
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove, true);
+      document.removeEventListener('click', onClick, true);
+      document.removeEventListener('keydown', onKeyDown, true);
+      document.body.style.overflow = '';
+
+      // Clear throttle timer.
+      if (throttleRef.current) {
+        clearTimeout(throttleRef.current);
+      }
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+      if (iframeDoc) {
+        iframeDoc.removeEventListener('mousemove', onIframeMouseMove, true);
+        iframeDoc.removeEventListener('click', onIframeClick, true);
+        iframeDoc.removeEventListener('keydown', onKeyDown, true);
+      }
+    };
+  }, []); // Empty deps - uses refs for stable handlers
+
+  // Render highlight box.
+  const renderHighlight = () => {
+    if (!highlightRect) {
+      return null;
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "act-picker-highlight",
+      style: {
+        position: 'fixed',
+        top: highlightRect.top,
+        left: highlightRect.left,
+        width: highlightRect.width,
+        height: highlightRect.height,
+        border: '3px solid #007cba',
+        backgroundColor: 'rgba(0, 124, 186, 0.15)',
+        pointerEvents: 'none',
+        zIndex: 9999999,
+        boxSizing: 'border-box',
+        borderRadius: '3px',
+        transition: 'top 0.08s ease-out, left 0.08s ease-out, width 0.08s ease-out, height 0.08s ease-out',
+        boxShadow: '0 0 0 2px rgba(0, 124, 186, 0.3)'
+      }
+    });
+  };
+
+  // Render element info.
+  const renderElementInfo = () => {
+    if (!hoveredElement) {
+      return null;
+    }
+    const tag = hoveredElement.tagName.toLowerCase();
+    const id = hoveredElement.id;
+    const classes = Array.from(hoveredElement.classList).slice(0, 3).join('.');
+    let info = tag;
+    if (id) {
+      info += `#${id}`;
+    } else if (classes) {
+      info += `.${classes}`;
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "act-picker-element-info",
+      style: {
+        position: 'fixed',
+        bottom: '80px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        padding: '8px 16px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '13px',
+        maxWidth: '80%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        zIndex: 9999999
+      },
+      children: info
+    });
+  };
+
+  // Render toolbar.
+  const renderToolbar = () => {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "act-picker-toolbar",
+      style: {
+        position: 'fixed',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        gap: '12px',
+        backgroundColor: '#fff',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        zIndex: 9999999,
+        pointerEvents: 'auto' // Make toolbar clickable
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        style: {
+          alignSelf: 'center',
+          fontWeight: 500
+        },
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Click an element to select it as target', 'admin-coach-tours')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        variant: "tertiary",
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+        onClick: () => {
+          stopPicking();
+          onCancel?.();
+        },
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Cancel', 'admin-coach-tours')
+      })]
+    });
+  };
+
+  // Render overlay portal.
+  const overlayContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    ref: overlayRef,
+    className: "act-picker-overlay",
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 9999998,
+      cursor: 'crosshair',
+      pointerEvents: 'none' // Let events pass through to iframe
+    },
+    children: [renderHighlight(), renderElementInfo(), renderToolbar()]
+  });
+
+  // Use portal to render at document body level.
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)(overlayContent, document.body);
+}
+
+/***/ },
+
+/***/ "./assets/js/educator/StepEditor.tsx"
+/*!*******************************************!*\
+  !*** ./assets/js/educator/StepEditor.tsx ***!
+  \*******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StepEditor)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/check.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pin.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/star-filled.mjs");
+/* harmony import */ var _runtime_watchCompletion_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../runtime/watchCompletion.js */ "./assets/js/runtime/watchCompletion.js");
+/* harmony import */ var _runtime_resolveTarget_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../runtime/resolveTarget.js */ "./assets/js/runtime/resolveTarget.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
+/**
+ * Step Editor Component.
+ *
+ * Form for editing step properties: title, content, target, completion, etc.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+
+
+
+
+const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Completion type info from runtime.
+ */
+
+/**
+ * Step Editor component.
+ */
+function StepEditor({
+  step,
+  tourId,
+  postType,
+  onClose
+}) {
+  // Local state for form fields.
+  const [title, setTitle] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(step.title || '');
+  const [content, setContent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(step.content || '');
+  const [completionType, setCompletionType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(step.completion?.type || 'manual');
+  const [completionParams, setCompletionParams] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(step.completion?.params || {});
+  const [isSaving, setIsSaving] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [saveError, setSaveError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [targetTestResult, setTargetTestResult] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+
+  // Get AI draft state.
+  const {
+    aiDraft,
+    isAiDrafting,
+    aiDraftError
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useSelect)(select => {
+    const store = select(STORE_NAME);
+    return {
+      aiDraft: store.getAiDraft(),
+      isAiDrafting: store.isAiDrafting(),
+      aiDraftError: store.getAiDraftError()
+    };
+  }, []);
+
+  // Get dispatch actions.
+  const {
+    updateStep,
+    requestAiDraft,
+    clearAiDraft,
+    startPicking
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useDispatch)(STORE_NAME);
+
+  // Get completion types.
+  const completionTypes = (0,_runtime_watchCompletion_js__WEBPACK_IMPORTED_MODULE_8__.getAvailableCompletions)();
+
+  /**
+   * Test target resolution.
+   */
+  const handleTestTarget = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    if (step.target) {
+      const result = (0,_runtime_resolveTarget_js__WEBPACK_IMPORTED_MODULE_9__.testTargetResolution)(step.target);
+      setTargetTestResult(result);
+
+      // Clear after a few seconds.
+      setTimeout(() => setTargetTestResult(null), 5000);
+    }
+  }, [step.target]);
+
+  /**
+   * Handle save.
+   */
+  const handleSave = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(async () => {
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      await updateStep(tourId, step.id, {
+        title: title.trim(),
+        content: content.trim(),
+        completion: {
+          type: completionType,
+          params: completionParams
+        }
+      });
+      onClose();
+    } catch (error) {
+      setSaveError(error.message || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Failed to save step.', 'admin-coach-tours'));
+    } finally {
+      setIsSaving(false);
+    }
+  }, [tourId, step.id, title, content, completionType, completionParams, updateStep, onClose]);
+
+  /**
+   * Handle requesting AI draft.
+   */
+  const handleRequestAiDraft = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    if (step.target) {
+      // Use the captured element context if available, otherwise build from step data.
+      const elementContext = step.elementContext || {
+        selector: step.target,
+        stepId: step.id
+      };
+
+      // Add existing content for context.
+      const contextWithExisting = {
+        ...elementContext,
+        existingTitle: title,
+        existingContent: content
+      };
+      requestAiDraft(contextWithExisting, postType);
+    }
+  }, [step.id, step.target, step.elementContext, title, content, postType, requestAiDraft]);
+
+  /**
+   * Apply AI draft to form.
+   */
+  const handleApplyAiDraft = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    if (aiDraft) {
+      if (aiDraft.title) {
+        setTitle(aiDraft.title);
+      }
+      if (aiDraft.content) {
+        setContent(aiDraft.content);
+      }
+      if (aiDraft.suggestedCompletion) {
+        setCompletionType(aiDraft.suggestedCompletion.type);
+        setCompletionParams(aiDraft.suggestedCompletion || {});
+      }
+      clearAiDraft();
+    }
+  }, [aiDraft, clearAiDraft]);
+
+  /**
+   * Handle re-picking target.
+   */
+  const handleRepickTarget = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    startPicking(step.id);
+  }, [step.id, startPicking]);
+
+  /**
+   * Update completion params.
+   */
+  const updateCompletionParam = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((key, value) => {
+    setCompletionParams(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  }, []);
+
+  // Get current completion type info.
+  const currentCompletionInfo = completionTypes.find(ct => ct.type === completionType);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    className: "act-step-editor",
+    children: [saveError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Notice, {
+      status: "error",
+      isDismissible: false,
+      children: saveError
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.BaseControl, {
+      __nextHasNoMarginBottom: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Target Element', 'admin-coach-tours'),
+      className: "act-step-editor-target",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        className: "act-target-info",
+        children: step.target?.locators?.length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("code", {
+            className: "act-target-selector",
+            children: step.target.locators[0].value
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+            gap: 2,
+            style: {
+              marginTop: '8px'
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+                variant: "secondary",
+                size: "small",
+                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+                onClick: handleTestTarget,
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Test', 'admin-coach-tours')
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+                variant: "tertiary",
+                size: "small",
+                onClick: handleRepickTarget,
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Re-pick', 'admin-coach-tours')
+              })
+            })]
+          }), targetTestResult && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Notice, {
+            status: targetTestResult.success ? 'success' : 'error',
+            isDismissible: false,
+            className: "act-target-test-result",
+            children: targetTestResult.success ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Target found successfully!', 'admin-coach-tours') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Target not found. Consider re-picking.', 'admin-coach-tours')
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          variant: "primary",
+          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+          onClick: handleRepickTarget,
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Pick Target Element', 'admin-coach-tours')
+        })
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Step Title', 'admin-coach-tours'),
+      value: title,
+      onChange: setTitle,
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('e.g., Click the Add Block button', 'admin-coach-tours')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextareaControl, {
+      __nextHasNoMarginBottom: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Step Content', 'admin-coach-tours'),
+      value: content,
+      onChange: setContent,
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Explain what the user should do and why…', 'admin-coach-tours'),
+      rows: 4
+    }), step.target && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.BaseControl, {
+      __nextHasNoMarginBottom: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('AI Assistance', 'admin-coach-tours'),
+      className: "act-ai-draft-section",
+      children: [isAiDrafting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+        align: "center",
+        gap: 2,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Generating draft…', 'admin-coach-tours')
+        })]
+      }) : aiDraft ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+        className: "act-ai-draft",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+          className: "act-ai-draft-preview",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+            children: aiDraft.title
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("p", {
+            children: [aiDraft.content?.substring(0, 100), "\u2026"]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+          gap: 2,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+              variant: "primary",
+              size: "small",
+              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+              onClick: handleApplyAiDraft,
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Apply', 'admin-coach-tours')
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+              variant: "tertiary",
+              size: "small",
+              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+              onClick: () => clearAiDraft(),
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Dismiss', 'admin-coach-tours')
+            })
+          })]
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        variant: "secondary",
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
+        onClick: handleRequestAiDraft,
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Generate with AI', 'admin-coach-tours')
+      }), aiDraftError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Notice, {
+        status: "error",
+        isDismissible: false,
+        children: aiDraftError
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Completion Condition', 'admin-coach-tours'),
+      value: completionType,
+      options: completionTypes.map(ct => ({
+        value: ct.type,
+        label: ct.label
+      })),
+      onChange: value => {
+        setCompletionType(value);
+        setCompletionParams({});
+      },
+      help: currentCompletionInfo?.description
+    }), currentCompletionInfo?.params && currentCompletionInfo.params.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+      className: "act-completion-params",
+      children: currentCompletionInfo.params.map(param => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+        __next40pxDefaultSize: true,
+        __nextHasNoMarginBottom: true,
+        label: param.name,
+        value: completionParams[param.name] || '',
+        onChange: value => updateCompletionParam(param.name, value),
+        help: param.description,
+        required: param.required
+      }, param.name))
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+      className: "act-step-editor-actions",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+        justify: "flex-end",
+        gap: 2,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+            variant: "tertiary",
+            onClick: onClose,
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Cancel', 'admin-coach-tours')
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+            variant: "primary",
+            onClick: handleSave,
+            isBusy: isSaving,
+            disabled: isSaving || !title.trim(),
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save Step', 'admin-coach-tours')
+          })
+        })]
+      })
+    })]
+  });
+}
+
+/***/ },
+
+/***/ "./assets/js/educator/StepList.tsx"
+/*!*****************************************!*\
+  !*** ./assets/js/educator/StepList.tsx ***!
+  \*****************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StepList)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/plus.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.mjs");
+/* harmony import */ var _dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @dnd-kit/core */ "./node_modules/@dnd-kit/core/dist/core.esm.js");
+/* harmony import */ var _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @dnd-kit/sortable */ "./node_modules/@dnd-kit/sortable/dist/sortable.esm.js");
+/* harmony import */ var _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @dnd-kit/utilities */ "./node_modules/@dnd-kit/utilities/dist/utilities.esm.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
+/**
+ * Step List Component.
+ *
+ * Displays sortable list of tour steps with drag-and-drop reordering.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+
+
+
+
+
+const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Sortable step item component.
+ */
+function SortableStepItem({
+  step,
+  onEdit,
+  onDelete
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__.useSortable)({
+    id: step.id
+  });
+  const style = {
+    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_9__.CSS.Transform.toString(transform),
+    transition: transition !== null && transition !== void 0 ? transition : undefined,
+    opacity: isDragging ? 0.5 : 1
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+    ref: setNodeRef,
+    style: style,
+    className: `act-step-item ${isDragging ? 'is-dragging' : ''}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+      align: "center",
+      gap: 2,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("button", {
+          type: "button",
+          className: "act-step-drag-handle",
+          ...attributes,
+          ...listeners,
+          "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Drag to reorder', 'admin-coach-tours'),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+            className: "dashicons dashicons-move",
+            style: {
+              width: 20,
+              height: 20
+            }
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+        className: "act-step-order",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "act-step-number",
+          children: step.order + 1
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexBlock, {
+        className: "act-step-content",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          className: "act-step-title",
+          children: step.title || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Untitled Step', 'admin-coach-tours')
+        }), step.target?.locators?.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          className: "act-step-target-info",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("code", {
+            children: [step.target.locators[0].value.substring(0, 30), step.target.locators[0].value.length > 30 ? '…' : '']
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, {
+        className: "act-step-actions",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Edit step', 'admin-coach-tours'),
+          onClick: () => onEdit(step),
+          size: "small"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Delete step', 'admin-coach-tours'),
+          onClick: () => onDelete(step.id),
+          size: "small",
+          isDestructive: true
+        })]
+      })]
+    })
+  });
+}
+
+/**
+ * Step List component.
+ */
+function StepList({
+  tourId,
+  steps = [],
+  onEditStep,
+  onAddStep
+}) {
+  const {
+    reorderSteps,
+    deleteStep
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useDispatch)(STORE_NAME);
+
+  // Configure drag sensors.
+  const sensors = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.useSensors)((0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.useSensor)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.PointerSensor, {
+    activationConstraint: {
+      distance: 8
+    }
+  }), (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.useSensor)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.KeyboardSensor, {
+    coordinateGetter: _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__.sortableKeyboardCoordinates
+  }));
+
+  /**
+   * Handle drag end.
+   */
+  const handleDragEnd = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
+    const {
+      active,
+      over
+    } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = steps.findIndex(s => s.id === active.id);
+      const newIndex = steps.findIndex(s => s.id === over?.id);
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newOrder = (0,_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__.arrayMove)(steps.map(s => s.id), oldIndex, newIndex);
+        reorderSteps(tourId, newOrder);
+      }
+    }
+  }, [tourId, steps, reorderSteps]);
+
+  /**
+   * Handle delete step.
+   */
+  const handleDeleteStep = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(stepId => {
+    if (window.confirm((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Are you sure you want to delete this step?', 'admin-coach-tours'))) {
+      deleteStep(tourId, stepId);
+    }
+  }, [tourId, deleteStep]);
+  if (steps.length === 0) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      className: "act-step-list-empty",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No steps yet. Click the button below to add your first step.', 'admin-coach-tours')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        variant: "primary",
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+        onClick: onAddStep,
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add First Step', 'admin-coach-tours')
+      })]
+    });
+  }
+
+  // Sort steps by order.
+  const sortedSteps = [...steps].sort((a, b) => a.order - b.order);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    className: "act-step-list",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.DndContext, {
+      sensors: sensors,
+      collisionDetection: _dnd_kit_core__WEBPACK_IMPORTED_MODULE_7__.closestCenter,
+      onDragEnd: handleDragEnd,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__.SortableContext, {
+        items: sortedSteps.map(s => s.id),
+        strategy: _dnd_kit_sortable__WEBPACK_IMPORTED_MODULE_8__.verticalListSortingStrategy,
+        children: sortedSteps.map(step => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(SortableStepItem, {
+          step: step,
+          onEdit: onEditStep,
+          onDelete: handleDeleteStep
+        }, step.id))
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+      className: "act-step-list-footer act-button-group",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+        variant: "secondary",
+        icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+        onClick: onAddStep,
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add Step', 'admin-coach-tours')
+      })
+    })]
+  });
+}
+
+/***/ },
+
+/***/ "./assets/js/runtime/captureLocatorBundle.js"
+/*!***************************************************!*\
+  !*** ./assets/js/runtime/captureLocatorBundle.js ***!
+  \***************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   captureElementContext: () => (/* binding */ captureElementContext),
+/* harmony export */   captureLocatorBundle: () => (/* binding */ captureLocatorBundle),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Capture locator bundle from a DOM element.
+ *
+ * Extracts multiple locator strategies from an element, prioritizing
+ * stable identifiers (id, data-*) over generated classes.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+/**
+ * @typedef {import('../types/step.js').Locator} Locator
+ * @typedef {import('../types/step.js').Target} Target
+ */
+
+/**
+ * List of class name patterns to ignore (typically generated).
+ */
+const IGNORED_CLASS_PATTERNS = [/^css-/i,
+// CSS-in-JS.
+/^sc-/i,
+// styled-components.
+/^emotion-/i,
+// Emotion.
+/^_/i,
+// Underscore prefixed (often generated).
+/^jsx-/i,
+// CSS Modules.
+/^styles?__/i,
+// Common generated pattern.
+/^[a-z]{1,2}[0-9]+/i,
+// Short hash-like.
+/^[0-9]/i,
+// Starts with number.
+/^svelte-/i // Svelte.
+];
+
+/**
+ * Check if a class name appears to be generated/unstable.
+ *
+ * @param {string} className Class name to check.
+ * @return {boolean} True if likely generated.
+ */
+function isGeneratedClassName(className) {
+  // Very short class names are often generated.
+  if (className.length <= 3) {
+    return true;
+  }
+
+  // Check against known patterns.
+  return IGNORED_CLASS_PATTERNS.some(pattern => pattern.test(className));
+}
+
+/**
+ * Filter class names to keep only stable ones.
+ *
+ * @param {string[]} classNames Array of class names.
+ * @return {string[]} Filtered class names.
+ */
+function filterStableClassNames(classNames) {
+  return classNames.filter(cn => !isGeneratedClassName(cn));
+}
+
+/**
+ * Get relevant data attributes from an element.
+ *
+ * @param {HTMLElement} element Element to inspect.
+ * @return {Object} Object of data attributes.
+ */
+function getDataAttributes(element) {
+  const dataAttrs = {};
+  const attrs = element.attributes;
+  for (let i = 0; i < attrs.length; i++) {
+    const attr = attrs[i];
+    if (attr.name.startsWith('data-')) {
+      // Skip some common non-useful data attrs.
+      const name = attr.name.slice(5);
+      if (!['reactid', 'react-checksum', 'v-'].some(skip => name.startsWith(skip))) {
+        dataAttrs[name] = attr.value;
+      }
+    }
+  }
+  return dataAttrs;
+}
+
+/**
+ * Get ARIA role for an element (explicit or implicit).
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {string|null} Role or null.
+ */
+function getRole(element) {
+  // Explicit role.
+  if (element.getAttribute('role')) {
+    return element.getAttribute('role');
+  }
+
+  // Implicit roles based on tag.
+  const tag = element.tagName.toLowerCase();
+  const type = element.getAttribute('type');
+  const implicitRoles = {
+    button: 'button',
+    a: element.hasAttribute('href') ? 'link' : null,
+    input: {
+      text: 'textbox',
+      search: 'searchbox',
+      email: 'textbox',
+      url: 'textbox',
+      tel: 'textbox',
+      password: 'textbox',
+      checkbox: 'checkbox',
+      radio: 'radio',
+      submit: 'button',
+      button: 'button',
+      reset: 'button',
+      range: 'slider'
+    },
+    textarea: 'textbox',
+    select: 'listbox',
+    option: 'option',
+    img: element.hasAttribute('alt') ? 'img' : null,
+    nav: 'navigation',
+    main: 'main',
+    header: 'banner',
+    footer: 'contentinfo',
+    aside: 'complementary',
+    form: 'form',
+    h1: 'heading',
+    h2: 'heading',
+    h3: 'heading',
+    h4: 'heading',
+    h5: 'heading',
+    h6: 'heading',
+    ul: 'list',
+    ol: 'list',
+    li: 'listitem',
+    table: 'table',
+    dialog: 'dialog'
+  };
+  if (tag === 'input' && implicitRoles.input[type]) {
+    return implicitRoles.input[type];
+  }
+  return implicitRoles[tag] || null;
+}
+
+/**
+ * Get accessible name for an element.
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {string|null} Accessible name or null.
+ */
+function getAccessibleName(element) {
+  // aria-label.
+  if (element.getAttribute('aria-label')) {
+    return element.getAttribute('aria-label');
+  }
+
+  // aria-labelledby.
+  const labelledBy = element.getAttribute('aria-labelledby');
+  if (labelledBy) {
+    const labelEl = document.getElementById(labelledBy);
+    if (labelEl) {
+      return labelEl.textContent?.trim() || null;
+    }
+  }
+
+  // Associated label.
+  if (element.id) {
+    const label = document.querySelector(`label[for="${element.id}"]`);
+    if (label) {
+      return label.textContent?.trim() || null;
+    }
+  }
+
+  // Title attribute.
+  if (element.getAttribute('title')) {
+    return element.getAttribute('title');
+  }
+
+  // Text content for buttons/links.
+  const tag = element.tagName.toLowerCase();
+  if (tag === 'button' || tag === 'a' || element.getAttribute('role') === 'button') {
+    const text = element.textContent?.trim();
+    if (text && text.length < 100) {
+      return text;
+    }
+  }
+  return null;
+}
+
+/**
+ * Generate a CSS selector path for an element.
+ *
+ * @param {HTMLElement} element    Element to generate path for.
+ * @param {number}      maxDepth   Maximum ancestor depth.
+ * @return {string} CSS selector path.
+ */
+function generateCSSPath(element, maxDepth = 3) {
+  const parts = [];
+  let current = element;
+  let depth = 0;
+  while (current && current !== document.body && depth < maxDepth) {
+    const tag = current.tagName.toLowerCase();
+
+    // If element has ID, use it (most specific).
+    if (current.id && depth === 0) {
+      parts.unshift(`#${CSS.escape(current.id)}`);
+      break;
+    }
+
+    // Build selector for this element.
+    let selector = tag;
+
+    // Add stable classes.
+    const classes = Array.from(current.classList);
+    const stableClasses = filterStableClassNames(classes);
+    if (stableClasses.length > 0) {
+      // Use first 2 stable classes max.
+      selector += stableClasses.slice(0, 2).map(c => `.${CSS.escape(c)}`).join('');
+    }
+
+    // Add relevant attributes for uniqueness.
+    const dataTestId = current.getAttribute('data-testid');
+    if (dataTestId && depth === 0) {
+      selector = `[${'data-testid'}="${dataTestId}"]`;
+    } else {
+      const type = current.getAttribute('type');
+      if (type && tag === 'input') {
+        selector += `[type="${type}"]`;
+      }
+      const name = current.getAttribute('name');
+      if (name && ['input', 'select', 'textarea'].includes(tag)) {
+        selector += `[name="${name}"]`;
+      }
+    }
+
+    // Add nth-child if needed for disambiguation.
+    if (current.parentElement && depth === 0) {
+      const siblings = Array.from(current.parentElement.children).filter(el => el.tagName === current.tagName);
+      if (siblings.length > 1) {
+        const index = siblings.indexOf(current) + 1;
+        selector += `:nth-of-type(${index})`;
+      }
+    }
+    parts.unshift(selector);
+    current = current.parentElement;
+    depth++;
+  }
+  return parts.join(' > ');
+}
+
+/**
+ * Find the nearest landmark or semantic container.
+ *
+ * @param {HTMLElement} element Element to search from.
+ * @param {number}      maxDepth Maximum depth to search.
+ * @return {Object|null} Container info or null.
+ */
+function findNearestContainer(element, maxDepth = 5) {
+  const landmarks = ['main', 'nav', 'aside', 'header', 'footer', 'section', 'article', 'form', 'dialog'];
+  const landmarkRoles = ['main', 'navigation', 'complementary', 'banner', 'contentinfo', 'region', 'form', 'dialog', 'search'];
+  let current = element.parentElement;
+  let depth = 0;
+  while (current && current !== document.body && depth < maxDepth) {
+    const tag = current.tagName.toLowerCase();
+    const role = current.getAttribute('role');
+
+    // Check for landmark element or role.
+    if (landmarks.includes(tag) || landmarkRoles.includes(role)) {
+      let selector = tag;
+      if (current.id) {
+        selector = `#${CSS.escape(current.id)}`;
+      } else if (role) {
+        selector = `[${'role'}="${role}"]`;
+      } else if (current.classList.length > 0) {
+        const stableClasses = filterStableClassNames(Array.from(current.classList));
+        if (stableClasses.length > 0) {
+          selector += `.${CSS.escape(stableClasses[0])}`;
+        }
+      }
+      return {
+        element: current,
+        selector,
+        type: role || tag
+      };
+    }
+
+    // Check for common container patterns.
+    const commonContainers = ['edit-post-sidebar', 'block-editor', 'editor-styles-wrapper', 'components-popover', 'components-modal', 'interface-interface-skeleton'];
+    for (const containerClass of commonContainers) {
+      if (current.classList.contains(containerClass)) {
+        return {
+          element: current,
+          selector: `.${containerClass}`,
+          type: 'editor-region'
+        };
+      }
+    }
+    current = current.parentElement;
+    depth++;
+  }
+  return null;
+}
+
+/**
+ * Check if an ID appears to be a unique/generated ID (like block UUIDs).
+ *
+ * @param {string} id The ID to check.
+ * @return {boolean} True if the ID appears unique/generated.
+ */
+function isUniqueId(id) {
+  if (!id) {
+    return true;
+  }
+
+  // Block IDs like "block-b435bbd5-7189-4126-bfdc-54e2f014ce08"
+  if (/^block-[a-f0-9-]{36}$/i.test(id)) {
+    return true;
+  }
+
+  // Generic UUIDs
+  if (/^[a-f0-9-]{36}$/i.test(id)) {
+    return true;
+  }
+
+  // Random hash-like IDs (more than 8 hex chars)
+  if (/^[a-f0-9]{8,}$/i.test(id)) {
+    return true;
+  }
+
+  // IDs with common unique patterns
+  if (/[-_][a-f0-9]{8,}/i.test(id)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Capture a complete locator bundle from an element.
+ *
+ * @param {HTMLElement} element Target element.
+ * @return {Target} Target configuration with locators and constraints.
+ */
+function captureLocatorBundle(element, options = {}) {
+  const {
+    inEditorIframe = false
+  } = options;
+  const locators = [];
+  const constraints = {
+    visible: true
+  };
+
+  // If element is in editor iframe, mark it.
+  if (inEditorIframe) {
+    constraints.inEditorIframe = true;
+  }
+
+  // 1. data-testid (highest priority).
+  const testId = element.getAttribute('data-testid');
+  if (testId && !isUniqueId(testId)) {
+    locators.push({
+      type: 'testId',
+      value: testId,
+      weight: 100,
+      fallback: false
+    });
+  }
+
+  // 2. ID-based CSS selector (skip unique IDs).
+  if (element.id && !isUniqueId(element.id)) {
+    locators.push({
+      type: 'css',
+      value: `#${CSS.escape(element.id)}`,
+      weight: 95,
+      fallback: false
+    });
+  }
+
+  // 3. Role + accessible name.
+  const role = getRole(element);
+  const accessibleName = getAccessibleName(element);
+  if (role) {
+    const roleValue = accessibleName ? `${role}:${accessibleName}` : role;
+    locators.push({
+      type: 'role',
+      value: roleValue,
+      weight: 80,
+      fallback: false
+    });
+  }
+
+  // 4. Data attributes (skip unique values like block IDs).
+  const dataAttrs = getDataAttributes(element);
+  for (const [key, value] of Object.entries(dataAttrs)) {
+    // Skip testid (already handled) and common non-useful ones.
+    if (key === 'testid' || key === 'reactid') {
+      continue;
+    }
+
+    // Skip unique block IDs - use the type instead.
+    if (key === 'block' && value && /^[a-f0-9-]{36}$/i.test(value)) {
+      continue;
+    }
+
+    // Prioritize block type (stable across pages).
+    const weight = key === 'type' ? 85 : key.startsWith('wp-') ? 75 : 70;
+    locators.push({
+      type: 'dataAttribute',
+      value: value ? `${key}:${value}` : key,
+      weight,
+      fallback: false
+    });
+
+    // Only add first 2 data attribute locators.
+    if (locators.filter(l => l.type === 'dataAttribute').length >= 2) {
+      break;
+    }
+  }
+
+  // 5. CSS path (medium priority).
+  const cssPath = generateCSSPath(element, 3);
+  if (cssPath) {
+    locators.push({
+      type: 'css',
+      value: cssPath,
+      weight: 60,
+      fallback: false
+    });
+  }
+
+  // 6. aria-label (fallback - not recommended as primary).
+  const ariaLabel = element.getAttribute('aria-label');
+  if (ariaLabel) {
+    locators.push({
+      type: 'ariaLabel',
+      value: ariaLabel,
+      weight: 40,
+      fallback: true // Mark as fallback due to i18n concerns.
+    });
+  }
+
+  // 7. Contextual selector with container.
+  const container = findNearestContainer(element);
+  if (container) {
+    constraints.withinContainer = container.selector;
+
+    // Generate simpler selector within container.
+    const tag = element.tagName.toLowerCase();
+    const stableClasses = filterStableClassNames(Array.from(element.classList));
+    let innerSelector = tag;
+    if (stableClasses.length > 0) {
+      innerSelector += `.${CSS.escape(stableClasses[0])}`;
+    }
+    locators.push({
+      type: 'contextual',
+      value: `${container.selector} >> ${innerSelector}`,
+      weight: 50,
+      fallback: true
+    });
+
+    // For Gutenberg blocks, add a :first-of-type fallback.
+    const blockType = element.getAttribute('data-type');
+    if (blockType) {
+      locators.push({
+        type: 'css',
+        value: `[data-type="${blockType}"]:first-of-type`,
+        weight: 45,
+        fallback: true
+      });
+    }
+  }
+
+  // Ensure we have at least one locator.
+  if (locators.length === 0) {
+    // Last resort: tag + nth-child.
+    const tag = element.tagName.toLowerCase();
+    const parent = element.parentElement;
+    if (parent) {
+      const siblings = Array.from(parent.children);
+      const index = siblings.indexOf(element) + 1;
+      locators.push({
+        type: 'css',
+        value: `${tag}:nth-child(${index})`,
+        weight: 10,
+        fallback: true
+      });
+    }
+  }
+
+  // Sort by weight descending.
+  locators.sort((a, b) => (b.weight || 50) - (a.weight || 50));
+  return {
+    locators,
+    constraints
+  };
+}
+
+/**
+ * Get element context for AI drafting.
+ * Minimizes data sent while providing enough context.
+ *
+ * @param {HTMLElement} element Target element.
+ * @return {Object} Minimal element context.
+ */
+function captureElementContext(element) {
+  const context = {
+    tagName: element.tagName.toLowerCase()
+  };
+
+  // Role.
+  const role = getRole(element);
+  if (role) {
+    context.role = role;
+  }
+
+  // ID (but not if it looks generated).
+  if (element.id && !/^[a-z0-9_-]{20,}$/i.test(element.id)) {
+    context.id = element.id;
+  }
+
+  // Stable class names.
+  const stableClasses = filterStableClassNames(Array.from(element.classList));
+  if (stableClasses.length > 0) {
+    context.classNames = stableClasses.slice(0, 5);
+  }
+
+  // Text content (trimmed, limited).
+  const text = element.textContent?.trim();
+  if (text && text.length <= 200) {
+    context.textContent = text;
+  } else if (text) {
+    context.textContent = `${text.slice(0, 197)}...`;
+  }
+
+  // Placeholder for inputs.
+  if (element.placeholder) {
+    context.placeholder = element.placeholder;
+  }
+
+  // Associated label.
+  const label = getAccessibleName(element);
+  if (label && label !== context.textContent) {
+    context.label = label;
+  }
+
+  // Relevant data attributes.
+  const dataAttrs = getDataAttributes(element);
+  const relevantDataKeys = Object.keys(dataAttrs).filter(key => key.startsWith('wp-') || key === 'block' || key === 'type' || key === 'testid');
+  if (relevantDataKeys.length > 0) {
+    context.dataAttrs = {};
+    relevantDataKeys.forEach(key => {
+      context.dataAttrs[key] = dataAttrs[key];
+    });
+  }
+
+  // Ancestor context (up to 3 levels).
+  const ancestors = [];
+  let current = element.parentElement;
+  let depth = 0;
+  while (current && current !== document.body && depth < 3) {
+    const ancestorInfo = {
+      tagName: current.tagName.toLowerCase()
+    };
+    const ancestorRole = getRole(current);
+    if (ancestorRole) {
+      ancestorInfo.role = ancestorRole;
+    }
+    if (current.id && !/^[a-z0-9_-]{20,}$/i.test(current.id)) {
+      ancestorInfo.id = current.id;
+    }
+    const ancestorClasses = filterStableClassNames(Array.from(current.classList));
+    if (ancestorClasses.length > 0) {
+      ancestorInfo.classNames = ancestorClasses.slice(0, 3);
+    }
+    ancestors.push(ancestorInfo);
+    current = current.parentElement;
+    depth++;
+  }
+  if (ancestors.length > 0) {
+    context.ancestors = ancestors;
+  }
+  return context;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (captureLocatorBundle);
+
+/***/ },
+
+/***/ "./assets/js/runtime/ensureEmptyPlaceholder.js"
+/*!*****************************************************!*\
+  !*** ./assets/js/runtime/ensureEmptyPlaceholder.js ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   ensureEmptyPlaceholder: () => (/* binding */ ensureEmptyPlaceholder),
+/* harmony export */   hasEmptyParagraph: () => (/* binding */ hasEmptyParagraph),
+/* harmony export */   insertEmptyParagraph: () => (/* binding */ insertEmptyParagraph)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Ensure Empty Block Placeholder Exists.
+ *
+ * Checks if there's an empty paragraph block in the editor.
+ * If not, inserts one so tours can use the "/" quick inserter workflow.
+ *
+ * @package AdminCoachTours
+ * @since   0.3.1
+ */
+
+
+
+/**
+ * Check if an empty paragraph block exists in the editor.
+ *
+ * @return {boolean} True if an empty paragraph exists.
+ */
+function hasEmptyParagraph() {
+  try {
+    const blockEditorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/block-editor');
+    if (!blockEditorStore?.getBlocks) {
+      return false;
+    }
+    const blocks = blockEditorStore.getBlocks();
+    const emptyParagraph = blocks.find(block => block.name === 'core/paragraph' && isEmptyContent(block.attributes?.content));
+    return !!emptyParagraph;
+  } catch (e) {
+    console.warn('[ACT] Error checking for empty paragraph:', e);
+    return false;
+  }
+}
+
+/**
+ * Check if content is considered empty.
+ * Handles various empty states: undefined, null, empty string, whitespace-only,
+ * and WordPress RichTextData objects.
+ *
+ * @param {*} content Block content attribute.
+ * @return {boolean} True if content is empty.
+ */
+function isEmptyContent(content) {
+  if (content === undefined || content === null || content === '') {
+    return true;
+  }
+  // Handle RichText value (might be a string with only whitespace/newlines)
+  if (typeof content === 'string') {
+    return content.trim() === '';
+  }
+  // Handle RichTextData object (WordPress 6.x+)
+  // RichTextData has toString(), toJSON(), and length properties
+  if (typeof content === 'object' && content !== null) {
+    // Check if it has a length property (RichTextData)
+    if (typeof content.length === 'number') {
+      return content.length === 0;
+    }
+    // Try toString() method
+    if (typeof content.toString === 'function') {
+      const str = content.toString();
+      // Avoid "[object Object]" from default toString
+      if (str !== '[object Object]') {
+        return str.trim() === '';
+      }
+    }
+    // Try toJSON() for serializable values
+    if (typeof content.toJSON === 'function') {
+      const json = content.toJSON();
+      if (typeof json === 'string') {
+        return json.trim() === '';
+      }
+    }
+  }
+  // Handle empty array (shouldn't happen but just in case)
+  if (Array.isArray(content) && content.length === 0) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Insert an empty paragraph block at the end of the editor content and select it.
+ *
+ * @return {Promise<string|null>} The clientId of the inserted block, or null on failure.
+ */
+async function insertEmptyParagraph() {
+  try {
+    const {
+      createBlock
+    } = await Promise.resolve(/*! import() */).then(__webpack_require__.t.bind(__webpack_require__, /*! @wordpress/blocks */ "@wordpress/blocks", 23));
+    const blockEditorDispatch = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.dispatch)('core/block-editor');
+    if (!blockEditorDispatch || !createBlock) {
+      console.warn('[ACT] Block editor not available for inserting paragraph');
+      return null;
+    }
+
+    // Create an empty paragraph block.
+    const block = createBlock('core/paragraph', {
+      content: ''
+    });
+
+    // Get current blocks to determine insertion position.
+    const blockEditorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/block-editor');
+    const blocks = blockEditorStore?.getBlocks() || [];
+    const insertIndex = blocks.length;
+
+    // Insert at the end.
+    await blockEditorDispatch.insertBlock(block, insertIndex, '', false);
+
+    // Select the block so it becomes active and editable.
+    await blockEditorDispatch.selectBlock(block.clientId);
+    console.log('[ACT] Inserted and selected empty paragraph block:', block.clientId);
+    return block.clientId;
+  } catch (e) {
+    console.error('[ACT] Error inserting empty paragraph:', e);
+    return null;
+  }
+}
+
+/**
+ * Wait for a condition to be true, polling at intervals.
+ *
+ * @param {Function} conditionFn Function that returns true when condition is met.
+ * @param {number}   timeout     Maximum time to wait in ms.
+ * @param {number}   interval    Polling interval in ms.
+ * @return {Promise<boolean>} True if condition met, false if timeout.
+ */
+async function waitForCondition(conditionFn, timeout = 3000, interval = 50) {
+  const startTime = Date.now();
+  while (Date.now() - startTime < timeout) {
+    if (conditionFn()) {
+      return true;
+    }
+    await new Promise(resolve => setTimeout(resolve, interval));
+  }
+  return false;
+}
+
+/**
+ * Focus a block element in the editor.
+ *
+ * @param {string} clientId The block client ID.
+ * @return {Promise<boolean>} True if focused successfully.
+ */
+async function focusBlock(clientId) {
+  // Small delay to let React update the DOM.
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  // Find the block element.
+  const iframe = document.querySelector('iframe[name="editor-canvas"]');
+  const targetDoc = iframe?.contentDocument || document;
+  const blockElement = targetDoc.querySelector(`[data-block="${clientId}"]`);
+  if (!blockElement) {
+    console.warn('[ACT focusBlock] Block element not found:', clientId);
+    return false;
+  }
+
+  // Find the editable element within the block.
+  const editableSelectors = ['[contenteditable="true"]', '.block-editor-rich-text__editable', 'textarea', 'input[type="text"]'];
+  let focusTarget = null;
+  for (const selector of editableSelectors) {
+    focusTarget = blockElement.querySelector(selector);
+    if (focusTarget) {
+      break;
+    }
+  }
+
+  // If no editable found, focus the block itself.
+  if (!focusTarget) {
+    focusTarget = blockElement;
+  }
+
+  // Scroll into view and focus.
+  focusTarget.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
+  focusTarget.focus();
+
+  // For contenteditable, also set selection/cursor position.
+  if (focusTarget.getAttribute('contenteditable') === 'true') {
+    const selection = targetDoc.getSelection();
+    const range = targetDoc.createRange();
+    range.selectNodeContents(focusTarget);
+    range.collapse(false); // Collapse to end.
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  }
+  console.log('[ACT focusBlock] Focused:', focusTarget.tagName, focusTarget.className);
+  return true;
+}
+
+/**
+ * Ensure an empty paragraph block exists in the editor.
+ *
+ * If no empty paragraph exists, inserts one at the end.
+ * This is needed for tours that use the "/" quick inserter workflow.
+ *
+ * @return {Promise<Object>} Result object with wasInserted boolean and optional clientId.
+ */
+async function ensureEmptyPlaceholder() {
+  const exists = hasEmptyParagraph();
+  if (exists) {
+    // Find and select the existing empty paragraph.
+    const blockEditorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/block-editor');
+    const blocks = blockEditorStore?.getBlocks() || [];
+    const emptyParagraph = blocks.find(block => block.name === 'core/paragraph' && isEmptyContent(block.attributes?.content));
+    if (emptyParagraph) {
+      await (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.dispatch)('core/block-editor').selectBlock(emptyParagraph.clientId);
+      console.log('[ACT] Selected existing empty paragraph:', emptyParagraph.clientId);
+      // Focus the block element to ensure it's ready for interaction.
+      await focusBlock(emptyParagraph.clientId);
+    }
+    return {
+      wasInserted: false,
+      clientId: emptyParagraph?.clientId || null
+    };
+  }
+  console.log('[ACT] No empty paragraph found, inserting one');
+  const clientId = await insertEmptyParagraph();
+  if (!clientId) {
+    return {
+      wasInserted: false,
+      clientId: null
+    };
+  }
+
+  // Wait for the block element to appear in DOM (check both main doc and iframe).
+  const success = await waitForCondition(() => {
+    const iframe = document.querySelector('iframe[name="editor-canvas"]');
+    const iframeDoc = iframe?.contentDocument;
+    const targetDoc = iframeDoc || document;
+    return !!targetDoc.querySelector(`[data-block="${clientId}"]`);
+  }, 3000);
+  if (success) {
+    console.log('[ACT] Block appeared in DOM:', clientId);
+    // Focus the block element to ensure it's ready for interaction.
+    await focusBlock(clientId);
+  } else {
+    console.warn('[ACT] Block inserted but not found in DOM:', clientId);
+  }
+  return {
+    wasInserted: true,
+    clientId
+  };
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ensureEmptyPlaceholder);
+
+/***/ },
+
+/***/ "./assets/js/runtime/gatherEditorContext.js"
+/*!**************************************************!*\
+  !*** ./assets/js/runtime/gatherEditorContext.js ***!
+  \**************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   gatherEditorContext: () => (/* binding */ gatherEditorContext)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Gather Editor Context for AI Tour Generation.
+ *
+ * Collects information about the current editor state to help AI
+ * generate accurate tour steps with working selectors.
+ *
+ * @package AdminCoachTours
+ * @since   0.3.0
+ */
+
+
+
+/**
+ * Get visible UI elements in the editor.
+ *
+ * @return {Object} Information about visible UI elements.
+ */
+function getVisibleElements() {
+  const elements = {
+    inserterOpen: false,
+    sidebarOpen: false,
+    sidebarTab: null,
+    toolbarVisible: false,
+    hasSelectedBlock: false,
+    selectedBlockType: null
+  };
+  try {
+    // Check if inserter is open.
+    const editorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/editor');
+    if (editorStore?.isInserterOpened) {
+      elements.inserterOpen = editorStore.isInserterOpened();
+    }
+
+    // Check sidebar state.
+    const editPostStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/edit-post');
+    if (editPostStore?.getActiveGeneralSidebarName) {
+      const sidebarName = editPostStore.getActiveGeneralSidebarName();
+      elements.sidebarOpen = !!sidebarName;
+      elements.sidebarTab = sidebarName || null;
+    }
+
+    // Check block selection.
+    const blockEditorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/block-editor');
+    if (blockEditorStore?.getSelectedBlock) {
+      const selectedBlock = blockEditorStore.getSelectedBlock();
+      elements.hasSelectedBlock = !!selectedBlock;
+      elements.selectedBlockType = selectedBlock?.name || null;
+    }
+
+    // Check toolbar visibility.
+    elements.toolbarVisible = !!document.querySelector('.block-editor-block-toolbar');
+  } catch (e) {
+    console.warn('[ACT] Error getting visible elements:', e);
+  }
+  return elements;
+}
+
+/**
+ * Get current blocks in the editor with DOM information.
+ *
+ * @return {Array} List of block types currently in the editor with targeting info.
+ */
+function getEditorBlocks() {
+  try {
+    const blockEditorStore = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/block-editor');
+    if (!blockEditorStore?.getBlocks) {
+      return [];
+    }
+    const blocks = blockEditorStore.getBlocks();
+    const selectedClientId = blockEditorStore.getSelectedBlockClientId?.() || null;
+
+    // Get the editor iframe for DOM lookups.
+    const iframe = document.querySelector('iframe[name="editor-canvas"]');
+    const iframeDoc = iframe?.contentDocument || null;
+    return blocks.map((block, index) => {
+      const blockInfo = {
+        name: block.name,
+        clientId: block.clientId,
+        isEmpty: isBlockEmpty(block),
+        isSelected: block.clientId === selectedClientId,
+        order: index
+      };
+
+      // Look up the DOM element for this block to get real selectors.
+      if (iframeDoc) {
+        const blockEl = iframeDoc.querySelector(`[data-block="${block.clientId}"]`);
+        if (blockEl) {
+          blockInfo.domInfo = {
+            tagName: blockEl.tagName.toLowerCase(),
+            dataType: blockEl.getAttribute('data-type'),
+            dataBlock: block.clientId,
+            hasRichText: !!blockEl.querySelector('.block-editor-rich-text__editable'),
+            // For empty paragraphs, get the editable element's info.
+            editableSelector: blockEl.querySelector('.block-editor-rich-text__editable') ? `[data-block="${block.clientId}"] .block-editor-rich-text__editable` : null
+          };
+        }
+      }
+      return blockInfo;
+    });
+  } catch (e) {
+    console.warn('[ACT] Error getting editor blocks:', e);
+    return [];
+  }
+}
+
+/**
+ * Check if a block is empty.
+ *
+ * @param {Object} block Block object.
+ * @return {boolean} True if block is empty.
+ */
+function isBlockEmpty(block) {
+  if (!block) {
+    return true;
+  }
+
+  // Paragraph blocks are empty if they have no content.
+  if (block.name === 'core/paragraph') {
+    return !block.attributes?.content || block.attributes.content === '';
+  }
+
+  // Image blocks are empty if they have no URL.
+  if (block.name === 'core/image') {
+    return !block.attributes?.url;
+  }
+
+  // Video blocks are empty if they have no src.
+  if (block.name === 'core/video') {
+    return !block.attributes?.src;
+  }
+
+  // Default to not empty.
+  return false;
+}
+
+/**
+ * Sample key UI elements from the page to help AI generate accurate selectors.
+ *
+ * @return {Object} Information about available UI elements.
+ */
+function sampleUIElements() {
+  const samples = {
+    inserterButton: null,
+    publishButton: null,
+    settingsButton: null,
+    searchInput: null,
+    emptyBlockPlaceholder: null
+  };
+  try {
+    // Sample inserter button.
+    const inserterSelectors = ['.editor-document-tools__inserter-toggle', 'button.block-editor-inserter-toggle', '[aria-label="Toggle block inserter"]'];
+    for (const sel of inserterSelectors) {
+      const el = document.querySelector(sel);
+      if (el) {
+        samples.inserterButton = {
+          selector: sel,
+          ariaLabel: el.getAttribute('aria-label') || null,
+          visible: isElementVisible(el)
+        };
+        break;
+      }
+    }
+
+    // Sample publish/save button.
+    const publishSelectors = ['.editor-post-publish-button', '.editor-post-save-draft'];
+    for (const sel of publishSelectors) {
+      const el = document.querySelector(sel);
+      if (el) {
+        samples.publishButton = {
+          selector: sel,
+          text: el.textContent?.trim() || null,
+          visible: isElementVisible(el)
+        };
+        break;
+      }
+    }
+
+    // Sample settings button.
+    const settingsBtn = document.querySelector('button[aria-label="Settings"]');
+    if (settingsBtn) {
+      samples.settingsButton = {
+        selector: 'button[aria-label="Settings"]',
+        visible: isElementVisible(settingsBtn)
+      };
+    }
+
+    // Sample search input in inserter (if open).
+    const searchInput = document.querySelector('.components-search-control__input');
+    if (searchInput) {
+      samples.searchInput = {
+        selector: '.components-search-control__input',
+        visible: isElementVisible(searchInput)
+      };
+    }
+
+    // Sample empty block placeholder (the "Type / to choose a block" element).
+    // This appears in empty posts and is an important starting point.
+    const placeholderSelectors = [
+    // Inside the editor iframe.
+    {
+      selector: '.block-editor-default-block-appender__content',
+      inIframe: true
+    }, {
+      selector: '[data-empty="true"] .block-editor-rich-text__editable',
+      inIframe: true
+    }, {
+      selector: 'p[data-empty="true"]',
+      inIframe: true
+    },
+    // In case it's not in iframe (older WP).
+    {
+      selector: '.block-editor-default-block-appender__content',
+      inIframe: false
+    }];
+    for (const {
+      selector,
+      inIframe
+    } of placeholderSelectors) {
+      let el = null;
+      if (inIframe) {
+        // Try to find in editor iframe.
+        const iframe = document.querySelector('iframe[name="editor-canvas"]');
+        if (iframe?.contentDocument) {
+          el = iframe.contentDocument.querySelector(selector);
+        }
+      } else {
+        el = document.querySelector(selector);
+      }
+      if (el) {
+        samples.emptyBlockPlaceholder = {
+          selector,
+          inIframe,
+          placeholder: el.getAttribute('data-placeholder') || el.getAttribute('aria-label') || null,
+          visible: true // If found, assume visible.
+        };
+        break;
+      }
+    }
+  } catch (e) {
+    console.warn('[ACT] Error sampling UI elements:', e);
+  }
+  return samples;
+}
+
+/**
+ * Check if an element is visible.
+ *
+ * @param {Element} el DOM element.
+ * @return {boolean} True if element is visible.
+ */
+function isElementVisible(el) {
+  if (!el) {
+    return false;
+  }
+  const rect = el.getBoundingClientRect();
+  const style = window.getComputedStyle(el);
+  return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+}
+
+/**
+ * Gather complete editor context for AI tour generation.
+ *
+ * @return {Object} Editor context including blocks, UI state, and samples.
+ */
+function gatherEditorContext() {
+  return {
+    editorBlocks: getEditorBlocks(),
+    visibleElements: getVisibleElements(),
+    uiSamples: sampleUIElements(),
+    wpVersion: window.adminCoachTours?.wpVersion || 'unknown',
+    timestamp: Date.now()
+  };
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (gatherEditorContext);
+
+/***/ },
+
+/***/ "./assets/js/runtime/resolveTarget.js"
+/*!********************************************!*\
+  !*** ./assets/js/runtime/resolveTarget.js ***!
+  \********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   resolveTarget: () => (/* binding */ resolveTarget),
+/* harmony export */   resolveTargetWithRecovery: () => (/* binding */ resolveTargetWithRecovery),
+/* harmony export */   testTargetResolution: () => (/* binding */ testTargetResolution)
+/* harmony export */ });
+/**
+ * Resolve target element using locator bundle.
+ *
+ * Tries locators in weighted order, applies constraints, and handles
+ * disambiguation of multiple matches.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+/**
+ * @typedef {import('../types/step.js').Target} Target
+ * @typedef {import('../types/step.js').Locator} Locator
+ * @typedef {import('../types/step.js').ResolutionResult} ResolutionResult
+ */
+
+/**
+ * Get the editor iframe's document if available.
+ *
+ * @return {Document|null} The iframe document or null.
+ */
+function getEditorIframeDocument() {
+  const iframe = document.querySelector('iframe[name="editor-canvas"]');
+  return iframe?.contentDocument || null;
+}
+
+/**
+ * Check if an element is visible.
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {boolean} True if visible.
+ */
+function isElementVisible(element) {
+  if (!element) {
+    return false;
+  }
+
+  // Check if element is in DOM.
+  if (!element.isConnected) {
+    return false;
+  }
+
+  // Check computed styles.
+  const style = window.getComputedStyle(element);
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+    return false;
+  }
+
+  // Check if element has dimensions.
+  const rect = element.getBoundingClientRect();
+  if (rect.width === 0 && rect.height === 0) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Check if element is within the currently selected block OR the last inserted block.
+ *
+ * @param {HTMLElement} element Element to check.
+ * @return {boolean} True if within selected/tracked block.
+ */
+function isWithinSelectedBlock(element) {
+  const wpData = window.wp?.data;
+  if (!wpData) {
+    console.log('[ACT isWithinSelectedBlock] wp.data not available');
+    return true; // Can't check, allow element.
+  }
+  const blockEditor = wpData.select('core/block-editor');
+  if (!blockEditor) {
+    console.log('[ACT isWithinSelectedBlock] core/block-editor not available');
+    return true;
+  }
+
+  // First, try the currently selected block.
+  let targetClientId = blockEditor.getSelectedBlockClientId();
+  console.log('[ACT isWithinSelectedBlock] Selected block clientId:', targetClientId);
+
+  // If no block is selected, try the last tracked block from elementAppear.
+  if (!targetClientId && window.__actLastAppearedBlockClientId) {
+    targetClientId = window.__actLastAppearedBlockClientId;
+    console.log('[ACT isWithinSelectedBlock] Using last appeared block:', targetClientId);
+  }
+  if (!targetClientId) {
+    console.log('[ACT isWithinSelectedBlock] No block to scope to, allowing element');
+    return true; // No block to scope to, allow element.
+  }
+
+  // Find the target block's DOM element.
+  const ownerDoc = element.ownerDocument || document;
+  const targetBlockElement = ownerDoc.querySelector(`[data-block="${targetClientId}"]`);
+  if (!targetBlockElement) {
+    console.log('[ACT isWithinSelectedBlock] Target block element not found in DOM');
+    return true; // Can't find block, allow element.
+  }
+
+  // Check if element is inside the target block.
+  const isWithin = targetBlockElement.contains(element);
+  console.log('[ACT isWithinSelectedBlock] Element within target block:', isWithin);
+  return isWithin;
+}
+
+/**
+ * Check if element is within a container.
+ *
+ * @param {HTMLElement} element           Element to check.
+ * @param {string}      containerSelector Container CSS selector.
+ * @return {boolean} True if within container.
+ */
+function isWithinContainer(element, containerSelector) {
+  if (!containerSelector) {
+    return true;
+  }
+
+  // Search in the element's own document (handles iframe elements).
+  const ownerDoc = element.ownerDocument || document;
+  const container = ownerDoc.querySelector(containerSelector);
+  if (!container) {
+    return false;
+  }
+  return container.contains(element);
+}
+
+/**
+ * Find elements by CSS selector.
+ *
+ * @param {string}   selector CSS selector.
+ * @param {Document} doc      Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByCSS(selector, doc = document) {
+  try {
+    return Array.from(doc.querySelectorAll(selector));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Find elements by role and optional accessible name.
+ *
+ * @param {string}   value Role value, optionally with name: "role:name".
+ * @param {Document} doc   Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByRole(value, doc = document) {
+  const [role, name] = value.split(':').map(s => s.trim());
+
+  // Find elements with explicit role attribute.
+  const withExplicitRole = Array.from(doc.querySelectorAll(`[role="${role}"]`));
+
+  // Find elements with implicit roles (basic mapping).
+  const implicitRoleMap = {
+    button: 'button, input[type="button"], input[type="submit"]',
+    textbox: 'input[type="text"], input:not([type]), textarea',
+    link: 'a[href]',
+    checkbox: 'input[type="checkbox"]',
+    radio: 'input[type="radio"]',
+    listbox: 'select',
+    option: 'option',
+    heading: 'h1, h2, h3, h4, h5, h6',
+    img: 'img[alt]',
+    navigation: 'nav',
+    main: 'main',
+    complementary: 'aside',
+    banner: 'header',
+    contentinfo: 'footer',
+    search: '[role="search"]',
+    form: 'form',
+    region: 'section[aria-label], section[aria-labelledby]',
+    tab: '[role="tab"]',
+    tabpanel: '[role="tabpanel"]',
+    tablist: '[role="tablist"]',
+    menu: '[role="menu"]',
+    menuitem: '[role="menuitem"]',
+    dialog: 'dialog, [role="dialog"]'
+  };
+  let withImplicitRole = [];
+  if (implicitRoleMap[role]) {
+    withImplicitRole = Array.from(doc.querySelectorAll(implicitRoleMap[role]));
+  }
+  const allMatches = [...withExplicitRole, ...withImplicitRole];
+
+  // Filter by name if provided.
+  if (name) {
+    return allMatches.filter(el => {
+      const accessibleName = getAccessibleName(el);
+      return accessibleName && accessibleName.toLowerCase().includes(name.toLowerCase());
+    });
+  }
+  return allMatches;
+}
+
+/**
+ * Get accessible name for an element.
+ *
+ * @param {HTMLElement} element Element.
+ * @return {string} Accessible name.
+ */
+function getAccessibleName(element) {
+  // aria-label takes precedence.
+  if (element.getAttribute('aria-label')) {
+    return element.getAttribute('aria-label');
+  }
+
+  // aria-labelledby.
+  const labelledBy = element.getAttribute('aria-labelledby');
+  if (labelledBy) {
+    const labelEl = document.getElementById(labelledBy);
+    if (labelEl) {
+      return labelEl.textContent?.trim() || '';
+    }
+  }
+
+  // For inputs, check associated label.
+  if (element.id) {
+    const label = document.querySelector(`label[for="${element.id}"]`);
+    if (label) {
+      return label.textContent?.trim() || '';
+    }
+  }
+
+  // Check title attribute.
+  if (element.getAttribute('title')) {
+    return element.getAttribute('title');
+  }
+
+  // Fall back to text content for buttons and links.
+  if (element.tagName === 'BUTTON' || element.tagName === 'A' || element.getAttribute('role') === 'button') {
+    return element.textContent?.trim() || '';
+  }
+
+  // Check for value on inputs.
+  if (element.tagName === 'INPUT' && element.value) {
+    return element.value;
+  }
+  return '';
+}
+
+/**
+ * Find elements by test ID (data-testid attribute).
+ *
+ * @param {string}   testId Test ID value.
+ * @param {Document} doc    Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByTestId(testId, doc = document) {
+  return Array.from(doc.querySelectorAll(`[data-testid="${testId}"]`));
+}
+
+/**
+ * Find elements by data attribute.
+ *
+ * @param {string}   value Data attribute in format "attr:value" or just "attr".
+ * @param {Document} doc   Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByDataAttribute(value, doc = document) {
+  const [attr, attrValue] = value.split(':').map(s => s.trim());
+  const selector = attrValue ? `[data-${attr}="${attrValue}"]` : `[data-${attr}]`;
+  try {
+    return Array.from(doc.querySelectorAll(selector));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Find elements by aria-label.
+ *
+ * @param {string}   label Aria label text (partial match).
+ * @param {Document} doc   Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByAriaLabel(label, doc = document) {
+  const allWithLabel = Array.from(doc.querySelectorAll('[aria-label]'));
+  return allWithLabel.filter(el => {
+    const elLabel = el.getAttribute('aria-label');
+    return elLabel && elLabel.toLowerCase().includes(label.toLowerCase());
+  });
+}
+
+/**
+ * Find elements by contextual selector (ancestor > descendant).
+ *
+ * @param {string}   value Contextual selector string.
+ * @param {Document} doc   Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByContextual(value, doc = document) {
+  // Format: "container >> target" or standard CSS.
+  const parts = value.split('>>').map(s => s.trim());
+  if (parts.length === 2) {
+    const [containerSel, targetSel] = parts;
+    const container = doc.querySelector(containerSel);
+    if (!container) {
+      return [];
+    }
+    return Array.from(container.querySelectorAll(targetSel));
+  }
+
+  // Fall back to CSS.
+  return findByCSS(value);
+}
+
+/**
+ * Find elements using WordPress block editor data store.
+ *
+ * Value formats:
+ * - "first" - First block in the editor
+ * - "last" - Last block in the editor
+ * - "selected" - Currently selected block
+ * - "type:core/paragraph" - First block of type
+ * - "type:core/paragraph:2" - Third block of type (0-indexed)
+ * - "nth:0" - Block at index 0
+ * - "inserted" - Block inserted by insertBlock precondition (default marker)
+ * - "inserted:myMarker" - Block inserted with specific marker ID
+ *
+ * @param {string}   value Block selector value.
+ * @param {Document} doc   Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByWpBlock(value, doc = document) {
+  // Check for inserted block first (uses global map from preconditions).
+  if (value === 'inserted' || value.startsWith('inserted:')) {
+    const markerId = value === 'inserted' ? 'act-inserted-block' : value.substring(9);
+    const insertedBlocks = window.__actInsertedBlocks;
+    console.log('[ACT findByWpBlock] Looking for inserted block, markerId:', markerId, 'map exists:', !!insertedBlocks, 'has key:', insertedBlocks?.has?.(markerId));
+    if (insertedBlocks?.has?.(markerId)) {
+      const clientId = insertedBlocks.get(markerId);
+      console.log('[ACT findByWpBlock] Looking for inserted block:', markerId, 'clientId:', clientId);
+
+      // Search in both main doc and iframe for the element.
+      let element = doc.querySelector(`[data-block="${clientId}"]`);
+
+      // If not found in provided doc, try iframe.
+      if (!element) {
+        const iframe = document.querySelector('iframe[name="editor-canvas"]');
+        const iframeDoc = iframe?.contentDocument;
+        if (iframeDoc && iframeDoc !== doc) {
+          element = iframeDoc.querySelector(`[data-block="${clientId}"]`);
+          console.log('[ACT findByWpBlock] Searched iframe, found:', !!element);
+        }
+      }
+
+      // If still not found, try main document.
+      if (!element && doc !== document) {
+        element = document.querySelector(`[data-block="${clientId}"]`);
+        console.log('[ACT findByWpBlock] Searched main doc, found:', !!element);
+      }
+      if (element) {
+        console.log('[ACT findByWpBlock] Found inserted block element');
+        return [element];
+      }
+    }
+    console.log('[ACT findByWpBlock] Inserted block not found for marker:', markerId, 'Available markers:', insertedBlocks ? Array.from(insertedBlocks.keys()) : 'none');
+    return [];
+  }
+
+  // Access WordPress data store.
+  const wpData = window.wp?.data;
+  if (!wpData) {
+    console.log('[ACT findByWpBlock] wp.data not available');
+    return [];
+  }
+  const blockEditor = wpData.select('core/block-editor');
+  if (!blockEditor) {
+    console.log('[ACT findByWpBlock] core/block-editor store not available');
+    return [];
+  }
+  const blocks = blockEditor.getBlocks();
+  console.log('[ACT findByWpBlock] Found', blocks.length, 'blocks in editor');
+  let targetClientId = null;
+  if (value === 'first') {
+    targetClientId = blocks[0]?.clientId;
+  } else if (value === 'last') {
+    targetClientId = blocks[blocks.length - 1]?.clientId;
+  } else if (value === 'selected') {
+    targetClientId = blockEditor.getSelectedBlockClientId();
+  } else if (value.startsWith('type:')) {
+    // Find block by type, optionally with index.
+    const parts = value.substring(5).split(':');
+    const blockType = parts[0];
+    const index = parts[1] ? parseInt(parts[1], 10) : 0;
+    const matchingBlocks = blocks.filter(b => b.name === blockType);
+    console.log('[ACT findByWpBlock] Looking for type:', blockType, '- found', matchingBlocks.length);
+    targetClientId = matchingBlocks[index]?.clientId;
+  } else if (value.startsWith('nth:')) {
+    const index = parseInt(value.substring(4), 10);
+    targetClientId = blocks[index]?.clientId;
+  }
+  if (!targetClientId) {
+    console.log('[ACT findByWpBlock] No matching block found for:', value);
+    return [];
+  }
+  console.log('[ACT findByWpBlock] Target clientId:', targetClientId);
+
+  // Find the DOM element by data-block attribute.
+  const element = doc.querySelector(`[data-block="${targetClientId}"]`);
+  if (element) {
+    console.log('[ACT findByWpBlock] Found element:', element.tagName);
+    return [element];
+  }
+  console.log('[ACT findByWpBlock] Element not found in DOM');
+  return [];
+}
+
+/**
+ * Find elements using a locator.
+ *
+ * @param {Locator}  locator Locator object.
+ * @param {Document} doc     Document to search in.
+ * @return {HTMLElement[]} Matching elements.
+ */
+function findByLocator(locator, doc = document) {
+  switch (locator.type) {
+    case 'css':
+      return findByCSS(locator.value, doc);
+    case 'role':
+      return findByRole(locator.value, doc);
+    case 'testid':
+    case 'testId':
+      return findByTestId(locator.value, doc);
+    case 'dataattribute':
+    case 'dataAttribute':
+      return findByDataAttribute(locator.value, doc);
+    case 'arialabel':
+    case 'ariaLabel':
+      return findByAriaLabel(locator.value, doc);
+    case 'contextual':
+      return findByContextual(locator.value, doc);
+    case 'wpBlock':
+    case 'wpblock':
+      return findByWpBlock(locator.value, doc);
+    default:
+      return [];
+  }
+}
+
+/**
+ * Calculate specificity score for an element based on how well it matches.
+ *
+ * @param {HTMLElement} element    Element to score.
+ * @param {Locator}     locator    Locator used.
+ * @param {Object}      constraints Target constraints.
+ * @return {number} Specificity score (higher is better).
+ */
+function calculateSpecificity(element, locator, constraints) {
+  let score = locator.weight || 50;
+
+  // Bonus for ID-based selectors.
+  if (element.id) {
+    score += 20;
+  }
+
+  // Bonus for data-testid.
+  if (element.getAttribute('data-testid')) {
+    score += 15;
+  }
+
+  // Bonus for being within specified container.
+  if (constraints?.withinContainer && isWithinContainer(element, constraints.withinContainer)) {
+    score += 10;
+  }
+
+  // BIG bonus for being within the currently selected block.
+  // This ensures we prefer elements in the block the user is working on.
+  if (isWithinSelectedBlock(element)) {
+    score += 100;
+  }
+
+  // Bonus for visibility.
+  if (isElementVisible(element)) {
+    score += 5;
+  }
+  return score;
+}
+
+/**
+ * Resolve target element from a target configuration.
+ *
+ * @param {Target} target Target configuration.
+ * @return {ResolutionResult} Resolution result.
+ */
+function resolveTarget(target) {
+  console.log('[ACT resolveTarget] Starting resolution', target);
+  if (!target || !target.locators || target.locators.length === 0) {
+    console.log('[ACT resolveTarget] No locators provided');
+    return {
+      success: false,
+      error: 'No locators provided'
+    };
+  }
+  const constraints = target.constraints || {};
+  console.log('[ACT resolveTarget] Constraints:', constraints);
+
+  // Determine which document to search in.
+  // Auto-detect iframe if withinContainer is an iframe-only selector.
+  const iframeOnlyContainers = ['.editor-styles-wrapper', '.block-editor-block-list__layout'];
+  const shouldSearchIframe = constraints.inEditorIframe || constraints.withinContainer && iframeOnlyContainers.includes(constraints.withinContainer);
+  console.log('[ACT resolveTarget] shouldSearchIframe:', shouldSearchIframe);
+  let searchDoc = document;
+  if (shouldSearchIframe) {
+    const iframeDoc = getEditorIframeDocument();
+    console.log('[ACT resolveTarget] iframeDoc:', iframeDoc ? 'found' : 'NOT FOUND');
+    if (!iframeDoc) {
+      return {
+        success: false,
+        error: 'Editor iframe not found'
+      };
+    }
+    searchDoc = iframeDoc;
+  }
+
+  // Sort locators by weight (descending), non-fallback first.
+  const sortedLocators = [...target.locators].sort((a, b) => {
+    // Non-fallback before fallback.
+    if (a.fallback !== b.fallback) {
+      return a.fallback ? 1 : -1;
+    }
+    // Higher weight first.
+    return (b.weight || 50) - (a.weight || 50);
+  });
+
+  // Try non-fallback locators first.
+  const primaryLocators = sortedLocators.filter(l => !l.fallback);
+  const fallbackLocators = sortedLocators.filter(l => l.fallback);
+  console.log('[ACT resolveTarget] Trying', primaryLocators.length, 'primary +', fallbackLocators.length, 'fallback locators');
+
+  // Try each locator.
+  for (const locator of [...primaryLocators, ...fallbackLocators]) {
+    let elements = findByLocator(locator, searchDoc);
+    console.log('[ACT resolveTarget] Locator', locator.type, ':', locator.value.substring(0, 50), '-> found', elements.length, 'raw matches');
+
+    // Apply visibility constraint.
+    if (constraints.visible !== false) {
+      elements = elements.filter(isElementVisible);
+      console.log('[ACT resolveTarget]   After visibility filter:', elements.length);
+    }
+
+    // Apply scopeToSelectedBlock constraint - only find elements within currently selected block.
+    if (constraints.scopeToSelectedBlock) {
+      elements = elements.filter(isWithinSelectedBlock);
+      console.log('[ACT resolveTarget]   After selectedBlock filter:', elements.length);
+    }
+
+    // Apply container constraint.
+    if (constraints.withinContainer) {
+      elements = elements.filter(el => isWithinContainer(el, constraints.withinContainer));
+      console.log('[ACT resolveTarget]   After container filter:', elements.length);
+    }
+    if (elements.length === 0) {
+      continue;
+    }
+
+    // Handle multiple matches.
+    if (elements.length === 1) {
+      console.log('[ACT resolveTarget] SUCCESS! Found element with', locator.type);
+      return {
+        success: true,
+        element: elements[0],
+        usedLocator: locator
+      };
+    }
+
+    // Use index constraint if provided.
+    if (typeof constraints.index === 'number' && elements[constraints.index]) {
+      return {
+        success: true,
+        element: elements[constraints.index],
+        usedLocator: locator
+      };
+    }
+
+    // Disambiguate by specificity score.
+    console.log('[ACT resolveTarget] Multiple matches (', elements.length, '), disambiguating by specificity...');
+    const scored = elements.map(el => ({
+      element: el,
+      score: calculateSpecificity(el, locator, constraints)
+    }));
+    scored.sort((a, b) => b.score - a.score);
+    console.log('[ACT resolveTarget] Scores:', scored.map(s => s.score));
+
+    // If top two have same score, it's ambiguous - but still return first.
+    return {
+      success: true,
+      element: scored[0].element,
+      usedLocator: locator
+    };
+  }
+  console.log('[ACT resolveTarget] FAILED - No matching element found after trying all locators');
+  return {
+    success: false,
+    error: 'No matching element found'
+  };
+}
+
+/**
+ * Resolve target with recovery retry.
+ *
+ * @param {Target}        target     Target configuration.
+ * @param {Function|null} recoveryFn Optional recovery function to run before retry.
+ * @return {Promise<ResolutionResult>} Resolution result.
+ */
+async function resolveTargetWithRecovery(target, recoveryFn = null) {
+  // First attempt.
+  let result = resolveTarget(target);
+  if (result.success) {
+    return result;
+  }
+
+  // If recovery function provided, run it and retry once.
+  if (recoveryFn) {
+    try {
+      await recoveryFn();
+
+      // Wait a tick for DOM updates.
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Retry.
+      result = resolveTarget(target);
+      if (result.success) {
+        return {
+          ...result,
+          recovered: true
+        };
+      }
+    } catch (error) {
+      // Recovery failed, return original error.
+      return {
+        success: false,
+        error: `Recovery failed: ${error.message}`
+      };
+    }
+  }
+  return result;
+}
+
+/**
+ * Test if a target can be resolved (for educator UI).
+ *
+ * @param {Target} target Target configuration.
+ * @return {Object} Test result with details.
+ */
+function testTargetResolution(target) {
+  const result = resolveTarget(target);
+  return {
+    success: result.success,
+    element: result.element,
+    usedLocator: result.usedLocator,
+    error: result.error,
+    elementInfo: result.element ? {
+      tagName: result.element.tagName.toLowerCase(),
+      id: result.element.id || null,
+      className: result.element.className || null,
+      textContent: result.element.textContent?.slice(0, 50) || null,
+      rect: result.element.getBoundingClientRect()
+    } : null
+  };
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (resolveTarget);
+
+/***/ },
+
+/***/ "./assets/js/runtime/watchCompletion.js"
+/*!**********************************************!*\
+  !*** ./assets/js/runtime/watchCompletion.js ***!
+  \**********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getAvailableCompletions: () => (/* binding */ getAvailableCompletions),
+/* harmony export */   watchCompletion: () => (/* binding */ watchCompletion)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Watch for step completion conditions.
+ *
+ * Monitors DOM events and @wordpress/data store changes to detect
+ * when a step's completion condition is satisfied.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+/**
+ * @typedef {import('../types/step.js').Completion} Completion
+ */
+
+/**
+ * Create a watcher that resolves when a condition is met.
+ *
+ * @param {Function} checkFn    Function that returns true when complete.
+ * @param {number}   timeout    Timeout in ms (0 for no timeout).
+ * @return {Promise<{success: boolean, timedOut?: boolean}>} Result.
+ */
+function createWatcher(checkFn, timeout = 0) {
+  return new Promise(resolve => {
+    let timeoutId = null;
+    let checkInterval = null;
+    let isResolved = false;
+    const cleanup = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      if (checkInterval) {
+        clearInterval(checkInterval);
+      }
+    };
+    const complete = (success, timedOut = false) => {
+      if (isResolved) {
+        return;
+      }
+      isResolved = true;
+      cleanup();
+      resolve({
+        success,
+        timedOut
+      });
+    };
+
+    // Set up timeout if specified.
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        complete(false, true);
+      }, timeout);
+    }
+
+    // Check periodically.
+    const check = () => {
+      try {
+        if (checkFn()) {
+          complete(true);
+        }
+      } catch {
+        // Check function threw, continue watching.
+      }
+    };
+
+    // Initial check.
+    check();
+
+    // If not immediately satisfied, poll.
+    if (!isResolved) {
+      checkInterval = setInterval(check, 100);
+    }
+  });
+}
+
+/**
+ * Watch for click on target element.
+ * Includes a grace period to avoid catching clicks during setup.
+ *
+ * @param {HTMLElement} targetElement Target element.
+ * @param {Object}      options       Options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchClickTarget(targetElement, options = {}) {
+  return new Promise(resolve => {
+    let isResolved = false;
+    let isArmed = false; // Grace period flag.
+    const {
+      timeout = 0,
+      gracePeriod = 300
+    } = options;
+    let timeoutId = null;
+    const cleanup = () => {
+      targetElement.removeEventListener('click', handleClick, true);
+      // Also try to remove from iframe document if applicable.
+      if (targetElement.ownerDocument !== document) {
+        targetElement.ownerDocument.removeEventListener('click', handleClick, true);
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+    const handleClick = event => {
+      if (isResolved) {
+        return;
+      }
+
+      // Ignore clicks during grace period.
+      if (!isArmed) {
+        console.log('[ACT watchClickTarget] Ignoring click during grace period');
+        return;
+      }
+
+      // Verify click is on target or within target.
+      if (targetElement === event.target || targetElement.contains(event.target)) {
+        console.log('[ACT watchClickTarget] Click detected on target:', targetElement.tagName);
+        isResolved = true;
+        cleanup();
+        resolve({
+          success: true,
+          event: 'click'
+        });
+      }
+    };
+
+    // Add listener to the target element.
+    targetElement.addEventListener('click', handleClick, {
+      capture: true
+    });
+
+    // Also listen on the document (for iframe elements).
+    if (targetElement.ownerDocument !== document) {
+      targetElement.ownerDocument.addEventListener('click', handleClick, {
+        capture: true
+      });
+    }
+
+    // Arm the watcher after grace period.
+    setTimeout(() => {
+      isArmed = true;
+      console.log('[ACT watchClickTarget] Armed after grace period, watching:', targetElement.tagName, targetElement.className);
+    }, gracePeriod);
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          resolve({
+            success: false,
+            timedOut: true
+          });
+        }
+      }, timeout);
+    }
+  });
+}
+
+/**
+ * Watch for DOM value change on target element.
+ *
+ * @param {HTMLElement} targetElement Target element.
+ * @param {Object}      options       Options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchDomValueChanged(targetElement, options = {}) {
+  return new Promise(resolve => {
+    let isResolved = false;
+    const {
+      timeout = 0,
+      expectedValue,
+      attributeName = null
+    } = options;
+    let timeoutId = null;
+    let observer = null;
+    const cleanup = () => {
+      if (observer) {
+        observer.disconnect();
+      }
+      targetElement.removeEventListener('input', handleInput);
+      targetElement.removeEventListener('change', handleChange);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+    const getCurrentValue = () => {
+      if (attributeName) {
+        return targetElement.getAttribute(attributeName);
+      }
+
+      // For form elements.
+      if ('value' in targetElement) {
+        return targetElement.value;
+      }
+
+      // For content editable.
+      if (targetElement.isContentEditable) {
+        return targetElement.textContent;
+      }
+
+      // For checkboxes/radios.
+      if (targetElement.type === 'checkbox' || targetElement.type === 'radio') {
+        return targetElement.checked;
+      }
+      return targetElement.textContent;
+    };
+    const initialValue = getCurrentValue();
+    const checkCompletion = () => {
+      const currentValue = getCurrentValue();
+
+      // If expected value specified, check for match.
+      if (expectedValue !== undefined) {
+        if (currentValue === expectedValue) {
+          return true;
+        }
+        return false;
+      }
+
+      // Otherwise, just check if value changed.
+      return currentValue !== initialValue;
+    };
+    const complete = () => {
+      if (isResolved) {
+        return;
+      }
+      if (checkCompletion()) {
+        isResolved = true;
+        cleanup();
+        resolve({
+          success: true,
+          event: 'valueChanged'
+        });
+      }
+    };
+    const handleInput = () => complete();
+    const handleChange = () => complete();
+
+    // Listen for input/change events.
+    targetElement.addEventListener('input', handleInput);
+    targetElement.addEventListener('change', handleChange);
+
+    // Also use MutationObserver for attribute changes.
+    observer = new MutationObserver(() => complete());
+    observer.observe(targetElement, {
+      attributes: true,
+      characterData: true,
+      subtree: true,
+      childList: true
+    });
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          resolve({
+            success: false,
+            timedOut: true
+          });
+        }
+      }, timeout);
+    }
+  });
+}
+
+/**
+ * Watch for @wordpress/data store state change.
+ *
+ * @param {Object} options Watcher options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchWpDataChange(options = {}) {
+  const {
+    storeName,
+    selector,
+    args = [],
+    expectedValue,
+    comparator = 'equals',
+    timeout = 0
+  } = options;
+  return new Promise(resolve => {
+    let isResolved = false;
+    let timeoutId = null;
+    let unsubscribe = null;
+    const cleanup = () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+    const store = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)(storeName);
+    if (!store || !store[selector]) {
+      resolve({
+        success: false,
+        error: `Invalid store or selector: ${storeName}.${selector}`
+      });
+      return;
+    }
+    const checkValue = () => {
+      try {
+        const currentValue = store[selector](...args);
+        switch (comparator) {
+          case 'equals':
+            return currentValue === expectedValue;
+          case 'notEquals':
+            return currentValue !== expectedValue;
+          case 'truthy':
+            return !!currentValue;
+          case 'falsy':
+            return !currentValue;
+          case 'contains':
+            if (Array.isArray(currentValue)) {
+              return currentValue.includes(expectedValue);
+            }
+            if (typeof currentValue === 'string') {
+              return currentValue.includes(expectedValue);
+            }
+            return false;
+          case 'greaterThan':
+            return currentValue > expectedValue;
+          case 'lessThan':
+            return currentValue < expectedValue;
+          case 'lengthEquals':
+            return currentValue?.length === expectedValue;
+          case 'lengthGreaterThan':
+            return currentValue?.length > expectedValue;
+          default:
+            return currentValue === expectedValue;
+        }
+      } catch {
+        return false;
+      }
+    };
+    const complete = () => {
+      if (isResolved) {
+        return;
+      }
+      if (checkValue()) {
+        isResolved = true;
+        cleanup();
+        resolve({
+          success: true,
+          event: 'wpDataChanged'
+        });
+      }
+    };
+
+    // Initial check.
+    complete();
+
+    // If not immediately satisfied, subscribe to changes.
+    if (!isResolved) {
+      unsubscribe = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.subscribe)(() => {
+        complete();
+      });
+    }
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          resolve({
+            success: false,
+            timedOut: true
+          });
+        }
+      }, timeout);
+    }
+  });
+}
+
+/**
+ * Watch for manual confirmation (user clicks continue).
+ *
+ * @param {Object} options Options.
+ * @return {Object} Watcher with cancel capability.
+ */
+function createManualWatcher(options = {}) {
+  const {
+    timeout = 0
+  } = options;
+  let resolveFn = null;
+  let timeoutId = null;
+  let isResolved = false;
+  const promise = new Promise(resolve => {
+    resolveFn = resolve;
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          resolve({
+            success: false,
+            timedOut: true
+          });
+        }
+      }, timeout);
+    }
+  });
+  return {
+    promise,
+    confirm: () => {
+      if (!isResolved) {
+        isResolved = true;
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        resolveFn({
+          success: true,
+          event: 'manual'
+        });
+      }
+    },
+    cancel: () => {
+      if (!isResolved) {
+        isResolved = true;
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        resolveFn({
+          success: false,
+          cancelled: true
+        });
+      }
+    }
+  };
+}
+
+/**
+ * Watch for element to appear in DOM.
+ * Tracks the last appeared block for scoping in subsequent steps.
+ * IMPORTANT: Waits for a NEW element, not just any existing match.
+ *
+ * @param {string} selector CSS selector.
+ * @param {Object} options  Options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchElementAppear(selector, options = {}) {
+  const {
+    timeout = 0
+  } = options;
+
+  // Helper to get all matching elements with their clientIds.
+  const getMatchingClientIds = () => {
+    const clientIds = new Set();
+
+    // Check main document.
+    document.querySelectorAll(selector).forEach(el => {
+      let clientId = el.getAttribute('data-block');
+      if (!clientId) {
+        const wrapper = el.closest('[data-block]');
+        clientId = wrapper?.getAttribute('data-block');
+      }
+      if (clientId) {
+        clientIds.add(clientId);
+      }
+    });
+
+    // Check iframe.
+    const iframe = document.querySelector('iframe[name="editor-canvas"]');
+    iframe?.contentDocument?.querySelectorAll(selector).forEach(el => {
+      let clientId = el.getAttribute('data-block');
+      if (!clientId) {
+        const wrapper = el.closest('[data-block]');
+        clientId = wrapper?.getAttribute('data-block');
+      }
+      if (clientId) {
+        clientIds.add(clientId);
+      }
+    });
+    return clientIds;
+  };
+
+  // Capture existing elements BEFORE watching.
+  const existingClientIds = getMatchingClientIds();
+  console.log('[ACT watchElementAppear] Existing matches:', existingClientIds.size, 'for selector:', selector);
+  return createWatcher(() => {
+    // Get current matches and look for NEW ones.
+    const currentClientIds = getMatchingClientIds();
+    for (const clientId of currentClientIds) {
+      if (!existingClientIds.has(clientId)) {
+        // Found a NEW element! Store it for later retrieval.
+        window.__actNewlyAppearedBlockClientId = clientId;
+        console.log('[ACT watchElementAppear] NEW element appeared:', clientId);
+        return true;
+      }
+    }
+    return false;
+  }, timeout).then(result => {
+    // Track the block that appeared for scoping in next step.
+    if (result.success && window.__actNewlyAppearedBlockClientId) {
+      window.__actLastAppearedBlockClientId = window.__actNewlyAppearedBlockClientId;
+      console.log('[ACT watchElementAppear] Tracked appeared block:', window.__actLastAppearedBlockClientId);
+      delete window.__actNewlyAppearedBlockClientId;
+    }
+    return {
+      ...result,
+      event: result.success ? 'elementAppeared' : null
+    };
+  });
+}
+
+/**
+ * Watch for element to disappear from DOM.
+ *
+ * @param {string} selector CSS selector.
+ * @param {Object} options  Options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchElementDisappear(selector, options = {}) {
+  const {
+    timeout = 0
+  } = options;
+  return createWatcher(() => {
+    const element = document.querySelector(selector);
+    return element === null;
+  }, timeout).then(result => ({
+    ...result,
+    event: result.success ? 'elementDisappeared' : null
+  }));
+}
+
+/**
+ * Watch for a custom event to be dispatched.
+ *
+ * @param {string} eventName Custom event name.
+ * @param {Object} options   Options.
+ * @return {Promise<Object>} Completion result.
+ */
+function watchCustomEvent(eventName, options = {}) {
+  const {
+    timeout = 0,
+    target = document
+  } = options;
+  return new Promise(resolve => {
+    let isResolved = false;
+    let timeoutId = null;
+    const cleanup = () => {
+      target.removeEventListener(eventName, handleEvent);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+    const handleEvent = event => {
+      if (isResolved) {
+        return;
+      }
+      isResolved = true;
+      cleanup();
+      resolve({
+        success: true,
+        event: eventName,
+        detail: event.detail
+      });
+    };
+    target.addEventListener(eventName, handleEvent, {
+      once: true
+    });
+    if (timeout > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          resolve({
+            success: false,
+            timedOut: true
+          });
+        }
+      }, timeout);
+    }
+  });
+}
+
+/**
+ * Create a completion watcher based on completion configuration.
+ *
+ * @param {Completion}       completion    Completion configuration.
+ * @param {HTMLElement|null} targetElement Resolved target element (if available).
+ * @return {Object} Watcher object with promise and cancel method.
+ */
+function watchCompletion(completion, targetElement = null) {
+  if (!completion || !completion.type) {
+    // Default to manual completion.
+    return createManualWatcher();
+  }
+  const {
+    type,
+    params = {}
+  } = completion;
+  const timeout = completion.timeout || 0;
+  switch (type) {
+    case 'clickTarget':
+      if (!targetElement) {
+        return {
+          promise: Promise.resolve({
+            success: false,
+            error: 'No target element for clickTarget'
+          }),
+          cancel: () => {}
+        };
+      }
+      return {
+        promise: watchClickTarget(targetElement, {
+          timeout
+        }),
+        cancel: () => {} // Click listeners are removed when promise resolves.
+      };
+    case 'domValueChanged':
+      if (!targetElement) {
+        return {
+          promise: Promise.resolve({
+            success: false,
+            error: 'No target element for domValueChanged'
+          }),
+          cancel: () => {}
+        };
+      }
+      return {
+        promise: watchDomValueChanged(targetElement, {
+          timeout,
+          ...params
+        }),
+        cancel: () => {}
+      };
+    case 'wpData':
+      return {
+        promise: watchWpDataChange({
+          timeout,
+          ...params
+        }),
+        cancel: () => {}
+      };
+    case 'manual':
+      return createManualWatcher({
+        timeout
+      });
+    case 'elementAppear':
+      return {
+        promise: watchElementAppear(params.selector, {
+          timeout
+        }),
+        cancel: () => {}
+      };
+    case 'elementDisappear':
+      return {
+        promise: watchElementDisappear(params.selector, {
+          timeout
+        }),
+        cancel: () => {}
+      };
+    case 'customEvent':
+      return {
+        promise: watchCustomEvent(params.eventName, {
+          timeout
+        }),
+        cancel: () => {}
+      };
+    default:
+      return createManualWatcher({
+        timeout
+      });
+  }
+}
+
+/**
+ * Get available completion types with descriptions.
+ *
+ * @return {Object[]} Array of completion type info.
+ */
+function getAvailableCompletions() {
+  return [{
+    type: 'clickTarget',
+    label: 'Click Target',
+    description: 'Complete when user clicks the target element',
+    requiresTarget: true,
+    params: []
+  }, {
+    type: 'domValueChanged',
+    label: 'Value Changed',
+    description: 'Complete when element value changes',
+    requiresTarget: true,
+    params: [{
+      name: 'expectedValue',
+      type: 'string',
+      optional: true,
+      description: 'Expected value (if not set, any change completes)'
+    }, {
+      name: 'attributeName',
+      type: 'string',
+      optional: true,
+      description: 'Attribute to watch (defaults to value/textContent)'
+    }]
+  }, {
+    type: 'wpData',
+    label: 'Store Change',
+    description: 'Complete when @wordpress/data store value changes',
+    requiresTarget: false,
+    params: [{
+      name: 'storeName',
+      type: 'string',
+      required: true,
+      description: 'Store name (e.g., core/block-editor)'
+    }, {
+      name: 'selector',
+      type: 'string',
+      required: true,
+      description: 'Selector function name'
+    }, {
+      name: 'args',
+      type: 'array',
+      optional: true,
+      description: 'Arguments for selector'
+    }, {
+      name: 'expectedValue',
+      type: 'any',
+      optional: true,
+      description: 'Expected value'
+    }, {
+      name: 'comparator',
+      type: 'string',
+      optional: true,
+      description: 'equals, notEquals, truthy, falsy, contains, greaterThan, lessThan'
+    }]
+  }, {
+    type: 'manual',
+    label: 'Manual',
+    description: 'Complete when user clicks continue button',
+    requiresTarget: false,
+    params: []
+  }, {
+    type: 'elementAppear',
+    label: 'Element Appears',
+    description: 'Complete when an element appears in DOM',
+    requiresTarget: false,
+    params: [{
+      name: 'selector',
+      type: 'string',
+      required: true,
+      description: 'CSS selector for element'
+    }]
+  }, {
+    type: 'elementDisappear',
+    label: 'Element Disappears',
+    description: 'Complete when an element is removed from DOM',
+    requiresTarget: false,
+    params: [{
+      name: 'selector',
+      type: 'string',
+      required: true,
+      description: 'CSS selector for element'
+    }]
+  }, {
+    type: 'customEvent',
+    label: 'Custom Event',
+    description: 'Complete when a custom event is dispatched',
+    requiresTarget: false,
+    params: [{
+      name: 'eventName',
+      type: 'string',
+      required: true,
+      description: 'Custom event name'
+    }]
+  }];
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (watchCompletion);
+
+/***/ },
+
+/***/ "./assets/js/store/actions.js"
+/*!************************************!*\
+  !*** ./assets/js/store/actions.js ***!
+  \************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   activatePicker: () => (/* binding */ activatePicker),
+/* harmony export */   addStep: () => (/* binding */ addStep),
+/* harmony export */   clearAiDraft: () => (/* binding */ clearAiDraft),
+/* harmony export */   clearEphemeralTour: () => (/* binding */ clearEphemeralTour),
+/* harmony export */   clearResolvedTarget: () => (/* binding */ clearResolvedTarget),
+/* harmony export */   createTour: () => (/* binding */ createTour),
+/* harmony export */   deactivatePicker: () => (/* binding */ deactivatePicker),
+/* harmony export */   deleteStep: () => (/* binding */ deleteStep),
+/* harmony export */   endTour: () => (/* binding */ endTour),
+/* harmony export */   fetchTour: () => (/* binding */ fetchTour),
+/* harmony export */   fetchTours: () => (/* binding */ fetchTours),
+/* harmony export */   incrementResolutionAttempts: () => (/* binding */ incrementResolutionAttempts),
+/* harmony export */   markStepComplete: () => (/* binding */ markStepComplete),
+/* harmony export */   nextStep: () => (/* binding */ nextStep),
+/* harmony export */   previousStep: () => (/* binding */ previousStep),
+/* harmony export */   receiveEphemeralTour: () => (/* binding */ receiveEphemeralTour),
+/* harmony export */   receiveTour: () => (/* binding */ receiveTour),
+/* harmony export */   receiveTours: () => (/* binding */ receiveTours),
+/* harmony export */   reorderSteps: () => (/* binding */ reorderSteps),
+/* harmony export */   repeatStep: () => (/* binding */ repeatStep),
+/* harmony export */   requestAiDraft: () => (/* binding */ requestAiDraft),
+/* harmony export */   requestAiTour: () => (/* binding */ requestAiTour),
+/* harmony export */   resetCompletion: () => (/* binding */ resetCompletion),
+/* harmony export */   saveTour: () => (/* binding */ saveTour),
+/* harmony export */   selectStep: () => (/* binding */ selectStep),
+/* harmony export */   setAiDraftError: () => (/* binding */ setAiDraftError),
+/* harmony export */   setAiDraftLoading: () => (/* binding */ setAiDraftLoading),
+/* harmony export */   setAiDraftResult: () => (/* binding */ setAiDraftResult),
+/* harmony export */   setAiTourError: () => (/* binding */ setAiTourError),
+/* harmony export */   setAiTourLoading: () => (/* binding */ setAiTourLoading),
+/* harmony export */   setCompletionSatisfied: () => (/* binding */ setCompletionSatisfied),
+/* harmony export */   setCurrentStep: () => (/* binding */ setCurrentStep),
+/* harmony export */   setCurrentTour: () => (/* binding */ setCurrentTour),
+/* harmony export */   setLastError: () => (/* binding */ setLastError),
+/* harmony export */   setLastFailureContext: () => (/* binding */ setLastFailureContext),
+/* harmony export */   setMode: () => (/* binding */ setMode),
+/* harmony export */   setPendingChanges: () => (/* binding */ setPendingChanges),
+/* harmony export */   setRecovering: () => (/* binding */ setRecovering),
+/* harmony export */   setResolvedTarget: () => (/* binding */ setResolvedTarget),
+/* harmony export */   setSidebarOpen: () => (/* binding */ setSidebarOpen),
+/* harmony export */   setToursError: () => (/* binding */ setToursError),
+/* harmony export */   setToursLoading: () => (/* binding */ setToursLoading),
+/* harmony export */   skipStep: () => (/* binding */ skipStep),
+/* harmony export */   startEphemeralTour: () => (/* binding */ startEphemeralTour),
+/* harmony export */   startPicking: () => (/* binding */ startPicking),
+/* harmony export */   startTour: () => (/* binding */ startTour),
+/* harmony export */   stopPicking: () => (/* binding */ stopPicking),
+/* harmony export */   stopTour: () => (/* binding */ stopTour),
+/* harmony export */   updateStep: () => (/* binding */ updateStep),
+/* harmony export */   updateTour: () => (/* binding */ updateTour)
+/* harmony export */ });
+/* harmony import */ var _reducer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./reducer */ "./assets/js/store/reducer.js");
+/**
+ * Store action creators.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+/**
+ * Generate a UUID v4.
+ *
+ * @return {string} UUID string.
+ */
+const generateId = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+};
+
+// ============================================================================
+// Tour Loading Actions
+// ============================================================================
+
+/**
+ * Set tours loading state.
+ *
+ * @param {boolean} isLoading Loading state.
+ * @return {Object} Action object.
+ */
+function setToursLoading(isLoading) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_TOURS_LOADING,
+    isLoading
+  };
+}
+
+/**
+ * Set tours error.
+ *
+ * @param {string|null} error Error message.
+ * @return {Object} Action object.
+ */
+function setToursError(error) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_TOURS_ERROR,
+    error
+  };
+}
+
+/**
+ * Receive tours from API.
+ *
+ * @param {Array} tours Array of tour objects.
+ * @return {Object} Action object.
+ */
+function receiveTours(tours) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.RECEIVE_TOURS,
+    tours
+  };
+}
+
+/**
+ * Receive a single tour.
+ *
+ * @param {Object} tour Tour object.
+ * @return {Object} Action object.
+ */
+function receiveTour(tour) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.RECEIVE_TOUR,
+    tour
+  };
+}
+
+/**
+ * Set current tour for editing (educator mode).
+ * Fetches the tour if not already in the store.
+ *
+ * @param {number|null} tourId Tour ID or null to deselect.
+ * @return {Generator} Action generator.
+ */
+function* setCurrentTour(tourId) {
+  if (!tourId) {
+    yield {
+      type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_CURRENT_TOUR,
+      tourId: null
+    };
+    return;
+  }
+
+  // First, try to fetch the tour to ensure it's in the store.
+  try {
+    const tour = yield {
+      type: 'API_FETCH',
+      request: {
+        path: `/admin-coach-tours/v1/tours/${tourId}`,
+        method: 'GET'
+      }
+    };
+
+    // If tour exists, receive it.
+    if (tour && tour.id) {
+      yield receiveTour(tour);
+    }
+  } catch (error) {
+    // Tour might not exist yet (new post). Create a placeholder.
+    console.log('[ACT] Tour not found, creating placeholder for:', tourId);
+    yield receiveTour({
+      id: tourId,
+      title: '',
+      steps: [],
+      status: 'draft'
+    });
+  }
+
+  // Now set it as current.
+  yield {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_CURRENT_TOUR,
+    tourId
+  };
+}
+
+/**
+ * Fetch tours from REST API.
+ *
+ * @param {Object} args Query arguments.
+ * @return {Object} Action object for control.
+ */
+function fetchTours(args = {}) {
+  return {
+    type: 'FETCH_TOURS',
+    args
+  };
+}
+
+/**
+ * Fetch a single tour.
+ *
+ * @param {number} tourId Tour ID.
+ * @return {Object} Action object for control.
+ */
+function fetchTour(tourId) {
+  return {
+    type: 'FETCH_TOUR',
+    tourId
+  };
+}
+
+/**
+ * Save tour to server.
+ *
+ * @param {number} tourId   Tour ID.
+ * @param {Object} tourData Tour data to save.
+ * @return {Generator} Action generator.
+ */
+function* saveTour(tourId, tourData) {
+  try {
+    const result = yield {
+      type: 'SAVE_TOUR',
+      tourId,
+      tourData
+    };
+    if (result?.id) {
+      yield receiveTour(result);
+    }
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Create a new tour.
+ *
+ * @param {Object} data Tour data (title, description, postTypes, editors, status).
+ * @return {Function} Thunk that creates tour and returns result.
+ */
+function* createTour(data) {
+  try {
+    const result = yield {
+      type: 'CREATE_TOUR',
+      data
+    };
+    if (result?.id) {
+      yield receiveTour(result);
+    }
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Update an existing tour.
+ *
+ * @param {number} tourId Tour ID.
+ * @param {Object} data   Tour data to update.
+ * @return {Function} Thunk that updates tour and returns result.
+ */
+function* updateTour(tourId, data) {
+  try {
+    const result = yield {
+      type: 'UPDATE_TOUR',
+      tourId,
+      data
+    };
+    if (result?.id) {
+      yield receiveTour(result);
+    }
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ============================================================================
+// Tour Playback Actions
+// ============================================================================
+
+/**
+ * Start a tour.
+ *
+ * @param {number} tourId Tour ID.
+ * @param {string} mode   Mode ('educator' | 'pupil').
+ * @return {Object} Action object.
+ */
+function startTour(tourId, mode = 'pupil') {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.START_TOUR,
+    tourId,
+    mode
+  };
+}
+
+/**
+ * End the current tour.
+ *
+ * @return {Object} Action object.
+ */
+function endTour() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.END_TOUR
+  };
+}
+
+/**
+ * Alias for endTour - stop the current tour.
+ *
+ * @return {Object} Action object.
+ */
+function stopTour() {
+  return endTour();
+}
+
+/**
+ * Set current step by index.
+ *
+ * @param {number} stepIndex Step index.
+ * @return {Object} Action object.
+ */
+function setCurrentStep(stepIndex) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_CURRENT_STEP,
+    stepIndex
+  };
+}
+
+/**
+ * Go to next step.
+ *
+ * @return {Object} Action object.
+ */
+function nextStep() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.NEXT_STEP
+  };
+}
+
+/**
+ * Go to previous step.
+ *
+ * @return {Object} Action object.
+ */
+function previousStep() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.PREVIOUS_STEP
+  };
+}
+
+/**
+ * Skip current step.
+ *
+ * @return {Object} Action object.
+ */
+function skipStep() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SKIP_STEP
+  };
+}
+
+/**
+ * Repeat current step.
+ *
+ * @return {Object} Action object.
+ */
+function repeatStep() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.REPEAT_STEP
+  };
+}
+
+// ============================================================================
+// Mode Management Actions
+// ============================================================================
+
+/**
+ * Set current mode.
+ *
+ * @param {string|null} mode Mode ('educator' | 'pupil' | null).
+ * @return {Object} Action object.
+ */
+function setMode(mode) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_MODE,
+    mode
+  };
+}
+
+// ============================================================================
+// Completion Actions
+// ============================================================================
+
+/**
+ * Set completion satisfied state.
+ *
+ * @param {boolean} satisfied Whether completion is satisfied.
+ * @return {Object} Action object.
+ */
+function setCompletionSatisfied(satisfied) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_COMPLETION_SATISFIED,
+    satisfied
+  };
+}
+
+/**
+ * Reset completion state.
+ *
+ * @return {Object} Action object.
+ */
+function resetCompletion() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.RESET_COMPLETION
+  };
+}
+
+/**
+ * Mark step as complete and auto-advance.
+ *
+ * Sets completion satisfied and moves to next step.
+ *
+ * @return {Object} Action object (next step).
+ */
+function markStepComplete() {
+  // This is just an alias for nextStep - the completion watcher
+  // handles the logic, this just triggers the advance.
+  return nextStep();
+}
+
+// ============================================================================
+// Target Resolution Actions
+// ============================================================================
+
+/**
+ * Set resolved target element info.
+ *
+ * @param {Object} target Target resolution result.
+ * @return {Object} Action object.
+ */
+function setResolvedTarget(target) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_RESOLVED_TARGET,
+    target
+  };
+}
+
+/**
+ * Clear resolved target.
+ *
+ * @return {Object} Action object.
+ */
+function clearResolvedTarget() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.CLEAR_RESOLVED_TARGET
+  };
+}
+
+/**
+ * Set recovering state.
+ *
+ * @param {boolean} isRecovering Recovery state.
+ * @return {Object} Action object.
+ */
+function setRecovering(isRecovering) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_RECOVERING,
+    isRecovering
+  };
+}
+
+/**
+ * Increment resolution attempts counter.
+ *
+ * @return {Object} Action object.
+ */
+function incrementResolutionAttempts() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.INCREMENT_RESOLUTION_ATTEMPTS
+  };
+}
+
+/**
+ * Set last error message.
+ *
+ * @param {string|null} error Error message.
+ * @return {Object} Action object.
+ */
+function setLastError(error) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_LAST_ERROR,
+    error
+  };
+}
+
+// ============================================================================
+// Educator Mode Actions
+// ============================================================================
+
+/**
+ * Activate element picker.
+ *
+ * @param {string|null} stepId Optional step ID if repicking for existing step.
+ * @return {Object} Action object.
+ */
+function activatePicker(stepId = null) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.ACTIVATE_PICKER,
+    stepId
+  };
+}
+
+/**
+ * Start picking an element (alias for activatePicker).
+ *
+ * @param {string|null} stepId Optional step ID if repicking for existing step.
+ * @return {Object} Action object.
+ */
+function startPicking(stepId = null) {
+  return activatePicker(stepId);
+}
+
+/**
+ * Deactivate element picker.
+ *
+ * @return {Object} Action object.
+ */
+function deactivatePicker() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.DEACTIVATE_PICKER
+  };
+}
+
+/**
+ * Stop picking (alias for deactivatePicker).
+ *
+ * @return {Object} Action object.
+ */
+function stopPicking() {
+  return deactivatePicker();
+}
+
+/**
+ * Select a step for editing.
+ *
+ * @param {string|null} stepId Step ID.
+ * @return {Object} Action object.
+ */
+function selectStep(stepId) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SELECT_STEP,
+    stepId
+  };
+}
+
+/**
+ * Set pending changes flag.
+ *
+ * @param {boolean} pending Has pending changes.
+ * @return {Object} Action object.
+ */
+function setPendingChanges(pending) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_PENDING_CHANGES,
+    pending
+  };
+}
+
+/**
+ * Update a step.
+ *
+ * @param {number} tourId  Tour ID.
+ * @param {string} stepId  Step ID.
+ * @param {Object} updates Updates to apply.
+ * @return {Generator} Action generator.
+ */
+function* updateStep(tourId, stepId, updates) {
+  yield {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.UPDATE_STEP,
+    tourId,
+    stepId,
+    updates
+  };
+}
+
+/**
+ * Add a new step.
+ *
+ * @param {number}      tourId Tour ID.
+ * @param {Object}      step   Step data (without id/order).
+ * @param {number|null} index  Insert position.
+ * @return {Generator} Action generator.
+ */
+function* addStep(tourId, step = {}, index = null) {
+  const newStep = {
+    id: generateId(),
+    order: 0,
+    title: '',
+    instruction: '',
+    hint: '',
+    target: {
+      locators: [],
+      constraints: {
+        visible: true
+      }
+    },
+    preconditions: [],
+    completion: {
+      type: 'manual'
+    },
+    recovery: [{
+      action: 'reapplyPreconditions',
+      timeout: 1000
+    }],
+    tags: [],
+    version: 1,
+    ...step
+  };
+  yield {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.ADD_STEP,
+    tourId,
+    step: newStep,
+    index
+  };
+}
+
+/**
+ * Delete a step.
+ *
+ * @param {number} tourId Tour ID.
+ * @param {string} stepId Step ID.
+ * @return {Generator} Action generator.
+ */
+function* deleteStep(tourId, stepId) {
+  yield {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.DELETE_STEP,
+    tourId,
+    stepId
+  };
+}
+
+/**
+ * Reorder steps.
+ *
+ * @param {number}   tourId  Tour ID.
+ * @param {string[]} stepIds Ordered step IDs.
+ * @return {Generator} Action generator.
+ */
+function* reorderSteps(tourId, stepIds) {
+  yield {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.REORDER_STEPS,
+    tourId,
+    stepIds
+  };
+}
+
+// ============================================================================
+// AI Drafting Actions
+// ============================================================================
+
+/**
+ * Set AI draft loading state.
+ *
+ * @param {boolean} isLoading Loading state.
+ * @return {Object} Action object.
+ */
+function setAiDraftLoading(isLoading) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_AI_DRAFT_LOADING,
+    isLoading
+  };
+}
+
+/**
+ * Set AI draft error.
+ *
+ * @param {string|null} error Error message.
+ * @return {Object} Action object.
+ */
+function setAiDraftError(error) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_AI_DRAFT_ERROR,
+    error
+  };
+}
+
+/**
+ * Set AI draft result.
+ *
+ * @param {Object} result AI draft output.
+ * @return {Object} Action object.
+ */
+function setAiDraftResult(result) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_AI_DRAFT_RESULT,
+    result
+  };
+}
+
+/**
+ * Clear AI draft state.
+ *
+ * @return {Object} Action object.
+ */
+function clearAiDraft() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.CLEAR_AI_DRAFT
+  };
+}
+
+/**
+ * Request AI to draft step.
+ *
+ * @param {Object} elementContext Element context for AI.
+ * @param {string} postType       Current post type.
+ * @return {Generator} Generator that handles AI draft request.
+ */
+function* requestAiDraft(elementContext, postType) {
+  // Set loading state.
+  yield setAiDraftLoading(true);
+  yield setAiDraftError(null);
+  try {
+    const result = yield {
+      type: 'REQUEST_AI_DRAFT',
+      elementContext,
+      postType
+    };
+    yield setAiDraftResult(result);
+    return result;
+  } catch (error) {
+    yield setAiDraftError(error.message || 'Failed to generate AI draft');
+    throw error;
+  } finally {
+    yield setAiDraftLoading(false);
+  }
+}
+
+// ============================================================================
+// UI Actions
+// ============================================================================
+
+/**
+ * Set sidebar open state.
+ *
+ * @param {boolean} isOpen Sidebar open state.
+ * @return {Object} Action object.
+ */
+function setSidebarOpen(isOpen) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_SIDEBAR_OPEN,
+    isOpen
+  };
+}
+
+// ============================================================================
+// AI Tour Generation Actions (Pupil Mode)
+// ============================================================================
+
+/**
+ * Set AI tour loading state.
+ *
+ * @param {boolean} isLoading Loading state.
+ * @return {Object} Action object.
+ */
+function setAiTourLoading(isLoading) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_AI_TOUR_LOADING,
+    isLoading
+  };
+}
+
+/**
+ * Set AI tour error.
+ *
+ * @param {string|null} error Error message.
+ * @return {Object} Action object.
+ */
+function setAiTourError(error) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_AI_TOUR_ERROR,
+    error
+  };
+}
+
+/**
+ * Set last failure context for contextual retry.
+ *
+ * @param {Object|null} failureContext Context about the failure (step, selector, error).
+ * @return {Object} Action object.
+ */
+function setLastFailureContext(failureContext) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.SET_LAST_FAILURE_CONTEXT,
+    failureContext
+  };
+}
+
+/**
+ * Receive an ephemeral tour from AI.
+ *
+ * @param {Object} tour Generated tour object.
+ * @return {Object} Action object.
+ */
+function receiveEphemeralTour(tour) {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.RECEIVE_EPHEMERAL_TOUR,
+    tour
+  };
+}
+
+/**
+ * Clear ephemeral tour.
+ *
+ * @return {Object} Action object.
+ */
+function clearEphemeralTour() {
+  return {
+    type: _reducer__WEBPACK_IMPORTED_MODULE_0__.ACTION_TYPES.CLEAR_EPHEMERAL_TOUR
+  };
+}
+
+/**
+ * Request AI to generate a tour.
+ *
+ * @param {string}      taskId         Predefined task ID (optional).
+ * @param {string}      query          Freeform user query (optional).
+ * @param {string}      postType       Current post type.
+ * @param {Object|null} failureContext Context from a previous failed attempt (for retry).
+ * @return {Generator} Generator that handles AI tour generation.
+ */
+function* requestAiTour(taskId, query, postType, failureContext = null) {
+  // Set loading state.
+  yield setAiTourLoading(true);
+  yield setAiTourError(null);
+  try {
+    // Gather editor context to help AI generate accurate selectors.
+    const editorContext = yield {
+      type: 'GATHER_EDITOR_CONTEXT'
+    };
+    const result = yield {
+      type: 'REQUEST_AI_TOUR',
+      taskId,
+      query,
+      postType,
+      editorContext,
+      failureContext
+    };
+    console.log('[ACT AI Response] Full result:', result);
+    console.log('[ACT AI Response] Tour:', JSON.stringify(result.tour, null, 2));
+
+    // Add an ID to the ephemeral tour.
+    const tour = {
+      id: 'ephemeral',
+      ...result.tour
+    };
+    yield receiveEphemeralTour(tour);
+
+    // Ensure an empty block placeholder exists for "/" quick inserter tours.
+    yield {
+      type: 'ENSURE_EMPTY_PLACEHOLDER'
+    };
+
+    // Automatically start the tour.
+    yield startTour('ephemeral', 'pupil');
+    return tour;
+  } catch (error) {
+    yield setAiTourError(error.message || 'Failed to generate tour');
+    throw error;
+  } finally {
+    yield setAiTourLoading(false);
+  }
+}
+
+/**
+ * Start an ephemeral tour directly (for pre-loaded tours).
+ *
+ * @param {Object} tour Tour object with title and steps.
+ * @return {Generator} Generator that sets up and starts the tour.
+ */
+function* startEphemeralTour(tour) {
+  // Add ID if not present.
+  const tourWithId = {
+    id: 'ephemeral',
+    ...tour
+  };
+  yield receiveEphemeralTour(tourWithId);
+
+  // Ensure an empty block placeholder exists for "/" quick inserter tours.
+  yield {
+    type: 'ENSURE_EMPTY_PLACEHOLDER'
+  };
+  yield startTour('ephemeral', 'pupil');
+}
+
+/***/ },
+
+/***/ "./assets/js/store/controls.js"
+/*!*************************************!*\
+  !*** ./assets/js/store/controls.js ***!
+  \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _runtime_gatherEditorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/gatherEditorContext */ "./assets/js/runtime/gatherEditorContext.js");
+/* harmony import */ var _runtime_ensureEmptyPlaceholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../runtime/ensureEmptyPlaceholder */ "./assets/js/runtime/ensureEmptyPlaceholder.js");
+/**
+ * Store controls for side effects.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+/**
+ * Control handlers.
+ */
+const controls = {
+  /**
+   * Handle API fetch requests.
+   *
+   * @param {Object} action Action with request config.
+   * @return {Promise} API response.
+   */
+  API_FETCH(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()(action.request);
+  },
+  /**
+   * Gather editor context for AI tour generation.
+   *
+   * @return {Object} Editor context including blocks and UI state.
+   */
+  GATHER_EDITOR_CONTEXT() {
+    return (0,_runtime_gatherEditorContext__WEBPACK_IMPORTED_MODULE_1__.gatherEditorContext)();
+  },
+  /**
+   * Ensure an empty block placeholder exists for "/" quick inserter tours.
+   *
+   * @return {Promise<Object>} Result with wasInserted and clientId.
+   */
+  ENSURE_EMPTY_PLACEHOLDER() {
+    return (0,_runtime_ensureEmptyPlaceholder__WEBPACK_IMPORTED_MODULE_2__.ensureEmptyPlaceholder)();
+  },
+  /**
+   * Handle tour fetch requests.
+   *
+   * @param {Object} action Action with tourId.
+   * @return {Promise} API response.
+   */
+  FETCH_TOUR(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: `/admin-coach-tours/v1/tours/${action.tourId}`,
+      method: 'GET'
+    });
+  },
+  /**
+   * Handle tours list fetch.
+   *
+   * @param {Object} action Action with args.
+   * @return {Promise} API response.
+   */
+  FETCH_TOURS(action) {
+    const params = new URLSearchParams();
+    if (action.args.postType) {
+      params.append('post_type', action.args.postType);
+    }
+    if (action.args.editor) {
+      params.append('editor', action.args.editor);
+    }
+    const query = params.toString();
+    const path = `/admin-coach-tours/v1/tours${query ? `?${query}` : ''}`;
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path,
+      method: 'GET'
+    });
+  },
+  /**
+   * Handle tour save requests.
+   *
+   * @param {Object} action Action with tourId and tourData.
+   * @return {Promise} API response.
+   */
+  SAVE_TOUR(action) {
+    console.log('[ACT Controls] SAVE_TOUR:', action.tourId, action.tourData);
+    console.log('[ACT Controls] Steps count:', action.tourData?.steps?.length);
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: `/admin-coach-tours/v1/tours/${action.tourId}`,
+      method: 'PUT',
+      data: action.tourData
+    });
+  },
+  /**
+   * Handle tour creation.
+   *
+   * @param {Object} action Action with tour data.
+   * @return {Promise} API response with created tour.
+   */
+  CREATE_TOUR(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/admin-coach-tours/v1/tours',
+      method: 'POST',
+      data: action.data
+    });
+  },
+  /**
+   * Handle tour update.
+   *
+   * @param {Object} action Action with tourId and data.
+   * @return {Promise} API response with updated tour.
+   */
+  UPDATE_TOUR(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: `/admin-coach-tours/v1/tours/${action.tourId}`,
+      method: 'PUT',
+      data: action.data
+    });
+  },
+  /**
+   * Handle AI draft requests.
+   *
+   * @param {Object} action Action with element context.
+   * @return {Promise} API response.
+   */
+  REQUEST_AI_DRAFT(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/admin-coach-tours/v1/ai/generate-draft',
+      method: 'POST',
+      data: {
+        elementContext: action.elementContext,
+        postType: action.postType
+      }
+    });
+  },
+  /**
+   * Handle AI tour generation requests.
+   *
+   * @param {Object} action Action with taskId, query, postType, editorContext, and optional failureContext.
+   * @return {Promise} API response with generated tour.
+   */
+  REQUEST_AI_TOUR(action) {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/admin-coach-tours/v1/ai/generate-tour',
+      method: 'POST',
+      data: {
+        taskId: action.taskId,
+        query: action.query,
+        postType: action.postType,
+        editorContext: action.editorContext || null,
+        failureContext: action.failureContext || null
+      }
+    });
+  },
+  /**
+   * Fetch available AI tasks.
+   *
+   * @return {Promise} API response with available tasks.
+   */
+  FETCH_AI_TASKS() {
+    return _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/admin-coach-tours/v1/ai/tasks',
+      method: 'GET'
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (controls);
+
+/***/ },
+
+/***/ "./assets/js/store/index.js"
+/*!**********************************!*\
+  !*** ./assets/js/store/index.js ***!
+  \**********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DEFAULT_STATE: () => (/* reexport safe */ _reducer__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_STATE),
+/* harmony export */   STORE_NAME: () => (/* binding */ STORE_NAME),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reducer */ "./assets/js/store/reducer.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./actions */ "./assets/js/store/actions.js");
+/* harmony import */ var _selectors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./selectors */ "./assets/js/store/selectors.js");
+/* harmony import */ var _resolvers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./resolvers */ "./assets/js/store/resolvers.js");
+/* harmony import */ var _controls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controls */ "./assets/js/store/controls.js");
+/**
+ * Admin Coach Tours - WordPress data store.
+ *
+ * Central state management for tour playback, editing, and UI state.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+
+
+
+
+/**
+ * Store name constant.
+ */
+const STORE_NAME = 'admin-coach-tours';
+
+/**
+ * Create the Redux store.
+ */
+const store = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createReduxStore)(STORE_NAME, {
+  reducer: _reducer__WEBPACK_IMPORTED_MODULE_1__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_2__,
+  selectors: _selectors__WEBPACK_IMPORTED_MODULE_3__,
+  resolvers: _resolvers__WEBPACK_IMPORTED_MODULE_4__,
+  controls: _controls__WEBPACK_IMPORTED_MODULE_5__["default"],
+  initialState: _reducer__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_STATE
+});
+
+/**
+ * Register the store with WordPress (only if not already registered).
+ */
+if (!(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)(STORE_NAME)) {
+  (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.register)(store);
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
+
+
+/***/ },
+
+/***/ "./assets/js/store/reducer.js"
+/*!************************************!*\
+  !*** ./assets/js/store/reducer.js ***!
+  \************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ACTION_TYPES: () => (/* binding */ ACTION_TYPES),
+/* harmony export */   DEFAULT_STATE: () => (/* binding */ DEFAULT_STATE),
+/* harmony export */   "default": () => (/* binding */ reducer)
+/* harmony export */ });
+/**
+ * Store reducer.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+/**
+ * Default state for the store.
+ */
+const DEFAULT_STATE = {
+  // Tour data.
+  tours: {},
+  toursLoading: false,
+  toursError: null,
+  // Current tour state.
+  currentTourId: null,
+  currentStepIndex: 0,
+  // Mode: 'educator' | 'pupil' | null.
+  mode: null,
+  // Completion tracking.
+  completionSatisfied: false,
+  skippedSteps: [],
+  // Educator mode state.
+  isPickerActive: false,
+  pickingStepId: null,
+  selectedStepId: null,
+  pendingChanges: false,
+  // Pupil mode state.
+  tourProgress: {},
+  isRecovering: false,
+  lastError: null,
+  // Target resolution.
+  resolvedTarget: null,
+  resolutionAttempts: 0,
+  // UI state.
+  sidebarOpen: false,
+  aiDraftLoading: false,
+  aiDraftError: null,
+  aiDraftResult: null,
+  // AI tour generation (pupil mode).
+  aiTourLoading: false,
+  aiTourError: null,
+  ephemeralTour: null,
+  lastFailureContext: null
+};
+
+/**
+ * Action types.
+ */
+const ACTION_TYPES = {
+  // Tour loading.
+  SET_TOURS_LOADING: 'SET_TOURS_LOADING',
+  SET_TOURS_ERROR: 'SET_TOURS_ERROR',
+  RECEIVE_TOURS: 'RECEIVE_TOURS',
+  RECEIVE_TOUR: 'RECEIVE_TOUR',
+  // Tour selection/editing.
+  SET_CURRENT_TOUR: 'SET_CURRENT_TOUR',
+  // Tour playback.
+  START_TOUR: 'START_TOUR',
+  END_TOUR: 'END_TOUR',
+  SET_CURRENT_STEP: 'SET_CURRENT_STEP',
+  NEXT_STEP: 'NEXT_STEP',
+  PREVIOUS_STEP: 'PREVIOUS_STEP',
+  SKIP_STEP: 'SKIP_STEP',
+  REPEAT_STEP: 'REPEAT_STEP',
+  // Mode management.
+  SET_MODE: 'SET_MODE',
+  // Completion.
+  SET_COMPLETION_SATISFIED: 'SET_COMPLETION_SATISFIED',
+  RESET_COMPLETION: 'RESET_COMPLETION',
+  // Target resolution.
+  SET_RESOLVED_TARGET: 'SET_RESOLVED_TARGET',
+  CLEAR_RESOLVED_TARGET: 'CLEAR_RESOLVED_TARGET',
+  SET_RECOVERING: 'SET_RECOVERING',
+  INCREMENT_RESOLUTION_ATTEMPTS: 'INCREMENT_RESOLUTION_ATTEMPTS',
+  SET_LAST_ERROR: 'SET_LAST_ERROR',
+  // Educator mode.
+  ACTIVATE_PICKER: 'ACTIVATE_PICKER',
+  DEACTIVATE_PICKER: 'DEACTIVATE_PICKER',
+  SELECT_STEP: 'SELECT_STEP',
+  SET_PENDING_CHANGES: 'SET_PENDING_CHANGES',
+  UPDATE_STEP: 'UPDATE_STEP',
+  ADD_STEP: 'ADD_STEP',
+  DELETE_STEP: 'DELETE_STEP',
+  REORDER_STEPS: 'REORDER_STEPS',
+  // AI drafting.
+  SET_AI_DRAFT_LOADING: 'SET_AI_DRAFT_LOADING',
+  SET_AI_DRAFT_ERROR: 'SET_AI_DRAFT_ERROR',
+  SET_AI_DRAFT_RESULT: 'SET_AI_DRAFT_RESULT',
+  CLEAR_AI_DRAFT: 'CLEAR_AI_DRAFT',
+  // UI.
+  SET_SIDEBAR_OPEN: 'SET_SIDEBAR_OPEN',
+  // Ephemeral AI tours.
+  SET_AI_TOUR_LOADING: 'SET_AI_TOUR_LOADING',
+  RECEIVE_EPHEMERAL_TOUR: 'RECEIVE_EPHEMERAL_TOUR',
+  SET_AI_TOUR_ERROR: 'SET_AI_TOUR_ERROR',
+  CLEAR_EPHEMERAL_TOUR: 'CLEAR_EPHEMERAL_TOUR',
+  SET_LAST_FAILURE_CONTEXT: 'SET_LAST_FAILURE_CONTEXT'
+};
+
+/**
+ * Main reducer function.
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Action object.
+ * @return {Object} New state.
+ */
+function reducer(state = DEFAULT_STATE, action) {
+  switch (action.type) {
+    // Tour loading.
+    case ACTION_TYPES.SET_TOURS_LOADING:
+      return {
+        ...state,
+        toursLoading: action.isLoading
+      };
+    case ACTION_TYPES.SET_TOURS_ERROR:
+      return {
+        ...state,
+        toursError: action.error,
+        toursLoading: false
+      };
+    case ACTION_TYPES.RECEIVE_TOURS:
+      return {
+        ...state,
+        tours: action.tours.reduce((acc, tour) => {
+          acc[tour.id] = tour;
+          return acc;
+        }, {
+          ...state.tours
+        }),
+        toursLoading: false,
+        toursError: null
+      };
+    case ACTION_TYPES.RECEIVE_TOUR:
+      return {
+        ...state,
+        tours: {
+          ...state.tours,
+          [action.tour.id]: action.tour
+        },
+        toursLoading: false
+      };
+
+    // Tour selection for editing.
+    case ACTION_TYPES.SET_CURRENT_TOUR:
+      return {
+        ...state,
+        currentTourId: action.tourId,
+        currentStepIndex: 0,
+        mode: action.tourId ? 'educator' : null,
+        selectedStepId: null
+      };
+
+    // Tour playback.
+    case ACTION_TYPES.START_TOUR:
+      return {
+        ...state,
+        currentTourId: action.tourId,
+        currentStepIndex: 0,
+        mode: action.mode || 'pupil',
+        completionSatisfied: false,
+        skippedSteps: [],
+        lastError: null,
+        resolutionAttempts: 0
+      };
+    case ACTION_TYPES.END_TOUR:
+      return {
+        ...state,
+        currentTourId: null,
+        currentStepIndex: 0,
+        mode: null,
+        completionSatisfied: false,
+        resolvedTarget: null,
+        isRecovering: false,
+        lastError: null
+      };
+    case ACTION_TYPES.SET_CURRENT_STEP:
+      return {
+        ...state,
+        currentStepIndex: action.stepIndex,
+        completionSatisfied: false,
+        resolvedTarget: null,
+        resolutionAttempts: 0,
+        lastError: null
+      };
+    case ACTION_TYPES.NEXT_STEP:
+      {
+        const tour = state.tours[state.currentTourId];
+        const nextIndex = state.currentStepIndex + 1;
+        const hasMore = tour && nextIndex < tour.steps.length;
+        if (!hasMore) {
+          // Tour complete.
+          return {
+            ...state,
+            currentTourId: null,
+            currentStepIndex: 0,
+            mode: null,
+            completionSatisfied: false,
+            resolvedTarget: null
+          };
+        }
+        return {
+          ...state,
+          currentStepIndex: nextIndex,
+          completionSatisfied: false,
+          resolvedTarget: null,
+          resolutionAttempts: 0,
+          lastError: null
+        };
+      }
+    case ACTION_TYPES.PREVIOUS_STEP:
+      return {
+        ...state,
+        currentStepIndex: Math.max(0, state.currentStepIndex - 1),
+        completionSatisfied: false,
+        resolvedTarget: null,
+        resolutionAttempts: 0
+      };
+    case ACTION_TYPES.SKIP_STEP:
+      {
+        const tour = state.tours[state.currentTourId];
+        const currentStep = tour?.steps[state.currentStepIndex];
+        const nextIndex = state.currentStepIndex + 1;
+        const hasMore = tour && nextIndex < tour.steps.length;
+        const newSkipped = currentStep ? [...state.skippedSteps, currentStep.id] : state.skippedSteps;
+        if (!hasMore) {
+          return {
+            ...state,
+            skippedSteps: newSkipped,
+            currentTourId: null,
+            currentStepIndex: 0,
+            mode: null
+          };
+        }
+        return {
+          ...state,
+          currentStepIndex: nextIndex,
+          skippedSteps: newSkipped,
+          completionSatisfied: false,
+          resolvedTarget: null,
+          resolutionAttempts: 0
+        };
+      }
+    case ACTION_TYPES.REPEAT_STEP:
+      return {
+        ...state,
+        completionSatisfied: false,
+        resolvedTarget: null,
+        resolutionAttempts: 0,
+        lastError: null,
+        isRecovering: false
+      };
+
+    // Mode management.
+    case ACTION_TYPES.SET_MODE:
+      return {
+        ...state,
+        mode: action.mode
+      };
+
+    // Completion.
+    case ACTION_TYPES.SET_COMPLETION_SATISFIED:
+      return {
+        ...state,
+        completionSatisfied: action.satisfied
+      };
+    case ACTION_TYPES.RESET_COMPLETION:
+      return {
+        ...state,
+        completionSatisfied: false
+      };
+
+    // Target resolution.
+    case ACTION_TYPES.SET_RESOLVED_TARGET:
+      return {
+        ...state,
+        resolvedTarget: action.target,
+        lastError: null
+      };
+    case ACTION_TYPES.CLEAR_RESOLVED_TARGET:
+      return {
+        ...state,
+        resolvedTarget: null
+      };
+    case ACTION_TYPES.SET_RECOVERING:
+      return {
+        ...state,
+        isRecovering: action.isRecovering
+      };
+    case ACTION_TYPES.INCREMENT_RESOLUTION_ATTEMPTS:
+      return {
+        ...state,
+        resolutionAttempts: state.resolutionAttempts + 1
+      };
+    case ACTION_TYPES.SET_LAST_ERROR:
+      return {
+        ...state,
+        lastError: action.error
+      };
+
+    // Educator mode.
+    case ACTION_TYPES.ACTIVATE_PICKER:
+      return {
+        ...state,
+        isPickerActive: true,
+        pickingStepId: action.stepId || null
+      };
+    case ACTION_TYPES.DEACTIVATE_PICKER:
+      return {
+        ...state,
+        isPickerActive: false,
+        pickingStepId: null
+      };
+    case ACTION_TYPES.SELECT_STEP:
+      return {
+        ...state,
+        selectedStepId: action.stepId
+      };
+    case ACTION_TYPES.SET_PENDING_CHANGES:
+      return {
+        ...state,
+        pendingChanges: action.pending
+      };
+    case ACTION_TYPES.UPDATE_STEP:
+      {
+        const tour = state.tours[action.tourId];
+        if (!tour) {
+          return state;
+        }
+        const updatedSteps = tour.steps.map(step => step.id === action.stepId ? {
+          ...step,
+          ...action.updates
+        } : step);
+        return {
+          ...state,
+          tours: {
+            ...state.tours,
+            [action.tourId]: {
+              ...tour,
+              steps: updatedSteps
+            }
+          },
+          pendingChanges: true
+        };
+      }
+    case ACTION_TYPES.ADD_STEP:
+      {
+        var _action$index;
+        const tour = state.tours[action.tourId];
+        if (!tour) {
+          return state;
+        }
+        const newSteps = [...tour.steps];
+        const insertIndex = (_action$index = action.index) !== null && _action$index !== void 0 ? _action$index : newSteps.length;
+        newSteps.splice(insertIndex, 0, action.step);
+
+        // Re-index orders.
+        newSteps.forEach((step, i) => {
+          step.order = i;
+        });
+        return {
+          ...state,
+          tours: {
+            ...state.tours,
+            [action.tourId]: {
+              ...tour,
+              steps: newSteps
+            }
+          },
+          selectedStepId: action.step.id,
+          pendingChanges: true
+        };
+      }
+    case ACTION_TYPES.DELETE_STEP:
+      {
+        const tour = state.tours[action.tourId];
+        if (!tour) {
+          return state;
+        }
+        const filteredSteps = tour.steps.filter(step => step.id !== action.stepId);
+
+        // Re-index orders.
+        filteredSteps.forEach((step, i) => {
+          step.order = i;
+        });
+        return {
+          ...state,
+          tours: {
+            ...state.tours,
+            [action.tourId]: {
+              ...tour,
+              steps: filteredSteps
+            }
+          },
+          selectedStepId: state.selectedStepId === action.stepId ? null : state.selectedStepId,
+          pendingChanges: true
+        };
+      }
+    case ACTION_TYPES.REORDER_STEPS:
+      {
+        const tour = state.tours[action.tourId];
+        if (!tour) {
+          return state;
+        }
+        const stepsMap = {};
+        tour.steps.forEach(step => {
+          stepsMap[step.id] = step;
+        });
+        const reorderedSteps = action.stepIds.map((id, index) => ({
+          ...stepsMap[id],
+          order: index
+        }));
+        return {
+          ...state,
+          tours: {
+            ...state.tours,
+            [action.tourId]: {
+              ...tour,
+              steps: reorderedSteps
+            }
+          },
+          pendingChanges: true
+        };
+      }
+
+    // AI drafting.
+    case ACTION_TYPES.SET_AI_DRAFT_LOADING:
+      return {
+        ...state,
+        aiDraftLoading: action.isLoading,
+        aiDraftError: action.isLoading ? null : state.aiDraftError
+      };
+    case ACTION_TYPES.SET_AI_DRAFT_ERROR:
+      return {
+        ...state,
+        aiDraftError: action.error,
+        aiDraftLoading: false
+      };
+    case ACTION_TYPES.SET_AI_DRAFT_RESULT:
+      return {
+        ...state,
+        aiDraftResult: action.result,
+        aiDraftLoading: false,
+        aiDraftError: null
+      };
+    case ACTION_TYPES.CLEAR_AI_DRAFT:
+      return {
+        ...state,
+        aiDraftResult: null,
+        aiDraftError: null,
+        aiDraftLoading: false
+      };
+
+    // UI.
+    case ACTION_TYPES.SET_SIDEBAR_OPEN:
+      return {
+        ...state,
+        sidebarOpen: action.isOpen
+      };
+
+    // AI tour generation (pupil mode).
+    case ACTION_TYPES.SET_AI_TOUR_LOADING:
+      return {
+        ...state,
+        aiTourLoading: action.isLoading,
+        aiTourError: action.isLoading ? null : state.aiTourError
+      };
+    case ACTION_TYPES.SET_AI_TOUR_ERROR:
+      return {
+        ...state,
+        aiTourError: action.error,
+        aiTourLoading: false
+      };
+    case ACTION_TYPES.RECEIVE_EPHEMERAL_TOUR:
+      return {
+        ...state,
+        ephemeralTour: action.tour,
+        aiTourLoading: false,
+        aiTourError: null,
+        // Also put it in tours with special 'ephemeral' key.
+        tours: {
+          ...state.tours,
+          ephemeral: action.tour
+        }
+      };
+    case ACTION_TYPES.CLEAR_EPHEMERAL_TOUR:
+      return {
+        ...state,
+        ephemeralTour: null,
+        aiTourError: null,
+        aiTourLoading: false,
+        lastFailureContext: null,
+        // Remove from tours.
+        tours: Object.fromEntries(Object.entries(state.tours).filter(([key]) => key !== 'ephemeral'))
+      };
+    case ACTION_TYPES.SET_LAST_FAILURE_CONTEXT:
+      return {
+        ...state,
+        lastFailureContext: action.failureContext
+      };
+    default:
+      return state;
+  }
+}
+
+/***/ },
+
+/***/ "./assets/js/store/resolvers.js"
+/*!**************************************!*\
+  !*** ./assets/js/store/resolvers.js ***!
+  \**************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getTour: () => (/* binding */ getTour),
+/* harmony export */   getTours: () => (/* binding */ getTours),
+/* harmony export */   getToursByPostType: () => (/* binding */ getToursByPostType)
+/* harmony export */ });
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./actions */ "./assets/js/store/actions.js");
+/**
+ * Store resolvers for async data fetching.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+
+/**
+ * Resolver for getTours.
+ *
+ * @return {Function} Generator function.
+ */
+function* getTours() {
+  yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursLoading)(true);
+  try {
+    const tours = yield {
+      type: 'API_FETCH',
+      request: {
+        path: '/admin-coach-tours/v1/tours',
+        method: 'GET'
+      }
+    };
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.receiveTours)(tours);
+  } catch (error) {
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursError)(error.message || 'Failed to fetch tours');
+  }
+}
+
+/**
+ * Resolver for getTour.
+ *
+ * @param {number} tourId Tour ID.
+ * @return {Function} Generator function.
+ */
+function* getTour(tourId) {
+  yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursLoading)(true);
+  try {
+    const tour = yield {
+      type: 'API_FETCH',
+      request: {
+        path: `/admin-coach-tours/v1/tours/${tourId}`,
+        method: 'GET'
+      }
+    };
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.receiveTour)(tour);
+  } catch (error) {
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursError)(error.message || 'Failed to fetch tour');
+  }
+}
+
+/**
+ * Resolver for getToursByPostType.
+ *
+ * @param {string} postType Post type.
+ * @return {Function} Generator function.
+ */
+function* getToursByPostType(postType) {
+  yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursLoading)(true);
+  try {
+    const tours = yield {
+      type: 'API_FETCH',
+      request: {
+        path: `/admin-coach-tours/v1/tours?post_type=${postType}&editor=block`,
+        method: 'GET'
+      }
+    };
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.receiveTours)(tours);
+  } catch (error) {
+    yield (0,_actions__WEBPACK_IMPORTED_MODULE_1__.setToursError)(error.message || 'Failed to fetch tours');
+  }
+}
+
+/***/ },
+
+/***/ "./assets/js/store/selectors.js"
+/*!**************************************!*\
+  !*** ./assets/js/store/selectors.js ***!
+  \**************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getAiDraft: () => (/* binding */ getAiDraft),
+/* harmony export */   getAiDraftError: () => (/* binding */ getAiDraftError),
+/* harmony export */   getAiDraftResult: () => (/* binding */ getAiDraftResult),
+/* harmony export */   getAiTourError: () => (/* binding */ getAiTourError),
+/* harmony export */   getCurrentStep: () => (/* binding */ getCurrentStep),
+/* harmony export */   getCurrentStepIndex: () => (/* binding */ getCurrentStepIndex),
+/* harmony export */   getCurrentTour: () => (/* binding */ getCurrentTour),
+/* harmony export */   getCurrentTourId: () => (/* binding */ getCurrentTourId),
+/* harmony export */   getEphemeralTour: () => (/* binding */ getEphemeralTour),
+/* harmony export */   getLastError: () => (/* binding */ getLastError),
+/* harmony export */   getLastFailureContext: () => (/* binding */ getLastFailureContext),
+/* harmony export */   getMode: () => (/* binding */ getMode),
+/* harmony export */   getPickingStepId: () => (/* binding */ getPickingStepId),
+/* harmony export */   getProgress: () => (/* binding */ getProgress),
+/* harmony export */   getResolutionAttempts: () => (/* binding */ getResolutionAttempts),
+/* harmony export */   getResolvedTarget: () => (/* binding */ getResolvedTarget),
+/* harmony export */   getSelectedStep: () => (/* binding */ getSelectedStep),
+/* harmony export */   getSelectedStepId: () => (/* binding */ getSelectedStepId),
+/* harmony export */   getSkippedSteps: () => (/* binding */ getSkippedSteps),
+/* harmony export */   getTotalSteps: () => (/* binding */ getTotalSteps),
+/* harmony export */   getTour: () => (/* binding */ getTour),
+/* harmony export */   getTours: () => (/* binding */ getTours),
+/* harmony export */   getToursByEditor: () => (/* binding */ getToursByEditor),
+/* harmony export */   getToursById: () => (/* binding */ getToursById),
+/* harmony export */   getToursByPostType: () => (/* binding */ getToursByPostType),
+/* harmony export */   getToursError: () => (/* binding */ getToursError),
+/* harmony export */   hasNextStep: () => (/* binding */ hasNextStep),
+/* harmony export */   hasPendingChanges: () => (/* binding */ hasPendingChanges),
+/* harmony export */   hasPreviousStep: () => (/* binding */ hasPreviousStep),
+/* harmony export */   isAiDraftLoading: () => (/* binding */ isAiDraftLoading),
+/* harmony export */   isAiDrafting: () => (/* binding */ isAiDrafting),
+/* harmony export */   isAiTourLoading: () => (/* binding */ isAiTourLoading),
+/* harmony export */   isCompletionSatisfied: () => (/* binding */ isCompletionSatisfied),
+/* harmony export */   isEducatorMode: () => (/* binding */ isEducatorMode),
+/* harmony export */   isEphemeralTourActive: () => (/* binding */ isEphemeralTourActive),
+/* harmony export */   isPickerActive: () => (/* binding */ isPickerActive),
+/* harmony export */   isPupilMode: () => (/* binding */ isPupilMode),
+/* harmony export */   isRecovering: () => (/* binding */ isRecovering),
+/* harmony export */   isSidebarOpen: () => (/* binding */ isSidebarOpen),
+/* harmony export */   isTourActive: () => (/* binding */ isTourActive),
+/* harmony export */   isToursLoading: () => (/* binding */ isToursLoading),
+/* harmony export */   wasStepSkipped: () => (/* binding */ wasStepSkipped)
+/* harmony export */ });
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Store selectors.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+// ============================================================================
+// Tour Selectors
+// ============================================================================
+
+/**
+ * Get tours as an object keyed by ID.
+ *
+ * @param {Object} state Store state.
+ * @return {Object} Tours object.
+ */
+function getToursById(state) {
+  return state.tours;
+}
+
+/**
+ * Get all tours as an array (memoized).
+ *
+ * @param {Object} state Store state.
+ * @return {Array} Array of tours.
+ */
+const getTours = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.tours), state => [state.tours]);
+
+/**
+ * Get a single tour by ID.
+ *
+ * @param {Object} state  Store state.
+ * @param {number} tourId Tour ID.
+ * @return {Object|null} Tour object or null.
+ */
+function getTour(state, tourId) {
+  return state.tours[tourId] || null;
+}
+
+/**
+ * Get tours loading state.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Loading state.
+ */
+function isToursLoading(state) {
+  return state.toursLoading;
+}
+
+/**
+ * Get tours error.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Error message.
+ */
+function getToursError(state) {
+  return state.toursError;
+}
+
+/**
+ * Get tours filtered by post type (memoized).
+ *
+ * @param {Object} state    Store state.
+ * @param {string} postType Post type to filter by.
+ * @return {Array} Filtered tours.
+ */
+const getToursByPostType = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)((state, postType) => getTours(state).filter(tour => tour.postTypes && tour.postTypes.includes(postType) && tour.status === 'publish'), (state, postType) => [state.tours, postType]);
+
+/**
+ * Get tours filtered by editor type (memoized).
+ *
+ * @param {Object} state  Store state.
+ * @param {string} editor Editor type ('block', 'classic', 'site').
+ * @return {Array} Filtered tours.
+ */
+const getToursByEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)((state, editor) => getTours(state).filter(tour => tour.editor === editor && tour.status === 'publish'), (state, editor) => [state.tours, editor]);
+
+// ============================================================================
+// Current Tour Selectors
+// ============================================================================
+
+/**
+ * Get current tour ID.
+ *
+ * @param {Object} state Store state.
+ * @return {number|null} Current tour ID.
+ */
+function getCurrentTourId(state) {
+  return state.currentTourId;
+}
+
+/**
+ * Get current tour object.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Current tour.
+ */
+function getCurrentTour(state) {
+  return state.currentTourId ? state.tours[state.currentTourId] : null;
+}
+
+/**
+ * Get current step index.
+ *
+ * @param {Object} state Store state.
+ * @return {number} Current step index.
+ */
+function getCurrentStepIndex(state) {
+  return state.currentStepIndex;
+}
+
+/**
+ * Get current step object (memoized).
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Current step.
+ */
+const getCurrentStep = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => {
+  const tour = getCurrentTour(state);
+  if (!tour || !tour.steps) {
+    return null;
+  }
+  return tour.steps[state.currentStepIndex] || null;
+}, state => [state.tours, state.currentTourId, state.currentStepIndex]);
+
+/**
+ * Get total steps count for current tour.
+ *
+ * @param {Object} state Store state.
+ * @return {number} Total steps.
+ */
+function getTotalSteps(state) {
+  const tour = getCurrentTour(state);
+  return tour?.steps?.length || 0;
+}
+
+/**
+ * Check if there is a next step.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Has next step.
+ */
+function hasNextStep(state) {
+  return state.currentStepIndex < getTotalSteps(state) - 1;
+}
+
+/**
+ * Check if there is a previous step.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Has previous step.
+ */
+function hasPreviousStep(state) {
+  return state.currentStepIndex > 0;
+}
+
+/**
+ * Get tour progress as percentage.
+ *
+ * @param {Object} state Store state.
+ * @return {number} Progress (0-100).
+ */
+function getProgress(state) {
+  const total = getTotalSteps(state);
+  if (total === 0) {
+    return 0;
+  }
+  return Math.round((state.currentStepIndex + 1) / total * 100);
+}
+
+// ============================================================================
+// Mode Selectors
+// ============================================================================
+
+/**
+ * Get current mode.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Mode ('educator' | 'pupil' | null).
+ */
+function getMode(state) {
+  return state.mode;
+}
+
+/**
+ * Check if in educator mode.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Is educator mode.
+ */
+function isEducatorMode(state) {
+  return state.mode === 'educator';
+}
+
+/**
+ * Check if in pupil mode.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Is pupil mode.
+ */
+function isPupilMode(state) {
+  return state.mode === 'pupil';
+}
+
+/**
+ * Check if a tour is active.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Tour is active.
+ */
+function isTourActive(state) {
+  return state.currentTourId !== null && state.mode !== null;
+}
+
+// ============================================================================
+// Completion Selectors
+// ============================================================================
+
+/**
+ * Check if completion is satisfied.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Completion satisfied.
+ */
+function isCompletionSatisfied(state) {
+  return state.completionSatisfied;
+}
+
+/**
+ * Get skipped steps.
+ *
+ * @param {Object} state Store state.
+ * @return {string[]} Array of skipped step IDs.
+ */
+function getSkippedSteps(state) {
+  return state.skippedSteps;
+}
+
+/**
+ * Check if a specific step was skipped.
+ *
+ * @param {Object} state  Store state.
+ * @param {string} stepId Step ID.
+ * @return {boolean} Was skipped.
+ */
+function wasStepSkipped(state, stepId) {
+  return state.skippedSteps.includes(stepId);
+}
+
+// ============================================================================
+// Target Resolution Selectors
+// ============================================================================
+
+/**
+ * Get resolved target.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Resolved target info.
+ */
+function getResolvedTarget(state) {
+  return state.resolvedTarget;
+}
+
+/**
+ * Check if currently recovering.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Is recovering.
+ */
+function isRecovering(state) {
+  return state.isRecovering;
+}
+
+/**
+ * Get resolution attempts count.
+ *
+ * @param {Object} state Store state.
+ * @return {number} Attempts count.
+ */
+function getResolutionAttempts(state) {
+  return state.resolutionAttempts;
+}
+
+/**
+ * Get last error.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Error message.
+ */
+function getLastError(state) {
+  return state.lastError;
+}
+
+// ============================================================================
+// Educator Mode Selectors
+// ============================================================================
+
+/**
+ * Check if picker is active.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Picker active.
+ */
+function isPickerActive(state) {
+  return state.isPickerActive;
+}
+
+/**
+ * Get the step ID being picked for (if repicking target).
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Step ID or null if adding new step.
+ */
+function getPickingStepId(state) {
+  return state.pickingStepId || null;
+}
+
+/**
+ * Get selected step ID.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Selected step ID.
+ */
+function getSelectedStepId(state) {
+  return state.selectedStepId;
+}
+
+/**
+ * Get selected step object (memoized).
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Selected step.
+ */
+const getSelectedStep = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => {
+  const tour = getCurrentTour(state);
+  if (!tour || !state.selectedStepId) {
+    return null;
+  }
+  return tour.steps.find(step => step.id === state.selectedStepId);
+}, state => [state.tours, state.currentTourId, state.selectedStepId]);
+
+/**
+ * Check if there are pending changes.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Has pending changes.
+ */
+function hasPendingChanges(state) {
+  return state.pendingChanges;
+}
+
+// ============================================================================
+// AI Draft Selectors
+// ============================================================================
+
+/**
+ * Check if AI draft is loading.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} AI draft loading.
+ */
+function isAiDraftLoading(state) {
+  return state.aiDraftLoading;
+}
+
+/**
+ * Check if AI drafting is in progress (alias for isAiDraftLoading).
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} AI drafting in progress.
+ */
+function isAiDrafting(state) {
+  return isAiDraftLoading(state);
+}
+
+/**
+ * Get AI draft error.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Error message.
+ */
+function getAiDraftError(state) {
+  return state.aiDraftError;
+}
+
+/**
+ * Get AI draft result.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} AI draft output.
+ */
+function getAiDraftResult(state) {
+  return state.aiDraftResult;
+}
+
+/**
+ * Get AI draft (alias for getAiDraftResult).
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} AI draft output.
+ */
+function getAiDraft(state) {
+  return getAiDraftResult(state);
+}
+
+// ============================================================================
+// UI Selectors
+// ============================================================================
+
+/**
+ * Check if sidebar is open.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Sidebar open.
+ */
+function isSidebarOpen(state) {
+  return state.sidebarOpen;
+}
+
+// ============================================================================
+// AI Tour Selectors (Pupil Mode)
+// ============================================================================
+
+/**
+ * Check if AI tour is loading.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} AI tour loading.
+ */
+function isAiTourLoading(state) {
+  return state.aiTourLoading;
+}
+
+/**
+ * Get AI tour error.
+ *
+ * @param {Object} state Store state.
+ * @return {string|null} Error message.
+ */
+function getAiTourError(state) {
+  return state.aiTourError;
+}
+
+/**
+ * Get last failure context for contextual retry.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Failure context.
+ */
+function getLastFailureContext(state) {
+  return state.lastFailureContext;
+}
+
+/**
+ * Get ephemeral tour.
+ *
+ * @param {Object} state Store state.
+ * @return {Object|null} Ephemeral tour.
+ */
+function getEphemeralTour(state) {
+  return state.ephemeralTour;
+}
+
+/**
+ * Check if currently running an ephemeral tour.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Is ephemeral tour active.
+ */
+function isEphemeralTourActive(state) {
+  return state.currentTourId === 'ephemeral' && state.mode === 'pupil';
+}
+
+/***/ },
+
+/***/ "./node_modules/@dnd-kit/accessibility/dist/accessibility.esm.js"
+/*!***********************************************************************!*\
+  !*** ./node_modules/@dnd-kit/accessibility/dist/accessibility.esm.js ***!
+  \***********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HiddenText: () => (/* binding */ HiddenText),
+/* harmony export */   LiveRegion: () => (/* binding */ LiveRegion),
+/* harmony export */   useAnnouncement: () => (/* binding */ useAnnouncement)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const hiddenStyles = {
+  display: 'none'
+};
+function HiddenText(_ref) {
+  let {
+    id,
+    value
+  } = _ref;
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: id,
+    style: hiddenStyles
+  }, value);
+}
+
+function LiveRegion(_ref) {
+  let {
+    id,
+    announcement,
+    ariaLiveType = "assertive"
+  } = _ref;
+  // Hide element visually but keep it readable by screen readers
+  const visuallyHidden = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: 1,
+    height: 1,
+    margin: -1,
+    border: 0,
+    padding: 0,
+    overflow: 'hidden',
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(100%)',
+    whiteSpace: 'nowrap'
+  };
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: id,
+    style: visuallyHidden,
+    role: "status",
+    "aria-live": ariaLiveType,
+    "aria-atomic": true
+  }, announcement);
+}
+
+function useAnnouncement() {
+  const [announcement, setAnnouncement] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const announce = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(value => {
+    if (value != null) {
+      setAnnouncement(value);
+    }
+  }, []);
+  return {
+    announce,
+    announcement
+  };
+}
+
+
+//# sourceMappingURL=accessibility.esm.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/@dnd-kit/core/dist/core.esm.js"
+/*!*****************************************************!*\
+  !*** ./node_modules/@dnd-kit/core/dist/core.esm.js ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AutoScrollActivator: () => (/* binding */ AutoScrollActivator),
+/* harmony export */   DndContext: () => (/* binding */ DndContext),
+/* harmony export */   DragOverlay: () => (/* binding */ DragOverlay),
+/* harmony export */   KeyboardCode: () => (/* binding */ KeyboardCode),
+/* harmony export */   KeyboardSensor: () => (/* binding */ KeyboardSensor),
+/* harmony export */   MeasuringFrequency: () => (/* binding */ MeasuringFrequency),
+/* harmony export */   MeasuringStrategy: () => (/* binding */ MeasuringStrategy),
+/* harmony export */   MouseSensor: () => (/* binding */ MouseSensor),
+/* harmony export */   PointerSensor: () => (/* binding */ PointerSensor),
+/* harmony export */   TouchSensor: () => (/* binding */ TouchSensor),
+/* harmony export */   TraversalOrder: () => (/* binding */ TraversalOrder),
+/* harmony export */   applyModifiers: () => (/* binding */ applyModifiers),
+/* harmony export */   closestCenter: () => (/* binding */ closestCenter),
+/* harmony export */   closestCorners: () => (/* binding */ closestCorners),
+/* harmony export */   defaultAnnouncements: () => (/* binding */ defaultAnnouncements),
+/* harmony export */   defaultCoordinates: () => (/* binding */ defaultCoordinates),
+/* harmony export */   defaultDropAnimation: () => (/* binding */ defaultDropAnimationConfiguration),
+/* harmony export */   defaultDropAnimationSideEffects: () => (/* binding */ defaultDropAnimationSideEffects),
+/* harmony export */   defaultKeyboardCoordinateGetter: () => (/* binding */ defaultKeyboardCoordinateGetter),
+/* harmony export */   defaultScreenReaderInstructions: () => (/* binding */ defaultScreenReaderInstructions),
+/* harmony export */   getClientRect: () => (/* binding */ getClientRect),
+/* harmony export */   getFirstCollision: () => (/* binding */ getFirstCollision),
+/* harmony export */   getScrollableAncestors: () => (/* binding */ getScrollableAncestors),
+/* harmony export */   pointerWithin: () => (/* binding */ pointerWithin),
+/* harmony export */   rectIntersection: () => (/* binding */ rectIntersection),
+/* harmony export */   useDndContext: () => (/* binding */ useDndContext),
+/* harmony export */   useDndMonitor: () => (/* binding */ useDndMonitor),
+/* harmony export */   useDraggable: () => (/* binding */ useDraggable),
+/* harmony export */   useDroppable: () => (/* binding */ useDroppable),
+/* harmony export */   useSensor: () => (/* binding */ useSensor),
+/* harmony export */   useSensors: () => (/* binding */ useSensors)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @dnd-kit/utilities */ "./node_modules/@dnd-kit/utilities/dist/utilities.esm.js");
+/* harmony import */ var _dnd_kit_accessibility__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @dnd-kit/accessibility */ "./node_modules/@dnd-kit/accessibility/dist/accessibility.esm.js");
+
+
+
+
+
+const DndMonitorContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+
+function useDndMonitor(listener) {
+  const registerListener = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(DndMonitorContext);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!registerListener) {
+      throw new Error('useDndMonitor must be used within a children of <DndContext>');
+    }
+
+    const unsubscribe = registerListener(listener);
+    return unsubscribe;
+  }, [listener, registerListener]);
+}
+
+function useDndMonitorProvider() {
+  const [listeners] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(() => new Set());
+  const registerListener = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(listener => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  }, [listeners]);
+  const dispatch = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(_ref => {
+    let {
+      type,
+      event
+    } = _ref;
+    listeners.forEach(listener => {
+      var _listener$type;
+
+      return (_listener$type = listener[type]) == null ? void 0 : _listener$type.call(listener, event);
+    });
+  }, [listeners]);
+  return [dispatch, registerListener];
+}
+
+const defaultScreenReaderInstructions = {
+  draggable: "\n    To pick up a draggable item, press the space bar.\n    While dragging, use the arrow keys to move the item.\n    Press space again to drop the item in its new position, or press escape to cancel.\n  "
+};
+const defaultAnnouncements = {
+  onDragStart(_ref) {
+    let {
+      active
+    } = _ref;
+    return "Picked up draggable item " + active.id + ".";
+  },
+
+  onDragOver(_ref2) {
+    let {
+      active,
+      over
+    } = _ref2;
+
+    if (over) {
+      return "Draggable item " + active.id + " was moved over droppable area " + over.id + ".";
+    }
+
+    return "Draggable item " + active.id + " is no longer over a droppable area.";
+  },
+
+  onDragEnd(_ref3) {
+    let {
+      active,
+      over
+    } = _ref3;
+
+    if (over) {
+      return "Draggable item " + active.id + " was dropped over droppable area " + over.id;
+    }
+
+    return "Draggable item " + active.id + " was dropped.";
+  },
+
+  onDragCancel(_ref4) {
+    let {
+      active
+    } = _ref4;
+    return "Dragging was cancelled. Draggable item " + active.id + " was dropped.";
+  }
+
+};
+
+function Accessibility(_ref) {
+  let {
+    announcements = defaultAnnouncements,
+    container,
+    hiddenTextDescribedById,
+    screenReaderInstructions = defaultScreenReaderInstructions
+  } = _ref;
+  const {
+    announce,
+    announcement
+  } = (0,_dnd_kit_accessibility__WEBPACK_IMPORTED_MODULE_3__.useAnnouncement)();
+  const liveRegionId = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useUniqueId)("DndLiveRegion");
+  const [mounted, setMounted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setMounted(true);
+  }, []);
+  useDndMonitor((0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    onDragStart(_ref2) {
+      let {
+        active
+      } = _ref2;
+      announce(announcements.onDragStart({
+        active
+      }));
+    },
+
+    onDragMove(_ref3) {
+      let {
+        active,
+        over
+      } = _ref3;
+
+      if (announcements.onDragMove) {
+        announce(announcements.onDragMove({
+          active,
+          over
+        }));
+      }
+    },
+
+    onDragOver(_ref4) {
+      let {
+        active,
+        over
+      } = _ref4;
+      announce(announcements.onDragOver({
+        active,
+        over
+      }));
+    },
+
+    onDragEnd(_ref5) {
+      let {
+        active,
+        over
+      } = _ref5;
+      announce(announcements.onDragEnd({
+        active,
+        over
+      }));
+    },
+
+    onDragCancel(_ref6) {
+      let {
+        active,
+        over
+      } = _ref6;
+      announce(announcements.onDragCancel({
+        active,
+        over
+      }));
+    }
+
+  }), [announce, announcements]));
+
+  if (!mounted) {
+    return null;
+  }
+
+  const markup = react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_dnd_kit_accessibility__WEBPACK_IMPORTED_MODULE_3__.HiddenText, {
+    id: hiddenTextDescribedById,
+    value: screenReaderInstructions.draggable
+  }), react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_dnd_kit_accessibility__WEBPACK_IMPORTED_MODULE_3__.LiveRegion, {
+    id: liveRegionId,
+    announcement: announcement
+  }));
+  return container ? (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(markup, container) : markup;
+}
+
+var Action;
+
+(function (Action) {
+  Action["DragStart"] = "dragStart";
+  Action["DragMove"] = "dragMove";
+  Action["DragEnd"] = "dragEnd";
+  Action["DragCancel"] = "dragCancel";
+  Action["DragOver"] = "dragOver";
+  Action["RegisterDroppable"] = "registerDroppable";
+  Action["SetDroppableDisabled"] = "setDroppableDisabled";
+  Action["UnregisterDroppable"] = "unregisterDroppable";
+})(Action || (Action = {}));
+
+function noop() {}
+
+function useSensor(sensor, options) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    sensor,
+    options: options != null ? options : {}
+  }), // eslint-disable-next-line react-hooks/exhaustive-deps
+  [sensor, options]);
+}
+
+function useSensors() {
+  for (var _len = arguments.length, sensors = new Array(_len), _key = 0; _key < _len; _key++) {
+    sensors[_key] = arguments[_key];
+  }
+
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => [...sensors].filter(sensor => sensor != null), // eslint-disable-next-line react-hooks/exhaustive-deps
+  [...sensors]);
+}
+
+const defaultCoordinates = /*#__PURE__*/Object.freeze({
+  x: 0,
+  y: 0
+});
+
+/**
+ * Returns the distance between two points
+ */
+function distanceBetween(p1, p2) {
+  return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
+function getRelativeTransformOrigin(event, rect) {
+  const eventCoordinates = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getEventCoordinates)(event);
+
+  if (!eventCoordinates) {
+    return '0 0';
+  }
+
+  const transformOrigin = {
+    x: (eventCoordinates.x - rect.left) / rect.width * 100,
+    y: (eventCoordinates.y - rect.top) / rect.height * 100
+  };
+  return transformOrigin.x + "% " + transformOrigin.y + "%";
+}
+
+/**
+ * Sort collisions from smallest to greatest value
+ */
+function sortCollisionsAsc(_ref, _ref2) {
+  let {
+    data: {
+      value: a
+    }
+  } = _ref;
+  let {
+    data: {
+      value: b
+    }
+  } = _ref2;
+  return a - b;
+}
+/**
+ * Sort collisions from greatest to smallest value
+ */
+
+function sortCollisionsDesc(_ref3, _ref4) {
+  let {
+    data: {
+      value: a
+    }
+  } = _ref3;
+  let {
+    data: {
+      value: b
+    }
+  } = _ref4;
+  return b - a;
+}
+/**
+ * Returns the coordinates of the corners of a given rectangle:
+ * [TopLeft {x, y}, TopRight {x, y}, BottomLeft {x, y}, BottomRight {x, y}]
+ */
+
+function cornersOfRectangle(_ref5) {
+  let {
+    left,
+    top,
+    height,
+    width
+  } = _ref5;
+  return [{
+    x: left,
+    y: top
+  }, {
+    x: left + width,
+    y: top
+  }, {
+    x: left,
+    y: top + height
+  }, {
+    x: left + width,
+    y: top + height
+  }];
+}
+function getFirstCollision(collisions, property) {
+  if (!collisions || collisions.length === 0) {
+    return null;
+  }
+
+  const [firstCollision] = collisions;
+  return property ? firstCollision[property] : firstCollision;
+}
+
+/**
+ * Returns the coordinates of the center of a given ClientRect
+ */
+
+function centerOfRectangle(rect, left, top) {
+  if (left === void 0) {
+    left = rect.left;
+  }
+
+  if (top === void 0) {
+    top = rect.top;
+  }
+
+  return {
+    x: left + rect.width * 0.5,
+    y: top + rect.height * 0.5
+  };
+}
+/**
+ * Returns the closest rectangles from an array of rectangles to the center of a given
+ * rectangle.
+ */
+
+
+const closestCenter = _ref => {
+  let {
+    collisionRect,
+    droppableRects,
+    droppableContainers
+  } = _ref;
+  const centerRect = centerOfRectangle(collisionRect, collisionRect.left, collisionRect.top);
+  const collisions = [];
+
+  for (const droppableContainer of droppableContainers) {
+    const {
+      id
+    } = droppableContainer;
+    const rect = droppableRects.get(id);
+
+    if (rect) {
+      const distBetween = distanceBetween(centerOfRectangle(rect), centerRect);
+      collisions.push({
+        id,
+        data: {
+          droppableContainer,
+          value: distBetween
+        }
+      });
+    }
+  }
+
+  return collisions.sort(sortCollisionsAsc);
+};
+
+/**
+ * Returns the closest rectangles from an array of rectangles to the corners of
+ * another rectangle.
+ */
+
+const closestCorners = _ref => {
+  let {
+    collisionRect,
+    droppableRects,
+    droppableContainers
+  } = _ref;
+  const corners = cornersOfRectangle(collisionRect);
+  const collisions = [];
+
+  for (const droppableContainer of droppableContainers) {
+    const {
+      id
+    } = droppableContainer;
+    const rect = droppableRects.get(id);
+
+    if (rect) {
+      const rectCorners = cornersOfRectangle(rect);
+      const distances = corners.reduce((accumulator, corner, index) => {
+        return accumulator + distanceBetween(rectCorners[index], corner);
+      }, 0);
+      const effectiveDistance = Number((distances / 4).toFixed(4));
+      collisions.push({
+        id,
+        data: {
+          droppableContainer,
+          value: effectiveDistance
+        }
+      });
+    }
+  }
+
+  return collisions.sort(sortCollisionsAsc);
+};
+
+/**
+ * Returns the intersecting rectangle area between two rectangles
+ */
+
+function getIntersectionRatio(entry, target) {
+  const top = Math.max(target.top, entry.top);
+  const left = Math.max(target.left, entry.left);
+  const right = Math.min(target.left + target.width, entry.left + entry.width);
+  const bottom = Math.min(target.top + target.height, entry.top + entry.height);
+  const width = right - left;
+  const height = bottom - top;
+
+  if (left < right && top < bottom) {
+    const targetArea = target.width * target.height;
+    const entryArea = entry.width * entry.height;
+    const intersectionArea = width * height;
+    const intersectionRatio = intersectionArea / (targetArea + entryArea - intersectionArea);
+    return Number(intersectionRatio.toFixed(4));
+  } // Rectangles do not overlap, or overlap has an area of zero (edge/corner overlap)
+
+
+  return 0;
+}
+/**
+ * Returns the rectangles that has the greatest intersection area with a given
+ * rectangle in an array of rectangles.
+ */
+
+const rectIntersection = _ref => {
+  let {
+    collisionRect,
+    droppableRects,
+    droppableContainers
+  } = _ref;
+  const collisions = [];
+
+  for (const droppableContainer of droppableContainers) {
+    const {
+      id
+    } = droppableContainer;
+    const rect = droppableRects.get(id);
+
+    if (rect) {
+      const intersectionRatio = getIntersectionRatio(rect, collisionRect);
+
+      if (intersectionRatio > 0) {
+        collisions.push({
+          id,
+          data: {
+            droppableContainer,
+            value: intersectionRatio
+          }
+        });
+      }
+    }
+  }
+
+  return collisions.sort(sortCollisionsDesc);
+};
+
+/**
+ * Check if a given point is contained within a bounding rectangle
+ */
+
+function isPointWithinRect(point, rect) {
+  const {
+    top,
+    left,
+    bottom,
+    right
+  } = rect;
+  return top <= point.y && point.y <= bottom && left <= point.x && point.x <= right;
+}
+/**
+ * Returns the rectangles that the pointer is hovering over
+ */
+
+
+const pointerWithin = _ref => {
+  let {
+    droppableContainers,
+    droppableRects,
+    pointerCoordinates
+  } = _ref;
+
+  if (!pointerCoordinates) {
+    return [];
+  }
+
+  const collisions = [];
+
+  for (const droppableContainer of droppableContainers) {
+    const {
+      id
+    } = droppableContainer;
+    const rect = droppableRects.get(id);
+
+    if (rect && isPointWithinRect(pointerCoordinates, rect)) {
+      /* There may be more than a single rectangle intersecting
+       * with the pointer coordinates. In order to sort the
+       * colliding rectangles, we measure the distance between
+       * the pointer and the corners of the intersecting rectangle
+       */
+      const corners = cornersOfRectangle(rect);
+      const distances = corners.reduce((accumulator, corner) => {
+        return accumulator + distanceBetween(pointerCoordinates, corner);
+      }, 0);
+      const effectiveDistance = Number((distances / 4).toFixed(4));
+      collisions.push({
+        id,
+        data: {
+          droppableContainer,
+          value: effectiveDistance
+        }
+      });
+    }
+  }
+
+  return collisions.sort(sortCollisionsAsc);
+};
+
+function adjustScale(transform, rect1, rect2) {
+  return { ...transform,
+    scaleX: rect1 && rect2 ? rect1.width / rect2.width : 1,
+    scaleY: rect1 && rect2 ? rect1.height / rect2.height : 1
+  };
+}
+
+function getRectDelta(rect1, rect2) {
+  return rect1 && rect2 ? {
+    x: rect1.left - rect2.left,
+    y: rect1.top - rect2.top
+  } : defaultCoordinates;
+}
+
+function createRectAdjustmentFn(modifier) {
+  return function adjustClientRect(rect) {
+    for (var _len = arguments.length, adjustments = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      adjustments[_key - 1] = arguments[_key];
+    }
+
+    return adjustments.reduce((acc, adjustment) => ({ ...acc,
+      top: acc.top + modifier * adjustment.y,
+      bottom: acc.bottom + modifier * adjustment.y,
+      left: acc.left + modifier * adjustment.x,
+      right: acc.right + modifier * adjustment.x
+    }), { ...rect
+    });
+  };
+}
+const getAdjustedRect = /*#__PURE__*/createRectAdjustmentFn(1);
+
+function parseTransform(transform) {
+  if (transform.startsWith('matrix3d(')) {
+    const transformArray = transform.slice(9, -1).split(/, /);
+    return {
+      x: +transformArray[12],
+      y: +transformArray[13],
+      scaleX: +transformArray[0],
+      scaleY: +transformArray[5]
+    };
+  } else if (transform.startsWith('matrix(')) {
+    const transformArray = transform.slice(7, -1).split(/, /);
+    return {
+      x: +transformArray[4],
+      y: +transformArray[5],
+      scaleX: +transformArray[0],
+      scaleY: +transformArray[3]
+    };
+  }
+
+  return null;
+}
+
+function inverseTransform(rect, transform, transformOrigin) {
+  const parsedTransform = parseTransform(transform);
+
+  if (!parsedTransform) {
+    return rect;
+  }
+
+  const {
+    scaleX,
+    scaleY,
+    x: translateX,
+    y: translateY
+  } = parsedTransform;
+  const x = rect.left - translateX - (1 - scaleX) * parseFloat(transformOrigin);
+  const y = rect.top - translateY - (1 - scaleY) * parseFloat(transformOrigin.slice(transformOrigin.indexOf(' ') + 1));
+  const w = scaleX ? rect.width / scaleX : rect.width;
+  const h = scaleY ? rect.height / scaleY : rect.height;
+  return {
+    width: w,
+    height: h,
+    top: y,
+    right: x + w,
+    bottom: y + h,
+    left: x
+  };
+}
+
+const defaultOptions = {
+  ignoreTransform: false
+};
+/**
+ * Returns the bounding client rect of an element relative to the viewport.
+ */
+
+function getClientRect(element, options) {
+  if (options === void 0) {
+    options = defaultOptions;
+  }
+
+  let rect = element.getBoundingClientRect();
+
+  if (options.ignoreTransform) {
+    const {
+      transform,
+      transformOrigin
+    } = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(element).getComputedStyle(element);
+
+    if (transform) {
+      rect = inverseTransform(rect, transform, transformOrigin);
+    }
+  }
+
+  const {
+    top,
+    left,
+    width,
+    height,
+    bottom,
+    right
+  } = rect;
+  return {
+    top,
+    left,
+    width,
+    height,
+    bottom,
+    right
+  };
+}
+/**
+ * Returns the bounding client rect of an element relative to the viewport.
+ *
+ * @remarks
+ * The ClientRect returned by this method does not take into account transforms
+ * applied to the element it measures.
+ *
+ */
+
+function getTransformAgnosticClientRect(element) {
+  return getClientRect(element, {
+    ignoreTransform: true
+  });
+}
+
+function getWindowClientRect(element) {
+  const width = element.innerWidth;
+  const height = element.innerHeight;
+  return {
+    top: 0,
+    left: 0,
+    right: width,
+    bottom: height,
+    width,
+    height
+  };
+}
+
+function isFixed(node, computedStyle) {
+  if (computedStyle === void 0) {
+    computedStyle = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(node).getComputedStyle(node);
+  }
+
+  return computedStyle.position === 'fixed';
+}
+
+function isScrollable(element, computedStyle) {
+  if (computedStyle === void 0) {
+    computedStyle = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(element).getComputedStyle(element);
+  }
+
+  const overflowRegex = /(auto|scroll|overlay)/;
+  const properties = ['overflow', 'overflowX', 'overflowY'];
+  return properties.some(property => {
+    const value = computedStyle[property];
+    return typeof value === 'string' ? overflowRegex.test(value) : false;
+  });
+}
+
+function getScrollableAncestors(element, limit) {
+  const scrollParents = [];
+
+  function findScrollableAncestors(node) {
+    if (limit != null && scrollParents.length >= limit) {
+      return scrollParents;
+    }
+
+    if (!node) {
+      return scrollParents;
+    }
+
+    if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isDocument)(node) && node.scrollingElement != null && !scrollParents.includes(node.scrollingElement)) {
+      scrollParents.push(node.scrollingElement);
+      return scrollParents;
+    }
+
+    if (!(0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isHTMLElement)(node) || (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isSVGElement)(node)) {
+      return scrollParents;
+    }
+
+    if (scrollParents.includes(node)) {
+      return scrollParents;
+    }
+
+    const computedStyle = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(element).getComputedStyle(node);
+
+    if (node !== element) {
+      if (isScrollable(node, computedStyle)) {
+        scrollParents.push(node);
+      }
+    }
+
+    if (isFixed(node, computedStyle)) {
+      return scrollParents;
+    }
+
+    return findScrollableAncestors(node.parentNode);
+  }
+
+  if (!element) {
+    return scrollParents;
+  }
+
+  return findScrollableAncestors(element);
+}
+function getFirstScrollableAncestor(node) {
+  const [firstScrollableAncestor] = getScrollableAncestors(node, 1);
+  return firstScrollableAncestor != null ? firstScrollableAncestor : null;
+}
+
+function getScrollableElement(element) {
+  if (!_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.canUseDOM || !element) {
+    return null;
+  }
+
+  if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isWindow)(element)) {
+    return element;
+  }
+
+  if (!(0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isNode)(element)) {
+    return null;
+  }
+
+  if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isDocument)(element) || element === (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(element).scrollingElement) {
+    return window;
+  }
+
+  if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isHTMLElement)(element)) {
+    return element;
+  }
+
+  return null;
+}
+
+function getScrollXCoordinate(element) {
+  if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isWindow)(element)) {
+    return element.scrollX;
+  }
+
+  return element.scrollLeft;
+}
+function getScrollYCoordinate(element) {
+  if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isWindow)(element)) {
+    return element.scrollY;
+  }
+
+  return element.scrollTop;
+}
+function getScrollCoordinates(element) {
+  return {
+    x: getScrollXCoordinate(element),
+    y: getScrollYCoordinate(element)
+  };
+}
+
+var Direction;
+
+(function (Direction) {
+  Direction[Direction["Forward"] = 1] = "Forward";
+  Direction[Direction["Backward"] = -1] = "Backward";
+})(Direction || (Direction = {}));
+
+function isDocumentScrollingElement(element) {
+  if (!_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.canUseDOM || !element) {
+    return false;
+  }
+
+  return element === document.scrollingElement;
+}
+
+function getScrollPosition(scrollingContainer) {
+  const minScroll = {
+    x: 0,
+    y: 0
+  };
+  const dimensions = isDocumentScrollingElement(scrollingContainer) ? {
+    height: window.innerHeight,
+    width: window.innerWidth
+  } : {
+    height: scrollingContainer.clientHeight,
+    width: scrollingContainer.clientWidth
+  };
+  const maxScroll = {
+    x: scrollingContainer.scrollWidth - dimensions.width,
+    y: scrollingContainer.scrollHeight - dimensions.height
+  };
+  const isTop = scrollingContainer.scrollTop <= minScroll.y;
+  const isLeft = scrollingContainer.scrollLeft <= minScroll.x;
+  const isBottom = scrollingContainer.scrollTop >= maxScroll.y;
+  const isRight = scrollingContainer.scrollLeft >= maxScroll.x;
+  return {
+    isTop,
+    isLeft,
+    isBottom,
+    isRight,
+    maxScroll,
+    minScroll
+  };
+}
+
+const defaultThreshold = {
+  x: 0.2,
+  y: 0.2
+};
+function getScrollDirectionAndSpeed(scrollContainer, scrollContainerRect, _ref, acceleration, thresholdPercentage) {
+  let {
+    top,
+    left,
+    right,
+    bottom
+  } = _ref;
+
+  if (acceleration === void 0) {
+    acceleration = 10;
+  }
+
+  if (thresholdPercentage === void 0) {
+    thresholdPercentage = defaultThreshold;
+  }
+
+  const {
+    isTop,
+    isBottom,
+    isLeft,
+    isRight
+  } = getScrollPosition(scrollContainer);
+  const direction = {
+    x: 0,
+    y: 0
+  };
+  const speed = {
+    x: 0,
+    y: 0
+  };
+  const threshold = {
+    height: scrollContainerRect.height * thresholdPercentage.y,
+    width: scrollContainerRect.width * thresholdPercentage.x
+  };
+
+  if (!isTop && top <= scrollContainerRect.top + threshold.height) {
+    // Scroll Up
+    direction.y = Direction.Backward;
+    speed.y = acceleration * Math.abs((scrollContainerRect.top + threshold.height - top) / threshold.height);
+  } else if (!isBottom && bottom >= scrollContainerRect.bottom - threshold.height) {
+    // Scroll Down
+    direction.y = Direction.Forward;
+    speed.y = acceleration * Math.abs((scrollContainerRect.bottom - threshold.height - bottom) / threshold.height);
+  }
+
+  if (!isRight && right >= scrollContainerRect.right - threshold.width) {
+    // Scroll Right
+    direction.x = Direction.Forward;
+    speed.x = acceleration * Math.abs((scrollContainerRect.right - threshold.width - right) / threshold.width);
+  } else if (!isLeft && left <= scrollContainerRect.left + threshold.width) {
+    // Scroll Left
+    direction.x = Direction.Backward;
+    speed.x = acceleration * Math.abs((scrollContainerRect.left + threshold.width - left) / threshold.width);
+  }
+
+  return {
+    direction,
+    speed
+  };
+}
+
+function getScrollElementRect(element) {
+  if (element === document.scrollingElement) {
+    const {
+      innerWidth,
+      innerHeight
+    } = window;
+    return {
+      top: 0,
+      left: 0,
+      right: innerWidth,
+      bottom: innerHeight,
+      width: innerWidth,
+      height: innerHeight
+    };
+  }
+
+  const {
+    top,
+    left,
+    right,
+    bottom
+  } = element.getBoundingClientRect();
+  return {
+    top,
+    left,
+    right,
+    bottom,
+    width: element.clientWidth,
+    height: element.clientHeight
+  };
+}
+
+function getScrollOffsets(scrollableAncestors) {
+  return scrollableAncestors.reduce((acc, node) => {
+    return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)(acc, getScrollCoordinates(node));
+  }, defaultCoordinates);
+}
+function getScrollXOffset(scrollableAncestors) {
+  return scrollableAncestors.reduce((acc, node) => {
+    return acc + getScrollXCoordinate(node);
+  }, 0);
+}
+function getScrollYOffset(scrollableAncestors) {
+  return scrollableAncestors.reduce((acc, node) => {
+    return acc + getScrollYCoordinate(node);
+  }, 0);
+}
+
+function scrollIntoViewIfNeeded(element, measure) {
+  if (measure === void 0) {
+    measure = getClientRect;
+  }
+
+  if (!element) {
+    return;
+  }
+
+  const {
+    top,
+    left,
+    bottom,
+    right
+  } = measure(element);
+  const firstScrollableAncestor = getFirstScrollableAncestor(element);
+
+  if (!firstScrollableAncestor) {
+    return;
+  }
+
+  if (bottom <= 0 || right <= 0 || top >= window.innerHeight || left >= window.innerWidth) {
+    element.scrollIntoView({
+      block: 'center',
+      inline: 'center'
+    });
+  }
+}
+
+const properties = [['x', ['left', 'right'], getScrollXOffset], ['y', ['top', 'bottom'], getScrollYOffset]];
+class Rect {
+  constructor(rect, element) {
+    this.rect = void 0;
+    this.width = void 0;
+    this.height = void 0;
+    this.top = void 0;
+    this.bottom = void 0;
+    this.right = void 0;
+    this.left = void 0;
+    const scrollableAncestors = getScrollableAncestors(element);
+    const scrollOffsets = getScrollOffsets(scrollableAncestors);
+    this.rect = { ...rect
+    };
+    this.width = rect.width;
+    this.height = rect.height;
+
+    for (const [axis, keys, getScrollOffset] of properties) {
+      for (const key of keys) {
+        Object.defineProperty(this, key, {
+          get: () => {
+            const currentOffsets = getScrollOffset(scrollableAncestors);
+            const scrollOffsetsDeltla = scrollOffsets[axis] - currentOffsets;
+            return this.rect[key] + scrollOffsetsDeltla;
+          },
+          enumerable: true
+        });
+      }
+    }
+
+    Object.defineProperty(this, 'rect', {
+      enumerable: false
+    });
+  }
+
+}
+
+class Listeners {
+  constructor(target) {
+    this.target = void 0;
+    this.listeners = [];
+
+    this.removeAll = () => {
+      this.listeners.forEach(listener => {
+        var _this$target;
+
+        return (_this$target = this.target) == null ? void 0 : _this$target.removeEventListener(...listener);
+      });
+    };
+
+    this.target = target;
+  }
+
+  add(eventName, handler, options) {
+    var _this$target2;
+
+    (_this$target2 = this.target) == null ? void 0 : _this$target2.addEventListener(eventName, handler, options);
+    this.listeners.push([eventName, handler, options]);
+  }
+
+}
+
+function getEventListenerTarget(target) {
+  // If the `event.target` element is removed from the document events will still be targeted
+  // at it, and hence won't always bubble up to the window or document anymore.
+  // If there is any risk of an element being removed while it is being dragged,
+  // the best practice is to attach the event listeners directly to the target.
+  // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
+  const {
+    EventTarget
+  } = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(target);
+  return target instanceof EventTarget ? target : (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(target);
+}
+
+function hasExceededDistance(delta, measurement) {
+  const dx = Math.abs(delta.x);
+  const dy = Math.abs(delta.y);
+
+  if (typeof measurement === 'number') {
+    return Math.sqrt(dx ** 2 + dy ** 2) > measurement;
+  }
+
+  if ('x' in measurement && 'y' in measurement) {
+    return dx > measurement.x && dy > measurement.y;
+  }
+
+  if ('x' in measurement) {
+    return dx > measurement.x;
+  }
+
+  if ('y' in measurement) {
+    return dy > measurement.y;
+  }
+
+  return false;
+}
+
+var EventName;
+
+(function (EventName) {
+  EventName["Click"] = "click";
+  EventName["DragStart"] = "dragstart";
+  EventName["Keydown"] = "keydown";
+  EventName["ContextMenu"] = "contextmenu";
+  EventName["Resize"] = "resize";
+  EventName["SelectionChange"] = "selectionchange";
+  EventName["VisibilityChange"] = "visibilitychange";
+})(EventName || (EventName = {}));
+
+function preventDefault(event) {
+  event.preventDefault();
+}
+function stopPropagation(event) {
+  event.stopPropagation();
+}
+
+var KeyboardCode;
+
+(function (KeyboardCode) {
+  KeyboardCode["Space"] = "Space";
+  KeyboardCode["Down"] = "ArrowDown";
+  KeyboardCode["Right"] = "ArrowRight";
+  KeyboardCode["Left"] = "ArrowLeft";
+  KeyboardCode["Up"] = "ArrowUp";
+  KeyboardCode["Esc"] = "Escape";
+  KeyboardCode["Enter"] = "Enter";
+  KeyboardCode["Tab"] = "Tab";
+})(KeyboardCode || (KeyboardCode = {}));
+
+const defaultKeyboardCodes = {
+  start: [KeyboardCode.Space, KeyboardCode.Enter],
+  cancel: [KeyboardCode.Esc],
+  end: [KeyboardCode.Space, KeyboardCode.Enter, KeyboardCode.Tab]
+};
+const defaultKeyboardCoordinateGetter = (event, _ref) => {
+  let {
+    currentCoordinates
+  } = _ref;
+
+  switch (event.code) {
+    case KeyboardCode.Right:
+      return { ...currentCoordinates,
+        x: currentCoordinates.x + 25
+      };
+
+    case KeyboardCode.Left:
+      return { ...currentCoordinates,
+        x: currentCoordinates.x - 25
+      };
+
+    case KeyboardCode.Down:
+      return { ...currentCoordinates,
+        y: currentCoordinates.y + 25
+      };
+
+    case KeyboardCode.Up:
+      return { ...currentCoordinates,
+        y: currentCoordinates.y - 25
+      };
+  }
+
+  return undefined;
+};
+
+class KeyboardSensor {
+  constructor(props) {
+    this.props = void 0;
+    this.autoScrollEnabled = false;
+    this.referenceCoordinates = void 0;
+    this.listeners = void 0;
+    this.windowListeners = void 0;
+    this.props = props;
+    const {
+      event: {
+        target
+      }
+    } = props;
+    this.props = props;
+    this.listeners = new Listeners((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(target));
+    this.windowListeners = new Listeners((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(target));
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.attach();
+  }
+
+  attach() {
+    this.handleStart();
+    this.windowListeners.add(EventName.Resize, this.handleCancel);
+    this.windowListeners.add(EventName.VisibilityChange, this.handleCancel);
+    setTimeout(() => this.listeners.add(EventName.Keydown, this.handleKeyDown));
+  }
+
+  handleStart() {
+    const {
+      activeNode,
+      onStart
+    } = this.props;
+    const node = activeNode.node.current;
+
+    if (node) {
+      scrollIntoViewIfNeeded(node);
+    }
+
+    onStart(defaultCoordinates);
+  }
+
+  handleKeyDown(event) {
+    if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isKeyboardEvent)(event)) {
+      const {
+        active,
+        context,
+        options
+      } = this.props;
+      const {
+        keyboardCodes = defaultKeyboardCodes,
+        coordinateGetter = defaultKeyboardCoordinateGetter,
+        scrollBehavior = 'smooth'
+      } = options;
+      const {
+        code
+      } = event;
+
+      if (keyboardCodes.end.includes(code)) {
+        this.handleEnd(event);
+        return;
+      }
+
+      if (keyboardCodes.cancel.includes(code)) {
+        this.handleCancel(event);
+        return;
+      }
+
+      const {
+        collisionRect
+      } = context.current;
+      const currentCoordinates = collisionRect ? {
+        x: collisionRect.left,
+        y: collisionRect.top
+      } : defaultCoordinates;
+
+      if (!this.referenceCoordinates) {
+        this.referenceCoordinates = currentCoordinates;
+      }
+
+      const newCoordinates = coordinateGetter(event, {
+        active,
+        context: context.current,
+        currentCoordinates
+      });
+
+      if (newCoordinates) {
+        const coordinatesDelta = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.subtract)(newCoordinates, currentCoordinates);
+        const scrollDelta = {
+          x: 0,
+          y: 0
+        };
+        const {
+          scrollableAncestors
+        } = context.current;
+
+        for (const scrollContainer of scrollableAncestors) {
+          const direction = event.code;
+          const {
+            isTop,
+            isRight,
+            isLeft,
+            isBottom,
+            maxScroll,
+            minScroll
+          } = getScrollPosition(scrollContainer);
+          const scrollElementRect = getScrollElementRect(scrollContainer);
+          const clampedCoordinates = {
+            x: Math.min(direction === KeyboardCode.Right ? scrollElementRect.right - scrollElementRect.width / 2 : scrollElementRect.right, Math.max(direction === KeyboardCode.Right ? scrollElementRect.left : scrollElementRect.left + scrollElementRect.width / 2, newCoordinates.x)),
+            y: Math.min(direction === KeyboardCode.Down ? scrollElementRect.bottom - scrollElementRect.height / 2 : scrollElementRect.bottom, Math.max(direction === KeyboardCode.Down ? scrollElementRect.top : scrollElementRect.top + scrollElementRect.height / 2, newCoordinates.y))
+          };
+          const canScrollX = direction === KeyboardCode.Right && !isRight || direction === KeyboardCode.Left && !isLeft;
+          const canScrollY = direction === KeyboardCode.Down && !isBottom || direction === KeyboardCode.Up && !isTop;
+
+          if (canScrollX && clampedCoordinates.x !== newCoordinates.x) {
+            const newScrollCoordinates = scrollContainer.scrollLeft + coordinatesDelta.x;
+            const canScrollToNewCoordinates = direction === KeyboardCode.Right && newScrollCoordinates <= maxScroll.x || direction === KeyboardCode.Left && newScrollCoordinates >= minScroll.x;
+
+            if (canScrollToNewCoordinates && !coordinatesDelta.y) {
+              // We don't need to update coordinates, the scroll adjustment alone will trigger
+              // logic to auto-detect the new container we are over
+              scrollContainer.scrollTo({
+                left: newScrollCoordinates,
+                behavior: scrollBehavior
+              });
+              return;
+            }
+
+            if (canScrollToNewCoordinates) {
+              scrollDelta.x = scrollContainer.scrollLeft - newScrollCoordinates;
+            } else {
+              scrollDelta.x = direction === KeyboardCode.Right ? scrollContainer.scrollLeft - maxScroll.x : scrollContainer.scrollLeft - minScroll.x;
+            }
+
+            if (scrollDelta.x) {
+              scrollContainer.scrollBy({
+                left: -scrollDelta.x,
+                behavior: scrollBehavior
+              });
+            }
+
+            break;
+          } else if (canScrollY && clampedCoordinates.y !== newCoordinates.y) {
+            const newScrollCoordinates = scrollContainer.scrollTop + coordinatesDelta.y;
+            const canScrollToNewCoordinates = direction === KeyboardCode.Down && newScrollCoordinates <= maxScroll.y || direction === KeyboardCode.Up && newScrollCoordinates >= minScroll.y;
+
+            if (canScrollToNewCoordinates && !coordinatesDelta.x) {
+              // We don't need to update coordinates, the scroll adjustment alone will trigger
+              // logic to auto-detect the new container we are over
+              scrollContainer.scrollTo({
+                top: newScrollCoordinates,
+                behavior: scrollBehavior
+              });
+              return;
+            }
+
+            if (canScrollToNewCoordinates) {
+              scrollDelta.y = scrollContainer.scrollTop - newScrollCoordinates;
+            } else {
+              scrollDelta.y = direction === KeyboardCode.Down ? scrollContainer.scrollTop - maxScroll.y : scrollContainer.scrollTop - minScroll.y;
+            }
+
+            if (scrollDelta.y) {
+              scrollContainer.scrollBy({
+                top: -scrollDelta.y,
+                behavior: scrollBehavior
+              });
+            }
+
+            break;
+          }
+        }
+
+        this.handleMove(event, (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.subtract)(newCoordinates, this.referenceCoordinates), scrollDelta));
+      }
+    }
+  }
+
+  handleMove(event, coordinates) {
+    const {
+      onMove
+    } = this.props;
+    event.preventDefault();
+    onMove(coordinates);
+  }
+
+  handleEnd(event) {
+    const {
+      onEnd
+    } = this.props;
+    event.preventDefault();
+    this.detach();
+    onEnd();
+  }
+
+  handleCancel(event) {
+    const {
+      onCancel
+    } = this.props;
+    event.preventDefault();
+    this.detach();
+    onCancel();
+  }
+
+  detach() {
+    this.listeners.removeAll();
+    this.windowListeners.removeAll();
+  }
+
+}
+KeyboardSensor.activators = [{
+  eventName: 'onKeyDown',
+  handler: (event, _ref, _ref2) => {
+    let {
+      keyboardCodes = defaultKeyboardCodes,
+      onActivation
+    } = _ref;
+    let {
+      active
+    } = _ref2;
+    const {
+      code
+    } = event.nativeEvent;
+
+    if (keyboardCodes.start.includes(code)) {
+      const activator = active.activatorNode.current;
+
+      if (activator && event.target !== activator) {
+        return false;
+      }
+
+      event.preventDefault();
+      onActivation == null ? void 0 : onActivation({
+        event: event.nativeEvent
+      });
+      return true;
+    }
+
+    return false;
+  }
+}];
+
+function isDistanceConstraint(constraint) {
+  return Boolean(constraint && 'distance' in constraint);
+}
+
+function isDelayConstraint(constraint) {
+  return Boolean(constraint && 'delay' in constraint);
+}
+
+class AbstractPointerSensor {
+  constructor(props, events, listenerTarget) {
+    var _getEventCoordinates;
+
+    if (listenerTarget === void 0) {
+      listenerTarget = getEventListenerTarget(props.event.target);
+    }
+
+    this.props = void 0;
+    this.events = void 0;
+    this.autoScrollEnabled = true;
+    this.document = void 0;
+    this.activated = false;
+    this.initialCoordinates = void 0;
+    this.timeoutId = null;
+    this.listeners = void 0;
+    this.documentListeners = void 0;
+    this.windowListeners = void 0;
+    this.props = props;
+    this.events = events;
+    const {
+      event
+    } = props;
+    const {
+      target
+    } = event;
+    this.props = props;
+    this.events = events;
+    this.document = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(target);
+    this.documentListeners = new Listeners(this.document);
+    this.listeners = new Listeners(listenerTarget);
+    this.windowListeners = new Listeners((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(target));
+    this.initialCoordinates = (_getEventCoordinates = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getEventCoordinates)(event)) != null ? _getEventCoordinates : defaultCoordinates;
+    this.handleStart = this.handleStart.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.handleEnd = this.handleEnd.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
+    this.removeTextSelection = this.removeTextSelection.bind(this);
+    this.attach();
+  }
+
+  attach() {
+    const {
+      events,
+      props: {
+        options: {
+          activationConstraint,
+          bypassActivationConstraint
+        }
+      }
+    } = this;
+    this.listeners.add(events.move.name, this.handleMove, {
+      passive: false
+    });
+    this.listeners.add(events.end.name, this.handleEnd);
+
+    if (events.cancel) {
+      this.listeners.add(events.cancel.name, this.handleCancel);
+    }
+
+    this.windowListeners.add(EventName.Resize, this.handleCancel);
+    this.windowListeners.add(EventName.DragStart, preventDefault);
+    this.windowListeners.add(EventName.VisibilityChange, this.handleCancel);
+    this.windowListeners.add(EventName.ContextMenu, preventDefault);
+    this.documentListeners.add(EventName.Keydown, this.handleKeydown);
+
+    if (activationConstraint) {
+      if (bypassActivationConstraint != null && bypassActivationConstraint({
+        event: this.props.event,
+        activeNode: this.props.activeNode,
+        options: this.props.options
+      })) {
+        return this.handleStart();
+      }
+
+      if (isDelayConstraint(activationConstraint)) {
+        this.timeoutId = setTimeout(this.handleStart, activationConstraint.delay);
+        this.handlePending(activationConstraint);
+        return;
+      }
+
+      if (isDistanceConstraint(activationConstraint)) {
+        this.handlePending(activationConstraint);
+        return;
+      }
+    }
+
+    this.handleStart();
+  }
+
+  detach() {
+    this.listeners.removeAll();
+    this.windowListeners.removeAll(); // Wait until the next event loop before removing document listeners
+    // This is necessary because we listen for `click` and `selection` events on the document
+
+    setTimeout(this.documentListeners.removeAll, 50);
+
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+    }
+  }
+
+  handlePending(constraint, offset) {
+    const {
+      active,
+      onPending
+    } = this.props;
+    onPending(active, constraint, this.initialCoordinates, offset);
+  }
+
+  handleStart() {
+    const {
+      initialCoordinates
+    } = this;
+    const {
+      onStart
+    } = this.props;
+
+    if (initialCoordinates) {
+      this.activated = true; // Stop propagation of click events once activation constraints are met
+
+      this.documentListeners.add(EventName.Click, stopPropagation, {
+        capture: true
+      }); // Remove any text selection from the document
+
+      this.removeTextSelection(); // Prevent further text selection while dragging
+
+      this.documentListeners.add(EventName.SelectionChange, this.removeTextSelection);
+      onStart(initialCoordinates);
+    }
+  }
+
+  handleMove(event) {
+    var _getEventCoordinates2;
+
+    const {
+      activated,
+      initialCoordinates,
+      props
+    } = this;
+    const {
+      onMove,
+      options: {
+        activationConstraint
+      }
+    } = props;
+
+    if (!initialCoordinates) {
+      return;
+    }
+
+    const coordinates = (_getEventCoordinates2 = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getEventCoordinates)(event)) != null ? _getEventCoordinates2 : defaultCoordinates;
+    const delta = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.subtract)(initialCoordinates, coordinates); // Constraint validation
+
+    if (!activated && activationConstraint) {
+      if (isDistanceConstraint(activationConstraint)) {
+        if (activationConstraint.tolerance != null && hasExceededDistance(delta, activationConstraint.tolerance)) {
+          return this.handleCancel();
+        }
+
+        if (hasExceededDistance(delta, activationConstraint.distance)) {
+          return this.handleStart();
+        }
+      }
+
+      if (isDelayConstraint(activationConstraint)) {
+        if (hasExceededDistance(delta, activationConstraint.tolerance)) {
+          return this.handleCancel();
+        }
+      }
+
+      this.handlePending(activationConstraint, delta);
+      return;
+    }
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+
+    onMove(coordinates);
+  }
+
+  handleEnd() {
+    const {
+      onAbort,
+      onEnd
+    } = this.props;
+    this.detach();
+
+    if (!this.activated) {
+      onAbort(this.props.active);
+    }
+
+    onEnd();
+  }
+
+  handleCancel() {
+    const {
+      onAbort,
+      onCancel
+    } = this.props;
+    this.detach();
+
+    if (!this.activated) {
+      onAbort(this.props.active);
+    }
+
+    onCancel();
+  }
+
+  handleKeydown(event) {
+    if (event.code === KeyboardCode.Esc) {
+      this.handleCancel();
+    }
+  }
+
+  removeTextSelection() {
+    var _this$document$getSel;
+
+    (_this$document$getSel = this.document.getSelection()) == null ? void 0 : _this$document$getSel.removeAllRanges();
+  }
+
+}
+
+const events = {
+  cancel: {
+    name: 'pointercancel'
+  },
+  move: {
+    name: 'pointermove'
+  },
+  end: {
+    name: 'pointerup'
+  }
+};
+class PointerSensor extends AbstractPointerSensor {
+  constructor(props) {
+    const {
+      event
+    } = props; // Pointer events stop firing if the target is unmounted while dragging
+    // Therefore we attach listeners to the owner document instead
+
+    const listenerTarget = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(event.target);
+    super(props, events, listenerTarget);
+  }
+
+}
+PointerSensor.activators = [{
+  eventName: 'onPointerDown',
+  handler: (_ref, _ref2) => {
+    let {
+      nativeEvent: event
+    } = _ref;
+    let {
+      onActivation
+    } = _ref2;
+
+    if (!event.isPrimary || event.button !== 0) {
+      return false;
+    }
+
+    onActivation == null ? void 0 : onActivation({
+      event
+    });
+    return true;
+  }
+}];
+
+const events$1 = {
+  move: {
+    name: 'mousemove'
+  },
+  end: {
+    name: 'mouseup'
+  }
+};
+var MouseButton;
+
+(function (MouseButton) {
+  MouseButton[MouseButton["RightClick"] = 2] = "RightClick";
+})(MouseButton || (MouseButton = {}));
+
+class MouseSensor extends AbstractPointerSensor {
+  constructor(props) {
+    super(props, events$1, (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getOwnerDocument)(props.event.target));
+  }
+
+}
+MouseSensor.activators = [{
+  eventName: 'onMouseDown',
+  handler: (_ref, _ref2) => {
+    let {
+      nativeEvent: event
+    } = _ref;
+    let {
+      onActivation
+    } = _ref2;
+
+    if (event.button === MouseButton.RightClick) {
+      return false;
+    }
+
+    onActivation == null ? void 0 : onActivation({
+      event
+    });
+    return true;
+  }
+}];
+
+const events$2 = {
+  cancel: {
+    name: 'touchcancel'
+  },
+  move: {
+    name: 'touchmove'
+  },
+  end: {
+    name: 'touchend'
+  }
+};
+class TouchSensor extends AbstractPointerSensor {
+  constructor(props) {
+    super(props, events$2);
+  }
+
+  static setup() {
+    // Adding a non-capture and non-passive `touchmove` listener in order
+    // to force `event.preventDefault()` calls to work in dynamically added
+    // touchmove event handlers. This is required for iOS Safari.
+    window.addEventListener(events$2.move.name, noop, {
+      capture: false,
+      passive: false
+    });
+    return function teardown() {
+      window.removeEventListener(events$2.move.name, noop);
+    }; // We create a new handler because the teardown function of another sensor
+    // could remove our event listener if we use a referentially equal listener.
+
+    function noop() {}
+  }
+
+}
+TouchSensor.activators = [{
+  eventName: 'onTouchStart',
+  handler: (_ref, _ref2) => {
+    let {
+      nativeEvent: event
+    } = _ref;
+    let {
+      onActivation
+    } = _ref2;
+    const {
+      touches
+    } = event;
+
+    if (touches.length > 1) {
+      return false;
+    }
+
+    onActivation == null ? void 0 : onActivation({
+      event
+    });
+    return true;
+  }
+}];
+
+var AutoScrollActivator;
+
+(function (AutoScrollActivator) {
+  AutoScrollActivator[AutoScrollActivator["Pointer"] = 0] = "Pointer";
+  AutoScrollActivator[AutoScrollActivator["DraggableRect"] = 1] = "DraggableRect";
+})(AutoScrollActivator || (AutoScrollActivator = {}));
+
+var TraversalOrder;
+
+(function (TraversalOrder) {
+  TraversalOrder[TraversalOrder["TreeOrder"] = 0] = "TreeOrder";
+  TraversalOrder[TraversalOrder["ReversedTreeOrder"] = 1] = "ReversedTreeOrder";
+})(TraversalOrder || (TraversalOrder = {}));
+
+function useAutoScroller(_ref) {
+  let {
+    acceleration,
+    activator = AutoScrollActivator.Pointer,
+    canScroll,
+    draggingRect,
+    enabled,
+    interval = 5,
+    order = TraversalOrder.TreeOrder,
+    pointerCoordinates,
+    scrollableAncestors,
+    scrollableAncestorRects,
+    delta,
+    threshold
+  } = _ref;
+  const scrollIntent = useScrollIntent({
+    delta,
+    disabled: !enabled
+  });
+  const [setAutoScrollInterval, clearAutoScrollInterval] = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useInterval)();
+  const scrollSpeed = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    x: 0,
+    y: 0
+  });
+  const scrollDirection = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    x: 0,
+    y: 0
+  });
+  const rect = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    switch (activator) {
+      case AutoScrollActivator.Pointer:
+        return pointerCoordinates ? {
+          top: pointerCoordinates.y,
+          bottom: pointerCoordinates.y,
+          left: pointerCoordinates.x,
+          right: pointerCoordinates.x
+        } : null;
+
+      case AutoScrollActivator.DraggableRect:
+        return draggingRect;
+    }
+  }, [activator, draggingRect, pointerCoordinates]);
+  const scrollContainerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const autoScroll = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const scrollContainer = scrollContainerRef.current;
+
+    if (!scrollContainer) {
+      return;
+    }
+
+    const scrollLeft = scrollSpeed.current.x * scrollDirection.current.x;
+    const scrollTop = scrollSpeed.current.y * scrollDirection.current.y;
+    scrollContainer.scrollBy(scrollLeft, scrollTop);
+  }, []);
+  const sortedScrollableAncestors = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => order === TraversalOrder.TreeOrder ? [...scrollableAncestors].reverse() : scrollableAncestors, [order, scrollableAncestors]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!enabled || !scrollableAncestors.length || !rect) {
+      clearAutoScrollInterval();
+      return;
+    }
+
+    for (const scrollContainer of sortedScrollableAncestors) {
+      if ((canScroll == null ? void 0 : canScroll(scrollContainer)) === false) {
+        continue;
+      }
+
+      const index = scrollableAncestors.indexOf(scrollContainer);
+      const scrollContainerRect = scrollableAncestorRects[index];
+
+      if (!scrollContainerRect) {
+        continue;
+      }
+
+      const {
+        direction,
+        speed
+      } = getScrollDirectionAndSpeed(scrollContainer, scrollContainerRect, rect, acceleration, threshold);
+
+      for (const axis of ['x', 'y']) {
+        if (!scrollIntent[axis][direction[axis]]) {
+          speed[axis] = 0;
+          direction[axis] = 0;
+        }
+      }
+
+      if (speed.x > 0 || speed.y > 0) {
+        clearAutoScrollInterval();
+        scrollContainerRef.current = scrollContainer;
+        setAutoScrollInterval(autoScroll, interval);
+        scrollSpeed.current = speed;
+        scrollDirection.current = direction;
+        return;
+      }
+    }
+
+    scrollSpeed.current = {
+      x: 0,
+      y: 0
+    };
+    scrollDirection.current = {
+      x: 0,
+      y: 0
+    };
+    clearAutoScrollInterval();
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [acceleration, autoScroll, canScroll, clearAutoScrollInterval, enabled, interval, // eslint-disable-next-line react-hooks/exhaustive-deps
+  JSON.stringify(rect), // eslint-disable-next-line react-hooks/exhaustive-deps
+  JSON.stringify(scrollIntent), setAutoScrollInterval, scrollableAncestors, sortedScrollableAncestors, scrollableAncestorRects, // eslint-disable-next-line react-hooks/exhaustive-deps
+  JSON.stringify(threshold)]);
+}
+const defaultScrollIntent = {
+  x: {
+    [Direction.Backward]: false,
+    [Direction.Forward]: false
+  },
+  y: {
+    [Direction.Backward]: false,
+    [Direction.Forward]: false
+  }
+};
+
+function useScrollIntent(_ref2) {
+  let {
+    delta,
+    disabled
+  } = _ref2;
+  const previousDelta = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.usePrevious)(delta);
+  return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLazyMemo)(previousIntent => {
+    if (disabled || !previousDelta || !previousIntent) {
+      // Reset scroll intent tracking when auto-scrolling is disabled
+      return defaultScrollIntent;
+    }
+
+    const direction = {
+      x: Math.sign(delta.x - previousDelta.x),
+      y: Math.sign(delta.y - previousDelta.y)
+    }; // Keep track of the user intent to scroll in each direction for both axis
+
+    return {
+      x: {
+        [Direction.Backward]: previousIntent.x[Direction.Backward] || direction.x === -1,
+        [Direction.Forward]: previousIntent.x[Direction.Forward] || direction.x === 1
+      },
+      y: {
+        [Direction.Backward]: previousIntent.y[Direction.Backward] || direction.y === -1,
+        [Direction.Forward]: previousIntent.y[Direction.Forward] || direction.y === 1
+      }
+    };
+  }, [disabled, delta, previousDelta]);
+}
+
+function useCachedNode(draggableNodes, id) {
+  const draggableNode = id != null ? draggableNodes.get(id) : undefined;
+  const node = draggableNode ? draggableNode.node.current : null;
+  return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLazyMemo)(cachedNode => {
+    var _ref;
+
+    if (id == null) {
+      return null;
+    } // In some cases, the draggable node can unmount while dragging
+    // This is the case for virtualized lists. In those situations,
+    // we fall back to the last known value for that node.
+
+
+    return (_ref = node != null ? node : cachedNode) != null ? _ref : null;
+  }, [node, id]);
+}
+
+function useCombineActivators(sensors, getSyntheticHandler) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => sensors.reduce((accumulator, sensor) => {
+    const {
+      sensor: Sensor
+    } = sensor;
+    const sensorActivators = Sensor.activators.map(activator => ({
+      eventName: activator.eventName,
+      handler: getSyntheticHandler(activator.handler, sensor)
+    }));
+    return [...accumulator, ...sensorActivators];
+  }, []), [sensors, getSyntheticHandler]);
+}
+
+var MeasuringStrategy;
+
+(function (MeasuringStrategy) {
+  MeasuringStrategy[MeasuringStrategy["Always"] = 0] = "Always";
+  MeasuringStrategy[MeasuringStrategy["BeforeDragging"] = 1] = "BeforeDragging";
+  MeasuringStrategy[MeasuringStrategy["WhileDragging"] = 2] = "WhileDragging";
+})(MeasuringStrategy || (MeasuringStrategy = {}));
+
+var MeasuringFrequency;
+
+(function (MeasuringFrequency) {
+  MeasuringFrequency["Optimized"] = "optimized";
+})(MeasuringFrequency || (MeasuringFrequency = {}));
+
+const defaultValue = /*#__PURE__*/new Map();
+function useDroppableMeasuring(containers, _ref) {
+  let {
+    dragging,
+    dependencies,
+    config
+  } = _ref;
+  const [queue, setQueue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const {
+    frequency,
+    measure,
+    strategy
+  } = config;
+  const containersRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(containers);
+  const disabled = isDisabled();
+  const disabledRef = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLatestValue)(disabled);
+  const measureDroppableContainers = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (ids) {
+    if (ids === void 0) {
+      ids = [];
+    }
+
+    if (disabledRef.current) {
+      return;
+    }
+
+    setQueue(value => {
+      if (value === null) {
+        return ids;
+      }
+
+      return value.concat(ids.filter(id => !value.includes(id)));
+    });
+  }, [disabledRef]);
+  const timeoutId = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const droppableRects = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLazyMemo)(previousValue => {
+    if (disabled && !dragging) {
+      return defaultValue;
+    }
+
+    if (!previousValue || previousValue === defaultValue || containersRef.current !== containers || queue != null) {
+      const map = new Map();
+
+      for (let container of containers) {
+        if (!container) {
+          continue;
+        }
+
+        if (queue && queue.length > 0 && !queue.includes(container.id) && container.rect.current) {
+          // This container does not need to be re-measured
+          map.set(container.id, container.rect.current);
+          continue;
+        }
+
+        const node = container.node.current;
+        const rect = node ? new Rect(measure(node), node) : null;
+        container.rect.current = rect;
+
+        if (rect) {
+          map.set(container.id, rect);
+        }
+      }
+
+      return map;
+    }
+
+    return previousValue;
+  }, [containers, queue, dragging, disabled, measure]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    containersRef.current = containers;
+  }, [containers]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (disabled) {
+      return;
+    }
+
+    measureDroppableContainers();
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [dragging, disabled]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (queue && queue.length > 0) {
+      setQueue(null);
+    }
+  }, //eslint-disable-next-line react-hooks/exhaustive-deps
+  [JSON.stringify(queue)]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (disabled || typeof frequency !== 'number' || timeoutId.current !== null) {
+      return;
+    }
+
+    timeoutId.current = setTimeout(() => {
+      measureDroppableContainers();
+      timeoutId.current = null;
+    }, frequency);
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [frequency, disabled, measureDroppableContainers, ...dependencies]);
+  return {
+    droppableRects,
+    measureDroppableContainers,
+    measuringScheduled: queue != null
+  };
+
+  function isDisabled() {
+    switch (strategy) {
+      case MeasuringStrategy.Always:
+        return false;
+
+      case MeasuringStrategy.BeforeDragging:
+        return dragging;
+
+      default:
+        return !dragging;
+    }
+  }
+}
+
+function useInitialValue(value, computeFn) {
+  return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLazyMemo)(previousValue => {
+    if (!value) {
+      return null;
+    }
+
+    if (previousValue) {
+      return previousValue;
+    }
+
+    return typeof computeFn === 'function' ? computeFn(value) : value;
+  }, [computeFn, value]);
+}
+
+function useInitialRect(node, measure) {
+  return useInitialValue(node, measure);
+}
+
+/**
+ * Returns a new MutationObserver instance.
+ * If `MutationObserver` is undefined in the execution environment, returns `undefined`.
+ */
+
+function useMutationObserver(_ref) {
+  let {
+    callback,
+    disabled
+  } = _ref;
+  const handleMutations = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useEvent)(callback);
+  const mutationObserver = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (disabled || typeof window === 'undefined' || typeof window.MutationObserver === 'undefined') {
+      return undefined;
+    }
+
+    const {
+      MutationObserver
+    } = window;
+    return new MutationObserver(handleMutations);
+  }, [handleMutations, disabled]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    return () => mutationObserver == null ? void 0 : mutationObserver.disconnect();
+  }, [mutationObserver]);
+  return mutationObserver;
+}
+
+/**
+ * Returns a new ResizeObserver instance bound to the `onResize` callback.
+ * If `ResizeObserver` is undefined in the execution environment, returns `undefined`.
+ */
+
+function useResizeObserver(_ref) {
+  let {
+    callback,
+    disabled
+  } = _ref;
+  const handleResize = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useEvent)(callback);
+  const resizeObserver = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (disabled || typeof window === 'undefined' || typeof window.ResizeObserver === 'undefined') {
+      return undefined;
+    }
+
+    const {
+      ResizeObserver
+    } = window;
+    return new ResizeObserver(handleResize);
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [disabled]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    return () => resizeObserver == null ? void 0 : resizeObserver.disconnect();
+  }, [resizeObserver]);
+  return resizeObserver;
+}
+
+function defaultMeasure(element) {
+  return new Rect(getClientRect(element), element);
+}
+
+function useRect(element, measure, fallbackRect) {
+  if (measure === void 0) {
+    measure = defaultMeasure;
+  }
+
+  const [rect, setRect] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+
+  function measureRect() {
+    setRect(currentRect => {
+      if (!element) {
+        return null;
+      }
+
+      if (element.isConnected === false) {
+        var _ref;
+
+        // Fall back to last rect we measured if the element is
+        // no longer connected to the DOM.
+        return (_ref = currentRect != null ? currentRect : fallbackRect) != null ? _ref : null;
+      }
+
+      const newRect = measure(element);
+
+      if (JSON.stringify(currentRect) === JSON.stringify(newRect)) {
+        return currentRect;
+      }
+
+      return newRect;
+    });
+  }
+
+  const mutationObserver = useMutationObserver({
+    callback(records) {
+      if (!element) {
+        return;
+      }
+
+      for (const record of records) {
+        const {
+          type,
+          target
+        } = record;
+
+        if (type === 'childList' && target instanceof HTMLElement && target.contains(element)) {
+          measureRect();
+          break;
+        }
+      }
+    }
+
+  });
+  const resizeObserver = useResizeObserver({
+    callback: measureRect
+  });
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    measureRect();
+
+    if (element) {
+      resizeObserver == null ? void 0 : resizeObserver.observe(element);
+      mutationObserver == null ? void 0 : mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    } else {
+      resizeObserver == null ? void 0 : resizeObserver.disconnect();
+      mutationObserver == null ? void 0 : mutationObserver.disconnect();
+    }
+  }, [element]);
+  return rect;
+}
+
+function useRectDelta(rect) {
+  const initialRect = useInitialValue(rect);
+  return getRectDelta(rect, initialRect);
+}
+
+const defaultValue$1 = [];
+function useScrollableAncestors(node) {
+  const previousNode = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(node);
+  const ancestors = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLazyMemo)(previousValue => {
+    if (!node) {
+      return defaultValue$1;
+    }
+
+    if (previousValue && previousValue !== defaultValue$1 && node && previousNode.current && node.parentNode === previousNode.current.parentNode) {
+      return previousValue;
+    }
+
+    return getScrollableAncestors(node);
+  }, [node]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    previousNode.current = node;
+  }, [node]);
+  return ancestors;
+}
+
+function useScrollOffsets(elements) {
+  const [scrollCoordinates, setScrollCoordinates] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const prevElements = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(elements); // To-do: Throttle the handleScroll callback
+
+  const handleScroll = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(event => {
+    const scrollingElement = getScrollableElement(event.target);
+
+    if (!scrollingElement) {
+      return;
+    }
+
+    setScrollCoordinates(scrollCoordinates => {
+      if (!scrollCoordinates) {
+        return null;
+      }
+
+      scrollCoordinates.set(scrollingElement, getScrollCoordinates(scrollingElement));
+      return new Map(scrollCoordinates);
+    });
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const previousElements = prevElements.current;
+
+    if (elements !== previousElements) {
+      cleanup(previousElements);
+      const entries = elements.map(element => {
+        const scrollableElement = getScrollableElement(element);
+
+        if (scrollableElement) {
+          scrollableElement.addEventListener('scroll', handleScroll, {
+            passive: true
+          });
+          return [scrollableElement, getScrollCoordinates(scrollableElement)];
+        }
+
+        return null;
+      }).filter(entry => entry != null);
+      setScrollCoordinates(entries.length ? new Map(entries) : null);
+      prevElements.current = elements;
+    }
+
+    return () => {
+      cleanup(elements);
+      cleanup(previousElements);
+    };
+
+    function cleanup(elements) {
+      elements.forEach(element => {
+        const scrollableElement = getScrollableElement(element);
+        scrollableElement == null ? void 0 : scrollableElement.removeEventListener('scroll', handleScroll);
+      });
+    }
+  }, [handleScroll, elements]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (elements.length) {
+      return scrollCoordinates ? Array.from(scrollCoordinates.values()).reduce((acc, coordinates) => (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)(acc, coordinates), defaultCoordinates) : getScrollOffsets(elements);
+    }
+
+    return defaultCoordinates;
+  }, [elements, scrollCoordinates]);
+}
+
+function useScrollOffsetsDelta(scrollOffsets, dependencies) {
+  if (dependencies === void 0) {
+    dependencies = [];
+  }
+
+  const initialScrollOffsets = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    initialScrollOffsets.current = null;
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  dependencies);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const hasScrollOffsets = scrollOffsets !== defaultCoordinates;
+
+    if (hasScrollOffsets && !initialScrollOffsets.current) {
+      initialScrollOffsets.current = scrollOffsets;
+    }
+
+    if (!hasScrollOffsets && initialScrollOffsets.current) {
+      initialScrollOffsets.current = null;
+    }
+  }, [scrollOffsets]);
+  return initialScrollOffsets.current ? (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.subtract)(scrollOffsets, initialScrollOffsets.current) : defaultCoordinates;
+}
+
+function useSensorSetup(sensors) {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.canUseDOM) {
+      return;
+    }
+
+    const teardownFns = sensors.map(_ref => {
+      let {
+        sensor
+      } = _ref;
+      return sensor.setup == null ? void 0 : sensor.setup();
+    });
+    return () => {
+      for (const teardown of teardownFns) {
+        teardown == null ? void 0 : teardown();
+      }
+    };
+  }, // TO-DO: Sensors length could theoretically change which would not be a valid dependency
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  sensors.map(_ref2 => {
+    let {
+      sensor
+    } = _ref2;
+    return sensor;
+  }));
+}
+
+function useSyntheticListeners(listeners, id) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return listeners.reduce((acc, _ref) => {
+      let {
+        eventName,
+        handler
+      } = _ref;
+
+      acc[eventName] = event => {
+        handler(event, id);
+      };
+
+      return acc;
+    }, {});
+  }, [listeners, id]);
+}
+
+function useWindowRect(element) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => element ? getWindowClientRect(element) : null, [element]);
+}
+
+const defaultValue$2 = [];
+function useRects(elements, measure) {
+  if (measure === void 0) {
+    measure = getClientRect;
+  }
+
+  const [firstElement] = elements;
+  const windowRect = useWindowRect(firstElement ? (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(firstElement) : null);
+  const [rects, setRects] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultValue$2);
+
+  function measureRects() {
+    setRects(() => {
+      if (!elements.length) {
+        return defaultValue$2;
+      }
+
+      return elements.map(element => isDocumentScrollingElement(element) ? windowRect : new Rect(measure(element), element));
+    });
+  }
+
+  const resizeObserver = useResizeObserver({
+    callback: measureRects
+  });
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    resizeObserver == null ? void 0 : resizeObserver.disconnect();
+    measureRects();
+    elements.forEach(element => resizeObserver == null ? void 0 : resizeObserver.observe(element));
+  }, [elements]);
+  return rects;
+}
+
+function getMeasurableNode(node) {
+  if (!node) {
+    return null;
+  }
+
+  if (node.children.length > 1) {
+    return node;
+  }
+
+  const firstChild = node.children[0];
+  return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isHTMLElement)(firstChild) ? firstChild : node;
+}
+
+function useDragOverlayMeasuring(_ref) {
+  let {
+    measure
+  } = _ref;
+  const [rect, setRect] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const handleResize = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(entries => {
+    for (const {
+      target
+    } of entries) {
+      if ((0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isHTMLElement)(target)) {
+        setRect(rect => {
+          const newRect = measure(target);
+          return rect ? { ...rect,
+            width: newRect.width,
+            height: newRect.height
+          } : newRect;
+        });
+        break;
+      }
+    }
+  }, [measure]);
+  const resizeObserver = useResizeObserver({
+    callback: handleResize
+  });
+  const handleNodeChange = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(element => {
+    const node = getMeasurableNode(element);
+    resizeObserver == null ? void 0 : resizeObserver.disconnect();
+
+    if (node) {
+      resizeObserver == null ? void 0 : resizeObserver.observe(node);
+    }
+
+    setRect(node ? measure(node) : null);
+  }, [measure, resizeObserver]);
+  const [nodeRef, setRef] = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useNodeRef)(handleNodeChange);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    nodeRef,
+    rect,
+    setRef
+  }), [rect, nodeRef, setRef]);
+}
+
+const defaultSensors = [{
+  sensor: PointerSensor,
+  options: {}
+}, {
+  sensor: KeyboardSensor,
+  options: {}
+}];
+const defaultData = {
+  current: {}
+};
+const defaultMeasuringConfiguration = {
+  draggable: {
+    measure: getTransformAgnosticClientRect
+  },
+  droppable: {
+    measure: getTransformAgnosticClientRect,
+    strategy: MeasuringStrategy.WhileDragging,
+    frequency: MeasuringFrequency.Optimized
+  },
+  dragOverlay: {
+    measure: getClientRect
+  }
+};
+
+class DroppableContainersMap extends Map {
+  get(id) {
+    var _super$get;
+
+    return id != null ? (_super$get = super.get(id)) != null ? _super$get : undefined : undefined;
+  }
+
+  toArray() {
+    return Array.from(this.values());
+  }
+
+  getEnabled() {
+    return this.toArray().filter(_ref => {
+      let {
+        disabled
+      } = _ref;
+      return !disabled;
+    });
+  }
+
+  getNodeFor(id) {
+    var _this$get$node$curren, _this$get;
+
+    return (_this$get$node$curren = (_this$get = this.get(id)) == null ? void 0 : _this$get.node.current) != null ? _this$get$node$curren : undefined;
+  }
+
+}
+
+const defaultPublicContext = {
+  activatorEvent: null,
+  active: null,
+  activeNode: null,
+  activeNodeRect: null,
+  collisions: null,
+  containerNodeRect: null,
+  draggableNodes: /*#__PURE__*/new Map(),
+  droppableRects: /*#__PURE__*/new Map(),
+  droppableContainers: /*#__PURE__*/new DroppableContainersMap(),
+  over: null,
+  dragOverlay: {
+    nodeRef: {
+      current: null
+    },
+    rect: null,
+    setRef: noop
+  },
+  scrollableAncestors: [],
+  scrollableAncestorRects: [],
+  measuringConfiguration: defaultMeasuringConfiguration,
+  measureDroppableContainers: noop,
+  windowRect: null,
+  measuringScheduled: false
+};
+const defaultInternalContext = {
+  activatorEvent: null,
+  activators: [],
+  active: null,
+  activeNodeRect: null,
+  ariaDescribedById: {
+    draggable: ''
+  },
+  dispatch: noop,
+  draggableNodes: /*#__PURE__*/new Map(),
+  over: null,
+  measureDroppableContainers: noop
+};
+const InternalContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(defaultInternalContext);
+const PublicContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(defaultPublicContext);
+
+function getInitialState() {
+  return {
+    draggable: {
+      active: null,
+      initialCoordinates: {
+        x: 0,
+        y: 0
+      },
+      nodes: new Map(),
+      translate: {
+        x: 0,
+        y: 0
+      }
+    },
+    droppable: {
+      containers: new DroppableContainersMap()
+    }
+  };
+}
+function reducer(state, action) {
+  switch (action.type) {
+    case Action.DragStart:
+      return { ...state,
+        draggable: { ...state.draggable,
+          initialCoordinates: action.initialCoordinates,
+          active: action.active
+        }
+      };
+
+    case Action.DragMove:
+      if (state.draggable.active == null) {
+        return state;
+      }
+
+      return { ...state,
+        draggable: { ...state.draggable,
+          translate: {
+            x: action.coordinates.x - state.draggable.initialCoordinates.x,
+            y: action.coordinates.y - state.draggable.initialCoordinates.y
+          }
+        }
+      };
+
+    case Action.DragEnd:
+    case Action.DragCancel:
+      return { ...state,
+        draggable: { ...state.draggable,
+          active: null,
+          initialCoordinates: {
+            x: 0,
+            y: 0
+          },
+          translate: {
+            x: 0,
+            y: 0
+          }
+        }
+      };
+
+    case Action.RegisterDroppable:
+      {
+        const {
+          element
+        } = action;
+        const {
+          id
+        } = element;
+        const containers = new DroppableContainersMap(state.droppable.containers);
+        containers.set(id, element);
+        return { ...state,
+          droppable: { ...state.droppable,
+            containers
+          }
+        };
+      }
+
+    case Action.SetDroppableDisabled:
+      {
+        const {
+          id,
+          key,
+          disabled
+        } = action;
+        const element = state.droppable.containers.get(id);
+
+        if (!element || key !== element.key) {
+          return state;
+        }
+
+        const containers = new DroppableContainersMap(state.droppable.containers);
+        containers.set(id, { ...element,
+          disabled
+        });
+        return { ...state,
+          droppable: { ...state.droppable,
+            containers
+          }
+        };
+      }
+
+    case Action.UnregisterDroppable:
+      {
+        const {
+          id,
+          key
+        } = action;
+        const element = state.droppable.containers.get(id);
+
+        if (!element || key !== element.key) {
+          return state;
+        }
+
+        const containers = new DroppableContainersMap(state.droppable.containers);
+        containers.delete(id);
+        return { ...state,
+          droppable: { ...state.droppable,
+            containers
+          }
+        };
+      }
+
+    default:
+      {
+        return state;
+      }
+  }
+}
+
+function RestoreFocus(_ref) {
+  let {
+    disabled
+  } = _ref;
+  const {
+    active,
+    activatorEvent,
+    draggableNodes
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(InternalContext);
+  const previousActivatorEvent = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.usePrevious)(activatorEvent);
+  const previousActiveId = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.usePrevious)(active == null ? void 0 : active.id); // Restore keyboard focus on the activator node
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (disabled) {
+      return;
+    }
+
+    if (!activatorEvent && previousActivatorEvent && previousActiveId != null) {
+      if (!(0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isKeyboardEvent)(previousActivatorEvent)) {
+        return;
+      }
+
+      if (document.activeElement === previousActivatorEvent.target) {
+        // No need to restore focus
+        return;
+      }
+
+      const draggableNode = draggableNodes.get(previousActiveId);
+
+      if (!draggableNode) {
+        return;
+      }
+
+      const {
+        activatorNode,
+        node
+      } = draggableNode;
+
+      if (!activatorNode.current && !node.current) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        for (const element of [activatorNode.current, node.current]) {
+          if (!element) {
+            continue;
+          }
+
+          const focusableNode = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.findFirstFocusableNode)(element);
+
+          if (focusableNode) {
+            focusableNode.focus();
+            break;
+          }
+        }
+      });
+    }
+  }, [activatorEvent, disabled, draggableNodes, previousActiveId, previousActivatorEvent]);
+  return null;
+}
+
+function applyModifiers(modifiers, _ref) {
+  let {
+    transform,
+    ...args
+  } = _ref;
+  return modifiers != null && modifiers.length ? modifiers.reduce((accumulator, modifier) => {
+    return modifier({
+      transform: accumulator,
+      ...args
+    });
+  }, transform) : transform;
+}
+
+function useMeasuringConfiguration(config) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    draggable: { ...defaultMeasuringConfiguration.draggable,
+      ...(config == null ? void 0 : config.draggable)
+    },
+    droppable: { ...defaultMeasuringConfiguration.droppable,
+      ...(config == null ? void 0 : config.droppable)
+    },
+    dragOverlay: { ...defaultMeasuringConfiguration.dragOverlay,
+      ...(config == null ? void 0 : config.dragOverlay)
+    }
+  }), // eslint-disable-next-line react-hooks/exhaustive-deps
+  [config == null ? void 0 : config.draggable, config == null ? void 0 : config.droppable, config == null ? void 0 : config.dragOverlay]);
+}
+
+function useLayoutShiftScrollCompensation(_ref) {
+  let {
+    activeNode,
+    measure,
+    initialRect,
+    config = true
+  } = _ref;
+  const initialized = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(false);
+  const {
+    x,
+    y
+  } = typeof config === 'boolean' ? {
+    x: config,
+    y: config
+  } : config;
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    const disabled = !x && !y;
+
+    if (disabled || !activeNode) {
+      initialized.current = false;
+      return;
+    }
+
+    if (initialized.current || !initialRect) {
+      // Return early if layout shift scroll compensation was already attempted
+      // or if there is no initialRect to compare to.
+      return;
+    } // Get the most up to date node ref for the active draggable
+
+
+    const node = activeNode == null ? void 0 : activeNode.node.current;
+
+    if (!node || node.isConnected === false) {
+      // Return early if there is no attached node ref or if the node is
+      // disconnected from the document.
+      return;
+    }
+
+    const rect = measure(node);
+    const rectDelta = getRectDelta(rect, initialRect);
+
+    if (!x) {
+      rectDelta.x = 0;
+    }
+
+    if (!y) {
+      rectDelta.y = 0;
+    } // Only perform layout shift scroll compensation once
+
+
+    initialized.current = true;
+
+    if (Math.abs(rectDelta.x) > 0 || Math.abs(rectDelta.y) > 0) {
+      const firstScrollableAncestor = getFirstScrollableAncestor(node);
+
+      if (firstScrollableAncestor) {
+        firstScrollableAncestor.scrollBy({
+          top: rectDelta.y,
+          left: rectDelta.x
+        });
+      }
+    }
+  }, [activeNode, x, y, initialRect, measure]);
+}
+
+const ActiveDraggableContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({ ...defaultCoordinates,
+  scaleX: 1,
+  scaleY: 1
+});
+var Status;
+
+(function (Status) {
+  Status[Status["Uninitialized"] = 0] = "Uninitialized";
+  Status[Status["Initializing"] = 1] = "Initializing";
+  Status[Status["Initialized"] = 2] = "Initialized";
+})(Status || (Status = {}));
+
+const DndContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function DndContext(_ref) {
+  var _sensorContext$curren, _dragOverlay$nodeRef$, _dragOverlay$rect, _over$rect;
+
+  let {
+    id,
+    accessibility,
+    autoScroll = true,
+    children,
+    sensors = defaultSensors,
+    collisionDetection = rectIntersection,
+    measuring,
+    modifiers,
+    ...props
+  } = _ref;
+  const store = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(reducer, undefined, getInitialState);
+  const [state, dispatch] = store;
+  const [dispatchMonitorEvent, registerMonitorListener] = useDndMonitorProvider();
+  const [status, setStatus] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Status.Uninitialized);
+  const isInitialized = status === Status.Initialized;
+  const {
+    draggable: {
+      active: activeId,
+      nodes: draggableNodes,
+      translate
+    },
+    droppable: {
+      containers: droppableContainers
+    }
+  } = state;
+  const node = activeId != null ? draggableNodes.get(activeId) : null;
+  const activeRects = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    initial: null,
+    translated: null
+  });
+  const active = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    var _node$data;
+
+    return activeId != null ? {
+      id: activeId,
+      // It's possible for the active node to unmount while dragging
+      data: (_node$data = node == null ? void 0 : node.data) != null ? _node$data : defaultData,
+      rect: activeRects
+    } : null;
+  }, [activeId, node]);
+  const activeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [activeSensor, setActiveSensor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [activatorEvent, setActivatorEvent] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const latestProps = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLatestValue)(props, Object.values(props));
+  const draggableDescribedById = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useUniqueId)("DndDescribedBy", id);
+  const enabledDroppableContainers = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => droppableContainers.getEnabled(), [droppableContainers]);
+  const measuringConfiguration = useMeasuringConfiguration(measuring);
+  const {
+    droppableRects,
+    measureDroppableContainers,
+    measuringScheduled
+  } = useDroppableMeasuring(enabledDroppableContainers, {
+    dragging: isInitialized,
+    dependencies: [translate.x, translate.y],
+    config: measuringConfiguration.droppable
+  });
+  const activeNode = useCachedNode(draggableNodes, activeId);
+  const activationCoordinates = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => activatorEvent ? (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getEventCoordinates)(activatorEvent) : null, [activatorEvent]);
+  const autoScrollOptions = getAutoScrollerOptions();
+  const initialActiveNodeRect = useInitialRect(activeNode, measuringConfiguration.draggable.measure);
+  useLayoutShiftScrollCompensation({
+    activeNode: activeId != null ? draggableNodes.get(activeId) : null,
+    config: autoScrollOptions.layoutShiftCompensation,
+    initialRect: initialActiveNodeRect,
+    measure: measuringConfiguration.draggable.measure
+  });
+  const activeNodeRect = useRect(activeNode, measuringConfiguration.draggable.measure, initialActiveNodeRect);
+  const containerNodeRect = useRect(activeNode ? activeNode.parentElement : null);
+  const sensorContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    activatorEvent: null,
+    active: null,
+    activeNode,
+    collisionRect: null,
+    collisions: null,
+    droppableRects,
+    draggableNodes,
+    draggingNode: null,
+    draggingNodeRect: null,
+    droppableContainers,
+    over: null,
+    scrollableAncestors: [],
+    scrollAdjustedTranslate: null
+  });
+  const overNode = droppableContainers.getNodeFor((_sensorContext$curren = sensorContext.current.over) == null ? void 0 : _sensorContext$curren.id);
+  const dragOverlay = useDragOverlayMeasuring({
+    measure: measuringConfiguration.dragOverlay.measure
+  }); // Use the rect of the drag overlay if it is mounted
+
+  const draggingNode = (_dragOverlay$nodeRef$ = dragOverlay.nodeRef.current) != null ? _dragOverlay$nodeRef$ : activeNode;
+  const draggingNodeRect = isInitialized ? (_dragOverlay$rect = dragOverlay.rect) != null ? _dragOverlay$rect : activeNodeRect : null;
+  const usesDragOverlay = Boolean(dragOverlay.nodeRef.current && dragOverlay.rect); // The delta between the previous and new position of the draggable node
+  // is only relevant when there is no drag overlay
+
+  const nodeRectDelta = useRectDelta(usesDragOverlay ? null : activeNodeRect); // Get the window rect of the dragging node
+
+  const windowRect = useWindowRect(draggingNode ? (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(draggingNode) : null); // Get scrollable ancestors of the dragging node
+
+  const scrollableAncestors = useScrollableAncestors(isInitialized ? overNode != null ? overNode : activeNode : null);
+  const scrollableAncestorRects = useRects(scrollableAncestors); // Apply modifiers
+
+  const modifiedTranslate = applyModifiers(modifiers, {
+    transform: {
+      x: translate.x - nodeRectDelta.x,
+      y: translate.y - nodeRectDelta.y,
+      scaleX: 1,
+      scaleY: 1
+    },
+    activatorEvent,
+    active,
+    activeNodeRect,
+    containerNodeRect,
+    draggingNodeRect,
+    over: sensorContext.current.over,
+    overlayNodeRect: dragOverlay.rect,
+    scrollableAncestors,
+    scrollableAncestorRects,
+    windowRect
+  });
+  const pointerCoordinates = activationCoordinates ? (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)(activationCoordinates, translate) : null;
+  const scrollOffsets = useScrollOffsets(scrollableAncestors); // Represents the scroll delta since dragging was initiated
+
+  const scrollAdjustment = useScrollOffsetsDelta(scrollOffsets); // Represents the scroll delta since the last time the active node rect was measured
+
+  const activeNodeScrollDelta = useScrollOffsetsDelta(scrollOffsets, [activeNodeRect]);
+  const scrollAdjustedTranslate = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)(modifiedTranslate, scrollAdjustment);
+  const collisionRect = draggingNodeRect ? getAdjustedRect(draggingNodeRect, modifiedTranslate) : null;
+  const collisions = active && collisionRect ? collisionDetection({
+    active,
+    collisionRect,
+    droppableRects,
+    droppableContainers: enabledDroppableContainers,
+    pointerCoordinates
+  }) : null;
+  const overId = getFirstCollision(collisions, 'id');
+  const [over, setOver] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null); // When there is no drag overlay used, we need to account for the
+  // window scroll delta
+
+  const appliedTranslate = usesDragOverlay ? modifiedTranslate : (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.add)(modifiedTranslate, activeNodeScrollDelta);
+  const transform = adjustScale(appliedTranslate, (_over$rect = over == null ? void 0 : over.rect) != null ? _over$rect : null, activeNodeRect);
+  const activeSensorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const instantiateSensor = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((event, _ref2) => {
+    let {
+      sensor: Sensor,
+      options
+    } = _ref2;
+
+    if (activeRef.current == null) {
+      return;
+    }
+
+    const activeNode = draggableNodes.get(activeRef.current);
+
+    if (!activeNode) {
+      return;
+    }
+
+    const activatorEvent = event.nativeEvent;
+    const sensorInstance = new Sensor({
+      active: activeRef.current,
+      activeNode,
+      event: activatorEvent,
+      options,
+      // Sensors need to be instantiated with refs for arguments that change over time
+      // otherwise they are frozen in time with the stale arguments
+      context: sensorContext,
+
+      onAbort(id) {
+        const draggableNode = draggableNodes.get(id);
+
+        if (!draggableNode) {
+          return;
+        }
+
+        const {
+          onDragAbort
+        } = latestProps.current;
+        const event = {
+          id
+        };
+        onDragAbort == null ? void 0 : onDragAbort(event);
+        dispatchMonitorEvent({
+          type: 'onDragAbort',
+          event
+        });
+      },
+
+      onPending(id, constraint, initialCoordinates, offset) {
+        const draggableNode = draggableNodes.get(id);
+
+        if (!draggableNode) {
+          return;
+        }
+
+        const {
+          onDragPending
+        } = latestProps.current;
+        const event = {
+          id,
+          constraint,
+          initialCoordinates,
+          offset
+        };
+        onDragPending == null ? void 0 : onDragPending(event);
+        dispatchMonitorEvent({
+          type: 'onDragPending',
+          event
+        });
+      },
+
+      onStart(initialCoordinates) {
+        const id = activeRef.current;
+
+        if (id == null) {
+          return;
+        }
+
+        const draggableNode = draggableNodes.get(id);
+
+        if (!draggableNode) {
+          return;
+        }
+
+        const {
+          onDragStart
+        } = latestProps.current;
+        const event = {
+          activatorEvent,
+          active: {
+            id,
+            data: draggableNode.data,
+            rect: activeRects
+          }
+        };
+        (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.unstable_batchedUpdates)(() => {
+          onDragStart == null ? void 0 : onDragStart(event);
+          setStatus(Status.Initializing);
+          dispatch({
+            type: Action.DragStart,
+            initialCoordinates,
+            active: id
+          });
+          dispatchMonitorEvent({
+            type: 'onDragStart',
+            event
+          });
+          setActiveSensor(activeSensorRef.current);
+          setActivatorEvent(activatorEvent);
+        });
+      },
+
+      onMove(coordinates) {
+        dispatch({
+          type: Action.DragMove,
+          coordinates
+        });
+      },
+
+      onEnd: createHandler(Action.DragEnd),
+      onCancel: createHandler(Action.DragCancel)
+    });
+    activeSensorRef.current = sensorInstance;
+
+    function createHandler(type) {
+      return async function handler() {
+        const {
+          active,
+          collisions,
+          over,
+          scrollAdjustedTranslate
+        } = sensorContext.current;
+        let event = null;
+
+        if (active && scrollAdjustedTranslate) {
+          const {
+            cancelDrop
+          } = latestProps.current;
+          event = {
+            activatorEvent,
+            active: active,
+            collisions,
+            delta: scrollAdjustedTranslate,
+            over
+          };
+
+          if (type === Action.DragEnd && typeof cancelDrop === 'function') {
+            const shouldCancel = await Promise.resolve(cancelDrop(event));
+
+            if (shouldCancel) {
+              type = Action.DragCancel;
+            }
+          }
+        }
+
+        activeRef.current = null;
+        (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.unstable_batchedUpdates)(() => {
+          dispatch({
+            type
+          });
+          setStatus(Status.Uninitialized);
+          setOver(null);
+          setActiveSensor(null);
+          setActivatorEvent(null);
+          activeSensorRef.current = null;
+          const eventName = type === Action.DragEnd ? 'onDragEnd' : 'onDragCancel';
+
+          if (event) {
+            const handler = latestProps.current[eventName];
+            handler == null ? void 0 : handler(event);
+            dispatchMonitorEvent({
+              type: eventName,
+              event
+            });
+          }
+        });
+      };
+    }
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [draggableNodes]);
+  const bindActivatorToSensorInstantiator = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((handler, sensor) => {
+    return (event, active) => {
+      const nativeEvent = event.nativeEvent;
+      const activeDraggableNode = draggableNodes.get(active);
+
+      if ( // Another sensor is already instantiating
+      activeRef.current !== null || // No active draggable
+      !activeDraggableNode || // Event has already been captured
+      nativeEvent.dndKit || nativeEvent.defaultPrevented) {
+        return;
+      }
+
+      const activationContext = {
+        active: activeDraggableNode
+      };
+      const shouldActivate = handler(event, sensor.options, activationContext);
+
+      if (shouldActivate === true) {
+        nativeEvent.dndKit = {
+          capturedBy: sensor.sensor
+        };
+        activeRef.current = active;
+        instantiateSensor(event, sensor);
+      }
+    };
+  }, [draggableNodes, instantiateSensor]);
+  const activators = useCombineActivators(sensors, bindActivatorToSensorInstantiator);
+  useSensorSetup(sensors);
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    if (activeNodeRect && status === Status.Initializing) {
+      setStatus(Status.Initialized);
+    }
+  }, [activeNodeRect, status]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      onDragMove
+    } = latestProps.current;
+    const {
+      active,
+      activatorEvent,
+      collisions,
+      over
+    } = sensorContext.current;
+
+    if (!active || !activatorEvent) {
+      return;
+    }
+
+    const event = {
+      active,
+      activatorEvent,
+      collisions,
+      delta: {
+        x: scrollAdjustedTranslate.x,
+        y: scrollAdjustedTranslate.y
+      },
+      over
+    };
+    (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.unstable_batchedUpdates)(() => {
+      onDragMove == null ? void 0 : onDragMove(event);
+      dispatchMonitorEvent({
+        type: 'onDragMove',
+        event
+      });
+    });
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [scrollAdjustedTranslate.x, scrollAdjustedTranslate.y]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      active,
+      activatorEvent,
+      collisions,
+      droppableContainers,
+      scrollAdjustedTranslate
+    } = sensorContext.current;
+
+    if (!active || activeRef.current == null || !activatorEvent || !scrollAdjustedTranslate) {
+      return;
+    }
+
+    const {
+      onDragOver
+    } = latestProps.current;
+    const overContainer = droppableContainers.get(overId);
+    const over = overContainer && overContainer.rect.current ? {
+      id: overContainer.id,
+      rect: overContainer.rect.current,
+      data: overContainer.data,
+      disabled: overContainer.disabled
+    } : null;
+    const event = {
+      active,
+      activatorEvent,
+      collisions,
+      delta: {
+        x: scrollAdjustedTranslate.x,
+        y: scrollAdjustedTranslate.y
+      },
+      over
+    };
+    (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.unstable_batchedUpdates)(() => {
+      setOver(over);
+      onDragOver == null ? void 0 : onDragOver(event);
+      dispatchMonitorEvent({
+        type: 'onDragOver',
+        event
+      });
+    });
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [overId]);
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    sensorContext.current = {
+      activatorEvent,
+      active,
+      activeNode,
+      collisionRect,
+      collisions,
+      droppableRects,
+      draggableNodes,
+      draggingNode,
+      draggingNodeRect,
+      droppableContainers,
+      over,
+      scrollableAncestors,
+      scrollAdjustedTranslate
+    };
+    activeRects.current = {
+      initial: draggingNodeRect,
+      translated: collisionRect
+    };
+  }, [active, activeNode, collisions, collisionRect, draggableNodes, draggingNode, draggingNodeRect, droppableRects, droppableContainers, over, scrollableAncestors, scrollAdjustedTranslate]);
+  useAutoScroller({ ...autoScrollOptions,
+    delta: translate,
+    draggingRect: collisionRect,
+    pointerCoordinates,
+    scrollableAncestors,
+    scrollableAncestorRects
+  });
+  const publicContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    const context = {
+      active,
+      activeNode,
+      activeNodeRect,
+      activatorEvent,
+      collisions,
+      containerNodeRect,
+      dragOverlay,
+      draggableNodes,
+      droppableContainers,
+      droppableRects,
+      over,
+      measureDroppableContainers,
+      scrollableAncestors,
+      scrollableAncestorRects,
+      measuringConfiguration,
+      measuringScheduled,
+      windowRect
+    };
+    return context;
+  }, [active, activeNode, activeNodeRect, activatorEvent, collisions, containerNodeRect, dragOverlay, draggableNodes, droppableContainers, droppableRects, over, measureDroppableContainers, scrollableAncestors, scrollableAncestorRects, measuringConfiguration, measuringScheduled, windowRect]);
+  const internalContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    const context = {
+      activatorEvent,
+      activators,
+      active,
+      activeNodeRect,
+      ariaDescribedById: {
+        draggable: draggableDescribedById
+      },
+      dispatch,
+      draggableNodes,
+      over,
+      measureDroppableContainers
+    };
+    return context;
+  }, [activatorEvent, activators, active, activeNodeRect, dispatch, draggableDescribedById, draggableNodes, over, measureDroppableContainers]);
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement(DndMonitorContext.Provider, {
+    value: registerMonitorListener
+  }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(InternalContext.Provider, {
+    value: internalContext
+  }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(PublicContext.Provider, {
+    value: publicContext
+  }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ActiveDraggableContext.Provider, {
+    value: transform
+  }, children)), react__WEBPACK_IMPORTED_MODULE_0___default().createElement(RestoreFocus, {
+    disabled: (accessibility == null ? void 0 : accessibility.restoreFocus) === false
+  })), react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Accessibility, { ...accessibility,
+    hiddenTextDescribedById: draggableDescribedById
+  }));
+
+  function getAutoScrollerOptions() {
+    const activeSensorDisablesAutoscroll = (activeSensor == null ? void 0 : activeSensor.autoScrollEnabled) === false;
+    const autoScrollGloballyDisabled = typeof autoScroll === 'object' ? autoScroll.enabled === false : autoScroll === false;
+    const enabled = isInitialized && !activeSensorDisablesAutoscroll && !autoScrollGloballyDisabled;
+
+    if (typeof autoScroll === 'object') {
+      return { ...autoScroll,
+        enabled
+      };
+    }
+
+    return {
+      enabled
+    };
+  }
+});
+
+const NullContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+const defaultRole = 'button';
+const ID_PREFIX = 'Draggable';
+function useDraggable(_ref) {
+  let {
+    id,
+    data,
+    disabled = false,
+    attributes
+  } = _ref;
+  const key = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useUniqueId)(ID_PREFIX);
+  const {
+    activators,
+    activatorEvent,
+    active,
+    activeNodeRect,
+    ariaDescribedById,
+    draggableNodes,
+    over
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(InternalContext);
+  const {
+    role = defaultRole,
+    roleDescription = 'draggable',
+    tabIndex = 0
+  } = attributes != null ? attributes : {};
+  const isDragging = (active == null ? void 0 : active.id) === id;
+  const transform = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(isDragging ? ActiveDraggableContext : NullContext);
+  const [node, setNodeRef] = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useNodeRef)();
+  const [activatorNode, setActivatorNodeRef] = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useNodeRef)();
+  const listeners = useSyntheticListeners(activators, id);
+  const dataRef = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLatestValue)(data);
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    draggableNodes.set(id, {
+      id,
+      key,
+      node,
+      activatorNode,
+      data: dataRef
+    });
+    return () => {
+      const node = draggableNodes.get(id);
+
+      if (node && node.key === key) {
+        draggableNodes.delete(id);
+      }
+    };
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [draggableNodes, id]);
+  const memoizedAttributes = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    role,
+    tabIndex,
+    'aria-disabled': disabled,
+    'aria-pressed': isDragging && role === defaultRole ? true : undefined,
+    'aria-roledescription': roleDescription,
+    'aria-describedby': ariaDescribedById.draggable
+  }), [disabled, role, tabIndex, isDragging, roleDescription, ariaDescribedById.draggable]);
+  return {
+    active,
+    activatorEvent,
+    activeNodeRect,
+    attributes: memoizedAttributes,
+    isDragging,
+    listeners: disabled ? undefined : listeners,
+    node,
+    over,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform
+  };
+}
+
+function useDndContext() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(PublicContext);
+}
+
+const ID_PREFIX$1 = 'Droppable';
+const defaultResizeObserverConfig = {
+  timeout: 25
+};
+function useDroppable(_ref) {
+  let {
+    data,
+    disabled = false,
+    id,
+    resizeObserverConfig
+  } = _ref;
+  const key = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useUniqueId)(ID_PREFIX$1);
+  const {
+    active,
+    dispatch,
+    over,
+    measureDroppableContainers
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(InternalContext);
+  const previous = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    disabled
+  });
+  const resizeObserverConnected = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(false);
+  const rect = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const callbackId = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const {
+    disabled: resizeObserverDisabled,
+    updateMeasurementsFor,
+    timeout: resizeObserverTimeout
+  } = { ...defaultResizeObserverConfig,
+    ...resizeObserverConfig
+  };
+  const ids = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLatestValue)(updateMeasurementsFor != null ? updateMeasurementsFor : id);
+  const handleResize = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    if (!resizeObserverConnected.current) {
+      // ResizeObserver invokes the `handleResize` callback as soon as `observe` is called,
+      // assuming the element is rendered and displayed.
+      resizeObserverConnected.current = true;
+      return;
+    }
+
+    if (callbackId.current != null) {
+      clearTimeout(callbackId.current);
+    }
+
+    callbackId.current = setTimeout(() => {
+      measureDroppableContainers(Array.isArray(ids.current) ? ids.current : [ids.current]);
+      callbackId.current = null;
+    }, resizeObserverTimeout);
+  }, //eslint-disable-next-line react-hooks/exhaustive-deps
+  [resizeObserverTimeout]);
+  const resizeObserver = useResizeObserver({
+    callback: handleResize,
+    disabled: resizeObserverDisabled || !active
+  });
+  const handleNodeChange = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((newElement, previousElement) => {
+    if (!resizeObserver) {
+      return;
+    }
+
+    if (previousElement) {
+      resizeObserver.unobserve(previousElement);
+      resizeObserverConnected.current = false;
+    }
+
+    if (newElement) {
+      resizeObserver.observe(newElement);
+    }
+  }, [resizeObserver]);
+  const [nodeRef, setNodeRef] = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useNodeRef)(handleNodeChange);
+  const dataRef = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useLatestValue)(data);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!resizeObserver || !nodeRef.current) {
+      return;
+    }
+
+    resizeObserver.disconnect();
+    resizeObserverConnected.current = false;
+    resizeObserver.observe(nodeRef.current);
+  }, [nodeRef, resizeObserver]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    dispatch({
+      type: Action.RegisterDroppable,
+      element: {
+        id,
+        key,
+        disabled,
+        node: nodeRef,
+        rect,
+        data: dataRef
+      }
+    });
+    return () => dispatch({
+      type: Action.UnregisterDroppable,
+      key,
+      id
+    });
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [id]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (disabled !== previous.current.disabled) {
+      dispatch({
+        type: Action.SetDroppableDisabled,
+        id,
+        key,
+        disabled
+      });
+      previous.current.disabled = disabled;
+    }
+  }, [id, key, disabled, dispatch]);
+  return {
+    active,
+    rect,
+    isOver: (over == null ? void 0 : over.id) === id,
+    node: nodeRef,
+    over,
+    setNodeRef
+  };
+}
+
+function AnimationManager(_ref) {
+  let {
+    animation,
+    children
+  } = _ref;
+  const [clonedChildren, setClonedChildren] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [element, setElement] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const previousChildren = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.usePrevious)(children);
+
+  if (!children && !clonedChildren && previousChildren) {
+    setClonedChildren(previousChildren);
+  }
+
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    if (!element) {
+      return;
+    }
+
+    const key = clonedChildren == null ? void 0 : clonedChildren.key;
+    const id = clonedChildren == null ? void 0 : clonedChildren.props.id;
+
+    if (key == null || id == null) {
+      setClonedChildren(null);
+      return;
+    }
+
+    Promise.resolve(animation(id, element)).then(() => {
+      setClonedChildren(null);
+    });
+  }, [animation, clonedChildren, element]);
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children, clonedChildren ? (0,react__WEBPACK_IMPORTED_MODULE_0__.cloneElement)(clonedChildren, {
+    ref: setElement
+  }) : null);
+}
+
+const defaultTransform = {
+  x: 0,
+  y: 0,
+  scaleX: 1,
+  scaleY: 1
+};
+function NullifiedContextProvider(_ref) {
+  let {
+    children
+  } = _ref;
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement(InternalContext.Provider, {
+    value: defaultInternalContext
+  }, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ActiveDraggableContext.Provider, {
+    value: defaultTransform
+  }, children));
+}
+
+const baseStyles = {
+  position: 'fixed',
+  touchAction: 'none'
+};
+
+const defaultTransition = activatorEvent => {
+  const isKeyboardActivator = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isKeyboardEvent)(activatorEvent);
+  return isKeyboardActivator ? 'transform 250ms ease' : undefined;
+};
+
+const PositionedOverlay = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)((_ref, ref) => {
+  let {
+    as,
+    activatorEvent,
+    adjustScale,
+    children,
+    className,
+    rect,
+    style,
+    transform,
+    transition = defaultTransition
+  } = _ref;
+
+  if (!rect) {
+    return null;
+  }
+
+  const scaleAdjustedTransform = adjustScale ? transform : { ...transform,
+    scaleX: 1,
+    scaleY: 1
+  };
+  const styles = { ...baseStyles,
+    width: rect.width,
+    height: rect.height,
+    top: rect.top,
+    left: rect.left,
+    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.CSS.Transform.toString(scaleAdjustedTransform),
+    transformOrigin: adjustScale && activatorEvent ? getRelativeTransformOrigin(activatorEvent, rect) : undefined,
+    transition: typeof transition === 'function' ? transition(activatorEvent) : transition,
+    ...style
+  };
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement(as, {
+    className,
+    style: styles,
+    ref
+  }, children);
+});
+
+const defaultDropAnimationSideEffects = options => _ref => {
+  let {
+    active,
+    dragOverlay
+  } = _ref;
+  const originalStyles = {};
+  const {
+    styles,
+    className
+  } = options;
+
+  if (styles != null && styles.active) {
+    for (const [key, value] of Object.entries(styles.active)) {
+      if (value === undefined) {
+        continue;
+      }
+
+      originalStyles[key] = active.node.style.getPropertyValue(key);
+      active.node.style.setProperty(key, value);
+    }
+  }
+
+  if (styles != null && styles.dragOverlay) {
+    for (const [key, value] of Object.entries(styles.dragOverlay)) {
+      if (value === undefined) {
+        continue;
+      }
+
+      dragOverlay.node.style.setProperty(key, value);
+    }
+  }
+
+  if (className != null && className.active) {
+    active.node.classList.add(className.active);
+  }
+
+  if (className != null && className.dragOverlay) {
+    dragOverlay.node.classList.add(className.dragOverlay);
+  }
+
+  return function cleanup() {
+    for (const [key, value] of Object.entries(originalStyles)) {
+      active.node.style.setProperty(key, value);
+    }
+
+    if (className != null && className.active) {
+      active.node.classList.remove(className.active);
+    }
+  };
+};
+
+const defaultKeyframeResolver = _ref2 => {
+  let {
+    transform: {
+      initial,
+      final
+    }
+  } = _ref2;
+  return [{
+    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.CSS.Transform.toString(initial)
+  }, {
+    transform: _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.CSS.Transform.toString(final)
+  }];
+};
+
+const defaultDropAnimationConfiguration = {
+  duration: 250,
+  easing: 'ease',
+  keyframes: defaultKeyframeResolver,
+  sideEffects: /*#__PURE__*/defaultDropAnimationSideEffects({
+    styles: {
+      active: {
+        opacity: '0'
+      }
+    }
+  })
+};
+function useDropAnimation(_ref3) {
+  let {
+    config,
+    draggableNodes,
+    droppableContainers,
+    measuringConfiguration
+  } = _ref3;
+  return (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useEvent)((id, node) => {
+    if (config === null) {
+      return;
+    }
+
+    const activeDraggable = draggableNodes.get(id);
+
+    if (!activeDraggable) {
+      return;
+    }
+
+    const activeNode = activeDraggable.node.current;
+
+    if (!activeNode) {
+      return;
+    }
+
+    const measurableNode = getMeasurableNode(node);
+
+    if (!measurableNode) {
+      return;
+    }
+
+    const {
+      transform
+    } = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.getWindow)(node).getComputedStyle(node);
+    const parsedTransform = parseTransform(transform);
+
+    if (!parsedTransform) {
+      return;
+    }
+
+    const animation = typeof config === 'function' ? config : createDefaultDropAnimation(config);
+    scrollIntoViewIfNeeded(activeNode, measuringConfiguration.draggable.measure);
+    return animation({
+      active: {
+        id,
+        data: activeDraggable.data,
+        node: activeNode,
+        rect: measuringConfiguration.draggable.measure(activeNode)
+      },
+      draggableNodes,
+      dragOverlay: {
+        node,
+        rect: measuringConfiguration.dragOverlay.measure(measurableNode)
+      },
+      droppableContainers,
+      measuringConfiguration,
+      transform: parsedTransform
+    });
+  });
+}
+
+function createDefaultDropAnimation(options) {
+  const {
+    duration,
+    easing,
+    sideEffects,
+    keyframes
+  } = { ...defaultDropAnimationConfiguration,
+    ...options
+  };
+  return _ref4 => {
+    let {
+      active,
+      dragOverlay,
+      transform,
+      ...rest
+    } = _ref4;
+
+    if (!duration) {
+      // Do not animate if animation duration is zero.
+      return;
+    }
+
+    const delta = {
+      x: dragOverlay.rect.left - active.rect.left,
+      y: dragOverlay.rect.top - active.rect.top
+    };
+    const scale = {
+      scaleX: transform.scaleX !== 1 ? active.rect.width * transform.scaleX / dragOverlay.rect.width : 1,
+      scaleY: transform.scaleY !== 1 ? active.rect.height * transform.scaleY / dragOverlay.rect.height : 1
+    };
+    const finalTransform = {
+      x: transform.x - delta.x,
+      y: transform.y - delta.y,
+      ...scale
+    };
+    const animationKeyframes = keyframes({ ...rest,
+      active,
+      dragOverlay,
+      transform: {
+        initial: transform,
+        final: finalTransform
+      }
+    });
+    const [firstKeyframe] = animationKeyframes;
+    const lastKeyframe = animationKeyframes[animationKeyframes.length - 1];
+
+    if (JSON.stringify(firstKeyframe) === JSON.stringify(lastKeyframe)) {
+      // The start and end keyframes are the same, infer that there is no animation needed.
+      return;
+    }
+
+    const cleanup = sideEffects == null ? void 0 : sideEffects({
+      active,
+      dragOverlay,
+      ...rest
+    });
+    const animation = dragOverlay.node.animate(animationKeyframes, {
+      duration,
+      easing,
+      fill: 'forwards'
+    });
+    return new Promise(resolve => {
+      animation.onfinish = () => {
+        cleanup == null ? void 0 : cleanup();
+        resolve();
+      };
+    });
+  };
+}
+
+let key = 0;
+function useKey(id) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (id == null) {
+      return;
+    }
+
+    key++;
+    return key;
+  }, [id]);
+}
+
+const DragOverlay = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().memo(_ref => {
+  let {
+    adjustScale = false,
+    children,
+    dropAnimation: dropAnimationConfig,
+    style,
+    transition,
+    modifiers,
+    wrapperElement = 'div',
+    className,
+    zIndex = 999
+  } = _ref;
+  const {
+    activatorEvent,
+    active,
+    activeNodeRect,
+    containerNodeRect,
+    draggableNodes,
+    droppableContainers,
+    dragOverlay,
+    over,
+    measuringConfiguration,
+    scrollableAncestors,
+    scrollableAncestorRects,
+    windowRect
+  } = useDndContext();
+  const transform = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(ActiveDraggableContext);
+  const key = useKey(active == null ? void 0 : active.id);
+  const modifiedTransform = applyModifiers(modifiers, {
+    activatorEvent,
+    active,
+    activeNodeRect,
+    containerNodeRect,
+    draggingNodeRect: dragOverlay.rect,
+    over,
+    overlayNodeRect: dragOverlay.rect,
+    scrollableAncestors,
+    scrollableAncestorRects,
+    transform,
+    windowRect
+  });
+  const initialRect = useInitialValue(activeNodeRect);
+  const dropAnimation = useDropAnimation({
+    config: dropAnimationConfig,
+    draggableNodes,
+    droppableContainers,
+    measuringConfiguration
+  }); // We need to wait for the active node to be measured before connecting the drag overlay ref
+  // otherwise collisions can be computed against a mispositioned drag overlay
+
+  const ref = initialRect ? dragOverlay.setRef : undefined;
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NullifiedContextProvider, null, react__WEBPACK_IMPORTED_MODULE_0___default().createElement(AnimationManager, {
+    animation: dropAnimation
+  }, active && key ? react__WEBPACK_IMPORTED_MODULE_0___default().createElement(PositionedOverlay, {
+    key: key,
+    id: active.id,
+    ref: ref,
+    as: wrapperElement,
+    activatorEvent: activatorEvent,
+    adjustScale: adjustScale,
+    className: className,
+    transition: transition,
+    rect: initialRect,
+    style: {
+      zIndex,
+      ...style
+    },
+    transform: modifiedTransform
+  }, children) : null));
+});
+
+
+//# sourceMappingURL=core.esm.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/@dnd-kit/sortable/dist/sortable.esm.js"
+/*!*************************************************************!*\
+  !*** ./node_modules/@dnd-kit/sortable/dist/sortable.esm.js ***!
+  \*************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SortableContext: () => (/* binding */ SortableContext),
+/* harmony export */   arrayMove: () => (/* binding */ arrayMove),
+/* harmony export */   arraySwap: () => (/* binding */ arraySwap),
+/* harmony export */   defaultAnimateLayoutChanges: () => (/* binding */ defaultAnimateLayoutChanges),
+/* harmony export */   defaultNewIndexGetter: () => (/* binding */ defaultNewIndexGetter),
+/* harmony export */   hasSortableData: () => (/* binding */ hasSortableData),
+/* harmony export */   horizontalListSortingStrategy: () => (/* binding */ horizontalListSortingStrategy),
+/* harmony export */   rectSortingStrategy: () => (/* binding */ rectSortingStrategy),
+/* harmony export */   rectSwappingStrategy: () => (/* binding */ rectSwappingStrategy),
+/* harmony export */   sortableKeyboardCoordinates: () => (/* binding */ sortableKeyboardCoordinates),
+/* harmony export */   useSortable: () => (/* binding */ useSortable),
+/* harmony export */   verticalListSortingStrategy: () => (/* binding */ verticalListSortingStrategy)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @dnd-kit/core */ "./node_modules/@dnd-kit/core/dist/core.esm.js");
+/* harmony import */ var _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @dnd-kit/utilities */ "./node_modules/@dnd-kit/utilities/dist/utilities.esm.js");
+
+
+
+
+/**
+ * Move an array item to a different position. Returns a new array with the item moved to the new position.
+ */
+function arrayMove(array, from, to) {
+  const newArray = array.slice();
+  newArray.splice(to < 0 ? newArray.length + to : to, 0, newArray.splice(from, 1)[0]);
+  return newArray;
+}
+
+/**
+ * Swap an array item to a different position. Returns a new array with the item swapped to the new position.
+ */
+function arraySwap(array, from, to) {
+  const newArray = array.slice();
+  newArray[from] = array[to];
+  newArray[to] = array[from];
+  return newArray;
+}
+
+function getSortedRects(items, rects) {
+  return items.reduce((accumulator, id, index) => {
+    const rect = rects.get(id);
+
+    if (rect) {
+      accumulator[index] = rect;
+    }
+
+    return accumulator;
+  }, Array(items.length));
+}
+
+function isValidIndex(index) {
+  return index !== null && index >= 0;
+}
+
+function itemsEqual(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function normalizeDisabled(disabled) {
+  if (typeof disabled === 'boolean') {
+    return {
+      draggable: disabled,
+      droppable: disabled
+    };
+  }
+
+  return disabled;
+}
+
+// To-do: We should be calculating scale transformation
+const defaultScale = {
+  scaleX: 1,
+  scaleY: 1
+};
+const horizontalListSortingStrategy = _ref => {
+  var _rects$activeIndex;
+
+  let {
+    rects,
+    activeNodeRect: fallbackActiveRect,
+    activeIndex,
+    overIndex,
+    index
+  } = _ref;
+  const activeNodeRect = (_rects$activeIndex = rects[activeIndex]) != null ? _rects$activeIndex : fallbackActiveRect;
+
+  if (!activeNodeRect) {
+    return null;
+  }
+
+  const itemGap = getItemGap(rects, index, activeIndex);
+
+  if (index === activeIndex) {
+    const newIndexRect = rects[overIndex];
+
+    if (!newIndexRect) {
+      return null;
+    }
+
+    return {
+      x: activeIndex < overIndex ? newIndexRect.left + newIndexRect.width - (activeNodeRect.left + activeNodeRect.width) : newIndexRect.left - activeNodeRect.left,
+      y: 0,
+      ...defaultScale
+    };
+  }
+
+  if (index > activeIndex && index <= overIndex) {
+    return {
+      x: -activeNodeRect.width - itemGap,
+      y: 0,
+      ...defaultScale
+    };
+  }
+
+  if (index < activeIndex && index >= overIndex) {
+    return {
+      x: activeNodeRect.width + itemGap,
+      y: 0,
+      ...defaultScale
+    };
+  }
+
+  return {
+    x: 0,
+    y: 0,
+    ...defaultScale
+  };
+};
+
+function getItemGap(rects, index, activeIndex) {
+  const currentRect = rects[index];
+  const previousRect = rects[index - 1];
+  const nextRect = rects[index + 1];
+
+  if (!currentRect || !previousRect && !nextRect) {
+    return 0;
+  }
+
+  if (activeIndex < index) {
+    return previousRect ? currentRect.left - (previousRect.left + previousRect.width) : nextRect.left - (currentRect.left + currentRect.width);
+  }
+
+  return nextRect ? nextRect.left - (currentRect.left + currentRect.width) : currentRect.left - (previousRect.left + previousRect.width);
+}
+
+const rectSortingStrategy = _ref => {
+  let {
+    rects,
+    activeIndex,
+    overIndex,
+    index
+  } = _ref;
+  const newRects = arrayMove(rects, overIndex, activeIndex);
+  const oldRect = rects[index];
+  const newRect = newRects[index];
+
+  if (!newRect || !oldRect) {
+    return null;
+  }
+
+  return {
+    x: newRect.left - oldRect.left,
+    y: newRect.top - oldRect.top,
+    scaleX: newRect.width / oldRect.width,
+    scaleY: newRect.height / oldRect.height
+  };
+};
+
+const rectSwappingStrategy = _ref => {
+  let {
+    activeIndex,
+    index,
+    rects,
+    overIndex
+  } = _ref;
+  let oldRect;
+  let newRect;
+
+  if (index === activeIndex) {
+    oldRect = rects[index];
+    newRect = rects[overIndex];
+  }
+
+  if (index === overIndex) {
+    oldRect = rects[index];
+    newRect = rects[activeIndex];
+  }
+
+  if (!newRect || !oldRect) {
+    return null;
+  }
+
+  return {
+    x: newRect.left - oldRect.left,
+    y: newRect.top - oldRect.top,
+    scaleX: newRect.width / oldRect.width,
+    scaleY: newRect.height / oldRect.height
+  };
+};
+
+// To-do: We should be calculating scale transformation
+const defaultScale$1 = {
+  scaleX: 1,
+  scaleY: 1
+};
+const verticalListSortingStrategy = _ref => {
+  var _rects$activeIndex;
+
+  let {
+    activeIndex,
+    activeNodeRect: fallbackActiveRect,
+    index,
+    rects,
+    overIndex
+  } = _ref;
+  const activeNodeRect = (_rects$activeIndex = rects[activeIndex]) != null ? _rects$activeIndex : fallbackActiveRect;
+
+  if (!activeNodeRect) {
+    return null;
+  }
+
+  if (index === activeIndex) {
+    const overIndexRect = rects[overIndex];
+
+    if (!overIndexRect) {
+      return null;
+    }
+
+    return {
+      x: 0,
+      y: activeIndex < overIndex ? overIndexRect.top + overIndexRect.height - (activeNodeRect.top + activeNodeRect.height) : overIndexRect.top - activeNodeRect.top,
+      ...defaultScale$1
+    };
+  }
+
+  const itemGap = getItemGap$1(rects, index, activeIndex);
+
+  if (index > activeIndex && index <= overIndex) {
+    return {
+      x: 0,
+      y: -activeNodeRect.height - itemGap,
+      ...defaultScale$1
+    };
+  }
+
+  if (index < activeIndex && index >= overIndex) {
+    return {
+      x: 0,
+      y: activeNodeRect.height + itemGap,
+      ...defaultScale$1
+    };
+  }
+
+  return {
+    x: 0,
+    y: 0,
+    ...defaultScale$1
+  };
+};
+
+function getItemGap$1(clientRects, index, activeIndex) {
+  const currentRect = clientRects[index];
+  const previousRect = clientRects[index - 1];
+  const nextRect = clientRects[index + 1];
+
+  if (!currentRect) {
+    return 0;
+  }
+
+  if (activeIndex < index) {
+    return previousRect ? currentRect.top - (previousRect.top + previousRect.height) : nextRect ? nextRect.top - (currentRect.top + currentRect.height) : 0;
+  }
+
+  return nextRect ? nextRect.top - (currentRect.top + currentRect.height) : previousRect ? currentRect.top - (previousRect.top + previousRect.height) : 0;
+}
+
+const ID_PREFIX = 'Sortable';
+const Context = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createContext({
+  activeIndex: -1,
+  containerId: ID_PREFIX,
+  disableTransforms: false,
+  items: [],
+  overIndex: -1,
+  useDragOverlay: false,
+  sortedRects: [],
+  strategy: rectSortingStrategy,
+  disabled: {
+    draggable: false,
+    droppable: false
+  }
+});
+function SortableContext(_ref) {
+  let {
+    children,
+    id,
+    items: userDefinedItems,
+    strategy = rectSortingStrategy,
+    disabled: disabledProp = false
+  } = _ref;
+  const {
+    active,
+    dragOverlay,
+    droppableRects,
+    over,
+    measureDroppableContainers
+  } = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.useDndContext)();
+  const containerId = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useUniqueId)(ID_PREFIX, id);
+  const useDragOverlay = Boolean(dragOverlay.rect !== null);
+  const items = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => userDefinedItems.map(item => typeof item === 'object' && 'id' in item ? item.id : item), [userDefinedItems]);
+  const isDragging = active != null;
+  const activeIndex = active ? items.indexOf(active.id) : -1;
+  const overIndex = over ? items.indexOf(over.id) : -1;
+  const previousItemsRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(items);
+  const itemsHaveChanged = !itemsEqual(items, previousItemsRef.current);
+  const disableTransforms = overIndex !== -1 && activeIndex === -1 || itemsHaveChanged;
+  const disabled = normalizeDisabled(disabledProp);
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    if (itemsHaveChanged && isDragging) {
+      measureDroppableContainers(items);
+    }
+  }, [itemsHaveChanged, items, isDragging, measureDroppableContainers]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    previousItemsRef.current = items;
+  }, [items]);
+  const contextValue = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    activeIndex,
+    containerId,
+    disabled,
+    disableTransforms,
+    items,
+    overIndex,
+    useDragOverlay,
+    sortedRects: getSortedRects(items, droppableRects),
+    strategy
+  }), // eslint-disable-next-line react-hooks/exhaustive-deps
+  [activeIndex, containerId, disabled.draggable, disabled.droppable, disableTransforms, items, overIndex, droppableRects, useDragOverlay, strategy]);
+  return react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Context.Provider, {
+    value: contextValue
+  }, children);
+}
+
+const defaultNewIndexGetter = _ref => {
+  let {
+    id,
+    items,
+    activeIndex,
+    overIndex
+  } = _ref;
+  return arrayMove(items, activeIndex, overIndex).indexOf(id);
+};
+const defaultAnimateLayoutChanges = _ref2 => {
+  let {
+    containerId,
+    isSorting,
+    wasDragging,
+    index,
+    items,
+    newIndex,
+    previousItems,
+    previousContainerId,
+    transition
+  } = _ref2;
+
+  if (!transition || !wasDragging) {
+    return false;
+  }
+
+  if (previousItems !== items && index === newIndex) {
+    return false;
+  }
+
+  if (isSorting) {
+    return true;
+  }
+
+  return newIndex !== index && containerId === previousContainerId;
+};
+const defaultTransition = {
+  duration: 200,
+  easing: 'ease'
+};
+const transitionProperty = 'transform';
+const disabledTransition = /*#__PURE__*/_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.CSS.Transition.toString({
+  property: transitionProperty,
+  duration: 0,
+  easing: 'linear'
+});
+const defaultAttributes = {
+  roleDescription: 'sortable'
+};
+
+/*
+ * When the index of an item changes while sorting,
+ * we need to temporarily disable the transforms
+ */
+
+function useDerivedTransform(_ref) {
+  let {
+    disabled,
+    index,
+    node,
+    rect
+  } = _ref;
+  const [derivedTransform, setDerivedtransform] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const previousIndex = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(index);
+  (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useIsomorphicLayoutEffect)(() => {
+    if (!disabled && index !== previousIndex.current && node.current) {
+      const initial = rect.current;
+
+      if (initial) {
+        const current = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.getClientRect)(node.current, {
+          ignoreTransform: true
+        });
+        const delta = {
+          x: initial.left - current.left,
+          y: initial.top - current.top,
+          scaleX: initial.width / current.width,
+          scaleY: initial.height / current.height
+        };
+
+        if (delta.x || delta.y) {
+          setDerivedtransform(delta);
+        }
+      }
+    }
+
+    if (index !== previousIndex.current) {
+      previousIndex.current = index;
+    }
+  }, [disabled, index, node, rect]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (derivedTransform) {
+      setDerivedtransform(null);
+    }
+  }, [derivedTransform]);
+  return derivedTransform;
+}
+
+function useSortable(_ref) {
+  let {
+    animateLayoutChanges = defaultAnimateLayoutChanges,
+    attributes: userDefinedAttributes,
+    disabled: localDisabled,
+    data: customData,
+    getNewIndex = defaultNewIndexGetter,
+    id,
+    strategy: localStrategy,
+    resizeObserverConfig,
+    transition = defaultTransition
+  } = _ref;
+  const {
+    items,
+    containerId,
+    activeIndex,
+    disabled: globalDisabled,
+    disableTransforms,
+    sortedRects,
+    overIndex,
+    useDragOverlay,
+    strategy: globalStrategy
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(Context);
+  const disabled = normalizeLocalDisabled(localDisabled, globalDisabled);
+  const index = items.indexOf(id);
+  const data = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    sortable: {
+      containerId,
+      index,
+      items
+    },
+    ...customData
+  }), [containerId, customData, index, items]);
+  const itemsAfterCurrentSortable = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => items.slice(items.indexOf(id)), [items, id]);
+  const {
+    rect,
+    node,
+    isOver,
+    setNodeRef: setDroppableNodeRef
+  } = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.useDroppable)({
+    id,
+    data,
+    disabled: disabled.droppable,
+    resizeObserverConfig: {
+      updateMeasurementsFor: itemsAfterCurrentSortable,
+      ...resizeObserverConfig
+    }
+  });
+  const {
+    active,
+    activatorEvent,
+    activeNodeRect,
+    attributes,
+    setNodeRef: setDraggableNodeRef,
+    listeners,
+    isDragging,
+    over,
+    setActivatorNodeRef,
+    transform
+  } = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.useDraggable)({
+    id,
+    data,
+    attributes: { ...defaultAttributes,
+      ...userDefinedAttributes
+    },
+    disabled: disabled.draggable
+  });
+  const setNodeRef = (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.useCombinedRefs)(setDroppableNodeRef, setDraggableNodeRef);
+  const isSorting = Boolean(active);
+  const displaceItem = isSorting && !disableTransforms && isValidIndex(activeIndex) && isValidIndex(overIndex);
+  const shouldDisplaceDragSource = !useDragOverlay && isDragging;
+  const dragSourceDisplacement = shouldDisplaceDragSource && displaceItem ? transform : null;
+  const strategy = localStrategy != null ? localStrategy : globalStrategy;
+  const finalTransform = displaceItem ? dragSourceDisplacement != null ? dragSourceDisplacement : strategy({
+    rects: sortedRects,
+    activeNodeRect,
+    activeIndex,
+    overIndex,
+    index
+  }) : null;
+  const newIndex = isValidIndex(activeIndex) && isValidIndex(overIndex) ? getNewIndex({
+    id,
+    items,
+    activeIndex,
+    overIndex
+  }) : index;
+  const activeId = active == null ? void 0 : active.id;
+  const previous = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    activeId,
+    items,
+    newIndex,
+    containerId
+  });
+  const itemsHaveChanged = items !== previous.current.items;
+  const shouldAnimateLayoutChanges = animateLayoutChanges({
+    active,
+    containerId,
+    isDragging,
+    isSorting,
+    id,
+    index,
+    items,
+    newIndex: previous.current.newIndex,
+    previousItems: previous.current.items,
+    previousContainerId: previous.current.containerId,
+    transition,
+    wasDragging: previous.current.activeId != null
+  });
+  const derivedTransform = useDerivedTransform({
+    disabled: !shouldAnimateLayoutChanges,
+    index,
+    node,
+    rect
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (isSorting && previous.current.newIndex !== newIndex) {
+      previous.current.newIndex = newIndex;
+    }
+
+    if (containerId !== previous.current.containerId) {
+      previous.current.containerId = containerId;
+    }
+
+    if (items !== previous.current.items) {
+      previous.current.items = items;
+    }
+  }, [isSorting, newIndex, containerId, items]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (activeId === previous.current.activeId) {
+      return;
+    }
+
+    if (activeId != null && previous.current.activeId == null) {
+      previous.current.activeId = activeId;
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      previous.current.activeId = activeId;
+    }, 50);
+    return () => clearTimeout(timeoutId);
+  }, [activeId]);
+  return {
+    active,
+    activeIndex,
+    attributes,
+    data,
+    rect,
+    index,
+    newIndex,
+    items,
+    isOver,
+    isSorting,
+    isDragging,
+    listeners,
+    node,
+    overIndex,
+    over,
+    setNodeRef,
+    setActivatorNodeRef,
+    setDroppableNodeRef,
+    setDraggableNodeRef,
+    transform: derivedTransform != null ? derivedTransform : finalTransform,
+    transition: getTransition()
+  };
+
+  function getTransition() {
+    if ( // Temporarily disable transitions for a single frame to set up derived transforms
+    derivedTransform || // Or to prevent items jumping to back to their "new" position when items change
+    itemsHaveChanged && previous.current.newIndex === index) {
+      return disabledTransition;
+    }
+
+    if (shouldDisplaceDragSource && !(0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.isKeyboardEvent)(activatorEvent) || !transition) {
+      return undefined;
+    }
+
+    if (isSorting || shouldAnimateLayoutChanges) {
+      return _dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.CSS.Transition.toString({ ...transition,
+        property: transitionProperty
+      });
+    }
+
+    return undefined;
+  }
+}
+
+function normalizeLocalDisabled(localDisabled, globalDisabled) {
+  var _localDisabled$dragga, _localDisabled$droppa;
+
+  if (typeof localDisabled === 'boolean') {
+    return {
+      draggable: localDisabled,
+      // Backwards compatibility
+      droppable: false
+    };
+  }
+
+  return {
+    draggable: (_localDisabled$dragga = localDisabled == null ? void 0 : localDisabled.draggable) != null ? _localDisabled$dragga : globalDisabled.draggable,
+    droppable: (_localDisabled$droppa = localDisabled == null ? void 0 : localDisabled.droppable) != null ? _localDisabled$droppa : globalDisabled.droppable
+  };
+}
+
+function hasSortableData(entry) {
+  if (!entry) {
+    return false;
+  }
+
+  const data = entry.data.current;
+
+  if (data && 'sortable' in data && typeof data.sortable === 'object' && 'containerId' in data.sortable && 'items' in data.sortable && 'index' in data.sortable) {
+    return true;
+  }
+
+  return false;
+}
+
+const directions = [_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Down, _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Right, _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Up, _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Left];
+const sortableKeyboardCoordinates = (event, _ref) => {
+  let {
+    context: {
+      active,
+      collisionRect,
+      droppableRects,
+      droppableContainers,
+      over,
+      scrollableAncestors
+    }
+  } = _ref;
+
+  if (directions.includes(event.code)) {
+    event.preventDefault();
+
+    if (!active || !collisionRect) {
+      return;
+    }
+
+    const filteredContainers = [];
+    droppableContainers.getEnabled().forEach(entry => {
+      if (!entry || entry != null && entry.disabled) {
+        return;
+      }
+
+      const rect = droppableRects.get(entry.id);
+
+      if (!rect) {
+        return;
+      }
+
+      switch (event.code) {
+        case _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Down:
+          if (collisionRect.top < rect.top) {
+            filteredContainers.push(entry);
+          }
+
+          break;
+
+        case _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Up:
+          if (collisionRect.top > rect.top) {
+            filteredContainers.push(entry);
+          }
+
+          break;
+
+        case _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Left:
+          if (collisionRect.left > rect.left) {
+            filteredContainers.push(entry);
+          }
+
+          break;
+
+        case _dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.KeyboardCode.Right:
+          if (collisionRect.left < rect.left) {
+            filteredContainers.push(entry);
+          }
+
+          break;
+      }
+    });
+    const collisions = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.closestCorners)({
+      active,
+      collisionRect: collisionRect,
+      droppableRects,
+      droppableContainers: filteredContainers,
+      pointerCoordinates: null
+    });
+    let closestId = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.getFirstCollision)(collisions, 'id');
+
+    if (closestId === (over == null ? void 0 : over.id) && collisions.length > 1) {
+      closestId = collisions[1].id;
+    }
+
+    if (closestId != null) {
+      const activeDroppable = droppableContainers.get(active.id);
+      const newDroppable = droppableContainers.get(closestId);
+      const newRect = newDroppable ? droppableRects.get(newDroppable.id) : null;
+      const newNode = newDroppable == null ? void 0 : newDroppable.node.current;
+
+      if (newNode && newRect && activeDroppable && newDroppable) {
+        const newScrollAncestors = (0,_dnd_kit_core__WEBPACK_IMPORTED_MODULE_1__.getScrollableAncestors)(newNode);
+        const hasDifferentScrollAncestors = newScrollAncestors.some((element, index) => scrollableAncestors[index] !== element);
+        const hasSameContainer = isSameContainer(activeDroppable, newDroppable);
+        const isAfterActive = isAfter(activeDroppable, newDroppable);
+        const offset = hasDifferentScrollAncestors || !hasSameContainer ? {
+          x: 0,
+          y: 0
+        } : {
+          x: isAfterActive ? collisionRect.width - newRect.width : 0,
+          y: isAfterActive ? collisionRect.height - newRect.height : 0
+        };
+        const rectCoordinates = {
+          x: newRect.left,
+          y: newRect.top
+        };
+        const newCoordinates = offset.x && offset.y ? rectCoordinates : (0,_dnd_kit_utilities__WEBPACK_IMPORTED_MODULE_2__.subtract)(rectCoordinates, offset);
+        return newCoordinates;
+      }
+    }
+  }
+
+  return undefined;
+};
+
+function isSameContainer(a, b) {
+  if (!hasSortableData(a) || !hasSortableData(b)) {
+    return false;
+  }
+
+  return a.data.current.sortable.containerId === b.data.current.sortable.containerId;
+}
+
+function isAfter(a, b) {
+  if (!hasSortableData(a) || !hasSortableData(b)) {
+    return false;
+  }
+
+  if (!isSameContainer(a, b)) {
+    return false;
+  }
+
+  return a.data.current.sortable.index < b.data.current.sortable.index;
+}
+
+
+//# sourceMappingURL=sortable.esm.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/@dnd-kit/utilities/dist/utilities.esm.js"
+/*!***************************************************************!*\
+  !*** ./node_modules/@dnd-kit/utilities/dist/utilities.esm.js ***!
+  \***************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CSS: () => (/* binding */ CSS),
+/* harmony export */   add: () => (/* binding */ add),
+/* harmony export */   canUseDOM: () => (/* binding */ canUseDOM),
+/* harmony export */   findFirstFocusableNode: () => (/* binding */ findFirstFocusableNode),
+/* harmony export */   getEventCoordinates: () => (/* binding */ getEventCoordinates),
+/* harmony export */   getOwnerDocument: () => (/* binding */ getOwnerDocument),
+/* harmony export */   getWindow: () => (/* binding */ getWindow),
+/* harmony export */   hasViewportRelativeCoordinates: () => (/* binding */ hasViewportRelativeCoordinates),
+/* harmony export */   isDocument: () => (/* binding */ isDocument),
+/* harmony export */   isHTMLElement: () => (/* binding */ isHTMLElement),
+/* harmony export */   isKeyboardEvent: () => (/* binding */ isKeyboardEvent),
+/* harmony export */   isNode: () => (/* binding */ isNode),
+/* harmony export */   isSVGElement: () => (/* binding */ isSVGElement),
+/* harmony export */   isTouchEvent: () => (/* binding */ isTouchEvent),
+/* harmony export */   isWindow: () => (/* binding */ isWindow),
+/* harmony export */   subtract: () => (/* binding */ subtract),
+/* harmony export */   useCombinedRefs: () => (/* binding */ useCombinedRefs),
+/* harmony export */   useEvent: () => (/* binding */ useEvent),
+/* harmony export */   useInterval: () => (/* binding */ useInterval),
+/* harmony export */   useIsomorphicLayoutEffect: () => (/* binding */ useIsomorphicLayoutEffect),
+/* harmony export */   useLatestValue: () => (/* binding */ useLatestValue),
+/* harmony export */   useLazyMemo: () => (/* binding */ useLazyMemo),
+/* harmony export */   useNodeRef: () => (/* binding */ useNodeRef),
+/* harmony export */   usePrevious: () => (/* binding */ usePrevious),
+/* harmony export */   useUniqueId: () => (/* binding */ useUniqueId)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function useCombinedRefs() {
+  for (var _len = arguments.length, refs = new Array(_len), _key = 0; _key < _len; _key++) {
+    refs[_key] = arguments[_key];
+  }
+
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => node => {
+    refs.forEach(ref => ref(node));
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  refs);
+}
+
+// https://github.com/facebook/react/blob/master/packages/shared/ExecutionEnvironment.js
+const canUseDOM = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined';
+
+function isWindow(element) {
+  const elementString = Object.prototype.toString.call(element);
+  return elementString === '[object Window]' || // In Electron context the Window object serializes to [object global]
+  elementString === '[object global]';
+}
+
+function isNode(node) {
+  return 'nodeType' in node;
+}
+
+function getWindow(target) {
+  var _target$ownerDocument, _target$ownerDocument2;
+
+  if (!target) {
+    return window;
+  }
+
+  if (isWindow(target)) {
+    return target;
+  }
+
+  if (!isNode(target)) {
+    return window;
+  }
+
+  return (_target$ownerDocument = (_target$ownerDocument2 = target.ownerDocument) == null ? void 0 : _target$ownerDocument2.defaultView) != null ? _target$ownerDocument : window;
+}
+
+function isDocument(node) {
+  const {
+    Document
+  } = getWindow(node);
+  return node instanceof Document;
+}
+
+function isHTMLElement(node) {
+  if (isWindow(node)) {
+    return false;
+  }
+
+  return node instanceof getWindow(node).HTMLElement;
+}
+
+function isSVGElement(node) {
+  return node instanceof getWindow(node).SVGElement;
+}
+
+function getOwnerDocument(target) {
+  if (!target) {
+    return document;
+  }
+
+  if (isWindow(target)) {
+    return target.document;
+  }
+
+  if (!isNode(target)) {
+    return document;
+  }
+
+  if (isDocument(target)) {
+    return target;
+  }
+
+  if (isHTMLElement(target) || isSVGElement(target)) {
+    return target.ownerDocument;
+  }
+
+  return document;
+}
+
+/**
+ * A hook that resolves to useEffect on the server and useLayoutEffect on the client
+ * @param callback {function} Callback function that is invoked when the dependencies of the hook change
+ */
+
+const useIsomorphicLayoutEffect = canUseDOM ? react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect : react__WEBPACK_IMPORTED_MODULE_0__.useEffect;
+
+function useEvent(handler) {
+  const handlerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(handler);
+  useIsomorphicLayoutEffect(() => {
+    handlerRef.current = handler;
+  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return handlerRef.current == null ? void 0 : handlerRef.current(...args);
+  }, []);
+}
+
+function useInterval() {
+  const intervalRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const set = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((listener, duration) => {
+    intervalRef.current = setInterval(listener, duration);
+  }, []);
+  const clear = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+  return [set, clear];
+}
+
+function useLatestValue(value, dependencies) {
+  if (dependencies === void 0) {
+    dependencies = [value];
+  }
+
+  const valueRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(value);
+  useIsomorphicLayoutEffect(() => {
+    if (valueRef.current !== value) {
+      valueRef.current = value;
+    }
+  }, dependencies);
+  return valueRef;
+}
+
+function useLazyMemo(callback, dependencies) {
+  const valueRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    const newValue = callback(valueRef.current);
+    valueRef.current = newValue;
+    return newValue;
+  }, // eslint-disable-next-line react-hooks/exhaustive-deps
+  [...dependencies]);
+}
+
+function useNodeRef(onChange) {
+  const onChangeHandler = useEvent(onChange);
+  const node = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const setNodeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(element => {
+    if (element !== node.current) {
+      onChangeHandler == null ? void 0 : onChangeHandler(element, node.current);
+    }
+
+    node.current = element;
+  }, //eslint-disable-next-line
+  []);
+  return [node, setNodeRef];
+}
+
+function usePrevious(value) {
+  const ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+let ids = {};
+function useUniqueId(prefix, value) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (value) {
+      return value;
+    }
+
+    const id = ids[prefix] == null ? 0 : ids[prefix] + 1;
+    ids[prefix] = id;
+    return prefix + "-" + id;
+  }, [prefix, value]);
+}
+
+function createAdjustmentFn(modifier) {
+  return function (object) {
+    for (var _len = arguments.length, adjustments = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      adjustments[_key - 1] = arguments[_key];
+    }
+
+    return adjustments.reduce((accumulator, adjustment) => {
+      const entries = Object.entries(adjustment);
+
+      for (const [key, valueAdjustment] of entries) {
+        const value = accumulator[key];
+
+        if (value != null) {
+          accumulator[key] = value + modifier * valueAdjustment;
+        }
+      }
+
+      return accumulator;
+    }, { ...object
+    });
+  };
+}
+
+const add = /*#__PURE__*/createAdjustmentFn(1);
+const subtract = /*#__PURE__*/createAdjustmentFn(-1);
+
+function hasViewportRelativeCoordinates(event) {
+  return 'clientX' in event && 'clientY' in event;
+}
+
+function isKeyboardEvent(event) {
+  if (!event) {
+    return false;
+  }
+
+  const {
+    KeyboardEvent
+  } = getWindow(event.target);
+  return KeyboardEvent && event instanceof KeyboardEvent;
+}
+
+function isTouchEvent(event) {
+  if (!event) {
+    return false;
+  }
+
+  const {
+    TouchEvent
+  } = getWindow(event.target);
+  return TouchEvent && event instanceof TouchEvent;
+}
+
+/**
+ * Returns the normalized x and y coordinates for mouse and touch events.
+ */
+
+function getEventCoordinates(event) {
+  if (isTouchEvent(event)) {
+    if (event.touches && event.touches.length) {
+      const {
+        clientX: x,
+        clientY: y
+      } = event.touches[0];
+      return {
+        x,
+        y
+      };
+    } else if (event.changedTouches && event.changedTouches.length) {
+      const {
+        clientX: x,
+        clientY: y
+      } = event.changedTouches[0];
+      return {
+        x,
+        y
+      };
+    }
+  }
+
+  if (hasViewportRelativeCoordinates(event)) {
+    return {
+      x: event.clientX,
+      y: event.clientY
+    };
+  }
+
+  return null;
+}
+
+const CSS = /*#__PURE__*/Object.freeze({
+  Translate: {
+    toString(transform) {
+      if (!transform) {
+        return;
+      }
+
+      const {
+        x,
+        y
+      } = transform;
+      return "translate3d(" + (x ? Math.round(x) : 0) + "px, " + (y ? Math.round(y) : 0) + "px, 0)";
+    }
+
+  },
+  Scale: {
+    toString(transform) {
+      if (!transform) {
+        return;
+      }
+
+      const {
+        scaleX,
+        scaleY
+      } = transform;
+      return "scaleX(" + scaleX + ") scaleY(" + scaleY + ")";
+    }
+
+  },
+  Transform: {
+    toString(transform) {
+      if (!transform) {
+        return;
+      }
+
+      return [CSS.Translate.toString(transform), CSS.Scale.toString(transform)].join(' ');
+    }
+
+  },
+  Transition: {
+    toString(_ref) {
+      let {
+        property,
+        duration,
+        easing
+      } = _ref;
+      return property + " " + duration + "ms " + easing;
+    }
+
+  }
+});
+
+const SELECTOR = 'a,frame,iframe,input:not([type=hidden]):not(:disabled),select:not(:disabled),textarea:not(:disabled),button:not(:disabled),*[tabindex]';
+function findFirstFocusableNode(element) {
+  if (element.matches(SELECTOR)) {
+    return element;
+  }
+
+  return element.querySelector(SELECTOR);
+}
+
+
+//# sourceMappingURL=utilities.esm.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/check.mjs"
+/*!**********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/check.mjs ***!
+  \**********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ check_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/check.tsx
+
+
+var check_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+
+//# sourceMappingURL=check.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/close.mjs"
+/*!**********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/close.mjs ***!
+  \**********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ close_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/close.tsx
+
+
+var close_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
+
+//# sourceMappingURL=close.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/help.mjs"
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/help.mjs ***!
+  \*********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ help_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/help.tsx
+
+
+var help_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M12 4a8 8 0 1 1 .001 16.001A8 8 0 0 1 12 4Zm0 1.5a6.5 6.5 0 1 0-.001 13.001A6.5 6.5 0 0 0 12 5.5Zm.75 11h-1.5V15h1.5v1.5Zm-.445-9.234a3 3 0 0 1 .445 5.89V14h-1.5v-1.25c0-.57.452-.958.917-1.01A1.5 1.5 0 0 0 12 8.75a1.5 1.5 0 0 0-1.5 1.5H9a3 3 0 0 1 3.305-2.984Z" }) });
+
+//# sourceMappingURL=help.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs"
+/*!***********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/pencil.mjs ***!
+  \***********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ pencil_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/pencil.tsx
+
+
+var pencil_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
+
+//# sourceMappingURL=pencil.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/pin.mjs"
+/*!********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/pin.mjs ***!
+  \********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ pin_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/pin.tsx
+
+
+var pin_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m21.5 9.1-6.6-6.6-4.2 5.6c-1.2-.1-2.4.1-3.6.7-.1 0-.1.1-.2.1-.5.3-.9.6-1.2.9l3.7 3.7-5.7 5.7v1.1h1.1l5.7-5.7 3.7 3.7c.4-.4.7-.8.9-1.2.1-.1.1-.2.2-.3.6-1.1.8-2.4.6-3.6l5.6-4.1zm-7.3 3.5.1.9c.1.9 0 1.8-.4 2.6l-6-6c.8-.4 1.7-.5 2.6-.4l.9.1L15 4.9 19.1 9l-4.9 3.6z" }) });
+
+//# sourceMappingURL=pin.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/plus.mjs"
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/plus.mjs ***!
+  \*********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ plus_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/plus.tsx
+
+
+var plus_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
+
+//# sourceMappingURL=plus.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/seen.mjs"
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/seen.mjs ***!
+  \*********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ seen_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/seen.tsx
+
+
+var seen_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z" }) });
+
+//# sourceMappingURL=seen.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/star-filled.mjs"
+/*!****************************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/star-filled.mjs ***!
+  \****************************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ star_filled_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/star-filled.tsx
+
+
+var star_filled_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
+
+//# sourceMappingURL=star-filled.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/trash.mjs"
+/*!**********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/trash.mjs ***!
+  \**********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ trash_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/trash.tsx
+
+
+var trash_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(
+  _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path,
+  {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M12 5.5A2.25 2.25 0 0 0 9.878 7h4.244A2.251 2.251 0 0 0 12 5.5ZM12 4a3.751 3.751 0 0 0-3.675 3H5v1.5h1.27l.818 8.997a2.75 2.75 0 0 0 2.739 2.501h4.347a2.75 2.75 0 0 0 2.738-2.5L17.73 8.5H19V7h-3.325A3.751 3.751 0 0 0 12 4Zm4.224 4.5H7.776l.806 8.861a1.25 1.25 0 0 0 1.245 1.137h4.347a1.25 1.25 0 0 0 1.245-1.137l.805-8.861Z"
+  }
+) });
+
+//# sourceMappingURL=trash.mjs.map
+
+
+/***/ },
+
+/***/ "@wordpress/api-fetch"
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+(module) {
+
+module.exports = window["wp"]["apiFetch"];
+
+/***/ },
+
+/***/ "@wordpress/blocks"
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+(module) {
+
+module.exports = window["wp"]["blocks"];
+
+/***/ },
+
+/***/ "@wordpress/components"
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ },
+
+/***/ "@wordpress/data"
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+(module) {
+
+module.exports = window["wp"]["data"];
+
+/***/ },
+
+/***/ "@wordpress/editor"
+/*!********************************!*\
+  !*** external ["wp","editor"] ***!
+  \********************************/
+(module) {
+
+module.exports = window["wp"]["editor"];
+
+/***/ },
+
+/***/ "@wordpress/element"
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+(module) {
+
+module.exports = window["wp"]["element"];
+
+/***/ },
+
+/***/ "@wordpress/i18n"
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ },
+
+/***/ "@wordpress/plugins"
+/*!*********************************!*\
+  !*** external ["wp","plugins"] ***!
+  \*********************************/
+(module) {
+
+module.exports = window["wp"]["plugins"];
+
+/***/ },
+
+/***/ "@wordpress/primitives"
+/*!************************************!*\
+  !*** external ["wp","primitives"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["primitives"];
+
+/***/ },
+
+/***/ "react"
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+(module) {
+
+module.exports = window["React"];
+
+/***/ },
+
+/***/ "react-dom"
+/*!***************************!*\
+  !*** external "ReactDOM" ***!
+  \***************************/
+(module) {
+
+module.exports = window["ReactDOM"];
+
+/***/ },
+
+/***/ "react/jsx-runtime"
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+(module) {
+
+module.exports = window["ReactJSXRuntime"];
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Check if module exists (development only)
+/******/ 		if (__webpack_modules__[moduleId] === undefined) {
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/create fake namespace object */
+/******/ 	(() => {
+/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
+/******/ 		var leafPrototypes;
+/******/ 		// create a fake namespace object
+/******/ 		// mode & 1: value is a module id, require it
+/******/ 		// mode & 2: merge all properties of value into the ns
+/******/ 		// mode & 4: return value when already ns object
+/******/ 		// mode & 16: return value when it's Promise-like
+/******/ 		// mode & 8|1: behave like require
+/******/ 		__webpack_require__.t = function(value, mode) {
+/******/ 			if(mode & 1) value = this(value);
+/******/ 			if(mode & 8) return value;
+/******/ 			if(typeof value === 'object' && value) {
+/******/ 				if((mode & 4) && value.__esModule) return value;
+/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
+/******/ 			}
+/******/ 			var ns = Object.create(null);
+/******/ 			__webpack_require__.r(ns);
+/******/ 			var def = {};
+/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
+/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
+/******/ 			}
+/******/ 			def['default'] = () => (value);
+/******/ 			__webpack_require__.d(ns, def);
+/******/ 			return ns;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!*************************************!*\
+  !*** ./assets/js/educator/index.js ***!
+  \*************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store */ "./assets/js/store/index.js");
+/* harmony import */ var _EducatorSidebar_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EducatorSidebar.jsx */ "./assets/js/educator/EducatorSidebar.jsx");
+/**
+ * Educator Entry Point.
+ *
+ * Registers the Educator sidebar plugin for the block editor.
+ *
+ * @package AdminCoachTours
+ * @since   0.1.0
+ */
+
+
+
+// Import store to ensure it's registered before components use it.
+
+
+
+// Register the educator plugin sidebar.
+(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_0__.registerPlugin)('admin-coach-tours-educator', {
+  render: _EducatorSidebar_jsx__WEBPACK_IMPORTED_MODULE_2__["default"],
+  icon: null // Icon is set in the PluginSidebar component.
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map
