@@ -75,6 +75,13 @@ export default function PupilLauncher() {
 		}
 	}, [ isPlaying, localLoading ] );
 
+	// Auto-open panel when there's an AI tour error (e.g., tour failed during playback).
+	useEffect( () => {
+		if ( aiTourError && ! isPlaying && ! isOpen ) {
+			setIsOpen( true );
+		}
+	}, [ aiTourError, isPlaying, isOpen ] );
+
 	// Get dispatch actions.
 	const { requestAiTour, clearEphemeralTour, setAiTourError, setLastFailureContext } = useDispatch( STORE_NAME );
 

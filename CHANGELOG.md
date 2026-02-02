@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.9] - 2026-02-02
+
+### Fixed
+
+- **"Try Again" button now works after tour failure**: When a tour fails, the launcher panel auto-opens showing the error with working "Try Again" and "Dismiss" buttons
+- **AI-powered retry**: Clicking "Try Again" sends failure context to AI so it can generate better selectors
+
+### Improved
+
+- **Clearer error messages**: When tour fails due to wrong block selection, error now says "Could not find the Image block. Make sure to insert or select the correct block, then try again."
+
 ## [0.3.8] - 2026-02-02
 
 ### Improved

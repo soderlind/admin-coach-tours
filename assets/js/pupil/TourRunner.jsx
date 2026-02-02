@@ -10,7 +10,7 @@
 import { useSelect, useDispatch, dispatch as wpDispatch, select as wpSelect } from '@wordpress/data';
 import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
 import { createPortal } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 import CoachPanel from './CoachPanel.jsx';
 import Highlighter from './Highlighter.js';
@@ -340,9 +340,18 @@ export default function TourRunner() {
 						clearInsertedBlocks();
 						previousStepIndexRef.current = null;
 						stopTour();
-						setAiTourError(
-							__( 'The generated tour could not complete. The AI may have produced incorrect steps.', 'admin-coach-tours' )
-						);
+						
+						// Get expected block type for better error message.
+						const blockType = getExpectedBlockType( currentStep.target?.locators );
+						const errorMessage = blockType
+							? sprintf(
+								/* translators: %s: block type name */
+								__( 'Could not find the %s block. Make sure to insert or select the correct block, then try again.', 'admin-coach-tours' ),
+								blockType
+							)
+							: __( 'The generated tour could not complete. Try again to get a fresh set of instructions.', 'admin-coach-tours' );
+						
+						setAiTourError( errorMessage );
 					}
 				}
 			}
