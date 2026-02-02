@@ -9,13 +9,13 @@
  *
  * @wordpress-plugin
  * Plugin Name: Admin Coach Tours
- * Plugin URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
+ * Plugin URI:  https://github.com/soderlind/admin-coach-tours
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.3.9
+ * Version:     0.4.0
  * Requires at least: 6.8
  * Requires PHP: 8.3
  * Author:      Per Soderlind
- * Author URI:  https://developer.developer.developer.developer.developer.developer.developer.developer
+ * Author URI:  https://github.com/soderlind
  * Text Domain: admin-coach-tours
  * Domain Path: /languages
  * License:     GPL-2.0-or-later
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.3.5';
+const VERSION = '0.4.0';
 
 /**
  * Plugin slug.
@@ -278,7 +278,14 @@ function enqueue_pupil_assets(): void {
 			'postType'    => $post_type ?? 'post',
 			'aiAvailable' => $ai_available,
 			'postTypes'   => get_post_types( [ 'show_in_rest' => true ], 'names' ),
+			'locale'      => get_user_locale(),
 		]
+	);
+
+	wp_set_script_translations(
+		'admin-coach-tours-pupil',
+		'admin-coach-tours',
+		PLUGIN_PATH . 'languages'
 	);
 
 	wp_enqueue_style(

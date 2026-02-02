@@ -1,0 +1,126 @@
+{
+	"translation-revision-date": "2025-01-01 12:00+0100",
+	"generator": "WP-CLI",
+	"source": "build/pupil/index.js",
+	"domain": "messages",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"lang": "nb_NO",
+				"plural-forms": "nplurals=2; plural=(n != 1);"
+			},
+			"Preparing…": [
+				"Forbereder…"
+			],
+			"This step expects a specific block type:": [
+				"Dette trinnet forventer en bestemt blokktype:"
+			],
+			"Please insert or select a %s block first, then try again.": [
+				"Vennligst sett inn eller velg en %s-blokk først, og prøv deretter igjen."
+			],
+			"Could not find the target element. The UI may have changed.": [
+				"Kunne ikke finne målelementet. Brukergrensesnittet kan ha endret seg."
+			],
+			"Try Again": [
+				"Prøv igjen"
+			],
+			"Finish": [
+				"Fullfør"
+			],
+			"Continue": [
+				"Fortsett"
+			],
+			"Next": [
+				"Neste"
+			],
+			"Step": [
+				"Trinn"
+			],
+			"Close tour": [
+				"Lukk omvisning"
+			],
+			"AI is not available.": [
+				"AI er ikke tilgjengelig."
+			],
+			"Failed to load tasks.": [
+				"Kunne ikke laste oppgaver."
+			],
+			"Open AI Coach": [
+				"Åpne AI Coach"
+			],
+			"AI Coach": [
+				"AI Coach"
+			],
+			"Close": [
+				"Lukk"
+			],
+			"AI is not configured yet.": [
+				"AI er ikke konfigurert ennå."
+			],
+			"Go to ": [
+				"Gå til "
+			],
+			"Tools → Coach Tours": [
+				"Verktøy → Coach Omvisninger"
+			],
+			" to add your API key.": [
+				" for å legge til din API-nøkkel."
+			],
+			"Creating your guided tour...": [
+				"Lager din veiledede omvisning..."
+			],
+			"AI is analyzing the editor and generating step-by-step instructions.": [
+				"AI analyserer editoren og genererer trinn-for-trinn instruksjoner."
+			],
+			"This usually takes a few seconds.": [
+				"Dette tar vanligvis noen få sekunder."
+			],
+			"Creating your tour...": [
+				"Lager omvisningen din..."
+			],
+			"AI is generating step-by-step instructions": [
+				"AI genererer trinn-for-trinn instruksjoner"
+			],
+			"What would you like to learn?": [
+				"Hva vil du lære?"
+			],
+			"Common Tasks": [
+				"Vanlige oppgaver"
+			],
+			"Ask a Question": [
+				"Still et spørsmål"
+			],
+			"This might be a temporary issue.": [
+				"Dette kan være et midlertidig problem."
+			],
+			"Loading tasks...": [
+				"Laster oppgaver..."
+			],
+			"Ask about the WordPress editor:": [
+				"Spør om WordPress-editoren:"
+			],
+			"e.g., How do I add a gallery?": [
+				"f.eks. Hvordan legger jeg til et galleri?"
+			],
+			"Generating...": [
+				"Genererer..."
+			],
+			"Get Tour": [
+				"Få omvisning"
+			],
+			"AI will create a step-by-step tour to guide you.": [
+				"AI vil lage en trinn-for-trinn omvisning for å veilede deg."
+			],
+			"Could not find the %s block. Make sure to insert or select the correct block, then try again.": [
+				"Kunne ikke finne %s-blokken. Sørg for å sette inn eller velge riktig blokk, og prøv deretter igjen."
+			],
+			"The generated tour could not complete. Try again to get a fresh set of instructions.": [
+				"Den genererte omvisningen kunne ikke fullføres. Prøv igjen for å få nye instruksjoner."
+			],
+			"Dismiss": [
+				"Avvis"
+			]
+		}
+	}
+}

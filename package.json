@@ -1,6 +1,6 @@
 {
 	"name": "admin-coach-tours",
-	"version": "0.3.9",
+	"version": "0.4.0",
 	"description": "Interactive guided tours for WordPress admin",
 	"author": "Per Soderlind",
 	"license": "GPL-2.0-or-later",
@@ -18,7 +18,13 @@
 		"test:js:watch": "vitest",
 		"test:js:coverage": "vitest run --coverage",
 		"test": "npm run test:js && composer test",
-		"packages-update": "wp-scripts packages-update"
+		"packages-update": "wp-scripts packages-update",
+		"i18n": "npm run i18n:make-pot && npm run i18n:update-po && npm run i18n:make-mo && npm run i18n:make-json && npm run i18n:make-php",
+		"i18n:make-pot": "wp i18n make-pot . languages/admin-coach-tours.pot --exclude=node_modules,vendor,tests,build --domain=admin-coach-tours",
+		"i18n:update-po": "wp i18n update-po languages/admin-coach-tours.pot languages/",
+		"i18n:make-mo": "wp i18n make-mo languages/",
+		"i18n:make-json": "wp i18n make-json languages/ --no-purge",
+		"i18n:make-php": "wp i18n make-php languages/"
 	},
 	"devDependencies": {
 		"@testing-library/dom": "^10.4.1",

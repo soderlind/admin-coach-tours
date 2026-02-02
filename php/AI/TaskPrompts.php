@@ -165,6 +165,55 @@ class TaskPrompts {
 	}
 
 	/**
+	 * Get language instruction for the AI based on WordPress locale.
+	 *
+	 * @param string $locale WordPress locale (e.g., 'nb_NO', 'sv_SE', 'en_US').
+	 * @return string Language instruction for the AI prompt.
+	 */
+	private static function get_language_instruction( string $locale ): string {
+		// If no locale or English, no special instruction needed.
+		if ( empty( $locale ) || str_starts_with( $locale, 'en' ) ) {
+			return '';
+		}
+
+		// Get the language name from WordPress translations.
+		$language = self::get_language_name_from_locale( $locale );
+
+		return <<<INSTRUCTION
+## IMPORTANT: Response Language
+The user's WordPress is set to {$language} ({$locale}).
+You MUST write all user-facing text in {$language}:
+- The tour "title" field
+- Each step's "title" field
+- Each step's "content" field (the HTML instructions)
+
+Keep technical identifiers in English:
+- Step "id" fields (e.g., "open-inserter", "select-block")
+- CSS selectors and locator values
+- Completion types and precondition types
+- JSON structure and property names
+INSTRUCTION;
+	}
+
+	/**
+	 * Get the language name from a WordPress locale code.
+	 *
+	 * @param string $locale WordPress locale code (e.g., 'nb_NO', 'sv_SE').
+	 * @return string The language name in English.
+	 */
+	private static function get_language_name_from_locale( string $locale ): string {
+		// Extract the two-letter language code.
+		$lang_code = strtolower( substr( $locale, 0, 2 ) );
+
+		// Load ms.php if not already loaded (contains format_code_lang).
+		if ( ! function_exists( 'format_code_lang' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/ms.php';
+		}
+
+		return format_code_lang( $lang_code );
+	}
+
+	/**
 	 * Get the system prompt for tour generation.
 	 *
 	 * @param string $task_id              The task ID or 'freeform' for custom queries.
@@ -173,14 +222,20 @@ class TaskPrompts {
 	 * @param string $post_type            The current post type.
 	 * @param string $editor_context       Current editor state (blocks, UI elements).
 	 * @param string $failure_context      Context from previous failed attempt (for retry).
+	 * @param string $locale               User's WordPress locale for response language.
 	 * @return string The system prompt.
 	 */
-	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, string $editor_context = '', string $failure_context = '' ): string {
+	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, string $editor_context = '', string $failure_context = '', string $locale = '' ): string {
 		$task = self::get_task( $task_id );
+
+		// Determine the display language based on locale.
+		$language_instruction = self::get_language_instruction( $locale );
 
 		// Base system prompt.
 		$system_prompt = <<<PROMPT
 You are an expert WordPress Gutenberg editor tutor. Your job is to create step-by-step interactive tours that guide users through tasks in the WordPress block editor.
+
+{$language_instruction}
 
 ## Your Role
 - Create clear, concise instructions for each step

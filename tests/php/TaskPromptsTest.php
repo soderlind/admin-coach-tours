@@ -195,4 +195,76 @@ class TaskPromptsTest extends TestCase {
 			$this->assertContains( $expected_id, $task_ids, "Expected task '$expected_id' not found" );
 		}
 	}
+
+	/**
+	 * Test system prompt with locale includes language instructions.
+	 */
+	public function test_system_prompt_with_locale_includes_language_instructions(): void {
+		// Mock format_code_lang to return a language name.
+		Functions\when( 'format_code_lang' )->justReturn( 'Norwegian' );
+
+		$prompt = TaskPrompts::get_system_prompt(
+			'add-image',
+			'',
+			'Sample Gutenberg context',
+			'post',
+			'',
+			'',
+			'nb_NO'
+		);
+
+		$this->assertStringContainsString( 'Response Language', $prompt );
+		$this->assertStringContainsString( 'Norwegian', $prompt );
+		$this->assertStringContainsString( 'nb_NO', $prompt );
+	}
+
+	/**
+	 * Test system prompt with English locale does not include language instructions.
+	 */
+	public function test_system_prompt_with_english_locale_no_language_instructions(): void {
+		$prompt = TaskPrompts::get_system_prompt(
+			'add-image',
+			'',
+			'Sample Gutenberg context',
+			'post',
+			'',
+			'',
+			'en_US'
+		);
+
+		$this->assertStringNotContainsString( 'Response Language', $prompt );
+	}
+
+	/**
+	 * Test system prompt with empty locale does not include language instructions.
+	 */
+	public function test_system_prompt_with_empty_locale_no_language_instructions(): void {
+		$prompt = TaskPrompts::get_system_prompt(
+			'add-image',
+			'',
+			'Sample Gutenberg context',
+			'post',
+			'',
+			'',
+			''
+		);
+
+		$this->assertStringNotContainsString( 'Response Language', $prompt );
+	}
+
+	/**
+	 * Test system prompt locale parameter is optional (backward compatible).
+	 */
+	public function test_system_prompt_locale_parameter_is_optional(): void {
+		// Should not throw an error when called without locale parameter.
+		$prompt = TaskPrompts::get_system_prompt(
+			'add-image',
+			'',
+			'Sample Gutenberg context',
+			'post'
+		);
+
+		$this->assertIsString( $prompt );
+		$this->assertNotEmpty( $prompt );
+	}
 }
