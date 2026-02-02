@@ -22,6 +22,42 @@ import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 const STORE_NAME = 'admin-coach-tours';
 
 /**
+ * Extract the expected block type from step locators.
+ *
+ * Parses locators to find data-type selectors and returns a human-readable block name.
+ *
+ * @param {Array} locators Array of locators from the step.
+ * @return {string|null} Human-readable block name or null.
+ */
+function getExpectedBlockType( locators ) {
+	if ( ! Array.isArray( locators ) ) {
+		return null;
+	}
+
+	for ( const locator of locators ) {
+		if ( locator.type === 'css' && typeof locator.value === 'string' ) {
+			// Look for data-type="core/xxx" pattern.
+			const match = locator.value.match( /data-type=["']?(core\/[\w-]+)["']?/i );
+			if ( match ) {
+				// Convert "core/image" to "Image".
+				const blockType = match[ 1 ].replace( 'core/', '' );
+				return blockType.charAt( 0 ).toUpperCase() + blockType.slice( 1 ).replace( /-/g, ' ' );
+			}
+		}
+		if ( locator.type === 'wpBlock' && typeof locator.value === 'string' ) {
+			// Look for "type:core/xxx" pattern.
+			const match = locator.value.match( /type:(core\/[\w-]+)/i );
+			if ( match ) {
+				const blockType = match[ 1 ].replace( 'core/', '' );
+				return blockType.charAt( 0 ).toUpperCase() + blockType.slice( 1 ).replace( /-/g, ' ' );
+			}
+		}
+	}
+
+	return null;
+}
+
+/**
  * Scroll an element into view, handling cross-frame scenarios.
  * When element is inside an iframe, we need to scroll both the iframe content
  * and ensure the iframe area is visible in the main window.
@@ -93,6 +129,7 @@ export default function TourRunner() {
 	
 	const [ targetElement, setTargetElement ] = useState( null );
 	const [ resolutionError, setResolutionError ] = useState( null );
+	const [ expectedBlockType, setExpectedBlockType ] = useState( null );
 	const [ resolution, setResolution ] = useState( null );
 	const [ isApplyingPreconditions, setIsApplyingPreconditions ] = useState( false );
 	const [ repeatCounter, setRepeatCounter ] = useState( 0 );
@@ -231,6 +268,8 @@ export default function TourRunner() {
 				if ( result.success ) {
 					resolvedElement = result.element; // Store locally for completion watcher.
 					setTargetElement( result.element );
+					setResolutionError( null );
+					setExpectedBlockType( null );
 					setResolution( {
 						success: true,
 						usedLocator: result.usedLocator,
@@ -272,6 +311,7 @@ export default function TourRunner() {
 					resolvedElement = null;
 					setTargetElement( null );
 					setResolutionError( result.error );
+					setExpectedBlockType( getExpectedBlockType( currentStep.target?.locators ) );
 					setResolution( {
 						success: false,
 						error: result.error,
@@ -439,6 +479,7 @@ export default function TourRunner() {
 			tourTitle={ currentTour.title }
 			targetElement={ targetElement }
 			resolutionError={ resolutionError }
+			expectedBlockType={ expectedBlockType }
 			isApplyingPreconditions={ isApplyingPreconditions }
 			onContinue={ handleContinue }
 			onRepeat={ handleRepeat }
