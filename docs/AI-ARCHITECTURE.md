@@ -40,7 +40,7 @@ This document explains how Admin Coach Tours uses AI to generate interactive tut
           │ Knowledge   │    │  Prompts    │    │  Context    │
           │ Base (RAG)  │    │             │    │             │
           └─────────────┘    └─────────────┘    └─────────────┘
-                    │                 │                       │
+                    │                 │                 │
                     └─────────────────┴─────────────────┘
                                       │
                                       ▼
