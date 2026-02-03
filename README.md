@@ -163,3 +163,4 @@ GPL v2 or later — see [LICENSE](LICENSE) for details.
 
 - Built with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts) and [@wordpress/data](https://www.npmjs.com/package/@wordpress/data)
 - AI integration supports OpenAI, Azure OpenAI, and Anthropic
+- RAG knowledge base includes pedagogical content from [Learn WordPress](https://learn.wordpress.org/learning-pathway/user/) courses

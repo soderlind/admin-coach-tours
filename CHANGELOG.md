@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-02-03
+
+### Added
+
+- **Enhanced RAG knowledge base**: Added pedagogical content from Learn WordPress courses:
+  - Editor interface concepts (Content area, List View, Settings sidebar)
+  - Multiple methods for adding blocks (Inserter, Quick Inserter, slash commands)
+  - Block patterns workflows (inserting, creating synced/unsynced patterns)
+  - Nesting best practices and container block guidelines
+  - Detailed workflows for Group, Columns, Cover, and Media & Text blocks
+  - Row and Stack container blocks
+  - Block tips from official WordPress training materials
+
+### Changed
+
+- **GutenbergKnowledgeBase**: Now includes editor concepts, design patterns, and nesting best practices in AI context.
+- **gutenberg-blocks.json**: Updated to v1.1.0 with source attribution to Learn WordPress.
+
 ## [0.4.0] - 2026-02-02
 
 ### Added

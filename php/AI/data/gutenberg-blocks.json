@@ -1,6 +1,106 @@
 {
-	"version": "1.0.0",
-	"lastUpdated": "2026-01-31",
+	"version": "1.1.0",
+	"lastUpdated": "2025-01-31",
+	"source": "Learn WordPress (https://learn.wordpress.org/learning-pathway/user/)",
+	"editorConcepts": {
+		"interfaceSections": {
+			"description": "The Gutenberg editor is divided into three main sections",
+			"sections": {
+				"contentArea": "The main editing canvas where you create and arrange blocks",
+				"leftSidebar": "Contains the Inserter (blocks/patterns) and List View for navigating nested content",
+				"rightSidebar": "Settings sidebar for configuring the selected block or document properties"
+			}
+		},
+		"addingBlocks": {
+			"description": "Multiple ways to add blocks to the editor",
+			"methods": [
+				{
+					"name": "Inserter Button",
+					"steps": ["Click the + button in the top-left toolbar", "Browse or search for blocks", "Click to insert"],
+					"tip": "Best for discovering available blocks"
+				},
+				{
+					"name": "Quick Inserter",
+					"steps": ["Click the + button that appears between blocks or in empty paragraphs"],
+					"tip": "Fastest for adding blocks between existing content"
+				},
+				{
+					"name": "Slash Command",
+					"steps": ["In an empty paragraph, type / followed by block name", "Example: /image, /heading, /columns"],
+					"tip": "Keyboard users' favorite - no mouse needed"
+				}
+			]
+		},
+		"listView": {
+			"description": "Navigate and organize nested blocks using List View",
+			"usage": [
+				"Open List View from the toolbar (three horizontal lines icon)",
+				"See hierarchical structure of all blocks on the page",
+				"Click any block in List View to select it in the editor",
+				"Drag blocks in List View to reorder them",
+				"Expand containers to see nested blocks inside"
+			],
+			"bestPractices": [
+				"Use List View when working with deeply nested content",
+				"Rename Group blocks to describe their purpose",
+				"Use List View to select parent containers that are hard to click"
+			]
+		},
+		"blockToolbar": {
+			"description": "The toolbar that appears above a selected block",
+			"features": [
+				"Transform block to different type (click block icon)",
+				"Drag handle to move block by dragging",
+				"Up/down arrows to reorder blocks",
+				"Alignment options for supported blocks",
+				"Text formatting (bold, italic, links)",
+				"More options menu (three dots) for additional actions"
+			]
+		}
+	},
+	"designPatterns": {
+		"description": "Pre-made layouts of grouped blocks to accelerate design",
+		"types": {
+			"themePatterns": "Patterns bundled with your theme, organized by category",
+			"syncedPatterns": "Patterns you create that update everywhere when edited (purple icon)",
+			"unsyncedPatterns": "Patterns you create that are independent copies",
+			"templateParts": "Reusable header, footer, and other structural elements"
+		},
+		"workflows": {
+			"insertPattern": [
+				"Click Inserter (+) button",
+				"Switch to Patterns tab",
+				"Browse categories or search",
+				"Click pattern to insert",
+				"Modify content and styling to fit your needs"
+			],
+			"createSyncedPattern": [
+				"Select the blocks you want to save as a pattern",
+				"Click More options (three dots) in toolbar",
+				"Select Create Pattern",
+				"Name it descriptively",
+				"Enable Sync this pattern option",
+				"Pattern will now update everywhere when edited"
+			],
+			"usePatternDirectory": [
+				"Visit wordpress.org/patterns",
+				"Search or browse curated patterns",
+				"Click Copy Pattern",
+				"Paste into your editor"
+			]
+		}
+	},
+	"nestingBestPractices": {
+		"description": "Best practices for creating complex layouts with nested blocks",
+		"containerBlocks": ["Group", "Columns", "Cover", "Media and Text", "Row", "Stack"],
+		"guidelines": [
+			"Use container blocks to group related content together",
+			"Always use List View when working with nested structures",
+			"Rename Group blocks to describe their purpose (e.g., 'Testimonial Section')",
+			"When changing container width, first deselect 'Inner blocks use content width'",
+			"Add padding to container blocks, not individual nested blocks"
+		]
+	},
 	"blocks": {
 		"core/paragraph": {
 			"name": "Paragraph",
@@ -252,7 +352,7 @@
 		},
 		"core/columns": {
 			"name": "Columns",
-			"description": "Display content in multiple columns.",
+			"description": "Display content in multiple columns. One of the most effective blocks for complex layouts.",
 			"category": "design",
 			"keywords": [
 				"columns",
@@ -270,10 +370,35 @@
 				"insert": [
 					"Open inserter",
 					"Select Columns block",
-					"Choose column layout",
+					"Choose column layout (e.g., two equal, 30/70, three equal)",
 					"Add content to each column"
+				],
+				"buildLayout": [
+					"Add Columns block and select layout",
+					"In first column: add Heading, Paragraph, and other content",
+					"In second column: add Image or Gallery",
+					"Select parent Columns block in List View",
+					"Change alignment to Wide width in toolbar"
+				],
+				"styleColumns": [
+					"Select the parent Columns block",
+					"Open Styles tab in sidebar",
+					"Add padding around the block's content",
+					"Add block spacing between columns"
+				],
+				"duplicateColumn": [
+					"Complete styling one column",
+					"Select that column in List View",
+					"Click three dots and Duplicate",
+					"Delete empty columns",
+					"Modify duplicated content as needed"
 				]
-			}
+			},
+			"tips": [
+				"Build and style one column completely, then duplicate it for consistency",
+				"Use List View to easily select the parent Columns block",
+				"Center text and set image aspect ratios for uniform appearance"
+			]
 		},
 		"core/gallery": {
 			"name": "Gallery",
@@ -300,7 +425,7 @@
 		},
 		"core/cover": {
 			"name": "Cover",
-			"description": "Add an image or video with a text overlay.",
+			"description": "Add an image or video with a text overlay. Great for headers, banners, and hero sections.",
 			"category": "media",
 			"keywords": [
 				"cover",
@@ -319,8 +444,84 @@
 					"Select Cover block",
 					"Upload or select background image",
 					"Add overlay text"
+				],
+				"createHeroBanner": [
+					"Add Cover block",
+					"Select background image from media library",
+					"Add text (e.g., 'Enjoy 20% Off')",
+					"Add Buttons block below text",
+					"Select both text and button, use Stack block to group",
+					"Justify Stack block to center",
+					"Change Cover alignment to wide or full width"
+				],
+				"styleOverlay": [
+					"Select Cover block",
+					"Open Styles tab in sidebar",
+					"Change overlay color and opacity",
+					"Lower opacity (e.g., 30%) to make image more visible",
+					"Higher opacity for better text readability"
+				],
+				"adjustSize": [
+					"Select Cover block",
+					"Use toolbar to toggle full height",
+					"Or drag the bottom handle to adjust height manually",
+					"Deselect 'Inner blocks use content width' for full-width nested content"
 				]
-			}
+			},
+			"tips": [
+				"Use Stack block inside Cover to group and center content",
+				"Adjust overlay opacity for balance between image visibility and text readability",
+				"Don't forget to add URL to call-to-action buttons"
+			]
+		},
+		"core/media-text": {
+			"name": "Media & Text",
+			"description": "Set media and words side-by-side for a richer layout. Perfect for featured content with call-to-action.",
+			"category": "media",
+			"keywords": [
+				"media",
+				"text",
+				"image",
+				"side by side",
+				"feature"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/media-text\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"media-text\"]"
+			},
+			"workflows": {
+				"insert": [
+					"Open inserter",
+					"Select Media & Text block",
+					"Add image on one side from media library",
+					"Add content on the other side"
+				],
+				"createFeatureSection": [
+					"Add Media & Text block",
+					"Select image from media library for left side",
+					"On right side: add Heading block",
+					"Add Paragraph with description",
+					"Add Buttons block with call-to-action",
+					"Make button text bold and add URL"
+				],
+				"adjustLayout": [
+					"Select the Media & Text block in List View",
+					"Change alignment to wide width in toolbar",
+					"Use toolbar button to flip media to right side",
+					"In Settings, adjust media width (e.g., 40%)",
+					"Change vertical alignment to align bottom"
+				],
+				"style": [
+					"Select Media & Text block",
+					"Open Styles tab",
+					"Add padding around the content"
+				]
+			},
+			"tips": [
+				"Great for 'About' sections with image and description",
+				"Adjust media width for visual balance",
+				"Always add URL to call-to-action buttons"
+			]
 		},
 		"core/table": {
 			"name": "Table",
@@ -436,11 +637,95 @@
 					"Add blocks inside group"
 				],
 				"groupExisting": [
-					"Select multiple blocks",
-					"Click Group in toolbar",
-					"Blocks are now grouped"
+					"Select multiple blocks (Shift+click in List View)",
+					"Click three dots in toolbar or use toolbar Group button",
+					"Select Group",
+					"Blocks are now grouped together"
+				],
+				"addBackgroundColor": [
+					"Select the Group block",
+					"Open Styles tab in sidebar",
+					"Click Background color",
+					"Choose a color or add custom color"
+				],
+				"changeWidth": [
+					"Select the Group block",
+					"First, deselect 'Inner blocks use content width' in Settings",
+					"Then use toolbar to select Wide width or Full width"
+				],
+				"renameSection": [
+					"Select the Group block",
+					"Click three dots in toolbar",
+					"Select Rename",
+					"Enter descriptive name (e.g., 'Hero Section', 'Testimonial')"
 				]
-			}
+			},
+			"tips": [
+				"Use Group to apply background colors to sections",
+				"Rename groups to organize your page structure",
+				"Must deselect 'Inner blocks use content width' before changing alignment"
+			]
+		},
+		"core/row": {
+			"name": "Row",
+			"description": "Arrange blocks horizontally in a row with flexible alignment options.",
+			"category": "design",
+			"keywords": [
+				"row",
+				"horizontal",
+				"inline",
+				"flex"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/group\"][class*=\"is-layout-flex\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"row\"]"
+			},
+			"workflows": {
+				"insert": [
+					"Open inserter",
+					"Select Row block",
+					"Add blocks that will appear side by side"
+				],
+				"fromGroup": [
+					"Select existing Group block",
+					"Click block icon in toolbar to Transform",
+					"Select Row"
+				]
+			},
+			"tips": [
+				"Use Row for horizontal arrangements like icon + text",
+				"Great for navigation items or social links"
+			]
+		},
+		"core/stack": {
+			"name": "Stack",
+			"description": "Arrange blocks vertically with consistent spacing.",
+			"category": "design",
+			"keywords": [
+				"stack",
+				"vertical",
+				"spacing"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/group\"][class*=\"is-layout-flex\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"stack\"]"
+			},
+			"workflows": {
+				"insert": [
+					"Open inserter",
+					"Select Stack block",
+					"Add blocks that will stack vertically"
+				],
+				"centerContent": [
+					"Add Stack block",
+					"Add content blocks inside",
+					"Use toolbar to justify items to center"
+				]
+			},
+			"tips": [
+				"Use Stack inside Cover blocks to center content",
+				"Customize spacing between stacked items in sidebar"
+			]
 		}
 	},
 	"uiElements": {
