@@ -172,34 +172,34 @@ The AI receives a comprehensive prompt built from multiple sources:
 │  1. BASE INSTRUCTIONS                                  │
 │     • Role definition                                  │
 │     • Tour JSON format specification                   │
-│     • Locator types (css, ariaLabel, wpBlock, etc.)   │
-│     • Completion types (clickTarget, manual, etc.)    │
-│     • Precondition types (openInserter, insertBlock)  │
+│     • Locator types (css, ariaLabel, wpBlock, etc.)    │
+│     • Completion types (clickTarget, manual, etc.)     │
+│     • Precondition types (openInserter, insertBlock)   │
 │     • Selector reliability rules                       │
 ├────────────────────────────────────────────────────────┤
 │  2. CURRENT CONTEXT                                    │
-│     • Post type (post, page, etc.)                    │
-│     • Task ID or "freeform"                           │
+│     • Post type (post, page, etc.)                     │
+│     • Task ID or "freeform"                            │
 ├────────────────────────────────────────────────────────┤
 │  3. EDITOR STATE (from frontend)                       │
-│     • Blocks in editor with targeting options         │
-│     • Visible UI elements                             │
-│     • Available starting points                       │
+│     • Blocks in editor with targeting options          │
+│     • Visible UI elements                              │
+│     • Available starting points                        │
 ├────────────────────────────────────────────────────────┤
 │  4. FAILURE CONTEXT (on retry only)                    │
-│     • Which step failed                               │
-│     • Selectors that didn't work                      │
-│     • Instructions to use different approach          │
+│     • Which step failed                                │
+│     • Selectors that didn't work                       │
+│     • Instructions to use different approach           │
 ├────────────────────────────────────────────────────────┤
 │  5. GUTENBERG REFERENCE (RAG)                          │
-│     • Relevant block definitions                      │
-│     • Proven selectors                                │
-│     • UI element patterns                             │
+│     • Relevant block definitions                       │
+│     • Proven selectors                                 │
+│     • UI element patterns                              │
 ├────────────────────────────────────────────────────────┤
 │  6. TASK-SPECIFIC INSTRUCTIONS                         │
-│     • Optimized step patterns for this task           │
-│     • Known working selectors                         │
-│     • Common pitfalls to avoid                        │
+│     • Optimized step patterns for this task            │
+│     • Known working selectors                          │
+│     • Common pitfalls to avoid                         │
 └────────────────────────────────────────────────────────┘
 ```
 
