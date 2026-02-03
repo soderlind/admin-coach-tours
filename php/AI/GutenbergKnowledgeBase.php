@@ -90,14 +90,44 @@ class GutenbergKnowledgeBase {
 		$knowledge = self::load();
 		$query     = strtolower( $query );
 		$context   = [
-			'blocks'     => [],
-			'uiElements' => [],
-			'actions'    => [],
-			'formatting' => [],
+			'editorConcepts'       => [],
+			'designPatterns'       => [],
+			'nestingBestPractices' => [],
+			'blocks'               => [],
+			'uiElements'           => [],
+			'actions'              => [],
+			'formatting'           => [],
 		];
 
 		if ( empty( $knowledge ) ) {
 			return $context;
+		}
+
+		// Include editor concepts for layout/design/nesting queries.
+		$concept_keywords = [ 'layout', 'design', 'insert', 'add', 'block', 'nest', 'group', 'column', 'list view', 'toolbar', 'sidebar' ];
+		foreach ( $concept_keywords as $keyword ) {
+			if ( str_contains( $query, $keyword ) && isset( $knowledge[ 'editorConcepts' ] ) ) {
+				$context[ 'editorConcepts' ] = $knowledge[ 'editorConcepts' ];
+				break;
+			}
+		}
+
+		// Include design patterns for pattern-related queries.
+		$pattern_keywords = [ 'pattern', 'template', 'layout', 'design', 'reuse', 'synced' ];
+		foreach ( $pattern_keywords as $keyword ) {
+			if ( str_contains( $query, $keyword ) && isset( $knowledge[ 'designPatterns' ] ) ) {
+				$context[ 'designPatterns' ] = $knowledge[ 'designPatterns' ];
+				break;
+			}
+		}
+
+		// Include nesting best practices for container/nesting queries.
+		$nesting_keywords = [ 'nest', 'group', 'column', 'cover', 'container', 'layout', 'section' ];
+		foreach ( $nesting_keywords as $keyword ) {
+			if ( str_contains( $query, $keyword ) && isset( $knowledge[ 'nestingBestPractices' ] ) ) {
+				$context[ 'nestingBestPractices' ] = $knowledge[ 'nestingBestPractices' ];
+				break;
+			}
 		}
 
 		// Score and collect relevant blocks.
@@ -270,8 +300,63 @@ class GutenbergKnowledgeBase {
 	public static function format_context_for_prompt( array $context ): string {
 		$output = [];
 
+		// Format editor concepts.
+		if ( ! empty( $context[ 'editorConcepts' ] ) ) {
+			$output[] = '## Gutenberg Editor Concepts';
+
+			if ( ! empty( $context[ 'editorConcepts' ][ 'addingBlocks' ] ) ) {
+				$output[] = "\n### Adding Blocks";
+				$output[] = $context[ 'editorConcepts' ][ 'addingBlocks' ][ 'description' ] ?? '';
+				foreach ( $context[ 'editorConcepts' ][ 'addingBlocks' ][ 'methods' ] ?? [] as $method ) {
+					$output[] = sprintf( '- **%s**: %s', $method[ 'name' ], implode( ' → ', $method[ 'steps' ] ?? [] ) );
+					if ( ! empty( $method[ 'tip' ] ) ) {
+						$output[] = sprintf( '  Tip: %s', $method[ 'tip' ] );
+					}
+				}
+			}
+
+			if ( ! empty( $context[ 'editorConcepts' ][ 'listView' ] ) ) {
+				$output[] = "\n### List View";
+				$output[] = $context[ 'editorConcepts' ][ 'listView' ][ 'description' ] ?? '';
+				$output[] = 'Usage:';
+				foreach ( $context[ 'editorConcepts' ][ 'listView' ][ 'usage' ] ?? [] as $usage ) {
+					$output[] = sprintf( '- %s', $usage );
+				}
+				if ( ! empty( $context[ 'editorConcepts' ][ 'listView' ][ 'bestPractices' ] ) ) {
+					$output[] = 'Best practices:';
+					foreach ( $context[ 'editorConcepts' ][ 'listView' ][ 'bestPractices' ] as $practice ) {
+						$output[] = sprintf( '- %s', $practice );
+					}
+				}
+			}
+		}
+
+		// Format design patterns.
+		if ( ! empty( $context[ 'designPatterns' ] ) ) {
+			$output[] = "\n## Block Patterns";
+			$output[] = $context[ 'designPatterns' ][ 'description' ] ?? '';
+
+			if ( ! empty( $context[ 'designPatterns' ][ 'workflows' ] ) ) {
+				$output[] = 'Workflows:';
+				foreach ( $context[ 'designPatterns' ][ 'workflows' ] as $workflow_name => $steps ) {
+					$output[] = sprintf( '- **%s**: %s', ucwords( str_replace( '_', ' ', $workflow_name ) ), implode( ' → ', $steps ) );
+				}
+			}
+		}
+
+		// Format nesting best practices.
+		if ( ! empty( $context[ 'nestingBestPractices' ] ) ) {
+			$output[] = "\n## Nesting Best Practices";
+			$output[] = $context[ 'nestingBestPractices' ][ 'description' ] ?? '';
+			$output[] = sprintf( 'Container blocks: %s', implode( ', ', $context[ 'nestingBestPractices' ][ 'containerBlocks' ] ?? [] ) );
+			$output[] = 'Guidelines:';
+			foreach ( $context[ 'nestingBestPractices' ][ 'guidelines' ] ?? [] as $guideline ) {
+				$output[] = sprintf( '- %s', $guideline );
+			}
+		}
+
 		if ( ! empty( $context[ 'blocks' ] ) ) {
-			$output[] = '## Relevant Gutenberg Blocks';
+			$output[] = "\n## Relevant Gutenberg Blocks";
 			foreach ( $context[ 'blocks' ] as $block_name => $block_data ) {
 				$output[] = sprintf(
 					"\n### %s (`%s`)\n%s\n",
@@ -291,6 +376,13 @@ class GutenbergKnowledgeBase {
 					$output[] = "\nWorkflows:";
 					foreach ( $block_data[ 'workflows' ] as $workflow_name => $steps ) {
 						$output[] = sprintf( '- %s: %s', $workflow_name, implode( ' → ', $steps ) );
+					}
+				}
+
+				if ( ! empty( $block_data[ 'tips' ] ) ) {
+					$output[] = "\nTips:";
+					foreach ( $block_data[ 'tips' ] as $tip ) {
+						$output[] = sprintf( '- %s', $tip );
 					}
 				}
 			}

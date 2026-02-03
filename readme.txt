@@ -4,7 +4,7 @@ Tags: gutenberg, block editor, tutorial, guided tour, ai, learning
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 0.4.0
+Stable tag: 0.4.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
