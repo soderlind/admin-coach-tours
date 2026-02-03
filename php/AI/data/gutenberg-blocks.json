@@ -16,17 +16,26 @@
 			"methods": [
 				{
 					"name": "Inserter Button",
-					"steps": ["Click the + button in the top-left toolbar", "Browse or search for blocks", "Click to insert"],
+					"steps": [
+						"Click the + button in the top-left toolbar",
+						"Browse or search for blocks",
+						"Click to insert"
+					],
 					"tip": "Best for discovering available blocks"
 				},
 				{
 					"name": "Quick Inserter",
-					"steps": ["Click the + button that appears between blocks or in empty paragraphs"],
+					"steps": [
+						"Click the + button that appears between blocks or in empty paragraphs"
+					],
 					"tip": "Fastest for adding blocks between existing content"
 				},
 				{
 					"name": "Slash Command",
-					"steps": ["In an empty paragraph, type / followed by block name", "Example: /image, /heading, /columns"],
+					"steps": [
+						"In an empty paragraph, type / followed by block name",
+						"Example: /image, /heading, /columns"
+					],
 					"tip": "Keyboard users' favorite - no mouse needed"
 				}
 			]
@@ -92,7 +101,14 @@
 	},
 	"nestingBestPractices": {
 		"description": "Best practices for creating complex layouts with nested blocks",
-		"containerBlocks": ["Group", "Columns", "Cover", "Media and Text", "Row", "Stack"],
+		"containerBlocks": [
+			"Group",
+			"Columns",
+			"Cover",
+			"Media and Text",
+			"Row",
+			"Stack"
+		],
 		"guidelines": [
 			"Use container blocks to group related content together",
 			"Always use List View when working with nested structures",
