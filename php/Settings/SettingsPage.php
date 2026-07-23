@@ -2,7 +2,8 @@
 /**
  * Settings Page.
  *
- * Provides admin settings page for plugin configuration.
+ * Provides admin settings page for plugin configuration. AI provider API keys
+ * are managed by the WordPress AI connector (wp_get_connectors), not here.
  *
  * @package AdminCoachTours
  * @since   0.1.0
@@ -13,7 +14,6 @@ declare(strict_types=1);
 namespace AdminCoachTours\Settings;
 
 use AdminCoachTours\AI\AiManager;
-use AdminCoachTours\Security\Encryption;
 
 /**
  * Settings Page class.
@@ -42,20 +42,6 @@ class SettingsPage {
 	private static ?self $instance = null;
 
 	/**
-	 * Tracks which option names are sensitive (need encryption).
-	 *
-	 * @var array<string, bool>
-	 */
-	private array $sensitive_options = [];
-
-	/**
-	 * Encryption helper.
-	 *
-	 * @var Encryption|null
-	 */
-	private ?Encryption $encryption = null;
-
-	/**
 	 * Get singleton instance.
 	 *
 	 * @return self
@@ -70,9 +56,7 @@ class SettingsPage {
 	/**
 	 * Constructor.
 	 */
-	private function __construct() {
-		$this->encryption = new Encryption();
-	}
+	private function __construct() {}
 
 	/**
 	 * Initialize settings.
@@ -158,7 +142,7 @@ class SettingsPage {
 			'act_ai',
 			[
 				'name'        => 'act_ai_enabled',
-				'description' => __( 'Enable AI-powered step draft generation.', 'admin-coach-tours' ),
+				'description' => __( 'Enable AI-powered tour and step draft generation.', 'admin-coach-tours' ),
 			]
 		);
 
@@ -167,59 +151,36 @@ class SettingsPage {
 			'act_ai_provider',
 			[
 				'type'              => 'string',
-				'sanitize_callback' => 'sanitize_key',
-				'default'           => 'openai',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
 			]
 		);
 
 		add_settings_field(
 			'act_ai_provider',
-			__( 'AI Provider', 'admin-coach-tours' ),
+			__( 'Preferred Provider', 'admin-coach-tours' ),
 			[ $this, 'render_provider_field' ],
 			self::MENU_SLUG,
 			'act_ai'
 		);
 
-		// Provider-specific settings.
-		$ai_manager = AiManager::get_instance();
+		register_setting(
+			self::OPTION_GROUP,
+			'act_ai_model',
+			[
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
+			]
+		);
 
-		foreach ( $ai_manager->get_providers() as $provider ) {
-			$provider_id = $provider->get_id();
-			$schema      = $provider->get_settings_schema();
-
-			foreach ( $schema as $field_id => $field_config ) {
-				$option_name = "act_ai_{$provider_id}_{$field_id}";
-
-				// Track sensitive fields for encryption.
-				if ( ! empty( $field_config[ 'sensitive' ] ) ) {
-					$this->sensitive_options[ $option_name ] = true;
-				}
-
-				register_setting(
-					self::OPTION_GROUP,
-					$option_name,
-					[
-						'type'              => $field_config[ 'type' ] ?? 'string',
-						'sanitize_callback' => [ $this, 'sanitize_provider_field' ],
-						'default'           => $field_config[ 'default' ] ?? '',
-					]
-				);
-
-				add_settings_field(
-					$option_name,
-					$field_config[ 'label' ] ?? $field_id,
-					[ $this, 'render_provider_setting_field' ],
-					self::MENU_SLUG,
-					'act_ai',
-					[
-						'provider' => $provider_id,
-						'field_id' => $field_id,
-						'field'    => $field_config,
-						'name'     => $option_name,
-					]
-				);
-			}
-		}
+		add_settings_field(
+			'act_ai_model',
+			__( 'Model Override', 'admin-coach-tours' ),
+			[ $this, 'render_model_field' ],
+			self::MENU_SLUG,
+			'act_ai'
+		);
 	}
 
 	/**
@@ -228,7 +189,7 @@ class SettingsPage {
 	 * @param string $hook Current admin page.
 	 */
 	public function enqueue_scripts( string $hook ): void {
-		// Settings page is now under Tools menu.
+		// Settings page is under the Tools menu.
 		if ( 'tools_page_' . self::MENU_SLUG !== $hook ) {
 			return;
 		}
@@ -275,21 +236,31 @@ class SettingsPage {
 	}
 
 	/**
-	 * Render AI section description.
+	 * Render AI section description and connector status.
 	 */
 	public function render_ai_section(): void {
 		echo '<p>' . esc_html__(
-			'Configure AI providers for generating step drafts and completion suggestions.',
+			'AI features use the WordPress AI connector. Configure at least one AI provider connector in WordPress, then enable AI features below.',
 			'admin-coach-tours'
 		) . '</p>';
 
 		$ai_manager = AiManager::get_instance();
+		$connectors = $ai_manager->get_configured_connectors();
 
-		if ( ! $ai_manager->is_available() ) {
+		if ( empty( $connectors ) ) {
 			echo '<div class="notice notice-warning inline"><p>';
-			esc_html_e( 'No AI provider is currently configured. Add an API key below to enable AI features.', 'admin-coach-tours' );
+			esc_html_e( 'No configured AI provider connector was detected. AI features are unavailable until a connector is set up.', 'admin-coach-tours' );
 			echo '</p></div>';
+			return;
 		}
+
+		echo '<div class="notice notice-success inline"><p>';
+		printf(
+			/* translators: %s: comma-separated list of configured provider labels. */
+			esc_html__( 'Configured AI providers: %s', 'admin-coach-tours' ),
+			esc_html( implode( ', ', $connectors ) )
+		);
+		echo '</p></div>';
 	}
 
 	/**
@@ -311,133 +282,43 @@ class SettingsPage {
 	}
 
 	/**
-	 * Render provider field.
+	 * Render the preferred-provider dropdown, populated from configured connectors.
 	 */
 	public function render_provider_field(): void {
 		$ai_manager = AiManager::get_instance();
-		$providers  = $ai_manager->get_providers();
-		$current    = get_option( 'act_ai_provider', 'openai' );
+		$connectors = $ai_manager->get_configured_connectors();
+		$current    = (string) get_option( 'act_ai_provider', '' );
 
 		?>
 		<select name="act_ai_provider" id="act_ai_provider">
-			<?php foreach ( $providers as $provider ) : ?>
-				<option value="<?php echo esc_attr( $provider->get_id() ); ?>" <?php selected( $current, $provider->get_id() ); ?>>
-					<?php echo esc_html( $provider->get_name() ); ?>
-					<?php if ( $provider->is_configured() ) : ?>
-						(<?php esc_html_e( 'configured', 'admin-coach-tours' ); ?>)
-					<?php endif; ?>
+			<option value="" <?php selected( $current, '' ); ?>>
+				<?php esc_html_e( 'Auto (first configured)', 'admin-coach-tours' ); ?>
+			</option>
+			<?php foreach ( $connectors as $id => $label ) : ?>
+				<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $current, $id ); ?>>
+					<?php echo esc_html( $label ); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
 		<p class="description">
-			<?php esc_html_e( 'Select the AI provider to use for generating step drafts.', 'admin-coach-tours' ); ?>
+			<?php esc_html_e( 'Choose which configured AI provider connector to use. Leave on Auto to use the first available.', 'admin-coach-tours' ); ?>
 		</p>
 		<?php
 	}
 
 	/**
-	 * Render provider setting field.
-	 *
-	 * @param array $args Field arguments.
+	 * Render the optional model-override text field.
 	 */
-	public function render_provider_setting_field( array $args ): void {
-		$provider_id = $args[ 'provider' ];
-		$field       = $args[ 'field' ];
-		$name        = $args[ 'name' ];
-		$type        = $field[ 'type' ] ?? 'text';
-		$options     = $field[ 'options' ] ?? [];
-		$desc        = $field[ 'description' ] ?? '';
-		$value       = get_option( $name, $field[ 'default' ] ?? '' );
+	public function render_model_field(): void {
+		$current = (string) get_option( 'act_ai_model', '' );
 
-		// Mask sensitive values.
-		$is_sensitive = $field[ 'sensitive' ] ?? false;
-
-		if ( $is_sensitive && ! empty( $value ) ) {
-			$display_value = str_repeat( '•', 20 );
-		} else {
-			$display_value = $value;
-		}
-
-		$wrapper_class = "act-provider-field act-provider-{$provider_id}";
-
-		echo '<div class="' . esc_attr( $wrapper_class ) . '" data-provider="' . esc_attr( $provider_id ) . '">';
-
-		if ( 'select' === $type && ! empty( $options ) ) {
-			echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '">';
-			foreach ( $options as $opt_value => $opt_label ) {
-				printf(
-					'<option value="%s" %s>%s</option>',
-					esc_attr( $opt_value ),
-					selected( $value, $opt_value, false ),
-					esc_html( $opt_label )
-				);
-			}
-			echo '</select>';
-		} else {
-			$input_type = 'password' === $type ? 'password' : 'text';
-
-			if ( $is_sensitive ) {
-				// Show a masked field with option to reveal/update.
-				printf(
-					'<input type="%s" name="%s" id="%s" class="regular-text act-sensitive-field" value="" placeholder="%s" autocomplete="off" />',
-					esc_attr( $input_type ),
-					esc_attr( $name ),
-					esc_attr( $name ),
-					! empty( $value ) ? esc_attr__( 'Leave empty to keep current', 'admin-coach-tours' ) : ''
-				);
-
-				if ( ! empty( $value ) ) {
-					echo '<span class="act-field-status dashicons dashicons-yes-alt" title="' . esc_attr__( 'API key is set', 'admin-coach-tours' ) . '"></span>';
-				}
-			} else {
-				printf(
-					'<input type="%s" name="%s" id="%s" class="regular-text" value="%s" />',
-					esc_attr( $input_type ),
-					esc_attr( $name ),
-					esc_attr( $name ),
-					esc_attr( $display_value )
-				);
-			}
-		}
-
-		if ( ! empty( $desc ) ) {
-			echo '<p class="description">' . esc_html( $desc ) . '</p>';
-		}
-
-		echo '</div>';
-	}
-
-	/**
-	 * Sanitize provider field.
-	 *
-	 * @param mixed $value Field value.
-	 * @return mixed Sanitized value.
-	 */
-	public function sanitize_provider_field( $value ) {
-		// Get the option name from the filter.
-		$filter_name = current_filter();
-		$option_name = '';
-
-		if ( preg_match( '/^sanitize_option_(.+)$/', $filter_name, $matches ) ) {
-			$option_name = $matches[ 1 ];
-		}
-
-		// Keep existing value if empty (for sensitive fields).
-		if ( '' === $value && ! empty( $option_name ) ) {
-			$existing = get_option( $option_name );
-			if ( ! empty( $existing ) ) {
-				return $existing;
-			}
-		}
-
-		// Sanitize.
-		$value = sanitize_text_field( $value );
-
-		// Encrypt sensitive fields.
-		if ( ! empty( $option_name ) && ! empty( $this->sensitive_options[ $option_name ] ) && ! empty( $value ) ) {
-			$value = $this->encryption->encrypt( $value );
-		}
-
-		return $value;
+		printf(
+			'<input type="text" name="act_ai_model" id="act_ai_model" class="regular-text" value="%s" placeholder="%s" />',
+			esc_attr( $current ),
+			esc_attr__( 'Provider default', 'admin-coach-tours' )
+		);
+		echo '<p class="description">';
+		esc_html_e( 'Optional model ID to use (e.g., a specific model name). Leave empty to use the provider default.', 'admin-coach-tours' );
+		echo '</p>';
 	}
 }

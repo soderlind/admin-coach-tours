@@ -19,11 +19,22 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  */
 function act_delete_options(): void {
 	$options = [
+		'act_version',
+		'act_enable_pupil_mode',
 		'act_ai_enabled',
 		'act_ai_provider',
+		'act_ai_model',
+		// Legacy options (pre-connector, encrypted keys and per-provider config).
+		'act_ai_openai_api_key',
+		'act_ai_openai_model',
+		'act_ai_azure_api_key',
+		'act_ai_azure_endpoint',
+		'act_ai_azure_deployment',
+		'act_ai_azure_model',
+		'act_ai_anthropic_api_key',
+		'act_ai_anthropic_model',
 		'act_ai_api_key',
 		'act_ai_endpoint',
-		'act_ai_model',
 		'act_allow_post_content',
 		'act_encryption_key',
 	];

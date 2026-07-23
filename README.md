@@ -1,7 +1,7 @@
 # Admin Coach Tours
 
 [![Version](https://img.shields.io/badge/version-0.3.6-blue.svg)](https://github.com/soderlind/admin-coach-tours)
-[![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-blue.svg)](https://wordpress.org)
+[![WordPress](https://img.shields.io/badge/WordPress-7.0%2B-blue.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-purple.svg)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -24,28 +24,25 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 ## Requirements
 
-- WordPress 6.8+
+- WordPress 7.0+
 - PHP 8.3+
-- sodium extension (for API key encryption)
-- AI provider API key (OpenAI, Azure OpenAI, or Anthropic)
+- At least one WordPress AI provider connector configured
 
 ## Installation
 
 1. Upload `admin-coach-tours` to `/wp-content/plugins/`
 2. Activate the plugin
-3. Go to **Tools → Coach Tours** to configure AI
+3. Go to **Tools → Coach Tours** to enable AI
 
 ## Setup
 
 ### Configure AI Provider
 
-1. Navigate to **Tours → Settings**
-2. Enable AI Features
-3. Select your provider:
-   - **OpenAI** — Add your API key
-   - **Azure OpenAI** — Add your API key and endpoint URL
-   - **Anthropic** — Add your API key
-4. Save settings
+1. Configure at least one WordPress AI provider connector
+2. Navigate to **Tools → Coach Tours**
+3. Enable AI Features
+4. Optionally choose a preferred provider and model override
+5. Save settings
 
 ## Usage
 

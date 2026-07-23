@@ -84,26 +84,25 @@ class AiController {
 	public static function get_status() {
 		$ai_manager = AiManager::get_instance();
 
+		$connectors     = $ai_manager->get_configured_connectors();
+		$active_provider = $ai_manager->resolve_provider_id();
+
 		$status = [
 			'available'      => $ai_manager->is_available(),
-			'activeProvider' => null,
+			'activeProvider' => '' !== $active_provider
+				? [
+					'id'   => $active_provider,
+					'name' => $connectors[ $active_provider ] ?? $active_provider,
+				]
+				: null,
 			'providers'      => [],
 		];
 
-		$active_provider = $ai_manager->get_active_provider();
-
-		if ( $active_provider ) {
-			$status[ 'activeProvider' ] = [
-				'id'   => $active_provider->get_id(),
-				'name' => $active_provider->get_name(),
-			];
-		}
-
-		foreach ( $ai_manager->get_providers() as $provider ) {
+		foreach ( $connectors as $id => $label ) {
 			$status[ 'providers' ][] = [
-				'id'         => $provider->get_id(),
-				'name'       => $provider->get_name(),
-				'configured' => $provider->is_configured(),
+				'id'         => $id,
+				'name'       => $label,
+				'configured' => true,
 			];
 		}
 
@@ -656,17 +655,7 @@ class AiController {
 		);
 
 		// Generate the tour.
-		$provider = $ai_manager->get_active_provider();
-
-		if ( ! $provider ) {
-			return new \WP_Error(
-				'no_provider',
-				__( 'No AI provider is available.', 'admin-coach-tours' ),
-				[ 'status' => 503 ]
-			);
-		}
-
-		$result = $provider->generate_tour( $system_prompt, $query );
+		$result = $ai_manager->generate_tour( $system_prompt, $query );
 
 		if ( is_wp_error( $result ) ) {
 			$status = 500;

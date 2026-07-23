@@ -1,7 +1,7 @@
 === Admin Coach Tours ===
 Contributors: PerS
 Tags: gutenberg, block editor, tutorial, guided tour, ai, learning
-Requires at least: 6.8
+Requires at least: 7.0
 Tested up to: 6.9
 Requires PHP: 8.3
 Stable tag: 0.4.1
@@ -48,26 +48,23 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 = Requirements =
 
-* WordPress 6.8 or later
+* WordPress 7.0 or later
 * PHP 8.3 or later
-* sodium extension (for API key encryption)
-* AI provider API key (OpenAI, Azure OpenAI, or Anthropic)
+* At least one WordPress AI provider connector configured
 
 == Installation ==
 
 1. Upload the `admin-coach-tours` folder to `/wp-content/plugins/`
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to **Tools → Coach Tours** to configure your AI provider
+3. Go to **Tools → Coach Tours** to enable AI features
 
 = Configure AI Provider =
 
-1. Navigate to **Tools → Coach Tours**
-2. Enable AI Features
-3. Select your provider:
-   * **OpenAI** — Add your API key
-   * **Azure OpenAI** — Add endpoint URL, API key, and deployment name
-   * **Anthropic** — Add your API key
-4. Save settings
+1. Configure at least one WordPress AI provider connector
+2. Navigate to **Tools → Coach Tours**
+3. Enable AI Features
+4. Optionally choose a preferred provider and model override
+5. Save settings
 
 == Usage ==
 
