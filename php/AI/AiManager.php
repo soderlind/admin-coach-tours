@@ -596,40 +596,11 @@ PROMPT;
 			'steps' => [],
 		];
 
-		$allowed_completion_types = [
-			'clickTarget',
-			'domValueChanged',
-			'manual',
-			'wpData',
-			'elementAppear',
-			'elementDisappear',
-			'customEvent',
-		];
+		$allowed_completion_types = TourSchema::COMPLETION_TYPES;
 
-		$allowed_precondition_types = [
-			'ensureEditor',
-			'ensureSidebarOpen',
-			'ensureSidebarClosed',
-			'selectSidebarTab',
-			'openInserter',
-			'closeInserter',
-			'selectBlock',
-			'focusElement',
-			'scrollIntoView',
-			'openModal',
-			'closeModal',
-			'insertBlock',
-		];
+		$allowed_precondition_types = TourSchema::PRECONDITION_TYPES;
 
-		$allowed_locator_types = [
-			'css',
-			'role',
-			'testId',
-			'dataAttribute',
-			'ariaLabel',
-			'contextual',
-			'wpBlock',
-		];
+		$allowed_locator_types = TourSchema::LOCATOR_TYPES;
 
 		foreach ( $content[ 'steps' ] as $index => $step ) {
 			$sanitized_step = [

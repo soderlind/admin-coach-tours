@@ -216,20 +216,24 @@ INSTRUCTION;
 	/**
 	 * Get the system prompt for tour generation.
 	 *
-	 * @param string $task_id              The task ID or 'freeform' for custom queries.
-	 * @param string $user_query           The user's query (for freeform).
-	 * @param string $gutenberg_context    RAG context from GutenbergKnowledgeBase.
-	 * @param string $post_type            The current post type.
-	 * @param string $editor_context       Current editor state (blocks, UI elements).
-	 * @param string $failure_context      Context from previous failed attempt (for retry).
-	 * @param string $locale               User's WordPress locale for response language.
+	 * @param string     $task_id              The task ID or 'freeform' for custom queries.
+	 * @param string     $user_query           The user's query (for freeform).
+	 * @param string     $gutenberg_context    RAG context from GutenbergKnowledgeBase.
+	 * @param string     $post_type            The current post type.
+	 * @param array      $editor_context       Sanitized editor state (blocks, UI elements).
+	 * @param array|null $failure_context      Sanitized context from a previous failed attempt.
+	 * @param string     $locale               User's WordPress locale for response language.
 	 * @return string The system prompt.
 	 */
-	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, string $editor_context = '', string $failure_context = '', string $locale = '' ): string {
+	public static function get_system_prompt( string $task_id, string $user_query, string $gutenberg_context, string $post_type, array $editor_context = [], ?array $failure_context = null, string $locale = '' ): string {
 		$task = self::get_task( $task_id );
 
 		// Determine the display language based on locale.
 		$language_instruction = self::get_language_instruction( $locale );
+
+		// Format the structured context arrays into prompt sub-sections.
+		$editor_context_str  = ! empty( $editor_context ) ? self::format_editor_context( $editor_context ) : '';
+		$failure_context_str = ! empty( $failure_context ) ? self::format_failure_context( $failure_context ) : '';
 
 		// Base system prompt.
 		$system_prompt = <<<PROMPT
@@ -384,8 +388,8 @@ Only use insertBlock precondition when the "/" workflow isn't practical (e.g., c
 - Post Type: {$post_type}
 - Task: {$task_id}
 
-{$editor_context}
-{$failure_context}
+{$editor_context_str}
+{$failure_context_str}
 
 ## Gutenberg Reference
 {$gutenberg_context}
@@ -602,7 +606,153 @@ INST
 	}
 
 	/**
+	 * Format sanitized editor context into an AI prompt sub-section.
+	 *
+	 * @param array $context Sanitized editor context.
+	 * @return string Formatted context for prompt.
+	 */
+	private static function format_editor_context( array $context ): string {
+		$lines = [ 'CURRENT EDITOR STATE:' ];
+
+		// Check for empty block placeholder first - it's a priority starting point.
+		$has_empty_placeholder = ! empty( $context[ 'uiSamples' ][ 'emptyBlockPlaceholder' ][ 'visible' ] );
+
+		if ( $has_empty_placeholder ) {
+			$lines[] = '⭐ STARTING POINT AVAILABLE: Empty block placeholder is visible!';
+			$lines[] = '   Users can click it and type "/" to add blocks - teach this workflow!';
+		}
+
+		// Blocks in editor with targeting options.
+		if ( ! empty( $context[ 'editorBlocks' ] ) ) {
+			$lines[] = '';
+			$lines[] = 'BLOCKS IN EDITOR (with targeting options):';
+
+			foreach ( $context[ 'editorBlocks' ] as $block ) {
+				$status = [];
+				if ( $block[ 'isEmpty' ] ) {
+					$status[] = 'empty';
+				}
+				if ( $block[ 'isSelected' ] ) {
+					$status[] = 'SELECTED';
+				}
+				$status_str = empty( $status ) ? '' : ' (' . implode( ', ', $status ) . ')';
+				$lines[]    = "- #{$block[ 'order' ]}: {$block[ 'name' ]}{$status_str}";
+
+				// Show targeting options.
+				$targets = [];
+				if ( $block[ 'isSelected' ] ) {
+					$targets[] = 'wpBlock: "selected" (recommended - currently selected)';
+				}
+				if ( ! empty( $block[ 'clientId' ] ) ) {
+					$targets[] = "wpBlock: \"clientId:{$block[ 'clientId' ]}\"";
+				}
+				if ( ! empty( $block[ 'domInfo' ][ 'editableSelector' ] ) ) {
+					$targets[] = "css: \"{$block[ 'domInfo' ][ 'editableSelector' ]}\" (in iframe)";
+				}
+				if ( ! empty( $block[ 'domInfo' ][ 'dataType' ] ) ) {
+					$targets[] = "css: \"[data-type=\\\"{$block[ 'domInfo' ][ 'dataType' ]}\\\"]\" (in iframe)";
+				}
+
+				if ( ! empty( $targets ) ) {
+					$lines[] = '  Targeting options:';
+					foreach ( $targets as $target ) {
+						$lines[] = "    • {$target}";
+					}
+				}
+			}
+		} else {
+			$lines[] = 'Blocks in editor: (empty editor or new post)';
+		}
+
+		// UI state.
+		if ( ! empty( $context[ 'visibleElements' ] ) ) {
+			$ve      = $context[ 'visibleElements' ];
+			$state   = [];
+			$state[] = $ve[ 'inserterOpen' ] ? 'Inserter panel is OPEN' : 'Inserter panel is closed';
+			$state[] = $ve[ 'sidebarOpen' ] ? 'Settings sidebar is OPEN' : 'Settings sidebar is closed';
+
+			if ( $ve[ 'hasSelectedBlock' ] && $ve[ 'selectedBlockType' ] ) {
+				$state[] = 'Selected block: ' . $ve[ 'selectedBlockType' ];
+			}
+			$lines[] = '';
+			$lines[] = 'UI State: ' . implode( '. ', $state );
+		}
+
+		// Verified selectors from page.
+		if ( ! empty( $context[ 'uiSamples' ] ) ) {
+			$lines[]          = '';
+			$lines[]          = 'VERIFIED SELECTORS (confirmed working on this page):';
+			$verified_samples = $context[ 'uiSamples' ];
+
+			if ( ! empty( $verified_samples[ 'inserterButton' ][ 'selector' ] ) && $verified_samples[ 'inserterButton' ][ 'visible' ] ) {
+				$lines[] = '- Inserter button: ' . $verified_samples[ 'inserterButton' ][ 'selector' ];
+			}
+			if ( ! empty( $verified_samples[ 'publishButton' ][ 'selector' ] ) && $verified_samples[ 'publishButton' ][ 'visible' ] ) {
+				$lines[] = '- Publish/Save button: ' . $verified_samples[ 'publishButton' ][ 'selector' ];
+			}
+			if ( ! empty( $verified_samples[ 'settingsButton' ][ 'selector' ] ) && $verified_samples[ 'settingsButton' ][ 'visible' ] ) {
+				$lines[] = '- Settings button: ' . $verified_samples[ 'settingsButton' ][ 'selector' ];
+			}
+			if ( ! empty( $verified_samples[ 'searchInput' ][ 'selector' ] ) && $verified_samples[ 'searchInput' ][ 'visible' ] ) {
+				$lines[] = '- Search input: ' . $verified_samples[ 'searchInput' ][ 'selector' ];
+			}
+			if ( ! empty( $verified_samples[ 'emptyBlockPlaceholder' ][ 'selector' ] ) && $verified_samples[ 'emptyBlockPlaceholder' ][ 'visible' ] ) {
+				$in_iframe = ! empty( $verified_samples[ 'emptyBlockPlaceholder' ][ 'inIframe' ] ) ? ' (in editor iframe)' : '';
+				$lines[]   = '- Empty block placeholder: ' . $verified_samples[ 'emptyBlockPlaceholder' ][ 'selector' ] . $in_iframe;
+			}
+		}
+
+		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Format sanitized failure context into an AI prompt sub-section.
+	 *
+	 * This helps the AI learn from previous failures and generate better selectors.
+	 *
+	 * @param array $context Sanitized failure context.
+	 * @return string Formatted context for prompt.
+	 */
+	private static function format_failure_context( array $context ): string {
+		$lines = [
+			'',
+			'⚠️ PREVIOUS ATTEMPT FAILED - PLEASE FIX:',
+			'',
+			'The previous tour generation failed at step ' . ( $context[ 'stepIndex' ] + 1 ) . '.',
+		];
+
+		if ( ! empty( $context[ 'stepTitle' ] ) ) {
+			$lines[] = 'Step title: "' . $context[ 'stepTitle' ] . '"';
+		}
+
+		if ( ! empty( $context[ 'error' ] ) ) {
+			$lines[] = 'Error: ' . $context[ 'error' ];
+		}
+
+		if ( ! empty( $context[ 'targetLocators' ] ) ) {
+			$lines[] = '';
+			$lines[] = 'The following selectors DID NOT WORK:';
+			foreach ( $context[ 'targetLocators' ] as $locator ) {
+				$lines[] = '  ❌ ' . $locator[ 'type' ] . ': "' . $locator[ 'value' ] . '"';
+			}
+		}
+
+		$lines[] = '';
+		$lines[] = 'REQUIREMENTS FOR THIS RETRY:';
+		$lines[] = '1. Use DIFFERENT selectors than the ones that failed';
+		$lines[] = '2. Prefer more general, reliable selectors (aria-label, data-type attributes)';
+		$lines[] = '3. Consider if the step order is correct - maybe a precondition is missing';
+		$lines[] = '4. Double-check inEditorIframe constraint - is the element really in/out of the iframe?';
+		$lines[] = '';
+
+		return implode( "\n", $lines );
+	}
+
+	/**
 	 * Get the JSON schema for tour generation response.
+	 *
+	 * The allowed step type enums derive from TourSchema, the single source of
+	 * truth shared with output validation.
 	 *
 	 * @return array JSON Schema for structured output.
 	 */
@@ -631,7 +781,10 @@ INST
 										'items' => [
 											'type'       => 'object',
 											'properties' => [
-												'type'     => [ 'type' => 'string' ],
+												'type'     => [
+													'type' => 'string',
+													'enum' => TourSchema::LOCATOR_TYPES,
+												],
 												'value'    => [ 'type' => 'string' ],
 												'weight'   => [ 'type' => 'integer' ],
 												'fallback' => [ 'type' => 'boolean' ],
@@ -653,7 +806,10 @@ INST
 								'items' => [
 									'type'       => 'object',
 									'properties' => [
-										'type'   => [ 'type' => 'string' ],
+										'type'   => [
+											'type' => 'string',
+											'enum' => TourSchema::PRECONDITION_TYPES,
+										],
 										'params' => [ 'type' => 'object' ],
 									],
 									'required'   => [ 'type' ],
@@ -662,7 +818,10 @@ INST
 							'completion'    => [
 								'type'       => 'object',
 								'properties' => [
-									'type'   => [ 'type' => 'string' ],
+									'type'   => [
+										'type' => 'string',
+										'enum' => TourSchema::COMPLETION_TYPES,
+									],
 									'params' => [ 'type' => 'object' ],
 								],
 								'required'   => [ 'type' ],

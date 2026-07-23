@@ -208,8 +208,8 @@ class TaskPromptsTest extends TestCase {
 			'',
 			'Sample Gutenberg context',
 			'post',
-			'',
-			'',
+			[],
+			null,
 			'nb_NO'
 		);
 
@@ -227,8 +227,8 @@ class TaskPromptsTest extends TestCase {
 			'',
 			'Sample Gutenberg context',
 			'post',
-			'',
-			'',
+			[],
+			null,
 			'en_US'
 		);
 
@@ -244,8 +244,8 @@ class TaskPromptsTest extends TestCase {
 			'',
 			'Sample Gutenberg context',
 			'post',
-			'',
-			'',
+			[],
+			null,
 			''
 		);
 
@@ -266,5 +266,61 @@ class TaskPromptsTest extends TestCase {
 
 		$this->assertIsString( $prompt );
 		$this->assertNotEmpty( $prompt );
+	}
+
+	/**
+	 * Test format_editor_context produces readable output.
+	 */
+	public function test_format_editor_context_creates_readable_output(): void {
+		$reflection = new \ReflectionClass( TaskPrompts::class);
+		$method     = $reflection->getMethod( 'format_editor_context' );
+		$method->setAccessible( true );
+
+		$context = [
+			'editorBlocks'    => [
+				[
+					'name'       => 'core/paragraph',
+					'isEmpty'    => true,
+					'isSelected' => false,
+					'order'      => 0,
+					'clientId'   => '',
+				],
+			],
+			'visibleElements' => [
+				'inserterOpen'      => false,
+				'sidebarOpen'       => true,
+				'hasSelectedBlock'  => false,
+				'selectedBlockType' => null,
+			],
+			'uiSamples'       => [
+				'inserterButton' => [
+					'selector' => '.editor-document-tools__inserter-toggle',
+					'visible'  => true,
+				],
+			],
+		];
+
+		$result = $method->invoke( null, $context );
+
+		$this->assertStringContainsString( 'CURRENT EDITOR STATE', $result );
+		$this->assertStringContainsString( 'core/paragraph (empty)', $result );
+		$this->assertStringContainsString( 'Inserter panel is closed', $result );
+		$this->assertStringContainsString( 'Settings sidebar is OPEN', $result );
+		$this->assertStringContainsString( 'VERIFIED SELECTORS', $result );
+		$this->assertStringContainsString( '.editor-document-tools__inserter-toggle', $result );
+	}
+
+	/**
+	 * Test format_editor_context handles an empty editor.
+	 */
+	public function test_format_editor_context_handles_empty(): void {
+		$reflection = new \ReflectionClass( TaskPrompts::class);
+		$method     = $reflection->getMethod( 'format_editor_context' );
+		$method->setAccessible( true );
+
+		$result = $method->invoke( null, [] );
+
+		$this->assertStringContainsString( 'CURRENT EDITOR STATE', $result );
+		$this->assertStringContainsString( 'empty editor or new post', $result );
 	}
 }

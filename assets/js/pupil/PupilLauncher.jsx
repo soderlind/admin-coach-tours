@@ -11,7 +11,6 @@
 import { useState, useEffect, useCallback, useRef, createPortal } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import apiFetch from '@wordpress/api-fetch';
 import { Dashicon } from '@wordpress/components';
 
 const STORE_NAME = 'admin-coach-tours';
@@ -83,7 +82,7 @@ export default function PupilLauncher() {
 	}, [ aiTourError, isPlaying, isOpen ] );
 
 	// Get dispatch actions.
-	const { requestAiTour, clearEphemeralTour, setAiTourError, setLastFailureContext } = useDispatch( STORE_NAME );
+	const { requestAiTour, clearEphemeralTour, setAiTourError, setLastFailureContext, fetchAiTasks } = useDispatch( STORE_NAME );
 
 	/**
 	 * Fetch available tasks when launcher opens.
@@ -93,7 +92,7 @@ export default function PupilLauncher() {
 			setIsTasksLoading( true );
 			setTasksError( null );
 
-			apiFetch( { path: '/admin-coach-tours/v1/ai/tasks' } )
+			fetchAiTasks()
 				.then( ( response ) => {
 					if ( response.available && response.tasks ) {
 						setTasks( response.tasks );
