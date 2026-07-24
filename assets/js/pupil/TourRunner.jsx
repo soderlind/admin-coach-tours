@@ -209,6 +209,7 @@ export default function TourRunner() {
 	const highlighterRef = useRef( null );
 	const previousStepIndexRef = useRef( null );
 	const completionWatcherRef = useRef( null ); // Use ref to avoid stale closure in cleanup.
+	const lastStepClickCleanupRef = useRef( null ); // Removes the last-step click-to-finish listener.
 
 	// Get playback state from store.
 	const {
@@ -476,6 +477,48 @@ export default function TourRunner() {
 				);
 				completionWatcherRef.current = watcher; // Store in ref for reliable cleanup.
 
+				// On the last step, clicking the highlighted block also finishes
+				// the tour (no need to press "Finish"). A short grace period avoids
+				// the click that reached this step from closing it immediately.
+				if ( stepIndex === totalSteps - 1 && resolvedElement ) {
+					const finishOnClick = () => {
+						if ( ! isMounted ) {
+							return;
+						}
+						console.log( '[ACT TourRunner] Last step: block clicked, finishing tour' );
+						clearInsertedBlocks();
+						focusCurrentBlock();
+						nextStep();
+					};
+
+					const graceTimer = setTimeout( () => {
+						if ( ! isMounted || ! resolvedElement.isConnected ) {
+							return;
+						}
+						resolvedElement.addEventListener( 'click', finishOnClick, {
+							once: true,
+							capture: true,
+						} );
+						lastStepClickCleanupRef.current = () => {
+							resolvedElement.removeEventListener( 'click', finishOnClick, {
+								capture: true,
+							} );
+						};
+					}, 400 );
+
+					// Ensure the pending timer is cleared on cleanup too.
+					const priorCleanup = lastStepClickCleanupRef.current;
+					lastStepClickCleanupRef.current = () => {
+						clearTimeout( graceTimer );
+						if ( priorCleanup ) {
+							priorCleanup();
+						}
+						resolvedElement.removeEventListener( 'click', finishOnClick, {
+							capture: true,
+						} );
+					};
+				}
+
 				// Wait for completion.
 				watcher.promise.then( async ( completionResult ) => {
 					if ( ! isMounted ) {
@@ -525,6 +568,11 @@ export default function TourRunner() {
 				console.log( '[ACT TourRunner] Cleanup: Cancelling completion watcher' );
 				completionWatcherRef.current.cancel();
 				completionWatcherRef.current = null;
+			}
+			// Remove any last-step click-to-finish listener/timer.
+			if ( lastStepClickCleanupRef.current ) {
+				lastStepClickCleanupRef.current();
+				lastStepClickCleanupRef.current = null;
 			}
 		};
 	}, [ isPlaying, currentStep, stepIndex, repeatCounter, stopTour, setAiTourError ] );
