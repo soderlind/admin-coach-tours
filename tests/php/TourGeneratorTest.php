@@ -100,6 +100,65 @@ class TourGeneratorTest extends TestCase {
 	}
 
 	/**
+	 * Test a task whose block is disabled is refused.
+	 */
+	public function test_generate_refused_when_task_block_disabled(): void {
+		$request = $this->make_request(
+			[
+				'taskId'        => 'add-audio',
+				'editorContext' => [ 'availableBlocks' => [ 'core/paragraph', 'core/image' ] ],
+			]
+		);
+
+		$generator = new TourGenerator( AiManager::get_instance() );
+		$result    = $generator->generate( $request );
+
+		$this->assertInstanceOf( \WP_Error::class, $result );
+		$this->assertSame( 'act_block_disabled', $result->get_error_code() );
+	}
+
+	/**
+	 * Test a task whose block IS available is not refused by the guard.
+	 */
+	public function test_generate_not_refused_when_task_block_available(): void {
+		$request = $this->make_request(
+			[
+				'taskId'        => 'add-image',
+				'editorContext' => [ 'availableBlocks' => [ 'core/paragraph', 'core/image' ] ],
+			]
+		);
+
+		$generator = new TourGenerator( AiManager::get_instance() );
+		$result    = $this->guard_disabled_task( $generator, $request );
+
+		$this->assertNull( $result );
+	}
+
+	/**
+	 * Test the guard is skipped when availability is unknown (older client).
+	 */
+	public function test_guard_skipped_when_availability_unknown(): void {
+		$request   = $this->make_request( [ 'taskId' => 'add-audio' ] );
+		$generator = new TourGenerator( AiManager::get_instance() );
+
+		$this->assertNull( $this->guard_disabled_task( $generator, $request ) );
+	}
+
+	/**
+	 * Test the cache key differs when block availability changes.
+	 */
+	public function test_cache_key_includes_available_blocks(): void {
+		$with_audio = $this->make_request(
+			[ 'taskId' => 'add-image', 'editorContext' => [ 'availableBlocks' => [ 'core/image', 'core/audio' ] ] ]
+		);
+		$without_audio = $this->make_request(
+			[ 'taskId' => 'add-image', 'editorContext' => [ 'availableBlocks' => [ 'core/image' ] ] ]
+		);
+
+		$this->assertNotEquals( $this->cache_key( $with_audio ), $this->cache_key( $without_audio ) );
+	}
+
+	/**
 	 * Test the cache key is stable for identical requests.
 	 */
 	public function test_cache_key_is_consistent(): void {
@@ -156,6 +215,20 @@ class TourGeneratorTest extends TestCase {
 		$generator  = new TourGenerator( AiManager::get_instance() );
 		$reflection = new \ReflectionClass( TourGenerator::class);
 		$method     = $reflection->getMethod( 'cache_key' );
+		$method->setAccessible( true );
+		return $method->invoke( $generator, $request );
+	}
+
+	/**
+	 * Invoke the private guard_disabled_task method.
+	 *
+	 * @param TourGenerator $generator Generator.
+	 * @param TourRequest   $request   Request.
+	 * @return \WP_Error|null
+	 */
+	private function guard_disabled_task( TourGenerator $generator, TourRequest $request ): ?\WP_Error {
+		$reflection = new \ReflectionClass( TourGenerator::class);
+		$method     = $reflection->getMethod( 'guard_disabled_task' );
 		$method->setAccessible( true );
 		return $method->invoke( $generator, $request );
 	}

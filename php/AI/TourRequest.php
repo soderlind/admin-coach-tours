@@ -111,6 +111,19 @@ final class TourRequest {
 	}
 
 	/**
+	 * Block names the editor reported as insertable.
+	 *
+	 * Empty when the client did not report availability.
+	 *
+	 * @return array<string>
+	 */
+	public function available_blocks(): array {
+		$available = $this->editor_context[ 'availableBlocks' ] ?? [];
+
+		return is_array( $available ) ? $available : [];
+	}
+
+	/**
 	 * Sanitized failure context, or null when not retrying.
 	 *
 	 * @return array|null
@@ -170,6 +183,23 @@ final class TourRequest {
 				}
 
 				$sanitized[ 'editorBlocks' ][] = $block_data;
+			}
+		}
+
+		// Blocks the editor reports as insertable (used to exclude disabled blocks).
+		if ( isset( $context[ 'availableBlocks' ] ) && is_array( $context[ 'availableBlocks' ] ) ) {
+			$available = [];
+			foreach ( array_slice( $context[ 'availableBlocks' ], 0, 200 ) as $name ) {
+				if ( ! is_string( $name ) ) {
+					continue;
+				}
+				$clean = preg_replace( '/[^a-z0-9\/_-]/', '', strtolower( $name ) );
+				if ( '' !== $clean && str_contains( $clean, '/' ) ) {
+					$available[] = $clean;
+				}
+			}
+			if ( ! empty( $available ) ) {
+				$sanitized[ 'availableBlocks' ] = array_values( array_unique( $available ) );
 			}
 		}
 

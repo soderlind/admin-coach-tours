@@ -31,6 +31,17 @@ describe( 'gatherEditorContext', () => {
 						},
 					],
 					getSelectedBlock: () => null,
+					canInsertBlockType: ( name ) => name !== 'core/audio',
+				};
+			}
+			if ( storeName === 'core/blocks' ) {
+				return {
+					getBlockTypes: () => [
+						{ name: 'core/paragraph' },
+						{ name: 'core/image' },
+						{ name: 'core/audio' },
+						{ name: 'my-plugin/widget' },
+					],
 				};
 			}
 			if ( storeName === 'core/editor' ) {
@@ -58,9 +69,21 @@ describe( 'gatherEditorContext', () => {
 		const context = gatherEditorContext();
 
 		expect( context ).toHaveProperty( 'editorBlocks' );
+		expect( context ).toHaveProperty( 'availableBlocks' );
 		expect( context ).toHaveProperty( 'visibleElements' );
 		expect( context ).toHaveProperty( 'uiSamples' );
 		expect( context ).toHaveProperty( 'timestamp' );
+	} );
+
+	it( 'should collect insertable core blocks and exclude disabled/non-core ones', () => {
+		const context = gatherEditorContext();
+
+		expect( context.availableBlocks ).toContain( 'core/paragraph' );
+		expect( context.availableBlocks ).toContain( 'core/image' );
+		// Disabled by canInsertBlockType.
+		expect( context.availableBlocks ).not.toContain( 'core/audio' );
+		// Non-core blocks are excluded.
+		expect( context.availableBlocks ).not.toContain( 'my-plugin/widget' );
 	} );
 
 	it( 'should collect editor blocks', () => {

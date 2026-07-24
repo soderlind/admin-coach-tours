@@ -156,6 +156,7 @@ Before each AI request, the frontend gathers real-time context:
       }
     }
   ],
+  availableBlocks: [ "core/paragraph", "core/heading", "core/image" ],
   visibleElements: {
     inserterOpen: false,
     sidebarOpen: true,
@@ -172,6 +173,22 @@ This context helps the AI:
 - Target the correct elements
 - Know which blocks already exist
 - Detect if the user can use "/" quick insert
+- Avoid blocks the site has disabled (see [Disabled blocks](#disabled-blocks))
+
+### Disabled blocks
+
+The frontend reports the `core/*` blocks the editor can actually insert
+(`availableBlocks`), which reflects unregistered blocks and `allowedBlockTypes`
+restrictions. The backend uses this to exclude disabled blocks from tours:
+
+- `GutenbergKnowledgeBase` drops disabled blocks from the RAG context.
+- The prompt lists disabled blocks under `DISABLED BLOCKS` with a hard rule
+  never to reference them.
+- A predefined task whose target block is disabled is refused up front with a
+  `act_block_disabled` error (HTTP 409) instead of generating a broken tour.
+- `BlockAvailability` resolves inner/variation blocks to their insertable
+  parent (e.g. `core/button` → `core/buttons`). An empty `availableBlocks`
+  (older client) disables nothing.
 
 ## System Prompt Structure
 

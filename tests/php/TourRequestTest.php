@@ -166,6 +166,44 @@ class TourRequestTest extends TestCase {
 	}
 
 	/**
+	 * Test availableBlocks are normalized, de-duplicated, and non-blocks dropped.
+	 */
+	public function test_sanitize_editor_context_handles_available_blocks(): void {
+		$result = $this->invoke_sanitize_editor(
+			[
+				'availableBlocks' => [
+					'core/paragraph',
+					'CORE/Image',        // upper-cased -> normalized.
+					'core/paragraph',    // duplicate.
+					'not-a-block',       // no slash -> dropped.
+					123,                 // non-string -> skipped.
+					'my-plugin/<script>',// stripped to my-plugin/script.
+				],
+			]
+		);
+
+		$this->assertContains( 'core/paragraph', $result[ 'availableBlocks' ] );
+		$this->assertContains( 'core/image', $result[ 'availableBlocks' ] );
+		$this->assertContains( 'my-plugin/script', $result[ 'availableBlocks' ] );
+		$this->assertNotContains( 'not-a-block', $result[ 'availableBlocks' ] );
+		$this->assertSame(
+			array_values( array_unique( $result[ 'availableBlocks' ] ) ),
+			$result[ 'availableBlocks' ]
+		);
+	}
+
+	/**
+	 * Test available_blocks is empty when the client omits it.
+	 */
+	public function test_available_blocks_empty_when_absent(): void {
+		$tour_request = TourRequest::from_rest(
+			$this->make_request( [ 'taskId' => 'add-image' ] )
+		);
+
+		$this->assertSame( [], $tour_request->available_blocks() );
+	}
+
+	/**
 	 * Invoke the private sanitize_editor_context helper.
 	 *
 	 * @param array $context Raw context.

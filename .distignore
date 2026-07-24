@@ -9,6 +9,7 @@
 .vscode/
 .editorconfig
 .DS_Store
+.wordpress-org/
 
 node_modules/
 tests/

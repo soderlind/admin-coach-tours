@@ -170,6 +170,10 @@ class AiController {
 				$data   = $error->get_error_data();
 				$status = is_array( $data ) ? ( $data[ 'status' ] ?? 500 ) : 500;
 				break;
+			default:
+				$data   = $error->get_error_data();
+				$status = is_array( $data ) && isset( $data[ 'status' ] ) ? (int) $data[ 'status' ] : 500;
+				break;
 		}
 
 		return new \WP_Error( $code, $error->get_error_message(), [ 'status' => $status ] );

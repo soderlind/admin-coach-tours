@@ -1,6 +1,6 @@
 {
-	"version": "1.1.0",
-	"lastUpdated": "2025-01-31",
+	"version": "1.2.0",
+	"lastUpdated": "2026-07-24",
 	"source": "Learn WordPress (https://learn.wordpress.org/learning-pathway/user/)",
 	"editorConcepts": {
 		"interfaceSections": {
@@ -741,6 +741,109 @@
 			"tips": [
 				"Use Stack inside Cover blocks to center content",
 				"Customize spacing between stacked items in sidebar"
+			]
+		},
+		"core/audio": {
+			"name": "Audio",
+			"description": "Embed a simple audio player.",
+			"category": "media",
+			"keywords": [
+				"audio",
+				"music",
+				"sound",
+				"mp3",
+				"podcast",
+				"media"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/audio\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"audio\"]",
+				"uploadButton": ".block-editor-media-placeholder .components-form-file-upload button.components-button",
+				"mediaLibraryButton": ".block-editor-media-placeholder__button",
+				"placeholder": ".block-editor-media-placeholder"
+			},
+			"workflows": {
+				"upload": [
+					"Open inserter",
+					"Select Audio block",
+					"Click Upload",
+					"Choose audio file from computer"
+				],
+				"mediaLibrary": [
+					"Open inserter",
+					"Select Audio block",
+					"Click Media Library",
+					"Select existing audio file"
+				]
+			}
+		},
+		"core/details": {
+			"name": "Details",
+			"description": "Hide and show additional content behind an expandable summary.",
+			"category": "text",
+			"keywords": [
+				"details",
+				"summary",
+				"accordion",
+				"expand",
+				"collapse",
+				"toggle",
+				"disclosure"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/details\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"details\"]",
+				"summary": ".wp-block-details summary"
+			},
+			"workflows": {
+				"insert": [
+					"Open inserter",
+					"Select Details block",
+					"Type the summary label",
+					"Add hidden content inside"
+				]
+			},
+			"tips": [
+				"The summary is always visible; the body toggles open and closed",
+				"Use it for FAQs or optional details"
+			]
+		},
+		"core/file": {
+			"name": "File",
+			"description": "Add a link to a downloadable file.",
+			"category": "media",
+			"keywords": [
+				"file",
+				"download",
+				"document",
+				"pdf",
+				"attachment",
+				"media"
+			],
+			"selectors": {
+				"block": "[data-type=\"core/file\"]",
+				"inserterItem": ".block-editor-inserter__panel-content button[class*=\"file\"]",
+				"uploadButton": ".block-editor-media-placeholder .components-form-file-upload button.components-button",
+				"mediaLibraryButton": ".block-editor-media-placeholder__button",
+				"placeholder": ".block-editor-media-placeholder"
+			},
+			"workflows": {
+				"upload": [
+					"Open inserter",
+					"Select File block",
+					"Click Upload",
+					"Choose file from computer"
+				],
+				"mediaLibrary": [
+					"Open inserter",
+					"Select File block",
+					"Click Media Library",
+					"Select existing file"
+				]
+			},
+			"tips": [
+				"Shows a download button by default",
+				"Good for PDFs and other documents"
 			]
 		}
 	},

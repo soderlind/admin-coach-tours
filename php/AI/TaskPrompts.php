@@ -199,6 +199,50 @@ class TaskPrompts {
 	}
 
 	/**
+	 * Map a task to the core block it teaches.
+	 *
+	 * Used to skip tours for blocks a site has disabled. Tasks that are not
+	 * tied to a single block (e.g. text formatting) return null.
+	 *
+	 * @param string $task_id The task ID.
+	 * @return string|null Block name (e.g. `core/image`) or null.
+	 */
+	public static function get_task_block( string $task_id ): ?string {
+		$map = [
+			'add-paragraph' => 'core/paragraph',
+			'add-image'     => 'core/image',
+			'add-video'     => 'core/video',
+			'embed-youtube' => 'core/embed',
+			'add-heading'   => 'core/heading',
+			'create-list'   => 'core/list',
+			'add-button'    => 'core/buttons',
+			'add-columns'   => 'core/columns',
+			'add-gallery'   => 'core/gallery',
+			'add-quote'     => 'core/quote',
+			'add-table'     => 'core/table',
+			'add-cover'     => 'core/cover',
+			'add-code'      => 'core/code',
+			'add-separator' => 'core/separator',
+			'add-details'   => 'core/details',
+			'add-audio'     => 'core/audio',
+			'add-file'      => 'core/file',
+			'add-group'     => 'core/group',
+			'add-spacer'    => 'core/spacer',
+			'embed-url'     => 'core/embed',
+		];
+
+		/**
+		 * Filter the task-to-block map used for disabled-block detection.
+		 *
+		 * @since 0.5.1
+		 * @param array<string, string> $map Task ID => block name.
+		 */
+		$map = apply_filters( 'act_task_block_map', $map );
+
+		return $map[ $task_id ] ?? null;
+	}
+
+	/**
 	 * Get tasks grouped by category.
 	 *
 	 * @return array Tasks grouped by category.
@@ -390,6 +434,7 @@ You must return a valid JSON object with this structure:
 8. USE THE TARGETING OPTIONS FROM "CURRENT EDITOR STATE" - they show real, working selectors for blocks on this page.
 9. For the block inserter button, use: .editor-document-tools__inserter-toggle
 10. For block items in inserter: .block-editor-block-types-list button.editor-block-list-item-[blockname]
+11. NEVER reference a block listed under "DISABLED BLOCKS" in CURRENT EDITOR STATE — those blocks are turned off on this site and cannot be inserted.
 
 ## Selector Reliability Rules (CRITICAL)
 Use ONLY these proven, stable selectors:
@@ -696,6 +741,15 @@ INST
 	 */
 	private static function format_editor_context( array $context ): string {
 		$lines = [ 'CURRENT EDITOR STATE:' ];
+
+		// Blocks disabled on this site must never appear in a tour.
+		if ( ! empty( $context[ 'disabledBlocks' ] ) && is_array( $context[ 'disabledBlocks' ] ) ) {
+			$lines[] = '';
+			$lines[] = '🚫 DISABLED BLOCKS (do NOT reference or use these — they are turned off on this site):';
+			foreach ( $context[ 'disabledBlocks' ] as $disabled_block ) {
+				$lines[] = "- {$disabled_block}";
+			}
+		}
 
 		// Check for empty block placeholder first - it's a priority starting point.
 		$has_empty_placeholder = ! empty( $context[ 'uiSamples' ][ 'emptyBlockPlaceholder' ][ 'visible' ] );

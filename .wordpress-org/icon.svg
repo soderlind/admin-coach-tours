@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Admin Coach Tours icon</title>
+  <desc>A document with modular blocks and a three-step guided path ending in a highlighted target.</desc>
+  <rect width="256" height="256" fill="#FFFFFF"/>
+  <path d="M48 28h124l36 36v164H48z" fill="#FFFFFF" stroke="#111111" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M172 28v36h36" fill="#7C5CFC" stroke="#111111" stroke-width="12" stroke-linejoin="round"/>
+  <rect x="76" y="78" width="48" height="34" rx="5" fill="#18A0FB" stroke="#111111" stroke-width="9"/>
+  <rect x="136" y="78" width="44" height="34" rx="5" fill="#FFFFFF" stroke="#111111" stroke-width="9"/>
+  <rect x="76" y="126" width="104" height="30" rx="5" fill="#FFFFFF" stroke="#111111" stroke-width="9"/>
+  <path d="M84 190C106 166 131 173 144 190c12 15 29 13 42-2" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>
+  <circle cx="82" cy="190" r="13" fill="#B7F52A" stroke="#111111" stroke-width="8"/>
+  <circle cx="144" cy="190" r="13" fill="#FF5A5F" stroke="#111111" stroke-width="8"/>
+  <circle cx="192" cy="184" r="22" fill="#B7F52A" stroke="#111111" stroke-width="9"/>
+  <path d="M184 184l6 6 12-15" fill="none" stroke="#111111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

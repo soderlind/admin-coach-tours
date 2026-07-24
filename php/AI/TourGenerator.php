@@ -25,7 +25,7 @@ class TourGenerator {
 	 *
 	 * @var string
 	 */
-	private const CACHE_VERSION = '3';
+	private const CACHE_VERSION = '4';
 
 	/**
 	 * AI manager.
@@ -66,6 +66,12 @@ class TourGenerator {
 			);
 		}
 
+		// A predefined task whose block is disabled on this site can't produce a tour.
+		$disabled_error = $this->guard_disabled_task( $request );
+		if ( is_wp_error( $disabled_error ) ) {
+			return $disabled_error;
+		}
+
 		// Cache lookup — skipped on contextual retries.
 		$cache_key = null;
 		if ( ! $request->has_failure_context() ) {
@@ -99,6 +105,43 @@ class TourGenerator {
 	}
 
 	/**
+	 * Reject a predefined task whose target block is disabled on this site.
+	 *
+	 * Only applies when the editor reported block availability and the task maps
+	 * to a specific block; otherwise the request proceeds unchanged.
+	 *
+	 * @param TourRequest $request Sanitized request.
+	 * @return \WP_Error|null Error when the task's block is disabled, otherwise null.
+	 */
+	private function guard_disabled_task( TourRequest $request ): ?\WP_Error {
+		if ( '' === $request->task_id() ) {
+			return null;
+		}
+
+		$block = TaskPrompts::get_task_block( $request->task_id() );
+		if ( null === $block ) {
+			return null;
+		}
+
+		if ( BlockAvailability::is_available( $block, $request->available_blocks() ) ) {
+			return null;
+		}
+
+		$task  = TaskPrompts::get_task( $request->task_id() );
+		$label = $task[ 'label' ] ?? $block;
+
+		return new \WP_Error(
+			'act_block_disabled',
+			sprintf(
+				/* translators: %s: task label, e.g. "Add audio". */
+				__( '“%s” can’t be shown because that block is disabled on this site.', 'admin-coach-tours' ),
+				$label
+			),
+			[ 'status' => 409 ]
+		);
+	}
+
+	/**
 	 * Assemble the full system prompt from grounding + editor + failure context.
 	 *
 	 * @param TourRequest $request Sanitized request.
@@ -108,15 +151,23 @@ class TourGenerator {
 		$task         = '' !== $request->task_id() ? TaskPrompts::get_task( $request->task_id() ) : null;
 		$search_query = $task ? ( $task[ 'description' ] ?? $request->task_id() ) : $request->query();
 
-		$context_data      = GutenbergKnowledgeBase::get_relevant_context( $search_query, 5 );
+		$available_blocks  = $request->available_blocks();
+		$context_data      = GutenbergKnowledgeBase::get_relevant_context( $search_query, 5, $available_blocks );
 		$gutenberg_context = GutenbergKnowledgeBase::format_context_for_prompt( $context_data );
+
+		// Surface disabled blocks so the model never references them.
+		$editor_context = $request->editor_context();
+		$disabled       = BlockAvailability::disabled_from( GutenbergKnowledgeBase::get_block_names(), $available_blocks );
+		if ( ! empty( $disabled ) ) {
+			$editor_context[ 'disabledBlocks' ] = $disabled;
+		}
 
 		return TaskPrompts::get_system_prompt(
 			$request->task_id(),
 			$request->query(),
 			$gutenberg_context,
 			$request->post_type(),
-			$request->editor_context(),
+			$editor_context,
 			$request->failure_context(),
 			$request->locale()
 		);
@@ -156,6 +207,12 @@ class TourGenerator {
 
 		if ( ! empty( $editor_context[ 'uiSamples' ][ 'emptyBlockPlaceholder' ][ 'visible' ] ) ) {
 			$key_data[ 'hasPlaceholder' ] = true;
+		}
+
+		if ( ! empty( $editor_context[ 'availableBlocks' ] ) ) {
+			$available = $editor_context[ 'availableBlocks' ];
+			sort( $available );
+			$key_data[ 'availableBlocks' ] = $available;
 		}
 
 		return 'act_tour_' . md5( (string) wp_json_encode( $key_data ) );
