@@ -58,6 +58,79 @@ function getExpectedBlockType( locators ) {
 }
 
 /**
+ * Extract the raw expected block name (e.g. "core/image") from step locators.
+ *
+ * @param {Array} locators Array of locators from the step.
+ * @return {string|null} Raw block name or null.
+ */
+function getExpectedBlockName( locators ) {
+	if ( ! Array.isArray( locators ) ) {
+		return null;
+	}
+
+	for ( const locator of locators ) {
+		if ( typeof locator.value !== 'string' ) {
+			continue;
+		}
+		if ( locator.type === 'css' ) {
+			const match = locator.value.match( /data-type=["']?(core\/[\w-]+)["']?/i );
+			if ( match ) {
+				return match[ 1 ];
+			}
+		}
+		if ( locator.type === 'wpBlock' ) {
+			const match = locator.value.match( /type:(core\/[\w-]+)/i );
+			if ( match ) {
+				return match[ 1 ];
+			}
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Detect whether the user diverged from the tour by adding a different block
+ * than the step expects (e.g. asked for an Image but inserted a Gallery).
+ *
+ * @param {string|null} expectedName Raw expected block name (e.g. "core/image").
+ * @return {boolean} True if a different, non-empty block is present and the
+ *                   expected block is absent.
+ */
+function userAddedDifferentBlock( expectedName ) {
+	if ( ! expectedName ) {
+		return false;
+	}
+
+	const blockEditor = wpSelect( 'core/block-editor' );
+	if ( ! blockEditor?.getBlocks ) {
+		return false;
+	}
+
+	const blocks = blockEditor.getBlocks() || [];
+
+	const hasExpected =
+		( blockEditor.getBlocksByName?.( expectedName )?.length || 0 ) > 0 ||
+		blocks.some( ( block ) => block.name === expectedName );
+
+	if ( hasExpected ) {
+		return false;
+	}
+
+	// Any non-paragraph block, or a paragraph the user has typed into, counts
+	// as the user having built something other than the expected block.
+	return blocks.some( ( block ) => {
+		if ( block.name === expectedName ) {
+			return false;
+		}
+		if ( block.name === 'core/paragraph' ) {
+			return ( block.attributes?.content || '' ).toString().trim().length > 0;
+		}
+		return true;
+	} );
+}
+
+/**
  * Scroll an element into view, handling cross-frame scenarios.
  * When element is inside an iframe, we need to scroll both the iframe content
  * and ensure the iframe area is visible in the main window.
@@ -309,6 +382,36 @@ export default function TourRunner() {
 					}, 350 ); // Allow time for smooth scroll to finish
 				} else {
 					resolvedElement = null;
+
+					// If the user diverged (added a different block than this step
+					// expects), retrying can't succeed. Stop the tour cleanly with a
+					// clear message instead of the confusing "Try Again" loop.
+					const expectedName = getExpectedBlockName( currentStep.target?.locators );
+					if ( userAddedDifferentBlock( expectedName ) ) {
+						const expectedLabel = getExpectedBlockType( currentStep.target?.locators );
+						console.log( '[ACT TourRunner] User added a different block than expected; aborting tour.' );
+
+						if ( highlighterRef.current ) {
+							highlighterRef.current.clear();
+						}
+
+						clearInsertedBlocks();
+						previousStepIndexRef.current = null;
+						stopTour();
+
+						setAiTourError(
+							expectedLabel
+								? sprintf(
+									/* translators: %s: expected block type name. */
+									__( 'This tour was for adding a %s block, but a different block was added. The tour has stopped — start a new tour for the block you added.', 'admin-coach-tours' ),
+									expectedLabel
+								)
+								: __( 'A different block than expected was added, so the tour has stopped.', 'admin-coach-tours' )
+						);
+
+						return;
+					}
+
 					setTargetElement( null );
 					setResolutionError( result.error );
 					setExpectedBlockType( getExpectedBlockType( currentStep.target?.locators ) );
