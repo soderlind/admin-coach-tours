@@ -133,6 +133,10 @@ composer lint        # PHP (WPCS)
 npm run lint         # JavaScript (ESLint)
 ```
 
+### Architecture
+
+See [docs/AI-ARCHITECTURE.md](docs/AI-ARCHITECTURE.md) for details on the AI tour generation architecture.
+
 ## Hooks
 
 ### Filters
