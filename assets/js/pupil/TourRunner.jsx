@@ -15,7 +15,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import CoachPanel from './CoachPanel.jsx';
 import Highlighter from './Highlighter.js';
 import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarget.js';
-import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
+import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex, focusCurrentBlock } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
 import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 
@@ -55,6 +55,79 @@ function getExpectedBlockType( locators ) {
 	}
 
 	return null;
+}
+
+/**
+ * Extract the raw expected block name (e.g. "core/image") from step locators.
+ *
+ * @param {Array} locators Array of locators from the step.
+ * @return {string|null} Raw block name or null.
+ */
+function getExpectedBlockName( locators ) {
+	if ( ! Array.isArray( locators ) ) {
+		return null;
+	}
+
+	for ( const locator of locators ) {
+		if ( typeof locator.value !== 'string' ) {
+			continue;
+		}
+		if ( locator.type === 'css' ) {
+			const match = locator.value.match( /data-type=["']?(core\/[\w-]+)["']?/i );
+			if ( match ) {
+				return match[ 1 ];
+			}
+		}
+		if ( locator.type === 'wpBlock' ) {
+			const match = locator.value.match( /type:(core\/[\w-]+)/i );
+			if ( match ) {
+				return match[ 1 ];
+			}
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Detect whether the user diverged from the tour by adding a different block
+ * than the step expects (e.g. asked for an Image but inserted a Gallery).
+ *
+ * @param {string|null} expectedName Raw expected block name (e.g. "core/image").
+ * @return {boolean} True if a different, non-empty block is present and the
+ *                   expected block is absent.
+ */
+function userAddedDifferentBlock( expectedName ) {
+	if ( ! expectedName ) {
+		return false;
+	}
+
+	const blockEditor = wpSelect( 'core/block-editor' );
+	if ( ! blockEditor?.getBlocks ) {
+		return false;
+	}
+
+	const blocks = blockEditor.getBlocks() || [];
+
+	const hasExpected =
+		( blockEditor.getBlocksByName?.( expectedName )?.length || 0 ) > 0 ||
+		blocks.some( ( block ) => block.name === expectedName );
+
+	if ( hasExpected ) {
+		return false;
+	}
+
+	// Any non-paragraph block, or a paragraph the user has typed into, counts
+	// as the user having built something other than the expected block.
+	return blocks.some( ( block ) => {
+		if ( block.name === expectedName ) {
+			return false;
+		}
+		if ( block.name === 'core/paragraph' ) {
+			return ( block.attributes?.content || '' ).toString().trim().length > 0;
+		}
+		return true;
+	} );
 }
 
 /**
@@ -136,6 +209,7 @@ export default function TourRunner() {
 	const highlighterRef = useRef( null );
 	const previousStepIndexRef = useRef( null );
 	const completionWatcherRef = useRef( null ); // Use ref to avoid stale closure in cleanup.
+	const lastStepClickCleanupRef = useRef( null ); // Removes the last-step click-to-finish listener.
 
 	// Get playback state from store.
 	const {
@@ -309,6 +383,36 @@ export default function TourRunner() {
 					}, 350 ); // Allow time for smooth scroll to finish
 				} else {
 					resolvedElement = null;
+
+					// If the user diverged (added a different block than this step
+					// expects), retrying can't succeed. Stop the tour cleanly with a
+					// clear message instead of the confusing "Try Again" loop.
+					const expectedName = getExpectedBlockName( currentStep.target?.locators );
+					if ( userAddedDifferentBlock( expectedName ) ) {
+						const expectedLabel = getExpectedBlockType( currentStep.target?.locators );
+						console.log( '[ACT TourRunner] User added a different block than expected; aborting tour.' );
+
+						if ( highlighterRef.current ) {
+							highlighterRef.current.clear();
+						}
+
+						clearInsertedBlocks();
+						previousStepIndexRef.current = null;
+						stopTour();
+
+						setAiTourError(
+							expectedLabel
+								? sprintf(
+									/* translators: %s: expected block type name. */
+									__( 'This tour was for adding a %s block, but a different block was added. The tour has stopped — start a new tour for the block you added.', 'admin-coach-tours' ),
+									expectedLabel
+								)
+								: __( 'A different block than expected was added, so the tour has stopped.', 'admin-coach-tours' )
+						);
+
+						return;
+					}
+
 					setTargetElement( null );
 					setResolutionError( result.error );
 					setExpectedBlockType( getExpectedBlockType( currentStep.target?.locators ) );
@@ -373,6 +477,48 @@ export default function TourRunner() {
 				);
 				completionWatcherRef.current = watcher; // Store in ref for reliable cleanup.
 
+				// On the last step, clicking the highlighted block also finishes
+				// the tour (no need to press "Finish"). A short grace period avoids
+				// the click that reached this step from closing it immediately.
+				if ( stepIndex === totalSteps - 1 && resolvedElement ) {
+					const finishOnClick = () => {
+						if ( ! isMounted ) {
+							return;
+						}
+						console.log( '[ACT TourRunner] Last step: block clicked, finishing tour' );
+						clearInsertedBlocks();
+						focusCurrentBlock();
+						nextStep();
+					};
+
+					const graceTimer = setTimeout( () => {
+						if ( ! isMounted || ! resolvedElement.isConnected ) {
+							return;
+						}
+						resolvedElement.addEventListener( 'click', finishOnClick, {
+							once: true,
+							capture: true,
+						} );
+						lastStepClickCleanupRef.current = () => {
+							resolvedElement.removeEventListener( 'click', finishOnClick, {
+								capture: true,
+							} );
+						};
+					}, 400 );
+
+					// Ensure the pending timer is cleared on cleanup too.
+					const priorCleanup = lastStepClickCleanupRef.current;
+					lastStepClickCleanupRef.current = () => {
+						clearTimeout( graceTimer );
+						if ( priorCleanup ) {
+							priorCleanup();
+						}
+						resolvedElement.removeEventListener( 'click', finishOnClick, {
+							capture: true,
+						} );
+					};
+				}
+
 				// Wait for completion.
 				watcher.promise.then( async ( completionResult ) => {
 					if ( ! isMounted ) {
@@ -404,6 +550,8 @@ export default function TourRunner() {
 							// Last step - end the tour.
 							console.log( '[ACT TourRunner] Last step completed, ending tour' );
 							clearInsertedBlocks();
+							// Return the caret to the current block before the panel closes.
+							focusCurrentBlock();
 							nextStep(); // This will end the tour since there's no next step.
 						}
 					}
@@ -420,6 +568,11 @@ export default function TourRunner() {
 				console.log( '[ACT TourRunner] Cleanup: Cancelling completion watcher' );
 				completionWatcherRef.current.cancel();
 				completionWatcherRef.current = null;
+			}
+			// Remove any last-step click-to-finish listener/timer.
+			if ( lastStepClickCleanupRef.current ) {
+				lastStepClickCleanupRef.current();
+				lastStepClickCleanupRef.current = null;
 			}
 		};
 	}, [ isPlaying, currentStep, stepIndex, repeatCounter, stopTour, setAiTourError ] );
@@ -473,6 +626,8 @@ export default function TourRunner() {
 		clearInsertedBlocks();
 		previousStepIndexRef.current = null;
 		stopTour();
+		// Return the caret to the block the user was on.
+		focusCurrentBlock();
 	}, [ stopTour ] );
 
 	// Don't render if not playing.

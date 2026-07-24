@@ -1,0 +1,61 @@
+name: Manually build plugin zip
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag/release to attach the zip to (e.g. 0.5.0)"
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  PLUGIN_SLUG: admin-coach-tours
+  PLUGIN_ZIP: admin-coach-tours.zip
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install JS dependencies and build assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Install production Composer dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Verify updater dependency is bundled
+        run: |
+          test -d vendor/yahnis-elsts/plugin-update-checker \
+            || { echo "Missing yahnis-elsts/plugin-update-checker in vendor/"; exit 1; }
+
+      - name: Build plugin zip
+        run: |
+          mkdir -p "/tmp/${PLUGIN_SLUG}"
+          rsync -a --exclude-from=.distignore --exclude='.git' ./ "/tmp/${PLUGIN_SLUG}/"
+          ( cd /tmp && zip -rq "${GITHUB_WORKSPACE}/${PLUGIN_ZIP}" "${PLUGIN_SLUG}" )
+
+      - name: Attach zip to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          files: ${{ env.PLUGIN_ZIP }}

@@ -1,5 +1,12 @@
 ## Plan: Admin Coach Tours MVP WordPress Plugin
 
+> **Historical document.** This is the original MVP plan and does not reflect the
+> current architecture. Notably, AI generation now uses the WordPress 7 AI
+> Connector (`wp_get_connectors` / `wp_ai_client_prompt`) instead of bundled
+> providers with sodium-encrypted API keys, and the minimum requirement is
+> WordPress 7.0+. For the current design see [AI-ARCHITECTURE.md](AI-ARCHITECTURE.md)
+> and the [CHANGELOG](../CHANGELOG.md).
+
 Build a WordPress plugin enabling Educators to author interactive tours in Gutenberg and Pupils to run them with guided overlays, completion gating, and AI-assisted step drafting. Uses `@wordpress/data` store, captures locator bundles up to 3 ancestor levels prioritizing `data-*`/`id`, includes minimal AI settings page with sodium-encrypted keys, and REST-level tour scope filtering.
 
 **Plugin:** Admin Coach Tours | **Slug:** `admin-coach-tours`

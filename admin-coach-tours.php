@@ -11,8 +11,8 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://github.com/soderlind/admin-coach-tours
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.4.1
- * Requires at least: 6.8
+ * Version:     0.5.0
+ * Requires at least: 7.0
  * Requires PHP: 8.3
  * Author:      Per Soderlind
  * Author URI:  https://github.com/soderlind
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.4.1';
+const VERSION = '0.5.0';
 
 /**
  * Plugin slug.
@@ -57,7 +57,7 @@ define( 'AdminCoachTours\PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 /**
  * Minimum WordPress version.
  */
-const MIN_WP_VERSION = '6.8';
+const MIN_WP_VERSION = '7.0';
 
 /**
  * Minimum PHP version.
@@ -100,11 +100,6 @@ function check_requirements(): bool {
 		);
 	}
 
-	// Check sodium extension.
-	if ( ! function_exists( 'sodium_crypto_secretbox' ) ) {
-		$errors[] = __( 'Admin Coach Tours requires the PHP Sodium extension for secure API key storage.', 'admin-coach-tours' );
-	}
-
 	if ( ! empty( $errors ) ) {
 		add_action(
 			'admin_notices',
@@ -141,6 +136,18 @@ function init(): void {
 		dirname( PLUGIN_BASENAME ) . '/languages'
 	);
 
+	// Self-updates from GitHub releases.
+	if ( class_exists( \Soderlind\WordPress\GitHubUpdater::class ) ) {
+		\Soderlind\WordPress\GitHubUpdater::init(
+			github_url:   'https://github.com/soderlind/admin-coach-tours',
+			plugin_file:  __FILE__,
+			plugin_slug:  'admin-coach-tours',
+			name_regex:   '/admin-coach-tours\.zip/',
+			branch:       'main',
+			check_period: 6,
+		);
+	}
+
 	// Initialize components.
 	$initializers = [
 		Cpt\ToursCpt::class,
@@ -160,6 +167,52 @@ function init(): void {
 
 	// Enqueue admin assets (for settings page).
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
+
+	// One-time cleanup of legacy AI options after upgrading to the WP AI connector.
+	add_action( 'admin_init', __NAMESPACE__ . '\\maybe_upgrade' );
+}
+
+/**
+ * Run one-time upgrade routines when the stored version differs from the current one.
+ *
+ * Removes legacy provider API-key options that are now managed by the
+ * WordPress AI connector (wp_get_connectors) instead of this plugin.
+ *
+ * @return void
+ */
+function maybe_upgrade(): void {
+	$stored = get_option( 'act_version', '' );
+
+	if ( VERSION === $stored ) {
+		return;
+	}
+
+	// Legacy options that stored encrypted API keys and per-provider config.
+	$legacy_options = [
+		'act_ai_provider',
+		'act_ai_openai_api_key',
+		'act_ai_openai_model',
+		'act_ai_azure_api_key',
+		'act_ai_azure_endpoint',
+		'act_ai_azure_deployment',
+		'act_ai_azure_model',
+		'act_ai_anthropic_api_key',
+		'act_ai_anthropic_model',
+		'act_ai_api_key',
+		'act_ai_endpoint',
+		'act_encryption_key',
+	];
+
+	// Preserve act_ai_provider only if it now holds a connector ID (repurposed).
+	// A fresh install has no legacy encrypted keys, so removing the others is safe.
+	foreach ( $legacy_options as $option ) {
+		if ( 'act_ai_provider' === $option ) {
+			continue;
+		}
+		delete_option( $option );
+	}
+
+	update_option( 'act_version', VERSION );
 }
 
 /**

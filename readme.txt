@@ -1,10 +1,10 @@
 === Admin Coach Tours ===
 Contributors: PerS
 Tags: gutenberg, block editor, tutorial, guided tour, ai, learning
-Requires at least: 6.8
+Requires at least: 7.0
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 0.4.1
+Stable tag: 0.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 = Features =
 
 * **AI-Generated Tours** — On-demand tutorials created by AI based on your request
-* **12 Predefined Tasks** — Common tasks like adding images, videos, headings, and more
+* **Ready-made Task Library** — 20+ common tasks like adding images, videos, headings, paragraphs, and more
 * **Freeform Questions** — Ask anything about the block editor
 * **Interactive Overlay** — Visual highlighting guides you through each step
 * **Smart Block Targeting** — Accurately identifies and highlights the correct elements
@@ -26,48 +26,67 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 = Predefined Tasks =
 
+**Text & Content:**
+* Add a paragraph
+* Add a heading
+* Create a list
+* Add a quote
+* Create a table
+* Format text (bold, italic, links)
+* Add a code block
+* Add a separator
+* Add a details/accordion
+
 **Media:**
 * Add an image
 * Add a video
 * Create a gallery
 * Add a cover image
-
-**Text & Content:**
-* Add a heading
-* Create a list
-* Add a quote
-* Create a table
-* Add a button
+* Add audio
+* Add a file download
 
 **Design & Layout:**
+* Add a button
 * Create columns
-* Add a group block
+* Group blocks in a container
+* Add spacing
 
 **Embeds:**
 * Embed a YouTube video
+* Embed from a URL
 
 = Requirements =
 
-* WordPress 6.8 or later
+* WordPress 7.0 or later
 * PHP 8.3 or later
-* sodium extension (for API key encryption)
-* AI provider API key (OpenAI, Azure OpenAI, or Anthropic)
+* At least one WordPress AI provider connector configured
 
 == Installation ==
 
-1. Upload the `admin-coach-tours` folder to `/wp-content/plugins/`
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to **Tools → Coach Tours** to configure your AI provider
+= From a release zip (recommended) =
+
+1. Download `admin-coach-tours.zip` from the latest GitHub release: https://github.com/soderlind/admin-coach-tours/releases/latest
+2. In wp-admin, go to Plugins > Add New > Upload Plugin, choose the zip, and click Install Now.
+3. Activate the plugin.
+4. Go to **Tools → Coach Tours** to enable AI features.
+
+= From source =
+
+1. `git clone https://github.com/soderlind/admin-coach-tours.git`
+2. `composer install --no-dev` and `npm ci && npm run build`
+3. Copy the folder into `wp-content/plugins/` and activate it.
+
+= Updates =
+
+The plugin updates itself from GitHub releases — new versions appear under Plugins and Dashboard > Updates like any other plugin.
 
 = Configure AI Provider =
 
-1. Navigate to **Tools → Coach Tours**
-2. Enable AI Features
-3. Select your provider:
-   * **OpenAI** — Add your API key
-   * **Azure OpenAI** — Add endpoint URL, API key, and deployment name
-   * **Anthropic** — Add your API key
-4. Save settings
+1. Configure at least one WordPress AI provider connector
+2. Navigate to **Tools → Coach Tours**
+3. Enable AI Features
+4. Optionally choose a preferred provider and model override
+5. Save settings
 
 == Usage ==
 
@@ -92,14 +111,11 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 = What AI providers are supported? =
 
-Admin Coach Tours supports:
-* OpenAI (GPT-4 and GPT-4o models)
-* Azure OpenAI
-* Anthropic (Claude models)
+Admin Coach Tours uses the WordPress AI connector, so it works with whatever AI provider connectors you have configured in WordPress (for example, an Azure AI Foundry or OpenAI connector). Configure at least one connector, then enable AI features in the plugin.
 
 = Are API keys stored securely? =
 
-Yes, all API keys are encrypted using PHP's sodium extension before being stored in the database.
+This plugin does not store API keys. Keys are managed by the WordPress AI connector you configure; the plugin only calls the connector.
 
 = Do I need to create my own tours? =
 
@@ -121,6 +137,22 @@ Yes, the plugin can be activated network-wide or on individual sites.
 4. AI Settings page for configuring your provider
 
 == Changelog ==
+
+= 0.5.0 =
+* Changed: Reworked the AI layer to use the WordPress 7 AI Connector (wp_get_connectors / wp_ai_client_prompt); removed bundled providers and API-key encryption. Now requires WordPress 7.0+ and at least one configured AI provider connector.
+* Changed: Refactored the AI tour-generation flow into deep modules; the REST controller is now a thin adapter.
+* Changed: Slimmed the settings page to connector status, an enable toggle, and an optional provider/model override.
+* Changed: Reordered task categories (Text first) and expanded the task list (Paragraph, Code, Separator, Details, Audio, File, Group, Spacer, Embed-from-URL).
+* Added: Coach panel shows the "/command" as a header above the instruction.
+* Added: Self-updates from GitHub releases via the WordPress Plugin GitHub Updater, plus release-zip build workflows.
+* Added: Refocus the current block when a tour closes.
+* Added: Finish the tour by clicking the highlighted block on the last step.
+* Added: Hide the launcher when the editor is in code editor mode.
+* Added: Stop the tour with a clear message when a different block than expected is inserted.
+* Fixed: generate-tour REST route rejected null editorContext/failureContext.
+* Fixed: wpBlock "selected" now falls back to the last-selected block so multi-step tours don't fail on confirmation steps.
+* Fixed: Removed the arrow "Next" button that let users skip ahead before a block existed.
+* Fixed: Tour copy no longer uses positional words ("below"/"above").
 
 = 0.4.0 =
 * Added: Localized AI responses - tours are now generated in the user's WordPress language

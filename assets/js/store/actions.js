@@ -781,6 +781,9 @@ export function* requestAiTour( taskId, query, postType, failureContext = null )
 	yield setAiTourLoading( true );
 	yield setAiTourError( null );
 
+	// Resolve the response language once, at the composition root.
+	const locale = window.adminCoachTours?.locale || '';
+
 	try {
 		// Gather editor context to help AI generate accurate selectors.
 		const editorContext = yield {
@@ -794,6 +797,7 @@ export function* requestAiTour( taskId, query, postType, failureContext = null )
 			postType,
 			editorContext,
 			failureContext,
+			locale,
 		};
 
 		console.log( '[ACT AI Response] Full result:', result );
@@ -825,13 +829,26 @@ export function* requestAiTour( taskId, query, postType, failureContext = null )
 }
 
 /**
+ * Fetch the available AI tasks through the store.
+ *
+ * Keeps all AI REST access behind the store's control seam so components
+ * don't call apiFetch directly or duplicate the endpoint path.
+ *
+ * @return {Generator} Generator resolving to the tasks response.
+ */
+export function* fetchAiTasks() {
+	return yield {
+		type: 'FETCH_AI_TASKS',
+	};
+}
+
+/**
  * Start an ephemeral tour directly (for pre-loaded tours).
  *
  * @param {Object} tour Tour object with title and steps.
  * @return {Generator} Generator that sets up and starts the tour.
  */
 export function* startEphemeralTour( tour ) {
-	// Add ID if not present.
 	const tourWithId = {
 		id: 'ephemeral',
 		...tour,

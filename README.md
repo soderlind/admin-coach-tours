@@ -1,7 +1,7 @@
 # Admin Coach Tours
 
 [![Version](https://img.shields.io/badge/version-0.3.6-blue.svg)](https://github.com/soderlind/admin-coach-tours)
-[![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-blue.svg)](https://wordpress.org)
+[![WordPress](https://img.shields.io/badge/WordPress-7.0%2B-blue.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-purple.svg)](https://php.net)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -22,7 +22,7 @@ https://github.com/user-attachments/assets/f74c34d9-58ba-49fc-a13e-05f8eb98c0ce
 ## Features
 
 - **AI-Generated Tours** — On-demand tutorials created by AI based on your request
-- **12 Predefined Tasks** — Common tasks like adding images, videos, headings, and more
+- **Ready-made Task Library** — 20+ common tasks like adding images, videos, headings, paragraphs, and more
 - **Freeform Questions** — Ask anything about the block editor
 - **Interactive Overlay** — Visual highlighting guides you through each step
 - **Smart Block Targeting** — Accurately identifies and highlights the correct elements
@@ -30,28 +30,43 @@ https://github.com/user-attachments/assets/f74c34d9-58ba-49fc-a13e-05f8eb98c0ce
 
 ## Requirements
 
-- WordPress 6.8+
+- WordPress 7.0+
 - PHP 8.3+
-- sodium extension (for API key encryption)
-- AI provider API key (OpenAI, Azure OpenAI, or Anthropic)
+- At least one WordPress AI provider connector configured
 
 ## Installation
 
-1. Upload `admin-coach-tours` to `/wp-content/plugins/`
-2. Activate the plugin
-3. Go to **Tools → Coach Tours** to configure AI
+### From a release zip (recommended)
+
+1. Download `admin-coach-tours.zip` from the [latest release](https://github.com/soderlind/admin-coach-tours/releases/latest).
+2. In wp-admin, go to **Plugins → Add New → Upload Plugin**, choose the zip, and click **Install Now**.
+3. Activate the plugin.
+4. Go to **Tools → Coach Tours** to enable AI.
+
+### From source
+
+```bash
+git clone https://github.com/soderlind/admin-coach-tours.git
+cd admin-coach-tours
+composer install --no-dev
+npm ci && npm run build
+```
+
+Copy the folder into `wp-content/plugins/` and activate it.
+
+### Updates
+
+The plugin updates itself from GitHub releases — new versions show up under **Plugins** and **Dashboard → Updates** like any other plugin (checked roughly every 6 hours).
 
 ## Setup
 
 ### Configure AI Provider
 
-1. Navigate to **Tours → Settings**
-2. Enable AI Features
-3. Select your provider:
-   - **OpenAI** — Add your API key
-   - **Azure OpenAI** — Add your API key and endpoint URL
-   - **Anthropic** — Add your API key
-4. Save settings
+1. Configure at least one WordPress AI provider connector
+2. Navigate to **Tools → Coach Tours**
+3. Enable AI Features
+4. Optionally choose a preferred provider and model override
+5. Save settings
 
 ## Usage
 
@@ -64,10 +79,10 @@ https://github.com/user-attachments/assets/f74c34d9-58ba-49fc-a13e-05f8eb98c0ce
 **Common Tasks:**
 | Category | Tasks |
 |----------|-------|
-| Media | Add image, Add video, Create gallery, Add cover |
-| Text | Add heading, Create list, Add quote, Create table |
-| Design | Add button, Create columns |
-| Embed | Embed YouTube |
+| Text | Add paragraph, heading, list, quote, table; format text; code, separator, details |
+| Media | Add image, video, gallery, cover, audio, file |
+| Design | Add button, columns, group, spacer |
+| Embed | Embed YouTube, embed from URL |
 
 **Or Ask a Question:**
 Type any question about the block editor and press Enter.
@@ -75,11 +90,6 @@ Type any question about the block editor and press Enter.
 4. Follow the highlighted steps to complete the task
 5. Each step auto-advances when you perform the action
 
-### Tour Controls
-
-- **Previous/Next** — Navigate between steps
-- **Skip** — Skip a step you already know
-- **Stop** — Exit the tour at any time
 
 ## How It Works
 
@@ -156,7 +166,7 @@ npm run lint         # JavaScript (ESLint)
 
 ## Security
 
-- API keys encrypted with libsodium
+- API keys are owned by the WordPress AI connector (not stored by this plugin)
 - All endpoints require authentication
 - Capability checks on all operations
 - Input sanitization and output escaping
@@ -168,5 +178,5 @@ GPL v2 or later — see [LICENSE](LICENSE) for details.
 ## Credits
 
 - Built with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts) and [@wordpress/data](https://www.npmjs.com/package/@wordpress/data)
-- AI integration supports OpenAI, Azure OpenAI, and Anthropic
+- AI generation via the WordPress 7 AI Connector (`wp_get_connectors` / `wp_ai_client_prompt`)
 - RAG knowledge base includes pedagogical content from [Learn WordPress](https://learn.wordpress.org/learning-pathway/user/) courses
