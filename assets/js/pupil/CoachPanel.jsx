@@ -7,7 +7,7 @@
  * @since   0.1.0
  */
 
-import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
+import { useState, useEffect, useCallback, useRef, useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	Button,
@@ -16,7 +16,7 @@ import {
 	FlexItem,
 	FlexBlock,
 } from '@wordpress/components';
-import { arrowRight, close } from '@wordpress/icons';
+import { close } from '@wordpress/icons';
 
 /**
  * @typedef {import('../types/step.js').Step} Step
@@ -65,6 +65,17 @@ export default function CoachPanel( {
 	const isFirstStep = stepIndex === 0;
 	const isLastStep = stepIndex === totalSteps - 1;
 	const isManualCompletion = step?.completion?.type === 'manual';
+
+	// Detect a "/command" in the instruction so it can be surfaced as a header.
+	const slashCommand = useMemo( () => {
+		const text = ( step?.content || '' ).replace( /<[^>]*>/g, ' ' );
+		const match = text.match( /(?:^|\s)(\/[a-z][a-z0-9-]*)/i );
+		return match ? match[ 1 ] : null;
+	}, [ step?.content ] );
+
+	// Only steps the user must confirm show a footer control; auto-advancing
+	// steps have none (removing the old "next" arrow that skipped ahead).
+	const hasControl = isManualCompletion || isLastStep;
 
 	/**
 	 * Position panel relative to target element.
@@ -284,6 +295,43 @@ export default function CoachPanel( {
 
 		return (
 			<>
+				{ slashCommand && (
+					<div
+						className="act-panel-slash-command"
+						style={ {
+							display: 'flex',
+							alignItems: 'center',
+							gap: '8px',
+							marginBottom: '14px',
+						} }
+					>
+						<span
+							style={ {
+								fontSize: '11px',
+								fontWeight: 600,
+								textTransform: 'uppercase',
+								letterSpacing: '0.05em',
+								color: '#757575',
+							} }
+						>
+							{ __( 'Type', 'admin-coach-tours' ) }
+						</span>
+						<code
+							style={ {
+								fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+								fontSize: '18px',
+								fontWeight: 700,
+								color: '#0b5cad',
+								background: '#f0f6fc',
+								border: '1px solid #c5d9ed',
+								borderRadius: '6px',
+								padding: '4px 10px',
+							} }
+						>
+							{ slashCommand }
+						</code>
+					</div>
+				) }
 				{ step?.content && (
 					<div
 						className="act-panel-content"
@@ -302,26 +350,16 @@ export default function CoachPanel( {
 			<div className="act-panel-controls">
 				<Flex justify="flex-end" align="center">
 					<FlexItem>
-						{ isManualCompletion || isLastStep ? (
-							<Button
-								variant="primary"
-								onClick={ onContinue }
-								disabled={ isApplyingPreconditions || !! resolutionError }
-								size="small"
-							>
-								{ isLastStep
-									? __( 'Finish', 'admin-coach-tours' )
-									: __( 'Continue', 'admin-coach-tours' ) }
-							</Button>
-						) : (
-							<Button
-								icon={ arrowRight }
-								label={ __( 'Next', 'admin-coach-tours' ) }
-								onClick={ onNext }
-								disabled={ isApplyingPreconditions || !! resolutionError }
-								size="small"
-							/>
-						) }
+						<Button
+							variant="primary"
+							onClick={ onContinue }
+							disabled={ isApplyingPreconditions || !! resolutionError }
+							size="small"
+						>
+							{ isLastStep
+								? __( 'Finish', 'admin-coach-tours' )
+								: __( 'Continue', 'admin-coach-tours' ) }
+						</Button>
 					</FlexItem>
 				</Flex>
 			</div>
@@ -414,17 +452,19 @@ export default function CoachPanel( {
 			</div>
 
 			{ /* Footer */ }
-			<div
-				className="act-panel-footer"
-				style={ {
-					padding: '14px 20px',
-					borderTop: '1px solid #e0e0e0',
-					background: '#fafafa',
-					borderRadius: '0 0 12px 12px',
-				} }
-			>
-				{ renderControls() }
-			</div>
+			{ hasControl && (
+				<div
+					className="act-panel-footer"
+					style={ {
+						padding: '14px 20px',
+						borderTop: '1px solid #e0e0e0',
+						background: '#fafafa',
+						borderRadius: '0 0 12px 12px',
+					} }
+				>
+					{ renderControls() }
+				</div>
+			) }
 		</div>
 	);
 }

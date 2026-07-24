@@ -19,12 +19,17 @@ const STORE_NAME = 'admin-coach-tours';
  * Icons for task categories.
  */
 const CATEGORY_ICONS = {
+	text: '📝',
 	media: '🖼️',
-	content: '📝',
-	layout: '📐',
-	formatting: '✨',
+	design: '📐',
+	embed: '🔗',
 	default: '📚',
 };
+
+/**
+ * Display order for task categories (Text first).
+ */
+const CATEGORY_ORDER = [ 'text', 'media', 'design', 'embed' ];
 
 /**
  * Pupil Launcher component.
@@ -267,6 +272,15 @@ export default function PupilLauncher() {
 		return acc;
 	}, {} );
 
+	// Order categories by CATEGORY_ORDER; unknown categories go last.
+	const orderedCategories = Object.entries( tasksByCategory ).sort(
+		( [ a ], [ b ] ) => {
+			const ia = CATEGORY_ORDER.indexOf( a );
+			const ib = CATEGORY_ORDER.indexOf( b );
+			return ( ia === -1 ? 999 : ia ) - ( ib === -1 ? 999 : ib );
+		}
+	);
+
 	// Render loading overlay via portal (always available, even when tour is playing).
 	// This must be outside the isPlaying guard to persist during the transition.
 	const loadingOverlay = isAiTourLoading && createPortal(
@@ -413,7 +427,7 @@ export default function PupilLauncher() {
 									</div>
 								) }
 
-								{ ! isTasksLoading && Object.entries( tasksByCategory ).map( ( [ category, categoryTasks ] ) => (
+								{ ! isTasksLoading && orderedCategories.map( ( [ category, categoryTasks ] ) => (
 									<div key={ category } className="act-pupil-launcher__category">
 										<h4>
 											<span className="act-pupil-launcher__category-icon">

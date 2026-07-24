@@ -25,6 +25,13 @@ class TaskPrompts {
 	public static function get_tasks(): array {
 		$tasks = [
 			[
+				'id'          => 'add-paragraph',
+				'label'       => __( 'Add a paragraph', 'admin-coach-tours' ),
+				'icon'        => 'editor-paragraph',
+				'category'    => 'text',
+				'description' => __( 'Learn how to add a paragraph block and write text.', 'admin-coach-tours' ),
+			],
+			[
 				'id'          => 'add-image',
 				'label'       => __( 'Add an image', 'admin-coach-tours' ),
 				'icon'        => 'format-image',
@@ -107,6 +114,62 @@ class TaskPrompts {
 				'icon'        => 'cover-image',
 				'category'    => 'media',
 				'description' => __( 'Learn how to add a cover image with text overlay.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-code',
+				'label'       => __( 'Add a code block', 'admin-coach-tours' ),
+				'icon'        => 'editor-code',
+				'category'    => 'text',
+				'description' => __( 'Learn how to add a block for displaying code.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-separator',
+				'label'       => __( 'Add a separator', 'admin-coach-tours' ),
+				'icon'        => 'minus',
+				'category'    => 'text',
+				'description' => __( 'Learn how to add a horizontal divider between sections.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-details',
+				'label'       => __( 'Add a details/accordion', 'admin-coach-tours' ),
+				'icon'        => 'arrow-down-alt2',
+				'category'    => 'text',
+				'description' => __( 'Learn how to add expandable details (accordion) content.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-audio',
+				'label'       => __( 'Add audio', 'admin-coach-tours' ),
+				'icon'        => 'format-audio',
+				'category'    => 'media',
+				'description' => __( 'Learn how to upload or embed an audio clip.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-file',
+				'label'       => __( 'Add a file download', 'admin-coach-tours' ),
+				'icon'        => 'media-document',
+				'category'    => 'media',
+				'description' => __( 'Learn how to add a downloadable file.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-group',
+				'label'       => __( 'Group blocks in a container', 'admin-coach-tours' ),
+				'icon'        => 'grid-view',
+				'category'    => 'design',
+				'description' => __( 'Learn how to wrap blocks in a group container.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'add-spacer',
+				'label'       => __( 'Add spacing', 'admin-coach-tours' ),
+				'icon'        => 'image-flip-vertical',
+				'category'    => 'design',
+				'description' => __( 'Learn how to add vertical space between blocks.', 'admin-coach-tours' ),
+			],
+			[
+				'id'          => 'embed-url',
+				'label'       => __( 'Embed from a URL', 'admin-coach-tours' ),
+				'icon'        => 'admin-links',
+				'category'    => 'embed',
+				'description' => __( 'Learn how to embed external content by pasting a URL.', 'admin-coach-tours' ),
 			],
 		];
 
@@ -429,6 +492,22 @@ PROMPT;
 	 */
 	private static function get_task_instructions( string $task_id ): string {
 		$instructions = [
+			'add-paragraph' => <<<'INST'
+Guide the user to add and write in a paragraph block. This is the simplest block — no slash command is needed.
+
+PATTERN:
+- An empty paragraph block is already inserted and SELECTED before the tour starts.
+- Step 1: Target the empty paragraph and instruct the user to click into it and start typing their text.
+  - Completion: manual
+- Keep it to a SINGLE step.
+
+SELECTORS:
+- wpBlock: "selected" or .block-editor-rich-text__editable (inEditorIframe = true)
+
+Do NOT use the "/" quick inserter for this task — the paragraph already exists.
+INST
+			,
+
 			'add-image'     => <<<'INST'
 Guide the user to add an image using the "/" quick inserter.
 
