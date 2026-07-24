@@ -4,7 +4,7 @@ Tags: gutenberg, block editor, tutorial, guided tour, ai, learning
 Requires at least: 7.0
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,11 @@ Yes, the plugin can be activated network-wide or on individual sites.
 4. AI Settings page for configuring your provider
 
 == Changelog ==
+
+= 0.6.0 =
+* Exclude disabled core blocks from generated tours (RAG, prompt, and predefined tasks skip blocks turned off on the site).
+* Expanded the block knowledge base with the Audio, Details, and File blocks.
+* Resolved all npm dependency vulnerabilities (upgraded @wordpress/scripts to v33 and pinned patched transitive packages).
 
 = 0.5.0 =
 * Changed: Reworked the AI layer to use the WordPress 7 AI Connector (wp_get_connectors / wp_ai_client_prompt); removed bundled providers and API-key encryption. Now requires WordPress 7.0+ and at least one configured AI provider connector.

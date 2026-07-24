@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-24
+
+### Added
+
+- Exclude disabled core blocks from generated tours — the editor reports insertable blocks, the RAG knowledge base and prompt skip disabled blocks, and a predefined task whose block is disabled is refused with a clear message.
+- Expanded the block knowledge base with the Audio, Details, and File blocks.
+
+### Security
+
+- Resolved all npm dependency vulnerabilities (upgraded `@wordpress/scripts` to v33 and pinned patched transitive packages).
+
 ## [0.5.0] - 2026-07-24
 
 ### Changed
