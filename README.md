@@ -13,6 +13,8 @@ AI-powered interactive tutorials for the WordPress block editor.
 
 Admin Coach Tours helps WordPress users learn the block editor through AI-generated step-by-step tutorials. Click **"Help me..."** in the editor, select a task or ask a question, and get an interactive guided tour tailored to your needs.
 
+https://github.com/user-attachments/assets/c405d199-585f-4d79-acae-eeed18988f6f
+
 ## Features
 
 - **AI-Generated Tours** — On-demand tutorials created by AI based on your request
