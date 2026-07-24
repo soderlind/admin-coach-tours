@@ -263,12 +263,13 @@ class Routes {
 							'description' => __( 'User locale for AI response language.', 'admin-coach-tours' ),
 						],
 						'editorContext'  => [
-							'type'        => 'object',
+							'type'        => [ 'object', 'null' ],
 							'default'     => [],
 							'description' => __( 'Current editor state (blocks, UI elements). Sanitized by TourRequest.', 'admin-coach-tours' ),
 						],
 						'failureContext' => [
-							'type'        => 'object',
+							'type'        => [ 'object', 'null' ],
+							'default'     => null,
 							'description' => __( 'Context from a previous failed attempt, for contextual retry. Sanitized by TourRequest.', 'admin-coach-tours' ),
 						],
 					],
