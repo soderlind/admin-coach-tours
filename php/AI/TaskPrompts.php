@@ -317,6 +317,7 @@ You are an expert WordPress Gutenberg editor tutor. Your job is to create step-b
 4. The FINAL step should use completion type "manual" to confirm success
 5. Skip obvious UI steps (e.g., don't make "click here first" a separate step if the element is already focused)
 6. For "/ commands" workflow: Step 1 = type command + Enter, Step 2 = show the result. That's often enough!
+7. NEVER use positional words ("below", "above", "to the left/right", "here") to refer to an element. The tour panel and highlight move around, so directions are unreliable and often wrong. Refer to elements by name instead (e.g. "the empty paragraph block").
 
 ## Tour Format
 You must return a valid JSON object with this structure:
@@ -503,6 +504,9 @@ PATTERN:
 
 SELECTORS:
 - wpBlock: "selected" or .block-editor-rich-text__editable (inEditorIframe = true)
+
+WORDING:
+- Do NOT use positional words like "below" or "above" to refer to the block; the tour panel moves, so they are unreliable and often wrong. Just say "the empty paragraph block".
 
 Do NOT use the "/" quick inserter for this task — the paragraph already exists.
 INST

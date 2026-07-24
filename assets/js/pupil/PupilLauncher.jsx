@@ -55,6 +55,7 @@ export default function PupilLauncher() {
 		isPlaying,
 		aiAvailable,
 		lastFailureContext,
+		editorMode,
 	} = useSelect( ( select ) => {
 		const store = select( STORE_NAME );
 		return {
@@ -65,6 +66,8 @@ export default function PupilLauncher() {
 			aiAvailable: window.adminCoachTours?.aiAvailable ?? false,
 			// Failure context for contextual retry.
 			lastFailureContext: store.getLastFailureContext?.() ?? null,
+			// 'visual' or 'text' (code editor).
+			editorMode: select( 'core/edit-post' )?.getEditorMode?.() ?? 'visual',
 		};
 	}, [] );
 
@@ -218,6 +221,11 @@ export default function PupilLauncher() {
 	const closeLauncher = useCallback( () => {
 		setIsOpen( false );
 	}, [] );
+
+	// Hide the launcher entirely when the editor is in code (text) mode.
+	if ( editorMode === 'text' ) {
+		return null;
+	}
 
 	// Show configuration prompt if AI is not available.
 	if ( ! aiAvailable ) {

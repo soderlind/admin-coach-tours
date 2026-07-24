@@ -461,6 +461,10 @@ export async function onLeaveStep( leavingStepIndex ) {
 	// Deselect current block when leaving.
 	const selectedClientId = blockEditorSelect.getSelectedBlockClientId?.();
 	if ( selectedClientId ) {
+		// Remember it so a later step's `wpBlock: "selected"` target can fall
+		// back to this block after we clear the selection here.
+		window.__actLastSelectedBlockClientId = selectedClientId;
+
 		try {
 			await blockEditorDispatch.clearSelectedBlock?.();
 			console.log( '[ACT onLeaveStep] Deselected block:', selectedClientId );
@@ -491,6 +495,7 @@ export function clearInsertedBlocks() {
 	currentStepIndex = 0;
 	// Also clear the last appeared block tracking.
 	delete window.__actLastAppearedBlockClientId;
+	delete window.__actLastSelectedBlockClientId;
 	console.log( '[ACT clearInsertedBlocks] Cleared all tracking' );
 }
 

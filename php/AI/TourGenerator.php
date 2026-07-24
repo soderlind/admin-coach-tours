@@ -25,7 +25,7 @@ class TourGenerator {
 	 *
 	 * @var string
 	 */
-	private const CACHE_VERSION = '2';
+	private const CACHE_VERSION = '3';
 
 	/**
 	 * AI manager.

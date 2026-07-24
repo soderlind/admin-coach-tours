@@ -437,6 +437,21 @@ function findByWpBlock( value, doc = document ) {
 		targetClientId = blocks[ blocks.length - 1 ]?.clientId;
 	} else if ( value === 'selected' ) {
 		targetClientId = blockEditor.getSelectedBlockClientId();
+
+		// The tour deselects blocks between steps (onLeaveStep), so a later step
+		// targeting "selected" can find nothing even though the user is still on
+		// that block. Fall back to the block the tour last worked with, then to
+		// the only block present.
+		if ( ! targetClientId ) {
+			targetClientId =
+				window.__actLastSelectedBlockClientId ||
+				window.__actLastAppearedBlockClientId ||
+				( blocks.length === 1 ? blocks[ 0 ]?.clientId : null );
+
+			if ( targetClientId ) {
+				console.log( '[ACT findByWpBlock] "selected" fell back to:', targetClientId );
+			}
+		}
 	} else if ( value.startsWith( 'type:' ) ) {
 		// Find block by type, optionally with index.
 		const parts = value.substring( 5 ).split( ':' );
