@@ -11,7 +11,7 @@
  * Plugin Name: Admin Coach Tours
  * Plugin URI:  https://github.com/soderlind/admin-coach-tours
  * Description: Interactive guided tours for WordPress admin, enabling educators to create step-by-step tutorials and pupils to learn with guided overlays.
- * Version:     0.4.1
+ * Version:     0.5.0
  * Requires at least: 7.0
  * Requires PHP: 8.3
  * Author:      Per Soderlind
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin version.
  */
-const VERSION = '0.4.1';
+const VERSION = '0.5.0';
 
 /**
  * Plugin slug.
@@ -135,6 +135,18 @@ function init(): void {
 		false,
 		dirname( PLUGIN_BASENAME ) . '/languages'
 	);
+
+	// Self-updates from GitHub releases.
+	if ( class_exists( \Soderlind\WordPress\GitHubUpdater::class ) ) {
+		\Soderlind\WordPress\GitHubUpdater::init(
+			github_url:   'https://github.com/soderlind/admin-coach-tours',
+			plugin_file:  __FILE__,
+			plugin_slug:  'admin-coach-tours',
+			name_regex:   '/admin-coach-tours\.zip/',
+			branch:       'main',
+			check_period: 6,
+		);
+	}
 
 	// Initialize components.
 	$initializers = [

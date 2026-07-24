@@ -20,17 +20,23 @@ This document explains how Admin Coach Tours uses AI to generate interactive tut
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         Redux Store (requestAiTour)                         │
-│  • Dispatches REQUEST_AI_TOUR with context                                  │
-│  • Passes failureContext on retry for AI learning                           │
+│  • Dispatches REQUEST_AI_TOUR with context (+ locale, failureContext)       │
+│  • Task list fetched via the store control (fetchAiTasks → /ai/tasks)       │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    REST API: POST /ai/generate-tour                         │
-│                         (AiController.php)                                  │
-│  • Sanitizes inputs                                                         │
-│  • Checks cache (skips on retry)                                            │
-│  • Builds system prompt                                                     │
+│                    AiController.php (thin HTTP adapter)                     │
+│  • TourRequest::from_rest() sanitizes the full input surface                │
+│  • Delegates to TourGenerator; maps results/errors to HTTP                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    TourGenerator (deep module)                              │
+│  • Cache lookup (skips on retry)                                            │
+│  • Retrieval (RAG) + prompt assembly + validation                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                     ┌─────────────────┼─────────────────┐
@@ -45,10 +51,10 @@ This document explains how Admin Coach Tours uses AI to generate interactive tut
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        AI Provider (generate_tour)                          │
-│  • OpenAI (gpt-4o)                                                          │
-│  • Azure OpenAI                                                             │
-│  • Anthropic (claude-3-5-sonnet)                                            │
+│                  WordPress AI Connector (via AiManager)                     │
+│  • wp_get_connectors() detects configured AI provider connectors            │
+│  • wp_ai_client_prompt(...)->generate_text() performs generation            │
+│  • Provider/model resolved from options + filters                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
@@ -69,47 +75,51 @@ This document explains how Admin Coach Tours uses AI to generate interactive tut
 
 ## Components
 
-### 1. AI Providers (`php/AI/`)
+### 1. AI Connector & backend modules (`php/AI/`, `php/Rest/`)
 
-The plugin supports multiple AI providers through a common interface:
+As of 0.5.0 the plugin no longer bundles its own providers. It uses the
+**WordPress 7 AI Connector** — the site owner configures an AI provider once in
+WordPress, and the plugin calls it without managing API keys.
 
-| Provider | Class | Model |
-|----------|-------|-------|
-| OpenAI | `OpenAiProvider.php` | gpt-4o |
-| Azure OpenAI | `AzureOpenAiProvider.php` | Configurable |
-| Anthropic | `AnthropicProvider.php` | claude-3-5-sonnet |
+| Module | Responsibility |
+|--------|----------------|
+| `AiManager` | Thin orchestrator over `wp_get_connectors()` / `wp_ai_client_prompt()`. Detects configured connectors, resolves provider/model, calls `generate_text()`, parses JSON (tolerating code fences), validates output. |
+| `TourRequest` | Immutable value object; `from_rest()` owns all input sanitization (including `editorContext`/`failureContext`). |
+| `TourGenerator` | Deep module `generate(TourRequest): array\|WP_Error` — owns caching, RAG retrieval, prompt assembly, the AI call, and validation. |
+| `TourSchema` | Single source of truth for the allowed locator / precondition / completion types, shared by the prompt schema and output validation. |
+| `AiController` | Thin HTTP adapter: build `TourRequest`, call `TourGenerator`, map results/errors to HTTP. |
 
-All providers implement `AiProviderInterface` with the key method:
+**Availability:** AI is available when `act_ai_enabled` is on *and* at least one
+AI provider connector is configured. Provider/model selection is resolved via
+the `act_ai_provider` / `act_ai_model` options, overridable with filters (see
+[Extending the AI](#extending-the-ai)).
 
 ```php
-public function generate_tour(string $system_prompt, string $user_message = ''): array|\WP_Error;
-```
-
-**Provider Registration:**
-```php
-// Custom providers can be added via filter
-add_filter('act_ai_providers', function($providers) {
-    $providers['my-provider'] = new MyCustomProvider();
-    return $providers;
-});
+// Generation happens through the WordPress AI client:
+$text = wp_ai_client_prompt( $user_message )
+    ->using_system_instruction( $system_prompt )
+    ->using_temperature( 0.7 )
+    ->using_provider( $connector_id ) // optional
+    ->generate_text();
 ```
 
 ### 2. Task Prompts (`php/AI/TaskPrompts.php`)
 
-Defines 12 predefined tasks with optimized prompts:
+Defines the predefined tasks with optimized prompts. Categories are displayed
+Text-first in the launcher:
 
 | Category | Tasks |
 |----------|-------|
-| Media | add-image, add-video, add-gallery, add-cover |
-| Text | add-heading, create-list, add-quote, add-table, format-text |
-| Design | add-button, add-columns |
-| Embed | embed-youtube |
+| Text & Content | add-paragraph, add-heading, create-list, add-quote, add-table, format-text, add-code, add-separator, add-details |
+| Media | add-image, add-video, add-gallery, add-cover, add-audio, add-file |
+| Design & Layout | add-button, add-columns, add-group, add-spacer |
+| Embed | embed-youtube, embed-url |
 
 Each task includes:
 - **ID**: Unique identifier
 - **Label**: Human-readable name
 - **Category**: For UI grouping
-- **Task-specific instructions**: Optimized step patterns
+- **Task-specific instructions**: Optimized step patterns (falls back to a generic "/" quick-inserter pattern when a task has none)
 
 ### 3. Gutenberg Knowledge Base (`php/AI/GutenbergKnowledgeBase.php`)
 
@@ -315,31 +325,33 @@ REQUIREMENTS FOR THIS RETRY:
 5. Backend includes failure context in AI prompt
 6. AI generates tour avoiding the failed selectors
 
+**Divergence abort:** if a step expects a specific block but the user inserted a
+different one (e.g. asked for an Image, added a Gallery), retrying can't succeed.
+`TourRunner` detects this and stops the tour with a clear message instead of the
+"Try Again" loop.
+
 ## Caching
 
 Tours are cached to avoid redundant API calls:
 
-- **Cache Key**: Hash of (taskId, query, postType, editorContext version)
-- **TTL**: 1 hour (3600 seconds)
-- **Cache Invalidation**: Version key changes when prompts are updated
-- **Skip Cache**: When retry includes failure context
+- **Cache Key**: Hash of (taskId, query, postType, cache-significant editorContext, version)
+- **TTL**: 24 hours (`DAY_IN_SECONDS`), filterable via `admin_coach_tours_cache_expiration`
+- **Cache Invalidation**: `TourGenerator::CACHE_VERSION` is bumped when prompts change
+- **Skip Cache**: When the request includes failure context (a contextual retry)
+
+Caching lives in `TourGenerator` (not the REST controller):
 
 ```php
-// Cache key generation
-$cache_key = 'act_tour_' . md5(serialize([
-    $task_id,
-    $query,
-    $post_type,
-    self::get_cache_version()
-]));
+// Cache key is built from the cache-significant parts of the TourRequest
+$cache_key = 'act_tour_' . md5( wp_json_encode( $key_data ) );
 ```
 
 ## Security
 
 ### API Key Storage
-- Keys encrypted with libsodium before storage
-- `Encryption` class handles encrypt/decrypt
-- Keys never logged or exposed in errors
+- API keys are **owned by the WordPress AI connector**, not this plugin
+- The plugin never stores, encrypts, logs, or exposes provider keys
+- Legacy encrypted-key options from earlier versions are removed on upgrade/uninstall
 
 ### Input Sanitization
 - All user inputs sanitized before use
@@ -352,22 +364,20 @@ $cache_key = 'act_tour_' . md5(serialize([
 
 ## Extending the AI
 
-### Custom Provider
+### Provider / model selection
+
+Providers are configured in WordPress as AI connectors. This plugin only
+chooses which configured connector to use, overridable via filters:
 
 ```php
-add_filter('act_ai_providers', function($providers) {
-    $providers['my-provider'] = new class implements AiProviderInterface {
-        public function get_id(): string { return 'my-provider'; }
-        public function get_name(): string { return 'My Provider'; }
-        public function is_configured(): bool { /* check config */ }
-        public function generate_tour(string $system_prompt, string $user_message = ''): array|\WP_Error {
-            // Call your AI API
-            // Return ['title' => '...', 'steps' => [...]]
-        }
-        // ... implement other interface methods
-    };
-    return $providers;
-});
+// Force a specific connector (provider) ID; '' = auto (first configured).
+add_filter('admin_coach_tours_ai_provider_id', fn() => 'azure-ai-foundry');
+
+// Force a specific model ID; '' = provider default.
+add_filter('admin_coach_tours_ai_model', fn() => 'gpt-4.1');
+
+// Override connector-availability detection (return bool, or null to defer).
+add_filter('admin_coach_tours_ai_connector_configured', fn() => true);
 ```
 
 ### Custom Tasks
@@ -403,17 +413,16 @@ add_filter('act_gutenberg_knowledge', function($data) {
 
 | File | Purpose |
 |------|---------|
-| `php/AI/AiManager.php` | Singleton managing provider registration and selection |
-| `php/AI/AiProviderInterface.php` | Contract for AI providers |
-| `php/AI/OpenAiProvider.php` | OpenAI implementation |
-| `php/AI/AzureOpenAiProvider.php` | Azure OpenAI implementation |
-| `php/AI/AnthropicProvider.php` | Anthropic Claude implementation |
+| `php/AI/AiManager.php` | Orchestrator over the WordPress AI connector (`wp_get_connectors` / `wp_ai_client_prompt`) |
+| `php/AI/TourRequest.php` | Immutable, sanitized tour-generation request (`from_rest`) |
+| `php/AI/TourGenerator.php` | Deep module: cache, RAG, prompt assembly, AI call, validation |
+| `php/AI/TourSchema.php` | Allowed locator/precondition/completion types (single source) |
 | `php/AI/TaskPrompts.php` | Task definitions and system prompts |
 | `php/AI/GutenbergKnowledgeBase.php` | RAG context from static docs |
 | `php/AI/data/gutenberg-blocks.json` | Block and UI element definitions |
-| `php/Rest/AiController.php` | REST API endpoints for AI |
+| `php/Rest/AiController.php` | Thin HTTP adapter for the AI REST endpoints |
 | `assets/js/runtime/gatherEditorContext.js` | Frontend context gathering |
-| `assets/js/store/actions.js` | Redux actions including `requestAiTour` |
+| `assets/js/store/actions.js` | Redux actions including `requestAiTour` and `fetchAiTasks` |
 | `assets/js/store/controls.js` | Redux controls for API calls |
 | `assets/js/pupil/PupilLauncher.jsx` | UI for requesting tours |
 | `assets/js/pupil/TourRunner.jsx` | Tour execution and failure handling |

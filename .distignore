@@ -1,0 +1,28 @@
+# Files and folders excluded from the distributable plugin zip.
+# Patterns are rsync --exclude-from compatible.
+
+.git/
+.github/
+.gitignore
+.gitattributes
+.distignore
+.vscode/
+.editorconfig
+.DS_Store
+
+node_modules/
+tests/
+coverage/
+docs/
+
+phpcs.xml
+phpunit.xml.dist
+vitest.config.js
+webpack.config.js
+tsconfig.json
+package-lock.json
+composer.lock
+
+CHANGELOG.md
+fix-step2.php
+fix-tour2.php

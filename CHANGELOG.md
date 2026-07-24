@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-07-24
+
+### Changed
+
+- Reworked the AI layer to use the WordPress 7 AI Connector (`wp_get_connectors` / `wp_ai_client_prompt`); removed the bundled OpenAI/Azure/Anthropic providers and API-key encryption. **Now requires WordPress 7.0+ and at least one configured AI provider connector.**
+- Refactored the AI tour-generation flow into deep modules (`TourRequest`, `TourGenerator`, `TourSchema`); the REST controller is now a thin adapter.
+- Slimmed the settings page to connector status, an enable toggle, and an optional provider/model override.
+- Reordered task categories (Text first) and expanded the task list: added Paragraph, plus Code, Separator, Details, Audio, File, Group, Spacer, and Embed-from-URL.
+
+### Added
+
+- Self-updates from GitHub releases via the WordPress Plugin GitHub Updater, plus GitHub Actions workflows to build and attach the release zip.
+- Coach panel shows the `/command` as a header above the instruction.
+- Refocus the current block when a tour closes.
+- Finish the tour by clicking the highlighted block on the last step.
+- Hide the launcher when the editor is in code editor mode.
+- Stop the tour with a clear message when a different block than expected is inserted.
+
+### Fixed
+
+- `generate-tour` REST route rejected `null` `editorContext`/`failureContext` (400 `rest_invalid_param`).
+- `wpBlock: "selected"` now falls back to the last-selected block so multi-step tours don't fail on confirmation steps.
+- Removed the arrow "Next" button that let users skip ahead before a block existed.
+- Tour copy no longer uses positional words ("below"/"above").
+
 ## [0.4.1] - 2026-02-03
 
 ### Added

@@ -16,7 +16,7 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 ## Features
 
 - **AI-Generated Tours** — On-demand tutorials created by AI based on your request
-- **12 Predefined Tasks** — Common tasks like adding images, videos, headings, and more
+- **Ready-made Task Library** — 20+ common tasks like adding images, videos, headings, paragraphs, and more
 - **Freeform Questions** — Ask anything about the block editor
 - **Interactive Overlay** — Visual highlighting guides you through each step
 - **Smart Block Targeting** — Accurately identifies and highlights the correct elements
@@ -30,9 +30,27 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 
 ## Installation
 
-1. Upload `admin-coach-tours` to `/wp-content/plugins/`
-2. Activate the plugin
-3. Go to **Tools → Coach Tours** to enable AI
+### From a release zip (recommended)
+
+1. Download `admin-coach-tours.zip` from the [latest release](https://github.com/soderlind/admin-coach-tours/releases/latest).
+2. In wp-admin, go to **Plugins → Add New → Upload Plugin**, choose the zip, and click **Install Now**.
+3. Activate the plugin.
+4. Go to **Tools → Coach Tours** to enable AI.
+
+### From source
+
+```bash
+git clone https://github.com/soderlind/admin-coach-tours.git
+cd admin-coach-tours
+composer install --no-dev
+npm ci && npm run build
+```
+
+Copy the folder into `wp-content/plugins/` and activate it.
+
+### Updates
+
+The plugin updates itself from GitHub releases — new versions show up under **Plugins** and **Dashboard → Updates** like any other plugin (checked roughly every 6 hours).
 
 ## Setup
 
@@ -55,10 +73,10 @@ Admin Coach Tours helps WordPress users learn the block editor through AI-genera
 **Common Tasks:**
 | Category | Tasks |
 |----------|-------|
-| Media | Add image, Add video, Create gallery, Add cover |
-| Text | Add heading, Create list, Add quote, Create table |
-| Design | Add button, Create columns |
-| Embed | Embed YouTube |
+| Text | Add paragraph, heading, list, quote, table; format text; code, separator, details |
+| Media | Add image, video, gallery, cover, audio, file |
+| Design | Add button, columns, group, spacer |
+| Embed | Embed YouTube, embed from URL |
 
 **Or Ask a Question:**
 Type any question about the block editor and press Enter.
@@ -66,11 +84,6 @@ Type any question about the block editor and press Enter.
 4. Follow the highlighted steps to complete the task
 5. Each step auto-advances when you perform the action
 
-### Tour Controls
-
-- **Previous/Next** — Navigate between steps
-- **Skip** — Skip a step you already know
-- **Stop** — Exit the tour at any time
 
 ## How It Works
 
@@ -147,7 +160,7 @@ npm run lint         # JavaScript (ESLint)
 
 ## Security
 
-- API keys encrypted with libsodium
+- API keys are owned by the WordPress AI connector (not stored by this plugin)
 - All endpoints require authentication
 - Capability checks on all operations
 - Input sanitization and output escaping
@@ -159,5 +172,5 @@ GPL v2 or later — see [LICENSE](LICENSE) for details.
 ## Credits
 
 - Built with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts) and [@wordpress/data](https://www.npmjs.com/package/@wordpress/data)
-- AI integration supports OpenAI, Azure OpenAI, and Anthropic
+- AI generation via the WordPress 7 AI Connector (`wp_get_connectors` / `wp_ai_client_prompt`)
 - RAG knowledge base includes pedagogical content from [Learn WordPress](https://learn.wordpress.org/learning-pathway/user/) courses
