@@ -15,7 +15,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import CoachPanel from './CoachPanel.jsx';
 import Highlighter from './Highlighter.js';
 import { resolveTarget, resolveTargetWithRecovery } from '../runtime/resolveTarget.js';
-import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex } from '../runtime/applyPreconditions.js';
+import { applyPreconditions, onLeaveStep, onEnterStep, clearInsertedBlocks, setCurrentStepIndex, focusCurrentBlock } from '../runtime/applyPreconditions.js';
 import { watchCompletion } from '../runtime/watchCompletion.js';
 import { waitForNextStepBlock } from '../runtime/waitForNextStepBlock.js';
 
@@ -404,6 +404,8 @@ export default function TourRunner() {
 							// Last step - end the tour.
 							console.log( '[ACT TourRunner] Last step completed, ending tour' );
 							clearInsertedBlocks();
+							// Return the caret to the current block before the panel closes.
+							focusCurrentBlock();
 							nextStep(); // This will end the tour since there's no next step.
 						}
 					}
@@ -473,6 +475,8 @@ export default function TourRunner() {
 		clearInsertedBlocks();
 		previousStepIndexRef.current = null;
 		stopTour();
+		// Return the caret to the block the user was on.
+		focusCurrentBlock();
 	}, [ stopTour ] );
 
 	// Don't render if not playing.

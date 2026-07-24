@@ -762,6 +762,24 @@ async function focusBlockElement( clientId ) {
 }
 
 /**
+ * Refocus the editor on the currently selected block.
+ *
+ * Used when the tour closes so the caret returns to the block the user was on.
+ *
+ * @return {Promise<boolean>} True if a block was focused.
+ */
+export async function focusCurrentBlock() {
+	const blockEditorSelect = select( 'core/block-editor' );
+	const clientId = blockEditorSelect?.getSelectedBlockClientId?.();
+
+	if ( ! clientId ) {
+		return false;
+	}
+
+	return focusBlockElement( clientId );
+}
+
+/**
  * Close any open modals/popovers.
  *
  * @param {string} modalSelector Modal selector.
