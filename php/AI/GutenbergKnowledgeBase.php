@@ -78,15 +78,33 @@ class GutenbergKnowledgeBase {
 	}
 
 	/**
+	 * Get the names of all blocks in the knowledge base.
+	 *
+	 * @return array<string> Block names (e.g. `core/paragraph`).
+	 */
+	public static function get_block_names(): array {
+		$knowledge = self::load();
+
+		if ( empty( $knowledge[ 'blocks' ] ) || ! is_array( $knowledge[ 'blocks' ] ) ) {
+			return [];
+		}
+
+		return array_keys( $knowledge[ 'blocks' ] );
+	}
+
+	/**
 	 * Get relevant context for a query.
 	 *
 	 * Searches blocks, UI elements, and actions for relevant information.
 	 *
-	 * @param string $query      The user query or task.
-	 * @param int    $max_blocks Maximum number of blocks to return.
+	 * @param string        $query           The user query or task.
+	 * @param int           $max_blocks      Maximum number of blocks to return.
+	 * @param array<string> $available_blocks Insertable block names from the editor;
+	 *                                        blocks not available are excluded. Empty
+	 *                                        means availability is unknown (no filtering).
 	 * @return array Relevant context for the AI prompt.
 	 */
-	public static function get_relevant_context( string $query, int $max_blocks = 5 ): array {
+	public static function get_relevant_context( string $query, int $max_blocks = 5, array $available_blocks = [] ): array {
 		$knowledge = self::load();
 		$query     = strtolower( $query );
 		$context   = [
@@ -134,6 +152,10 @@ class GutenbergKnowledgeBase {
 		$scored_blocks = [];
 		if ( isset( $knowledge[ 'blocks' ] ) ) {
 			foreach ( $knowledge[ 'blocks' ] as $block_name => $block_data ) {
+				// Skip blocks the site has disabled.
+				if ( ! BlockAvailability::is_available( $block_name, $available_blocks ) ) {
+					continue;
+				}
 				$score = self::calculate_relevance_score( $query, $block_name, $block_data );
 				if ( $score > 0 ) {
 					$scored_blocks[] = [

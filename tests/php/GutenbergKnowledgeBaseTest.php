@@ -165,4 +165,37 @@ class GutenbergKnowledgeBaseTest extends TestCase {
 		$this->assertIsArray( $context );
 		$this->assertArrayHasKey( 'blocks', $context );
 	}
+
+	/**
+	 * Test get_block_names returns the knowledge-base block keys.
+	 */
+	public function test_get_block_names_returns_names(): void {
+		$names = GutenbergKnowledgeBase::get_block_names();
+
+		$this->assertIsArray( $names );
+		$this->assertContains( 'core/image', $names );
+	}
+
+	/**
+	 * Test disabled blocks are excluded from relevant context.
+	 */
+	public function test_get_relevant_context_excludes_disabled_blocks(): void {
+		// Availability list omits core/image, so it must not be returned.
+		$context = GutenbergKnowledgeBase::get_relevant_context(
+			'image',
+			5,
+			[ 'core/paragraph', 'core/heading' ]
+		);
+
+		$this->assertArrayNotHasKey( 'core/image', $context[ 'blocks' ] );
+	}
+
+	/**
+	 * Test empty availability list disables no blocks (unknown = allow all).
+	 */
+	public function test_get_relevant_context_allows_all_when_availability_unknown(): void {
+		$context = GutenbergKnowledgeBase::get_relevant_context( 'image', 5, [] );
+
+		$this->assertArrayHasKey( 'core/image', $context[ 'blocks' ] );
+	}
 }

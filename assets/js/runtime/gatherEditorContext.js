@@ -111,6 +111,39 @@ function getEditorBlocks() {
 }
 
 /**
+ * Get the core block types that can currently be inserted.
+ *
+ * Reflects both unregistered blocks and editor `allowedBlockTypes`
+ * restrictions, so blocks that a site has disabled are omitted. Used by the
+ * backend to exclude disabled blocks from generated tours.
+ *
+ * @return {Array} List of insertable `core/*` block names.
+ */
+function getAvailableBlocks() {
+	try {
+		const blocksStore = select( 'core/blocks' );
+		if ( ! blocksStore?.getBlockTypes ) {
+			return [];
+		}
+
+		const blockEditorStore = select( 'core/block-editor' );
+		const canInsert =
+			typeof blockEditorStore?.canInsertBlockType === 'function'
+				? ( name ) => blockEditorStore.canInsertBlockType( name )
+				: () => true;
+
+		return blocksStore
+			.getBlockTypes()
+			.map( ( blockType ) => blockType.name )
+			.filter( ( name ) => typeof name === 'string' && name.startsWith( 'core/' ) )
+			.filter( ( name ) => canInsert( name ) );
+	} catch ( e ) {
+		console.warn( '[ACT] Error getting available blocks:', e );
+		return [];
+	}
+}
+
+/**
  * Check if a block is empty.
  *
  * @param {Object} block Block object.
@@ -279,6 +312,7 @@ function isElementVisible( el ) {
 export function gatherEditorContext() {
 	return {
 		editorBlocks: getEditorBlocks(),
+		availableBlocks: getAvailableBlocks(),
 		visibleElements: getVisibleElements(),
 		uiSamples: sampleUIElements(),
 		wpVersion: window.adminCoachTours?.wpVersion || 'unknown',
